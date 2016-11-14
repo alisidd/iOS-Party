@@ -2,8 +2,8 @@
 //  AppDelegate.swift
 //  Party
 //
-//  Created by Ali Siddiqui on 11/14/16.
-//  Copyright © 2016 Ali Siddiqui.MatthewPaletta. All rights reserved.
+//  Created by Ali Siddiqui and Matthew Paletta on 11/9/16.
+//  Copyright © 2016 Ali Siddiqui and Matthew Paletta. All rights reserved.
 //
 
 import UIKit
@@ -14,9 +14,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     var window: UIWindow?
 
-
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
         // Override point for customization after application launch.
+        UIApplication.shared.statusBarStyle = .lightContent
         return true
     }
 

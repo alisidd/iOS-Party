@@ -8,22 +8,28 @@
 
 /* Begin PBXBuildFile section */
 		417C38CD1DDA43FD00F59926 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 417C38CC1DDA43FD00F59926 /* AppDelegate.swift */; };
-		417C38CF1DDA43FD00F59926 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 417C38CE1DDA43FD00F59926 /* ViewController.swift */; };
 		417C38D21DDA43FD00F59926 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 417C38D01DDA43FD00F59926 /* Main.storyboard */; };
 		417C38D51DDA43FD00F59926 /* Party.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 417C38D31DDA43FD00F59926 /* Party.xcdatamodeld */; };
 		417C38D71DDA43FD00F59926 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 417C38D61DDA43FD00F59926 /* Assets.xcassets */; };
 		417C38DA1DDA43FD00F59926 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 417C38D81DDA43FD00F59926 /* LaunchScreen.storyboard */; };
+		417C38E51DDA447600F59926 /* InitialSetupViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 417C38E11DDA447600F59926 /* InitialSetupViewController.swift */; };
+		417C38E61DDA447600F59926 /* PartyCreationViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 417C38E21DDA447600F59926 /* PartyCreationViewController.swift */; };
+		417C38E71DDA447600F59926 /* PartyJoinedViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 417C38E31DDA447600F59926 /* PartyJoinedViewController.swift */; };
+		417C38E81DDA447600F59926 /* setupButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 417C38E41DDA447600F59926 /* setupButton.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
 		417C38C91DDA43FD00F59926 /* Party.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Party.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		417C38CC1DDA43FD00F59926 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
-		417C38CE1DDA43FD00F59926 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
 		417C38D11DDA43FD00F59926 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		417C38D41DDA43FD00F59926 /* Party.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = Party.xcdatamodel; sourceTree = "<group>"; };
 		417C38D61DDA43FD00F59926 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		417C38D91DDA43FD00F59926 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		417C38DB1DDA43FD00F59926 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		417C38E11DDA447600F59926 /* InitialSetupViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = InitialSetupViewController.swift; sourceTree = "<group>"; };
+		417C38E21DDA447600F59926 /* PartyCreationViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PartyCreationViewController.swift; sourceTree = "<group>"; };
+		417C38E31DDA447600F59926 /* PartyJoinedViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PartyJoinedViewController.swift; sourceTree = "<group>"; };
+		417C38E41DDA447600F59926 /* setupButton.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = setupButton.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -56,8 +62,11 @@
 		417C38CB1DDA43FD00F59926 /* Party */ = {
 			isa = PBXGroup;
 			children = (
+				417C38E11DDA447600F59926 /* InitialSetupViewController.swift */,
+				417C38E21DDA447600F59926 /* PartyCreationViewController.swift */,
+				417C38E31DDA447600F59926 /* PartyJoinedViewController.swift */,
+				417C38E41DDA447600F59926 /* setupButton.swift */,
 				417C38CC1DDA43FD00F59926 /* AppDelegate.swift */,
-				417C38CE1DDA43FD00F59926 /* ViewController.swift */,
 				417C38D01DDA43FD00F59926 /* Main.storyboard */,
 				417C38D61DDA43FD00F59926 /* Assets.xcassets */,
 				417C38D81DDA43FD00F59926 /* LaunchScreen.storyboard */,
@@ -140,8 +149,11 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				417C38CF1DDA43FD00F59926 /* ViewController.swift in Sources */,
+				417C38E71DDA447600F59926 /* PartyJoinedViewController.swift in Sources */,
 				417C38D51DDA43FD00F59926 /* Party.xcdatamodeld in Sources */,
+				417C38E81DDA447600F59926 /* setupButton.swift in Sources */,
+				417C38E51DDA447600F59926 /* InitialSetupViewController.swift in Sources */,
+				417C38E61DDA447600F59926 /* PartyCreationViewController.swift in Sources */,
 				417C38CD1DDA43FD00F59926 /* AppDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
