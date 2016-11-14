@@ -15,12 +15,11 @@ class PartyCreationViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
+        blurBackgroundImageView()
     }
     
     override func viewWillAppear(_ animated: Bool) {
         customizeNavigationBar()
-        blurBackgroundImageView()
         
         customizeTextField()
     }
