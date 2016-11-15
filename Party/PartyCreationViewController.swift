@@ -14,10 +14,13 @@ class PartyCreationViewController: UIViewController, UITextFieldDelegate, UIPick
     @IBOutlet weak var partyNameField: UITextField!
     @IBOutlet weak var genrePicker: UIPickerView!
     
-    var genres = ["Rock", "Pop", "Hip Hop", "Country", "Alternative"]
+    var genres = [["--", "Rock", "Pop", "Hip Hop", "Country", "Alternative"]]
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        genres.append(genres[0])
+        genres.append(genres[0])
+        print(genres)
         blurBackgroundImageView()
         initializeTextField()
         initializePickerView()
@@ -81,19 +84,19 @@ class PartyCreationViewController: UIViewController, UITextFieldDelegate, UIPick
                 $0.backgroundColor = UIColor.gray
             }
         }
-        return 1
-    }
-    
-    func pickerView(_ pickerView: UIPickerView, numberOfRowsInComponent component: Int) -> Int {
         return genres.count
     }
     
+    func pickerView(_ pickerView: UIPickerView, numberOfRowsInComponent component: Int) -> Int {
+        return genres[component].count
+    }
+    
     func pickerView(_ pickerView: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String? {
-        return genres[row]
+        return genres[component][row]
     }
     
     func pickerView(_ pickerView: UIPickerView, attributedTitleForRow row: Int, forComponent component: Int) -> NSAttributedString? {
-        return NSAttributedString(string: genres[row], attributes: [NSForegroundColorAttributeName: UIColor.white])
+        return NSAttributedString(string: genres[component][row], attributes: [NSForegroundColorAttributeName: UIColor.white])
     }
 
     override func didReceiveMemoryWarning() {
