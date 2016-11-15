@@ -7,15 +7,15 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		417C38CD1DDA43FD00F59926 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 417C38CC1DDA43FD00F59926 /* AppDelegate.swift */; };
 		417C38D21DDA43FD00F59926 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 417C38D01DDA43FD00F59926 /* Main.storyboard */; };
-		417C38D51DDA43FD00F59926 /* Party.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 417C38D31DDA43FD00F59926 /* Party.xcdatamodeld */; };
 		417C38D71DDA43FD00F59926 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 417C38D61DDA43FD00F59926 /* Assets.xcassets */; };
 		417C38DA1DDA43FD00F59926 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 417C38D81DDA43FD00F59926 /* LaunchScreen.storyboard */; };
-		417C38E51DDA447600F59926 /* InitialSetupViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 417C38E11DDA447600F59926 /* InitialSetupViewController.swift */; };
-		417C38E61DDA447600F59926 /* PartyCreationViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 417C38E21DDA447600F59926 /* PartyCreationViewController.swift */; };
-		417C38E71DDA447600F59926 /* PartyJoinedViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 417C38E31DDA447600F59926 /* PartyJoinedViewController.swift */; };
-		417C38E81DDA447600F59926 /* setupButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 417C38E41DDA447600F59926 /* setupButton.swift */; };
+		417C38EA1DDA91A100F59926 /* PartyCreationViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 417C38E21DDA447600F59926 /* PartyCreationViewController.swift */; };
+		417C38EB1DDA91A400F59926 /* PartyJoinedViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 417C38E31DDA447600F59926 /* PartyJoinedViewController.swift */; };
+		417C38EC1DDA91A800F59926 /* InitialSetupViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 417C38E11DDA447600F59926 /* InitialSetupViewController.swift */; };
+		417C38ED1DDA91AF00F59926 /* setupButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 417C38E41DDA447600F59926 /* setupButton.swift */; };
+		417C38EE1DDA91B100F59926 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 417C38CC1DDA43FD00F59926 /* AppDelegate.swift */; };
+		417C38EF1DDA91B500F59926 /* Party.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 417C38D31DDA43FD00F59926 /* Party.xcdatamodeld */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -149,12 +149,12 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				417C38E71DDA447600F59926 /* PartyJoinedViewController.swift in Sources */,
-				417C38D51DDA43FD00F59926 /* Party.xcdatamodeld in Sources */,
-				417C38E81DDA447600F59926 /* setupButton.swift in Sources */,
-				417C38E51DDA447600F59926 /* InitialSetupViewController.swift in Sources */,
-				417C38E61DDA447600F59926 /* PartyCreationViewController.swift in Sources */,
-				417C38CD1DDA43FD00F59926 /* AppDelegate.swift in Sources */,
+				417C38EF1DDA91B500F59926 /* Party.xcdatamodeld in Sources */,
+				417C38EE1DDA91B100F59926 /* AppDelegate.swift in Sources */,
+				417C38ED1DDA91AF00F59926 /* setupButton.swift in Sources */,
+				417C38EC1DDA91A800F59926 /* InitialSetupViewController.swift in Sources */,
+				417C38EB1DDA91A400F59926 /* PartyJoinedViewController.swift in Sources */,
+				417C38EA1DDA91A100F59926 /* PartyCreationViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -277,10 +277,13 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				DEVELOPMENT_TEAM = M88ZYQ7793;
 				INFOPLIST_FILE = Party/Info.plist;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				INSTALL_PATH = "@executable_path/../Frameworks";
+				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.example.AliSiddiqui.MatthewPaletta.Party;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_VERSION = 3.0;
+				SWIFT_VERSION = 3.0.1;
+				SYMROOT = build/Products;
 			};
 			name = Debug;
 		};
@@ -290,10 +293,13 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				DEVELOPMENT_TEAM = M88ZYQ7793;
 				INFOPLIST_FILE = Party/Info.plist;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				INSTALL_PATH = "@executable_path/../Frameworks";
+				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.example.AliSiddiqui.MatthewPaletta.Party;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_VERSION = 3.0;
+				SWIFT_VERSION = 3.0.1;
+				SYMROOT = build/Products;
 			};
 			name = Release;
 		};
@@ -316,6 +322,7 @@
 				417C38E01DDA43FD00F59926 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 

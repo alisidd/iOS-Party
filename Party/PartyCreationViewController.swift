@@ -8,20 +8,28 @@
 
 import UIKit
 
-class PartyCreationViewController: UIViewController {
+class PartyCreationViewController: UIViewController, UITextFieldDelegate, UIPickerViewDelegate, UIPickerViewDataSource {
 
     @IBOutlet weak var backgroundImageView: UIImageView!
     @IBOutlet weak var partyNameField: UITextField!
+    @IBOutlet weak var genrePicker: UIPickerView!
+    
+    var genres = [["--", "Rock", "Pop", "Hip Hop", "Country", "Alternative"]]
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
+        genres.append(genres[0])
+        genres.append(genres[0])
+        print(genres)
+        blurBackgroundImageView()
+        initializeTextField()
+        initializePickerView()
     }
     
     override func viewWillAppear(_ animated: Bool) {
-        customizeNavigationBar()
-        blurBackgroundImageView()
+        super.viewWillAppear(animated)
         
+        customizeNavigationBar()
         customizeTextField()
     }
     
@@ -41,6 +49,10 @@ class PartyCreationViewController: UIViewController {
         backgroundImageView.addSubview(blurView)
     }
     
+    func initializeTextField() {
+        partyNameField.delegate = self
+    }
+    
     func customizeTextField() {
         let bottomBorder = CALayer()
         bottomBorder.frame = CGRect(x: 0, y: partyNameField.frame.height, width: partyNameField.frame.width, height: 1)
@@ -48,9 +60,44 @@ class PartyCreationViewController: UIViewController {
         partyNameField.borderStyle = UITextBorderStyle.none
         partyNameField.layer.addSublayer(bottomBorder)
         partyNameField.attributedPlaceholder = NSAttributedString(string: "Party Name", attributes: [NSForegroundColorAttributeName: UIColor.darkGray])
+        
+        partyNameField.autocapitalizationType = UITextAutocapitalizationType.sentences
     }
-
     
+    func textFieldShouldReturn(_ partyNameField: UITextField) -> Bool {
+        partyNameField.resignFirstResponder()
+        return true
+    }
+    
+    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+        partyNameField.resignFirstResponder()
+    }
+    
+    func initializePickerView() {
+        genrePicker.delegate = self
+        genrePicker.dataSource = self
+    }
+    
+    func numberOfComponents(in pickerView: UIPickerView) -> Int {
+        pickerView.subviews.forEach {
+            if $0.bounds.height <= 1 {
+                $0.backgroundColor = UIColor.gray
+            }
+        }
+        return genres.count
+    }
+    
+    func pickerView(_ pickerView: UIPickerView, numberOfRowsInComponent component: Int) -> Int {
+        return genres[component].count
+    }
+    
+    func pickerView(_ pickerView: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String? {
+        return genres[component][row]
+    }
+    
+    func pickerView(_ pickerView: UIPickerView, attributedTitleForRow row: Int, forComponent component: Int) -> NSAttributedString? {
+        return NSAttributedString(string: genres[component][row], attributes: [NSForegroundColorAttributeName: UIColor.white])
+    }
 
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
