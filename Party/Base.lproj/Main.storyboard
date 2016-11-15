@@ -124,20 +124,28 @@
                                 <fontDescription key="fontDescription" style="UICTFontTextStyleBody"/>
                                 <textInputTraits key="textInputTraits"/>
                             </textField>
+                            <pickerView contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="kZf-Rg-XuV">
+                                <rect key="frame" x="40" y="295" width="295" height="216"/>
+                                <color key="backgroundColor" red="1" green="1" blue="1" alpha="0.0" colorSpace="custom" customColorSpace="sRGB"/>
+                            </pickerView>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
                             <constraint firstItem="gg0-Ka-tDR" firstAttribute="top" secondItem="gAj-Q9-ed4" secondAttribute="bottom" constant="100" id="35n-Vq-RyK"/>
                             <constraint firstItem="dxN-LP-T9U" firstAttribute="leading" secondItem="BFI-Zo-17q" secondAttribute="leading" id="3C8-iM-q7s"/>
+                            <constraint firstItem="kZf-Rg-XuV" firstAttribute="leading" secondItem="dxN-LP-T9U" secondAttribute="leading" constant="40" id="G9b-m1-ngr"/>
                             <constraint firstItem="gg0-Ka-tDR" firstAttribute="leading" secondItem="BFI-Zo-17q" secondAttribute="leadingMargin" constant="40" id="PZ7-n0-Tzw"/>
                             <constraint firstAttribute="trailing" secondItem="dxN-LP-T9U" secondAttribute="trailing" id="Qna-F9-m1c"/>
                             <constraint firstItem="dxN-LP-T9U" firstAttribute="top" secondItem="BFI-Zo-17q" secondAttribute="top" id="bQg-UB-Hg5"/>
                             <constraint firstItem="dxN-LP-T9U" firstAttribute="bottom" secondItem="58Y-OY-fAV" secondAttribute="top" id="rDA-I4-nU2"/>
                             <constraint firstItem="gg0-Ka-tDR" firstAttribute="centerX" secondItem="dxN-LP-T9U" secondAttribute="centerX" id="tWg-nh-nb9"/>
+                            <constraint firstItem="kZf-Rg-XuV" firstAttribute="top" secondItem="gg0-Ka-tDR" secondAttribute="bottom" constant="86" id="vfA-7Z-xYw"/>
+                            <constraint firstItem="kZf-Rg-XuV" firstAttribute="trailing" secondItem="dxN-LP-T9U" secondAttribute="trailing" constant="-40" id="zTg-LB-nV7"/>
                         </constraints>
                     </view>
                     <connections>
                         <outlet property="backgroundImageView" destination="dxN-LP-T9U" id="ECx-A9-Nm3"/>
+                        <outlet property="genrePicker" destination="kZf-Rg-XuV" id="gsb-GK-xSv"/>
                         <outlet property="partyNameField" destination="gg0-Ka-tDR" id="GB7-7j-SHr"/>
                     </connections>
                 </viewController>
