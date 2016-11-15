@@ -8,7 +8,7 @@
 
 import UIKit
 
-class PartyJoinedViewController: UIViewController {
+class PartyJoinedViewController: UITableViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
