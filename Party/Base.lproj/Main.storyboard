@@ -27,13 +27,13 @@
                                 <rect key="frame" x="-265" y="0.0" width="640" height="667"/>
                             </imageView>
                             <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" distribution="fillEqually" alignment="center" translatesAutoresizingMaskIntoConstraints="NO" id="9SL-NN-BUz">
-                                <rect key="frame" x="0.0" y="263" width="374" height="140"/>
+                                <rect key="frame" x="0.0" y="243" width="375" height="180"/>
                                 <subviews>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="QG0-gk-zbd" customClass="setupButton" customModule="Party" customModuleProvider="target">
-                                        <rect key="frame" x="0.0" y="0.0" width="374" height="70"/>
+                                        <rect key="frame" x="0.0" y="0.0" width="375" height="90"/>
                                         <color key="backgroundColor" red="0.14509803921568626" green="0.14509803921568626" blue="0.14509803921568626" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                         <fontDescription key="fontDescription" name="Helvetica-Light" family="Helvetica" pointSize="22"/>
-                                        <state key="normal" title="Host Party">
+                                        <state key="normal" title="Create Party">
                                             <color key="titleColor" red="1" green="0.43529411759999997" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                         </state>
                                         <connections>
@@ -41,7 +41,7 @@
                                         </connections>
                                     </button>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="7L7-B0-Hdx" customClass="setupButton" customModule="Party" customModuleProvider="target">
-                                        <rect key="frame" x="0.0" y="70" width="374" height="70"/>
+                                        <rect key="frame" x="0.0" y="90" width="375" height="90"/>
                                         <color key="backgroundColor" red="0.14582011421319796" green="0.14582011421319796" blue="0.14582011421319796" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                         <fontDescription key="fontDescription" name="Helvetica-Light" family="Helvetica" pointSize="22"/>
                                         <state key="normal" title="Join Party">
@@ -54,7 +54,7 @@
                                 </subviews>
                                 <constraints>
                                     <constraint firstItem="QG0-gk-zbd" firstAttribute="leading" secondItem="7L7-B0-Hdx" secondAttribute="leading" id="1Xs-4S-I0f"/>
-                                    <constraint firstAttribute="height" constant="140" id="bOw-Sj-Sv5"/>
+                                    <constraint firstAttribute="height" constant="180" id="bOw-Sj-Sv5"/>
                                     <constraint firstItem="QG0-gk-zbd" firstAttribute="leading" secondItem="9SL-NN-BUz" secondAttribute="leading" id="lJl-eX-Smp"/>
                                 </constraints>
                             </stackView>
@@ -67,7 +67,6 @@
                             <constraint firstItem="0ug-C2-aT1" firstAttribute="bottom" secondItem="wfy-db-euE" secondAttribute="top" id="Kfm-ph-ATR"/>
                             <constraint firstItem="0ug-C2-aT1" firstAttribute="centerY" secondItem="9SL-NN-BUz" secondAttribute="centerY" id="LWg-Ai-cUu"/>
                             <constraint firstItem="9SL-NN-BUz" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leading" id="QMi-lG-2BE"/>
-                            <constraint firstItem="9SL-NN-BUz" firstAttribute="centerX" secondItem="8bC-Xf-vdC" secondAttribute="centerX" id="yCh-MA-H86"/>
                         </constraints>
                     </view>
                     <navigationItem key="navigationItem" id="ZCr-ka-sBX"/>
@@ -92,7 +91,7 @@
                                 <rect key="frame" x="0.0" y="28" width="375" height="88"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="wm4-FH-rQ8" id="efQ-pf-BbU">
-                                    <rect key="frame" x="0.0" y="0.0" width="375" height="87.5"/>
+                                    <rect key="frame" x="0.0" y="0.0" width="375" height="87"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                     <subviews>
                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="jsd-iR-Kq9">
@@ -144,10 +143,10 @@
             </objects>
             <point key="canvasLocation" x="2325.5999999999999" y="535.68215892053979"/>
         </scene>
-        <!--Host Party-->
+        <!--Create Party-->
         <scene sceneID="2v2-wa-oxB">
             <objects>
-                <viewController title="Host Party" id="9wA-Gp-aQL" customClass="PartyCreationViewController" customModule="Party" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController title="Create Party" id="9wA-Gp-aQL" customClass="PartyCreationViewController" customModule="Party" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="gAj-Q9-ed4"/>
                         <viewControllerLayoutGuide type="bottom" id="58Y-OY-fAV"/>
@@ -177,9 +176,12 @@
                                     <constraint firstAttribute="height" constant="70" id="7gO-NG-wGJ"/>
                                 </constraints>
                                 <fontDescription key="fontDescription" name="Helvetica-Light" family="Helvetica" pointSize="22"/>
-                                <state key="normal" title="Select Genres">
+                                <state key="normal" title="Select Genres  &gt;">
                                     <color key="titleColor" red="1" green="0.4344842136" blue="0.005222451407" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 </state>
+                                <connections>
+                                    <segue destination="Ytz-7e-nak" kind="show" id="gln-FH-JCu"/>
+                                </connections>
                             </button>
                             <stackView opaque="NO" contentMode="scaleToFill" distribution="fillEqually" translatesAutoresizingMaskIntoConstraints="NO" id="IDK-wT-eP1">
                                 <rect key="frame" x="0.0" y="164" width="375" height="70"/>
@@ -240,6 +242,43 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="aZk-rR-iJs" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="2327.1999999999998" y="-174.06296851574214"/>
+        </scene>
+        <!--Genre Picking Table View Controller-->
+        <scene sceneID="jOm-ku-U0T">
+            <objects>
+                <tableViewController id="Ytz-7e-nak" customClass="GenrePickingTableViewController" customModule="Party" customModuleProvider="target" sceneMemberID="viewController">
+                    <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="28" sectionFooterHeight="28" id="bVj-AI-MVB">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <prototypes>
+                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="none" indentationWidth="10" reuseIdentifier="genre" textLabel="xFF-as-PIq" style="IBUITableViewCellStyleDefault" id="IO5-GB-QNs">
+                                <rect key="frame" x="0.0" y="28" width="375" height="44"/>
+                                <autoresizingMask key="autoresizingMask"/>
+                                <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="IO5-GB-QNs" id="G02-HM-JqQ">
+                                    <rect key="frame" x="0.0" y="0.0" width="375" height="43"/>
+                                    <autoresizingMask key="autoresizingMask"/>
+                                    <subviews>
+                                        <label opaque="NO" multipleTouchEnabled="YES" contentMode="left" text="Title" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="xFF-as-PIq">
+                                            <rect key="frame" x="15" y="0.0" width="345" height="43"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                            <nil key="textColor"/>
+                                            <nil key="highlightedColor"/>
+                                        </label>
+                                    </subviews>
+                                </tableViewCellContentView>
+                            </tableViewCell>
+                        </prototypes>
+                        <connections>
+                            <outlet property="dataSource" destination="Ytz-7e-nak" id="GxL-Qx-1T2"/>
+                            <outlet property="delegate" destination="Ytz-7e-nak" id="bDM-g9-wst"/>
+                        </connections>
+                    </tableView>
+                </tableViewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="o1z-7v-Yx4" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="3246" y="-174"/>
         </scene>
         <!--Navigation Controller-->
         <scene sceneID="XwQ-1h-6q4">

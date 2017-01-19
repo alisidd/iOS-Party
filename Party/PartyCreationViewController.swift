@@ -21,8 +21,6 @@ class PartyCreationViewController: UIViewController, UITextFieldDelegate, UIPick
     @IBOutlet weak var partyNameField: UITextField!
     @IBOutlet weak var selectGenresButton: setupButton!
     
-    
-    var genres = ["--", "Rock", "Pop", "Hip Hop", "Country", "Alternative"]
     var musicService = MusicService.AppleMusic
     
     override func viewDidLoad() {
