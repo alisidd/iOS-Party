@@ -24,32 +24,28 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="background" translatesAutoresizingMaskIntoConstraints="NO" id="0ug-C2-aT1">
-                                <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                                <rect key="frame" x="-265" y="0.0" width="640" height="667"/>
                             </imageView>
-                            <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" distribution="fillEqually" alignment="center" spacing="20" translatesAutoresizingMaskIntoConstraints="NO" id="9SL-NN-BUz">
-                                <rect key="frame" x="47" y="263" width="280" height="140"/>
+                            <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" distribution="fillEqually" alignment="center" translatesAutoresizingMaskIntoConstraints="NO" id="9SL-NN-BUz">
+                                <rect key="frame" x="0.0" y="263" width="374" height="140"/>
                                 <subviews>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="QG0-gk-zbd" customClass="setupButton" customModule="Party" customModuleProvider="target">
-                                        <rect key="frame" x="0.0" y="0.0" width="280" height="60"/>
-                                        <color key="backgroundColor" red="0.32314783817826076" green="0.4294495558375635" blue="0.39370879124909186" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                        <constraints>
-                                            <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="280" id="5X9-59-LnE"/>
-                                            <constraint firstAttribute="height" constant="60" id="JyT-9P-v0E"/>
-                                        </constraints>
+                                        <rect key="frame" x="0.0" y="0.0" width="374" height="70"/>
+                                        <color key="backgroundColor" red="0.14509803921568626" green="0.14509803921568626" blue="0.14509803921568626" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                         <fontDescription key="fontDescription" name="Helvetica-Light" family="Helvetica" pointSize="22"/>
                                         <state key="normal" title="Host Party">
-                                            <color key="titleColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                                            <color key="titleColor" red="1" green="0.43529411759999997" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                         </state>
                                         <connections>
                                             <segue destination="9wA-Gp-aQL" kind="show" id="4fh-7f-BHd"/>
                                         </connections>
                                     </button>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="7L7-B0-Hdx" customClass="setupButton" customModule="Party" customModuleProvider="target">
-                                        <rect key="frame" x="0.0" y="80" width="280" height="60"/>
-                                        <color key="backgroundColor" red="0.32314783819999998" green="0.42944955579999999" blue="0.39370879120000002" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                        <rect key="frame" x="0.0" y="70" width="374" height="70"/>
+                                        <color key="backgroundColor" red="0.14582011421319796" green="0.14582011421319796" blue="0.14582011421319796" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                         <fontDescription key="fontDescription" name="Helvetica-Light" family="Helvetica" pointSize="22"/>
                                         <state key="normal" title="Join Party">
-                                            <color key="titleColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                                            <color key="titleColor" red="1" green="0.43529411764705883" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                         </state>
                                         <connections>
                                             <segue destination="MXk-NH-NYu" kind="show" id="Izr-jN-44h"/>
@@ -57,19 +53,21 @@
                                     </button>
                                 </subviews>
                                 <constraints>
-                                    <constraint firstItem="7L7-B0-Hdx" firstAttribute="width" secondItem="QG0-gk-zbd" secondAttribute="width" id="WbL-kh-AZo"/>
-                                    <constraint firstItem="7L7-B0-Hdx" firstAttribute="height" secondItem="QG0-gk-zbd" secondAttribute="height" id="YfY-2Q-gdI"/>
+                                    <constraint firstItem="QG0-gk-zbd" firstAttribute="leading" secondItem="7L7-B0-Hdx" secondAttribute="leading" id="1Xs-4S-I0f"/>
+                                    <constraint firstAttribute="height" constant="140" id="bOw-Sj-Sv5"/>
+                                    <constraint firstItem="QG0-gk-zbd" firstAttribute="leading" secondItem="9SL-NN-BUz" secondAttribute="leading" id="lJl-eX-Smp"/>
                                 </constraints>
                             </stackView>
                         </subviews>
                         <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <constraints>
-                            <constraint firstAttribute="trailing" secondItem="0ug-C2-aT1" secondAttribute="trailing" id="25s-v9-Q41"/>
-                            <constraint firstItem="0ug-C2-aT1" firstAttribute="top" secondItem="8bC-Xf-vdC" secondAttribute="top" id="7oc-aa-ZLd"/>
-                            <constraint firstItem="0ug-C2-aT1" firstAttribute="bottom" secondItem="wfy-db-euE" secondAttribute="top" id="Iri-db-EQ9"/>
-                            <constraint firstItem="9SL-NN-BUz" firstAttribute="centerY" secondItem="0ug-C2-aT1" secondAttribute="centerY" id="SUQ-eE-XaR"/>
-                            <constraint firstItem="9SL-NN-BUz" firstAttribute="centerX" secondItem="8bC-Xf-vdC" secondAttribute="centerX" id="bK4-Ki-LCF"/>
-                            <constraint firstItem="9SL-NN-BUz" firstAttribute="centerX" secondItem="0ug-C2-aT1" secondAttribute="centerX" id="qab-I4-g5n"/>
+                            <constraint firstItem="0ug-C2-aT1" firstAttribute="top" secondItem="8bC-Xf-vdC" secondAttribute="top" id="03R-Zw-bpx"/>
+                            <constraint firstAttribute="trailing" secondItem="9SL-NN-BUz" secondAttribute="trailing" id="89A-HB-YWl"/>
+                            <constraint firstAttribute="trailing" secondItem="0ug-C2-aT1" secondAttribute="trailing" id="8kr-iP-zb2"/>
+                            <constraint firstItem="0ug-C2-aT1" firstAttribute="bottom" secondItem="wfy-db-euE" secondAttribute="top" id="Kfm-ph-ATR"/>
+                            <constraint firstItem="0ug-C2-aT1" firstAttribute="centerY" secondItem="9SL-NN-BUz" secondAttribute="centerY" id="LWg-Ai-cUu"/>
+                            <constraint firstItem="9SL-NN-BUz" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leading" id="QMi-lG-2BE"/>
+                            <constraint firstItem="9SL-NN-BUz" firstAttribute="centerX" secondItem="8bC-Xf-vdC" secondAttribute="centerX" id="yCh-MA-H86"/>
                         </constraints>
                     </view>
                     <navigationItem key="navigationItem" id="ZCr-ka-sBX"/>
@@ -161,39 +159,82 @@
                             <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="background" translatesAutoresizingMaskIntoConstraints="NO" id="dxN-LP-T9U">
                                 <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                             </imageView>
-                            <segmentedControl contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="plain" selectedSegmentIndex="0" translatesAutoresizingMaskIntoConstraints="NO" id="zzo-5Y-otQ">
-                                <rect key="frame" x="91" y="99" width="179" height="29"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <segments>
-                                    <segment title="Apple Music"/>
-                                    <segment title="Spotify"/>
-                                </segments>
-                                <color key="tintColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
-                                <connections>
-                                    <action selector="musicServiceChange:" destination="9wA-Gp-aQL" eventType="valueChanged" id="VoS-dr-HXG"/>
-                                </connections>
-                            </segmentedControl>
-                            <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Party Name" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="gg0-Ka-tDR">
-                                <rect key="frame" x="33" y="159" width="295" height="50"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <color key="backgroundColor" red="1" green="1" blue="1" alpha="0.0" colorSpace="custom" customColorSpace="sRGB"/>
+                            <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Party Name" textAlignment="center" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="gg0-Ka-tDR">
+                                <rect key="frame" x="0.0" y="234" width="375" height="100"/>
+                                <color key="backgroundColor" red="0.14509803921568626" green="0.14509803921568626" blue="0.14509803921568626" alpha="0.0" colorSpace="custom" customColorSpace="sRGB"/>
                                 <color key="tintColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="100" id="NnE-5g-mui"/>
+                                </constraints>
                                 <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                <fontDescription key="fontDescription" style="UICTFontTextStyleBody"/>
+                                <fontDescription key="fontDescription" style="UICTFontTextStyleTitle2"/>
                                 <textInputTraits key="textInputTraits"/>
                             </textField>
+                            <button contentMode="scaleToFill" semanticContentAttribute="forceRightToLeft" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="32T-D3-GPM" customClass="setupButton" customModule="Party" customModuleProvider="target">
+                                <rect key="frame" x="0.0" y="334" width="375" height="70"/>
+                                <color key="backgroundColor" red="0.14509803921568626" green="0.14509803921568626" blue="0.14509803921568626" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="70" id="7gO-NG-wGJ"/>
+                                </constraints>
+                                <fontDescription key="fontDescription" name="Helvetica-Light" family="Helvetica" pointSize="22"/>
+                                <state key="normal" title="Select Genres">
+                                    <color key="titleColor" red="1" green="0.4344842136" blue="0.005222451407" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                </state>
+                            </button>
+                            <stackView opaque="NO" contentMode="scaleToFill" distribution="fillEqually" translatesAutoresizingMaskIntoConstraints="NO" id="IDK-wT-eP1">
+                                <rect key="frame" x="0.0" y="164" width="375" height="70"/>
+                                <subviews>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="NXk-fz-9f9" customClass="setupButton" customModule="Party" customModuleProvider="target">
+                                        <rect key="frame" x="0.0" y="0.0" width="187.5" height="70"/>
+                                        <color key="backgroundColor" red="0.058922595037563474" green="0.058922595037563474" blue="0.058922595037563474" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                        <fontDescription key="fontDescription" style="UICTFontTextStyleBody"/>
+                                        <state key="normal" title="Apple Music">
+                                            <color key="titleColor" red="1" green="0.4344842136" blue="0.005222451407" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                        </state>
+                                        <connections>
+                                            <action selector="changeToAppleMusic:" destination="9wA-Gp-aQL" eventType="touchUpInside" id="87M-cb-Ca5"/>
+                                        </connections>
+                                    </button>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="rLG-hj-JGO" customClass="setupButton" customModule="Party" customModuleProvider="target">
+                                        <rect key="frame" x="187.5" y="0.0" width="187.5" height="70"/>
+                                        <color key="backgroundColor" red="0.1450980392" green="0.1450980392" blue="0.1450980392" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                        <fontDescription key="fontDescription" style="UICTFontTextStyleBody"/>
+                                        <state key="normal" title="Spotify">
+                                            <color key="titleColor" red="1" green="0.4344842136" blue="0.005222451407" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                        </state>
+                                        <connections>
+                                            <action selector="changeToSpotify:" destination="9wA-Gp-aQL" eventType="touchUpInside" id="Ayq-m4-eeg"/>
+                                        </connections>
+                                    </button>
+                                </subviews>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="70" id="3Vd-Le-xuD"/>
+                                </constraints>
+                            </stackView>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
+                            <constraint firstItem="IDK-wT-eP1" firstAttribute="leading" secondItem="BFI-Zo-17q" secondAttribute="leading" id="0Mt-cQ-GVn"/>
+                            <constraint firstAttribute="trailing" secondItem="gg0-Ka-tDR" secondAttribute="trailing" id="4yw-zR-W5r"/>
+                            <constraint firstItem="IDK-wT-eP1" firstAttribute="top" secondItem="gAj-Q9-ed4" secondAttribute="bottom" constant="100" id="9Sb-Mu-2tc"/>
+                            <constraint firstItem="32T-D3-GPM" firstAttribute="leading" secondItem="BFI-Zo-17q" secondAttribute="leading" id="9o2-s8-8yw"/>
+                            <constraint firstItem="gg0-Ka-tDR" firstAttribute="top" secondItem="IDK-wT-eP1" secondAttribute="bottom" id="ERc-S8-dZJ"/>
                             <constraint firstItem="dxN-LP-T9U" firstAttribute="leading" secondItem="BFI-Zo-17q" secondAttribute="leading" id="IYp-1M-HuK"/>
+                            <constraint firstItem="gg0-Ka-tDR" firstAttribute="leading" secondItem="BFI-Zo-17q" secondAttribute="leading" id="LWI-Zu-byO"/>
                             <constraint firstItem="dxN-LP-T9U" firstAttribute="bottom" secondItem="58Y-OY-fAV" secondAttribute="top" id="W3T-e5-vuI"/>
+                            <constraint firstAttribute="trailing" secondItem="IDK-wT-eP1" secondAttribute="trailing" id="bFK-V8-jiK"/>
                             <constraint firstItem="dxN-LP-T9U" firstAttribute="top" secondItem="BFI-Zo-17q" secondAttribute="top" id="baF-gp-Pup"/>
+                            <constraint firstAttribute="trailing" secondItem="32T-D3-GPM" secondAttribute="trailing" id="gEE-mp-UPz"/>
                             <constraint firstAttribute="trailing" secondItem="dxN-LP-T9U" secondAttribute="trailing" id="mLG-GF-CNQ"/>
+                            <constraint firstItem="32T-D3-GPM" firstAttribute="top" secondItem="gg0-Ka-tDR" secondAttribute="bottom" id="yLa-b8-EeN"/>
                         </constraints>
                     </view>
                     <connections>
+                        <outlet property="appleMusicButton" destination="NXk-fz-9f9" id="XPA-n0-Scx"/>
                         <outlet property="backgroundImageView" destination="dxN-LP-T9U" id="ECx-A9-Nm3"/>
                         <outlet property="partyNameField" destination="gg0-Ka-tDR" id="GB7-7j-SHr"/>
+                        <outlet property="selectGenresButton" destination="32T-D3-GPM" id="W6W-A8-j74"/>
+                        <outlet property="spotifyButton" destination="rLG-hj-JGO" id="SB4-GJ-mIQ"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="aZk-rR-iJs" userLabel="First Responder" sceneMemberID="firstResponder"/>

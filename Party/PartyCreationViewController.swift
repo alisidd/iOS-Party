@@ -8,20 +8,6 @@
 
 import UIKit
 
-extension UIImage{
-    func imageScaledToSize(size : CGSize, isOpaque : Bool) -> UIImage{
-        UIGraphicsBeginImageContextWithOptions(size, isOpaque, 0.0)
-        
-        let imageRect = CGRect(origin: CGPoint(x: 0, y: 0), size: size)
-        self.draw(in: imageRect)
-        
-        let scaledImage = UIGraphicsGetImageFromCurrentImageContext()
-        UIGraphicsEndImageContext()
-        
-        return scaledImage!
-    }
-}
-
 class PartyCreationViewController: UIViewController, UITextFieldDelegate, UIPickerViewDelegate {
     
     enum MusicService {
@@ -30,8 +16,11 @@ class PartyCreationViewController: UIViewController, UITextFieldDelegate, UIPick
     }
 
     @IBOutlet weak var backgroundImageView: UIImageView!
+    @IBOutlet weak var appleMusicButton: setupButton!
+    @IBOutlet weak var spotifyButton: setupButton!
     @IBOutlet weak var partyNameField: UITextField!
-    @IBOutlet weak var partyNameIcon: UIImageView!
+    @IBOutlet weak var selectGenresButton: setupButton!
+    
     
     var genres = ["--", "Rock", "Pop", "Hip Hop", "Country", "Alternative"]
     var musicService = MusicService.AppleMusic
@@ -40,7 +29,6 @@ class PartyCreationViewController: UIViewController, UITextFieldDelegate, UIPick
         super.viewDidLoad()
         blurBackgroundImageView()
         initializeTextField()
-        initializeIcon()
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -50,8 +38,20 @@ class PartyCreationViewController: UIViewController, UITextFieldDelegate, UIPick
         customizeTextField()
     }
     
-    @IBAction func musicServiceChange(_ sender: UISegmentedControl) {
-        musicService = sender.selectedSegmentIndex == 0 ? .AppleMusic : .Spotify
+    @IBAction func changeToAppleMusic(_ sender: setupButton) {
+        UIView.animate(withDuration: 0.25, animations: {
+            sender.backgroundColor = UIColor(colorLiteralRed: 15/255, green: 15/255, blue: 15/255, alpha: 1)
+            self.spotifyButton.backgroundColor = UIColor(colorLiteralRed: 37/255, green: 37/255, blue: 37/255, alpha: 1)
+        })
+        musicService = .AppleMusic
+    }
+    
+    @IBAction func changeToSpotify(_ sender: setupButton) {
+        UIView.animate(withDuration: 0.25, animations: {
+            sender.backgroundColor = UIColor(colorLiteralRed: 15/255, green: 15/255, blue: 15/255, alpha: 1)
+            self.appleMusicButton.backgroundColor = UIColor(colorLiteralRed: 37/255, green: 37/255, blue: 37/255, alpha: 1)
+        })
+        musicService = .Spotify
     }
     
     func customizeNavigationBar() {
@@ -74,21 +74,9 @@ class PartyCreationViewController: UIViewController, UITextFieldDelegate, UIPick
         partyNameField.delegate = self
     }
     
-    func initializeIcon() {
-        let imageView = UIImageView(frame: CGRect(x: 0, y: 0, width: 55, height: 35))
-        imageView.image = #imageLiteral(resourceName: "partyNameIcon").imageScaledToSize(size: CGSize(width: imageView.bounds.width - 20, height: imageView.bounds.height), isOpaque: false)
-        imageView.contentMode = UIViewContentMode.center
-        partyNameField.leftView = imageView
-        
-        partyNameField.leftViewMode = UITextFieldViewMode.always
-    }
-    
     func customizeTextField() {
-        let bottomBorder = CALayer()
-        bottomBorder.frame = CGRect(x: 0, y: partyNameField.frame.height, width: partyNameField.frame.width, height: 1)
-        bottomBorder.backgroundColor = UIColor.gray.cgColor
-        partyNameField.backgroundColor = UIColor(white: 0.7, alpha: 0.2)
-        partyNameField.layer.addSublayer(bottomBorder)
+        partyNameField.backgroundColor = UIColor(colorLiteralRed: 37/255, green: 37/255, blue: 37/255, alpha: 37/255)
+
         partyNameField.attributedPlaceholder = NSAttributedString(string: "Party Name", attributes: [NSForegroundColorAttributeName: UIColor.lightGray])
  
         partyNameField.autocapitalizationType = UITextAutocapitalizationType.sentences

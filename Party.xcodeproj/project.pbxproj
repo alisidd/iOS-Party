@@ -15,9 +15,9 @@
 		417C38DA1DDA43FD00F59926 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 417C38D81DDA43FD00F59926 /* LaunchScreen.storyboard */; };
 		417C38EA1DDA91A100F59926 /* PartyCreationViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 417C38E21DDA447600F59926 /* PartyCreationViewController.swift */; };
 		417C38EC1DDA91A800F59926 /* InitialSetupViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 417C38E11DDA447600F59926 /* InitialSetupViewController.swift */; };
-		417C38ED1DDA91AF00F59926 /* setupButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 417C38E41DDA447600F59926 /* setupButton.swift */; };
 		417C38EE1DDA91B100F59926 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 417C38CC1DDA43FD00F59926 /* AppDelegate.swift */; };
 		417C38EF1DDA91B500F59926 /* Party.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 417C38D31DDA43FD00F59926 /* Party.xcdatamodeld */; };
+		418503F71E307BE900472006 /* setupButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 418503F61E307BE900472006 /* setupButton.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -33,7 +33,7 @@
 		417C38DB1DDA43FD00F59926 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		417C38E11DDA447600F59926 /* InitialSetupViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = InitialSetupViewController.swift; sourceTree = "<group>"; };
 		417C38E21DDA447600F59926 /* PartyCreationViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PartyCreationViewController.swift; sourceTree = "<group>"; };
-		417C38E41DDA447600F59926 /* setupButton.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = setupButton.swift; sourceTree = "<group>"; };
+		418503F61E307BE900472006 /* setupButton.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = setupButton.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -71,7 +71,7 @@
 				3472FB111DDAC68900A35FCB /* PartyJoinedViewController.swift */,
 				3472FB131DDAC6FC00A35FCB /* PartyListCell.swift */,
 				3472FB151DDAC81E00A35FCB /* Party.swift */,
-				417C38E41DDA447600F59926 /* setupButton.swift */,
+				418503F61E307BE900472006 /* setupButton.swift */,
 				417C38CC1DDA43FD00F59926 /* AppDelegate.swift */,
 				417C38D01DDA43FD00F59926 /* Main.storyboard */,
 				417C38D81DDA43FD00F59926 /* LaunchScreen.storyboard */,
@@ -156,10 +156,10 @@
 			buildActionMask = 2147483647;
 			files = (
 				3472FB121DDAC68900A35FCB /* PartyJoinedViewController.swift in Sources */,
+				418503F71E307BE900472006 /* setupButton.swift in Sources */,
 				3472FB141DDAC6FC00A35FCB /* PartyListCell.swift in Sources */,
 				417C38EF1DDA91B500F59926 /* Party.xcdatamodeld in Sources */,
 				417C38EE1DDA91B100F59926 /* AppDelegate.swift in Sources */,
-				417C38ED1DDA91AF00F59926 /* setupButton.swift in Sources */,
 				417C38EC1DDA91A800F59926 /* InitialSetupViewController.swift in Sources */,
 				3472FB161DDAC81E00A35FCB /* Party.swift in Sources */,
 				417C38EA1DDA91A100F59926 /* PartyCreationViewController.swift in Sources */,
