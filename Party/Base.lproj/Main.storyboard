@@ -143,10 +143,10 @@
             </objects>
             <point key="canvasLocation" x="2325.5999999999999" y="535.68215892053979"/>
         </scene>
-        <!--View Controller-->
+        <!--Party View Controller-->
         <scene sceneID="axc-VX-2Qx">
             <objects>
-                <viewController id="IhU-0X-egj" sceneMemberID="viewController">
+                <viewController id="IhU-0X-egj" customClass="PartyViewController" customModule="Party" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="aeu-Sl-Wwd"/>
                         <viewControllerLayoutGuide type="bottom" id="IwS-71-ORn"/>
@@ -154,8 +154,22 @@
                     <view key="view" contentMode="scaleToFill" id="ZZK-fY-JAX">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="background" translatesAutoresizingMaskIntoConstraints="NO" id="3Iu-Is-JTy">
+                                <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                            </imageView>
+                        </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <constraints>
+                            <constraint firstItem="IwS-71-ORn" firstAttribute="top" secondItem="3Iu-Is-JTy" secondAttribute="bottom" id="S5M-He-cF7"/>
+                            <constraint firstItem="3Iu-Is-JTy" firstAttribute="leading" secondItem="ZZK-fY-JAX" secondAttribute="leading" id="SpE-It-UM0"/>
+                            <constraint firstItem="3Iu-Is-JTy" firstAttribute="top" secondItem="ZZK-fY-JAX" secondAttribute="top" id="YWj-2c-WWO"/>
+                            <constraint firstAttribute="trailing" secondItem="3Iu-Is-JTy" secondAttribute="trailing" id="t22-BS-RPr"/>
+                        </constraints>
                     </view>
+                    <connections>
+                        <outlet property="backgroundImageView" destination="3Iu-Is-JTy" id="gSB-kp-cEU"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="f0T-g7-1Cu" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
@@ -244,7 +258,7 @@
                                     <color key="titleColor" red="0.1450980392" green="0.1450980392" blue="0.1450980392" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 </state>
                                 <connections>
-                                    <segue destination="IhU-0X-egj" kind="show" id="51P-jV-0ma"/>
+                                    <segue destination="IhU-0X-egj" kind="show" identifier="Create Party" id="51P-jV-0ma"/>
                                 </connections>
                             </button>
                         </subviews>
@@ -339,7 +353,7 @@
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="o1z-7v-Yx4" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="3202" y="-734"/>
+            <point key="canvasLocation" x="3265" y="-734"/>
         </scene>
         <!--Navigation Controller-->
         <scene sceneID="XwQ-1h-6q4">

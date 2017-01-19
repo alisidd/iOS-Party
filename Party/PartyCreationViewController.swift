@@ -8,12 +8,12 @@
 
 import UIKit
 
+enum MusicService {
+    case appleMusic
+    case spotify
+}
+
 class PartyCreationViewController: UIViewController, UITextFieldDelegate, UIPickerViewDelegate, changeSelectedGenresList {
-    
-    enum MusicService {
-        case appleMusic
-        case spotify
-    }
 
     @IBOutlet weak var backgroundImageView: UIImageView!
     @IBOutlet weak var appleMusicButton: setupButton!
@@ -21,12 +21,8 @@ class PartyCreationViewController: UIViewController, UITextFieldDelegate, UIPick
     @IBOutlet weak var partyNameField: UITextField!
     @IBOutlet weak var selectGenresButton: setupButton!
     
-    var musicService = MusicService.appleMusic
-    var selectedGenres = [String]() {
-        didSet {
-            print(selectedGenres)
-        }
-    }
+    private var musicService = MusicService.appleMusic
+    private var selectedGenres = [String]()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -109,12 +105,33 @@ class PartyCreationViewController: UIViewController, UITextFieldDelegate, UIPick
 
     
     // MARK: - Navigation
+    
+    override func shouldPerformSegue(withIdentifier identifier: String, sender: Any?) -> Bool {
+        if (self.partyNameField.text?.isEmpty)! {
+            alertUser()
+            return false
+        } else {
+            return true
+        }
+    }
+    
+    func alertUser() {
+        let alert = UIAlertController(title: "No Party Name", message: "You have to provide a party name to continue", preferredStyle: UIAlertControllerStyle.alert)
+        alert.addAction(UIAlertAction(title: "OK", style: UIAlertActionStyle.default, handler: nil))
+        self.present(alert, animated: true, completion: nil)
+    }
 
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if segue.identifier == "Genre Popover" {
             if let controller = segue.destination as? GenrePickingTableViewController {
                 controller.delegate = self
                 controller.selectedGenres = selectedGenres
+            }
+        } else if segue.identifier == "Create Party" {
+            if let controller = segue.destination as? PartyViewController {
+                controller.selectedGenres = selectedGenres
+                controller.musicService = musicService
+                controller.partyName = self.partyNameField.text!
             }
         }
     }
