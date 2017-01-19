@@ -8,7 +8,21 @@
 
 import UIKit
 
-class PartyCreationViewController: UIViewController, UITextFieldDelegate, UIPickerViewDelegate, UIPickerViewDataSource {
+extension UIImage{
+    func imageScaledToSize(size : CGSize, isOpaque : Bool) -> UIImage{
+        UIGraphicsBeginImageContextWithOptions(size, isOpaque, 0.0)
+        
+        let imageRect = CGRect(origin: CGPoint(x: 0, y: 0), size: size)
+        self.draw(in: imageRect)
+        
+        let scaledImage = UIGraphicsGetImageFromCurrentImageContext()
+        UIGraphicsEndImageContext()
+        
+        return scaledImage!
+    }
+}
+
+class PartyCreationViewController: UIViewController, UITextFieldDelegate, UIPickerViewDelegate {
     
     enum MusicService {
         case AppleMusic
@@ -61,9 +75,11 @@ class PartyCreationViewController: UIViewController, UITextFieldDelegate, UIPick
     }
     
     func initializeIcon() {
-        let imageView = UIImageView(frame: CGRect(x: 0, y: 0, width: 60, height: 60))
-        imageView.image = #imageLiteral(resourceName: "partyNameIcon")
+        let imageView = UIImageView(frame: CGRect(x: 0, y: 0, width: 55, height: 35))
+        imageView.image = #imageLiteral(resourceName: "partyNameIcon").imageScaledToSize(size: CGSize(width: imageView.bounds.width - 20, height: imageView.bounds.height), isOpaque: false)
+        imageView.contentMode = UIViewContentMode.center
         partyNameField.leftView = imageView
+        
         partyNameField.leftViewMode = UITextFieldViewMode.always
     }
     
@@ -85,27 +101,6 @@ class PartyCreationViewController: UIViewController, UITextFieldDelegate, UIPick
     
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         partyNameField.resignFirstResponder()
-    }
-    
-    func numberOfComponents(in pickerView: UIPickerView) -> Int {
-        pickerView.subviews.forEach {
-            if $0.bounds.height <= 1 {
-                $0.backgroundColor = UIColor.gray
-            }
-        }
-        return 1
-    }
-    
-    func pickerView(_ pickerView: UIPickerView, numberOfRowsInComponent component: Int) -> Int {
-        return genres.count
-    }
-    
-    func pickerView(_ pickerView: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String? {
-        return genres[row]
-    }
-    
-    func pickerView(_ pickerView: UIPickerView, attributedTitleForRow row: Int, forComponent component: Int) -> NSAttributedString? {
-        return NSAttributedString(string: genres[row], attributes: [NSForegroundColorAttributeName: UIColor.white])
     }
 
     override func didReceiveMemoryWarning() {
