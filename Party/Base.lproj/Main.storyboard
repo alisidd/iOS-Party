@@ -94,7 +94,7 @@
                                 <rect key="frame" x="0.0" y="28" width="375" height="88"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="wm4-FH-rQ8" id="efQ-pf-BbU">
-                                    <rect key="frame" x="0.0" y="0.0" width="375" height="87"/>
+                                    <rect key="frame" x="0.0" y="0.0" width="375" height="87.5"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                     <subviews>
                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="jsd-iR-Kq9">
@@ -161,39 +161,38 @@
                             <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="background" translatesAutoresizingMaskIntoConstraints="NO" id="dxN-LP-T9U">
                                 <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                             </imageView>
-                            <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Party Name" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="gg0-Ka-tDR">
-                                <rect key="frame" x="56" y="164" width="279" height="45"/>
+                            <segmentedControl contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="plain" selectedSegmentIndex="0" translatesAutoresizingMaskIntoConstraints="NO" id="zzo-5Y-otQ">
+                                <rect key="frame" x="91" y="99" width="179" height="29"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <segments>
+                                    <segment title="Apple Music"/>
+                                    <segment title="Spotify"/>
+                                </segments>
+                                <color key="tintColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
+                                <connections>
+                                    <action selector="musicServiceChange:" destination="9wA-Gp-aQL" eventType="valueChanged" id="VoS-dr-HXG"/>
+                                </connections>
+                            </segmentedControl>
+                            <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Party Name" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="gg0-Ka-tDR">
+                                <rect key="frame" x="33" y="159" width="295" height="50"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <color key="backgroundColor" red="1" green="1" blue="1" alpha="0.0" colorSpace="custom" customColorSpace="sRGB"/>
                                 <color key="tintColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
-                                <constraints>
-                                    <constraint firstAttribute="height" constant="45" id="2fa-we-a9G"/>
-                                </constraints>
                                 <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <fontDescription key="fontDescription" style="UICTFontTextStyleBody"/>
                                 <textInputTraits key="textInputTraits"/>
                             </textField>
-                            <pickerView contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="kZf-Rg-XuV">
-                                <rect key="frame" x="40" y="295" width="295" height="216"/>
-                                <color key="backgroundColor" red="1" green="1" blue="1" alpha="0.0" colorSpace="custom" customColorSpace="sRGB"/>
-                            </pickerView>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
-                            <constraint firstItem="gg0-Ka-tDR" firstAttribute="top" secondItem="gAj-Q9-ed4" secondAttribute="bottom" constant="100" id="35n-Vq-RyK"/>
-                            <constraint firstItem="dxN-LP-T9U" firstAttribute="leading" secondItem="BFI-Zo-17q" secondAttribute="leading" id="3C8-iM-q7s"/>
-                            <constraint firstItem="gg0-Ka-tDR" firstAttribute="trailing" secondItem="dxN-LP-T9U" secondAttribute="trailing" constant="-40" id="80c-wk-62K"/>
-                            <constraint firstItem="kZf-Rg-XuV" firstAttribute="leading" secondItem="dxN-LP-T9U" secondAttribute="leading" constant="40" id="G9b-m1-ngr"/>
-                            <constraint firstItem="gg0-Ka-tDR" firstAttribute="leading" secondItem="BFI-Zo-17q" secondAttribute="leadingMargin" constant="40" id="PZ7-n0-Tzw"/>
-                            <constraint firstAttribute="trailing" secondItem="dxN-LP-T9U" secondAttribute="trailing" id="Qna-F9-m1c"/>
-                            <constraint firstItem="dxN-LP-T9U" firstAttribute="top" secondItem="BFI-Zo-17q" secondAttribute="top" id="bQg-UB-Hg5"/>
-                            <constraint firstItem="dxN-LP-T9U" firstAttribute="bottom" secondItem="58Y-OY-fAV" secondAttribute="top" id="rDA-I4-nU2"/>
-                            <constraint firstItem="kZf-Rg-XuV" firstAttribute="top" secondItem="gg0-Ka-tDR" secondAttribute="bottom" constant="86" id="vfA-7Z-xYw"/>
-                            <constraint firstItem="kZf-Rg-XuV" firstAttribute="trailing" secondItem="dxN-LP-T9U" secondAttribute="trailing" constant="-40" id="zTg-LB-nV7"/>
+                            <constraint firstItem="dxN-LP-T9U" firstAttribute="leading" secondItem="BFI-Zo-17q" secondAttribute="leading" id="IYp-1M-HuK"/>
+                            <constraint firstItem="dxN-LP-T9U" firstAttribute="bottom" secondItem="58Y-OY-fAV" secondAttribute="top" id="W3T-e5-vuI"/>
+                            <constraint firstItem="dxN-LP-T9U" firstAttribute="top" secondItem="BFI-Zo-17q" secondAttribute="top" id="baF-gp-Pup"/>
+                            <constraint firstAttribute="trailing" secondItem="dxN-LP-T9U" secondAttribute="trailing" id="mLG-GF-CNQ"/>
                         </constraints>
                     </view>
                     <connections>
                         <outlet property="backgroundImageView" destination="dxN-LP-T9U" id="ECx-A9-Nm3"/>
-                        <outlet property="genrePicker" destination="kZf-Rg-XuV" id="gsb-GK-xSv"/>
                         <outlet property="partyNameField" destination="gg0-Ka-tDR" id="GB7-7j-SHr"/>
                     </connections>
                 </viewController>

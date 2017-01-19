@@ -9,18 +9,24 @@
 import UIKit
 
 class PartyCreationViewController: UIViewController, UITextFieldDelegate, UIPickerViewDelegate, UIPickerViewDataSource {
+    
+    enum MusicService {
+        case AppleMusic
+        case Spotify
+    }
 
     @IBOutlet weak var backgroundImageView: UIImageView!
     @IBOutlet weak var partyNameField: UITextField!
-    @IBOutlet weak var genrePicker: UIPickerView!
+    @IBOutlet weak var partyNameIcon: UIImageView!
     
     var genres = ["--", "Rock", "Pop", "Hip Hop", "Country", "Alternative"]
+    var musicService = MusicService.AppleMusic
     
     override func viewDidLoad() {
         super.viewDidLoad()
         blurBackgroundImageView()
         initializeTextField()
-        initializePickerView()
+        initializeIcon()
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -28,6 +34,10 @@ class PartyCreationViewController: UIViewController, UITextFieldDelegate, UIPick
         
         customizeNavigationBar()
         customizeTextField()
+    }
+    
+    @IBAction func musicServiceChange(_ sender: UISegmentedControl) {
+        musicService = sender.selectedSegmentIndex == 0 ? .AppleMusic : .Spotify
     }
     
     func customizeNavigationBar() {
@@ -50,14 +60,21 @@ class PartyCreationViewController: UIViewController, UITextFieldDelegate, UIPick
         partyNameField.delegate = self
     }
     
+    func initializeIcon() {
+        let imageView = UIImageView(frame: CGRect(x: 0, y: 0, width: 60, height: 60))
+        imageView.image = #imageLiteral(resourceName: "partyNameIcon")
+        partyNameField.leftView = imageView
+        partyNameField.leftViewMode = UITextFieldViewMode.always
+    }
+    
     func customizeTextField() {
         let bottomBorder = CALayer()
         bottomBorder.frame = CGRect(x: 0, y: partyNameField.frame.height, width: partyNameField.frame.width, height: 1)
         bottomBorder.backgroundColor = UIColor.gray.cgColor
-        partyNameField.borderStyle = UITextBorderStyle.none
+        partyNameField.backgroundColor = UIColor(white: 0.7, alpha: 0.2)
         partyNameField.layer.addSublayer(bottomBorder)
-        partyNameField.attributedPlaceholder = NSAttributedString(string: "Party Name", attributes: [NSForegroundColorAttributeName: UIColor.darkGray])
-        
+        partyNameField.attributedPlaceholder = NSAttributedString(string: "Party Name", attributes: [NSForegroundColorAttributeName: UIColor.lightGray])
+ 
         partyNameField.autocapitalizationType = UITextAutocapitalizationType.sentences
     }
     
@@ -68,11 +85,6 @@ class PartyCreationViewController: UIViewController, UITextFieldDelegate, UIPick
     
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         partyNameField.resignFirstResponder()
-    }
-    
-    func initializePickerView() {
-        genrePicker.delegate = self
-        genrePicker.dataSource = self
     }
     
     func numberOfComponents(in pickerView: UIPickerView) -> Int {
