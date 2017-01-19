@@ -143,6 +143,24 @@
             </objects>
             <point key="canvasLocation" x="2325.5999999999999" y="535.68215892053979"/>
         </scene>
+        <!--View Controller-->
+        <scene sceneID="axc-VX-2Qx">
+            <objects>
+                <viewController id="IhU-0X-egj" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="aeu-Sl-Wwd"/>
+                        <viewControllerLayoutGuide type="bottom" id="IwS-71-ORn"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="ZZK-fY-JAX">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                    </view>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="f0T-g7-1Cu" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="3265" y="80"/>
+        </scene>
         <!--Create Party-->
         <scene sceneID="2v2-wa-oxB">
             <objects>
@@ -215,11 +233,27 @@
                                     <constraint firstAttribute="height" constant="70" id="3Vd-Le-xuD"/>
                                 </constraints>
                             </stackView>
+                            <button contentMode="scaleToFill" semanticContentAttribute="forceRightToLeft" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="AbB-Zi-Pt0" customClass="setupButton" customModule="Party" customModuleProvider="target">
+                                <rect key="frame" x="0.0" y="597" width="375" height="70"/>
+                                <color key="backgroundColor" red="1" green="0.4344842136" blue="0.005222451407" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="70" id="FjE-J3-h07"/>
+                                </constraints>
+                                <fontDescription key="fontDescription" name="Helvetica-Light" family="Helvetica" pointSize="22"/>
+                                <state key="normal" title="Create">
+                                    <color key="titleColor" red="0.1450980392" green="0.1450980392" blue="0.1450980392" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                </state>
+                                <connections>
+                                    <segue destination="IhU-0X-egj" kind="show" id="51P-jV-0ma"/>
+                                </connections>
+                            </button>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
+                            <constraint firstItem="AbB-Zi-Pt0" firstAttribute="leading" secondItem="BFI-Zo-17q" secondAttribute="leading" id="0Ad-pT-uUe"/>
                             <constraint firstItem="IDK-wT-eP1" firstAttribute="leading" secondItem="BFI-Zo-17q" secondAttribute="leading" id="0Mt-cQ-GVn"/>
                             <constraint firstAttribute="trailing" secondItem="gg0-Ka-tDR" secondAttribute="trailing" id="4yw-zR-W5r"/>
+                            <constraint firstAttribute="trailing" secondItem="AbB-Zi-Pt0" secondAttribute="trailing" id="7kc-S3-aBX"/>
                             <constraint firstItem="IDK-wT-eP1" firstAttribute="top" secondItem="gAj-Q9-ed4" secondAttribute="bottom" constant="100" id="9Sb-Mu-2tc"/>
                             <constraint firstItem="32T-D3-GPM" firstAttribute="leading" secondItem="BFI-Zo-17q" secondAttribute="leading" id="9o2-s8-8yw"/>
                             <constraint firstItem="gg0-Ka-tDR" firstAttribute="top" secondItem="IDK-wT-eP1" secondAttribute="bottom" id="ERc-S8-dZJ"/>
@@ -231,6 +265,7 @@
                             <constraint firstAttribute="trailing" secondItem="32T-D3-GPM" secondAttribute="trailing" id="gEE-mp-UPz"/>
                             <constraint firstAttribute="trailing" secondItem="dxN-LP-T9U" secondAttribute="trailing" id="mLG-GF-CNQ"/>
                             <constraint firstItem="32T-D3-GPM" firstAttribute="top" secondItem="gg0-Ka-tDR" secondAttribute="bottom" id="yLa-b8-EeN"/>
+                            <constraint firstItem="58Y-OY-fAV" firstAttribute="top" secondItem="AbB-Zi-Pt0" secondAttribute="bottom" id="yOq-8o-FPn"/>
                         </constraints>
                     </view>
                     <connections>
@@ -243,7 +278,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="aZk-rR-iJs" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="2327.1999999999998" y="-174.06296851574214"/>
+            <point key="canvasLocation" x="2326" y="-349"/>
         </scene>
         <!--Genre Picking Table View Controller-->
         <scene sceneID="jOm-ku-U0T">
@@ -259,10 +294,10 @@
                             <subviews>
                                 <button contentMode="scaleToFill" semanticContentAttribute="forceRightToLeft" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Y4G-KB-e0F" customClass="setupButton" customModule="Party" customModuleProvider="target">
                                     <rect key="frame" x="0.0" y="0.0" width="375" height="80"/>
-                                    <color key="backgroundColor" red="0.1450980392" green="0.1450980392" blue="0.1450980392" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                    <color key="backgroundColor" red="1" green="0.4344842136" blue="0.005222451407" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                     <fontDescription key="fontDescription" name="Helvetica-Light" family="Helvetica" pointSize="22"/>
                                     <state key="normal" title="Done">
-                                        <color key="titleColor" red="1" green="0.4344842136" blue="0.005222451407" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                        <color key="titleColor" red="0.1450980392" green="0.1450980392" blue="0.1450980392" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                     </state>
                                     <connections>
                                         <action selector="goBack:" destination="Ytz-7e-nak" eventType="touchUpInside" id="otJ-LM-SOj"/>
@@ -304,7 +339,7 @@
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="o1z-7v-Yx4" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="3246" y="-174"/>
+            <point key="canvasLocation" x="3202" y="-734"/>
         </scene>
         <!--Navigation Controller-->
         <scene sceneID="XwQ-1h-6q4">

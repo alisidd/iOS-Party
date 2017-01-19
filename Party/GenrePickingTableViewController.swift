@@ -28,7 +28,7 @@ class GenrePickingTableViewController: UITableViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        selectRows()
+        selectGenres()
     }
     
     func adjustTableView() {
@@ -38,7 +38,7 @@ class GenrePickingTableViewController: UITableViewController {
         tableView.contentInset = UIEdgeInsetsMake(20, 0, 0, 0);
     }
     
-    func selectRows() {
+    func selectGenres() {
         for genre in selectedGenres {
             let index = genres.index(of: genre)!
             let rowToSelect = IndexPath(item: index, section: 0)
