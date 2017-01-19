@@ -8,23 +8,47 @@
 
 import UIKit
 
+protocol changeSelectedGenresList: class {
+    func addToGenresList(withGenre genre: String)
+    func removeFromGenresList(withGenre genre: String)
+}
+
 class GenrePickingTableViewController: UITableViewController {
     
     var genres = ["Rock", "Pop", "Hip Hop", "Country", "Alternative"]
-
+    var selectedGenres = [String]()
+    weak var delegate: changeSelectedGenresList?
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = UIColor(colorLiteralRed: 37/255, green: 37/255, blue: 37/255, alpha: 1)
         
+        adjustTableView()
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        selectRows()
+    }
+    
+    func adjustTableView() {
         tableView.allowsMultipleSelection = true
         tableView.rowHeight = 70
         tableView.separatorColor = UIColor(colorLiteralRed: 15/255, green: 15/255, blue: 15/255, alpha: 1)
-        tableView.tableFooterView = UIView()
+        tableView.contentInset = UIEdgeInsetsMake(20, 0, 0, 0);
     }
-
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
+    
+    func selectRows() {
+        for genre in selectedGenres {
+            let index = genres.index(of: genre)!
+            let rowToSelect = IndexPath(item: index, section: 0)
+            
+            if let cell = tableView.cellForRow(at: rowToSelect) {
+                cell.accessoryType = .checkmark
+                cell.tintColor = UIColor(colorLiteralRed: 1, green: 111/255, blue: 1/255, alpha: 1)
+            }
+            tableView.selectRow(at: rowToSelect, animated: false, scrollPosition: UITableViewScrollPosition.none)
+        }
     }
 
     // MARK: - Table view data source
@@ -52,12 +76,16 @@ class GenrePickingTableViewController: UITableViewController {
             cell.accessoryType = .checkmark
             cell.tintColor = UIColor(colorLiteralRed: 1, green: 111/255, blue: 1/255, alpha: 1)
         }
+        
+        delegate?.addToGenresList(withGenre: genres[indexPath.row])
     }
     
     override func tableView(_ tableView: UITableView, didDeselectRowAt indexPath: IndexPath) {
         if let cell = tableView.cellForRow(at: indexPath) {
             cell.accessoryType = .none
         }
+        
+        delegate?.removeFromGenresList(withGenre: genres[indexPath.row])
     }
     
     override func tableView(_ tableView: UITableView, didHighlightRowAt indexPath: IndexPath) {
@@ -68,12 +96,13 @@ class GenrePickingTableViewController: UITableViewController {
     
     override func tableView(_ tableView: UITableView, didUnhighlightRowAt indexPath: IndexPath) {
         if let cell = tableView.cellForRow(at: indexPath) {
-            UIView.animate(withDuration: 4, animations: {
-                cell.textLabel?.textColor = UIColor(colorLiteralRed: 1, green: 111/255, blue: 1/255, alpha: 1)
-            })
+            cell.textLabel?.textColor = UIColor(colorLiteralRed: 1, green: 111/255, blue: 1/255, alpha: 1)
         }
     }
 
+    @IBAction func goBack(_ sender: setupButton) {
+        dismiss(animated: true, completion: nil)
+    }
     /*
     // MARK: - Navigation
 

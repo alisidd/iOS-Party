@@ -180,7 +180,9 @@
                                     <color key="titleColor" red="1" green="0.4344842136" blue="0.005222451407" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 </state>
                                 <connections>
-                                    <segue destination="Ytz-7e-nak" kind="show" id="gln-FH-JCu"/>
+                                    <segue destination="Ytz-7e-nak" kind="popoverPresentation" identifier="Genre Popover" popoverAnchorView="32T-D3-GPM" id="gln-FH-JCu">
+                                        <popoverArrowDirection key="popoverArrowDirection" up="YES" down="YES" left="YES" right="YES"/>
+                                    </segue>
                                 </connections>
                             </button>
                             <stackView opaque="NO" contentMode="scaleToFill" distribution="fillEqually" translatesAutoresizingMaskIntoConstraints="NO" id="IDK-wT-eP1">
@@ -251,6 +253,30 @@
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <view key="tableFooterView" contentMode="scaleToFill" id="YgC-wQ-1ju">
+                            <rect key="frame" x="0.0" y="72" width="375" height="80"/>
+                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                            <subviews>
+                                <button contentMode="scaleToFill" semanticContentAttribute="forceRightToLeft" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Y4G-KB-e0F" customClass="setupButton" customModule="Party" customModuleProvider="target">
+                                    <rect key="frame" x="0.0" y="0.0" width="375" height="80"/>
+                                    <color key="backgroundColor" red="0.1450980392" green="0.1450980392" blue="0.1450980392" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                    <fontDescription key="fontDescription" name="Helvetica-Light" family="Helvetica" pointSize="22"/>
+                                    <state key="normal" title="Done">
+                                        <color key="titleColor" red="1" green="0.4344842136" blue="0.005222451407" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                    </state>
+                                    <connections>
+                                        <action selector="goBack:" destination="Ytz-7e-nak" eventType="touchUpInside" id="otJ-LM-SOj"/>
+                                    </connections>
+                                </button>
+                            </subviews>
+                            <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                            <constraints>
+                                <constraint firstAttribute="bottom" secondItem="Y4G-KB-e0F" secondAttribute="bottom" id="21A-jj-9Yg"/>
+                                <constraint firstItem="Y4G-KB-e0F" firstAttribute="leading" secondItem="YgC-wQ-1ju" secondAttribute="leading" id="C1i-a4-blQ"/>
+                                <constraint firstAttribute="trailing" secondItem="Y4G-KB-e0F" secondAttribute="trailing" id="Pec-ff-uBz"/>
+                                <constraint firstItem="Y4G-KB-e0F" firstAttribute="top" secondItem="YgC-wQ-1ju" secondAttribute="top" id="yVh-QH-Qmr"/>
+                            </constraints>
+                        </view>
                         <prototypes>
                             <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="none" indentationWidth="10" reuseIdentifier="genre" textLabel="xFF-as-PIq" style="IBUITableViewCellStyleDefault" id="IO5-GB-QNs">
                                 <rect key="frame" x="0.0" y="28" width="375" height="44"/>

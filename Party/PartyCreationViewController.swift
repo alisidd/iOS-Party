@@ -8,11 +8,11 @@
 
 import UIKit
 
-class PartyCreationViewController: UIViewController, UITextFieldDelegate, UIPickerViewDelegate {
+class PartyCreationViewController: UIViewController, UITextFieldDelegate, UIPickerViewDelegate, changeSelectedGenresList {
     
     enum MusicService {
-        case AppleMusic
-        case Spotify
+        case appleMusic
+        case spotify
     }
 
     @IBOutlet weak var backgroundImageView: UIImageView!
@@ -21,7 +21,12 @@ class PartyCreationViewController: UIViewController, UITextFieldDelegate, UIPick
     @IBOutlet weak var partyNameField: UITextField!
     @IBOutlet weak var selectGenresButton: setupButton!
     
-    var musicService = MusicService.AppleMusic
+    var musicService = MusicService.appleMusic
+    var selectedGenres = [String]() {
+        didSet {
+            print(selectedGenres)
+        }
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -41,7 +46,7 @@ class PartyCreationViewController: UIViewController, UITextFieldDelegate, UIPick
             sender.backgroundColor = UIColor(colorLiteralRed: 15/255, green: 15/255, blue: 15/255, alpha: 1)
             self.spotifyButton.backgroundColor = UIColor(colorLiteralRed: 37/255, green: 37/255, blue: 37/255, alpha: 1)
         })
-        musicService = .AppleMusic
+        musicService = .appleMusic
     }
     
     @IBAction func changeToSpotify(_ sender: setupButton) {
@@ -49,7 +54,7 @@ class PartyCreationViewController: UIViewController, UITextFieldDelegate, UIPick
             sender.backgroundColor = UIColor(colorLiteralRed: 15/255, green: 15/255, blue: 15/255, alpha: 1)
             self.appleMusicButton.backgroundColor = UIColor(colorLiteralRed: 37/255, green: 37/255, blue: 37/255, alpha: 1)
         })
-        musicService = .Spotify
+        musicService = .spotify
     }
     
     func customizeNavigationBar() {
@@ -88,20 +93,30 @@ class PartyCreationViewController: UIViewController, UITextFieldDelegate, UIPick
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         partyNameField.resignFirstResponder()
     }
+    
+    func addToGenresList(withGenre genre: String) {
+        selectedGenres.append(genre)
+    }
+    
+    func removeFromGenresList(withGenre genre: String) {
+        selectedGenres.remove(at: selectedGenres.index(of: genre)!)
+    }
 
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
     }
 
-    /*
+    
     // MARK: - Navigation
 
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destinationViewController.
-        // Pass the selected object to the new view controller.
+        if segue.identifier == "Genre Popover" {
+            if let controller = segue.destination as? GenrePickingTableViewController {
+                controller.delegate = self
+                controller.selectedGenres = selectedGenres
+            }
+        }
     }
-    */
 
 }
