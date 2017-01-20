@@ -14,7 +14,7 @@ class AddSongViewController: UIViewController, UITextFieldDelegate {
     @IBOutlet weak var searchSongsField: UITextField!
     
     var party = Party()
-    private var songsList = [String]
+    private var songsList = [String]()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -54,7 +54,7 @@ class AddSongViewController: UIViewController, UITextFieldDelegate {
     func textFieldShouldReturn(_ searchSongsField: UITextField) -> Bool {
         searchSongsField.resignFirstResponder()
         if !(searchSongsField.text?.isEmpty)! {
-            fetchResults(forQuery: searchSongsField.text)
+            fetchResults(forQuery: searchSongsField.text!)
         }
         return true
     }
