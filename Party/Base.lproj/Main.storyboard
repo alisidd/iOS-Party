@@ -229,31 +229,25 @@
                                             <rect key="frame" x="0.0" y="0.0" width="375" height="43"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
-                                                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="background" translatesAutoresizingMaskIntoConstraints="NO" id="qRM-vb-quh">
-                                                    <rect key="frame" x="0.0" y="0.0" width="375" height="43"/>
-                                                </imageView>
-                                                <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" alignment="center" translatesAutoresizingMaskIntoConstraints="NO" id="Rmh-fc-81j">
-                                                    <rect key="frame" x="23" y="4.5" width="98" height="35"/>
+                                                <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" distribution="fillProportionally" alignment="top" translatesAutoresizingMaskIntoConstraints="NO" id="Rmh-fc-81j">
+                                                    <rect key="frame" x="88" y="4" width="92" height="35"/>
                                                     <subviews>
                                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Track Name" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="2DO-4R-Sug">
-                                                            <rect key="frame" x="3" y="0.0" width="92" height="20.5"/>
+                                                            <rect key="frame" x="0.0" y="0.0" width="92" height="20.5"/>
                                                             <fontDescription key="fontDescription" style="UICTFontTextStyleBody"/>
                                                             <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                             <nil key="highlightedColor"/>
                                                         </label>
                                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Artist Name" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="kxl-HZ-CKU">
-                                                            <rect key="frame" x="15.5" y="20.5" width="67.5" height="14.5"/>
+                                                            <rect key="frame" x="0.0" y="20.5" width="67.5" height="14.5"/>
                                                             <fontDescription key="fontDescription" style="UICTFontTextStyleCaption1"/>
                                                             <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                             <nil key="highlightedColor"/>
                                                         </label>
                                                     </subviews>
-                                                    <constraints>
-                                                        <constraint firstItem="2DO-4R-Sug" firstAttribute="leading" secondItem="Rmh-fc-81j" secondAttribute="leading" constant="3" id="EiK-KT-QAl"/>
-                                                    </constraints>
                                                 </stackView>
                                                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="e9C-Jv-HvF">
-                                                    <rect key="frame" x="322" y="-2" width="30" height="46"/>
+                                                    <rect key="frame" x="322" y="-1" width="30" height="46"/>
                                                     <fontDescription key="fontDescription" style="UICTFontTextStyleTitle1"/>
                                                     <state key="normal" title="+">
                                                         <color key="titleColor" red="1" green="0.4344842136" blue="0.005222451407" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
@@ -262,21 +256,26 @@
                                                         <action selector="addTrack:" destination="L1I-KA-fw5" eventType="touchUpInside" id="NDy-op-J6P"/>
                                                     </connections>
                                                 </button>
+                                                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="rt8-Py-GK2">
+                                                    <rect key="frame" x="18" y="-3" width="50" height="50"/>
+                                                    <constraints>
+                                                        <constraint firstAttribute="height" constant="50" id="DgY-hB-pGc"/>
+                                                        <constraint firstAttribute="width" constant="50" id="t2z-Qh-13g"/>
+                                                    </constraints>
+                                                </imageView>
                                             </subviews>
                                             <constraints>
-                                                <constraint firstAttribute="trailing" secondItem="qRM-vb-quh" secondAttribute="trailing" id="CKj-po-bHv"/>
-                                                <constraint firstItem="Rmh-fc-81j" firstAttribute="leading" secondItem="bpz-Oi-siJ" secondAttribute="leadingMargin" constant="15" id="Gk7-4a-90U"/>
-                                                <constraint firstAttribute="bottom" secondItem="qRM-vb-quh" secondAttribute="bottom" id="H83-KE-dFt"/>
-                                                <constraint firstItem="qRM-vb-quh" firstAttribute="leading" secondItem="bpz-Oi-siJ" secondAttribute="leading" id="Iop-NQ-1Ne"/>
-                                                <constraint firstAttribute="trailingMargin" secondItem="e9C-Jv-HvF" secondAttribute="trailing" constant="15" id="QX0-m9-ZwT"/>
-                                                <constraint firstItem="qRM-vb-quh" firstAttribute="centerY" secondItem="Rmh-fc-81j" secondAttribute="centerY" id="cae-Ei-VTl"/>
-                                                <constraint firstItem="qRM-vb-quh" firstAttribute="top" secondItem="bpz-Oi-siJ" secondAttribute="top" id="hoe-Rf-fpw"/>
-                                                <constraint firstItem="qRM-vb-quh" firstAttribute="centerY" secondItem="e9C-Jv-HvF" secondAttribute="centerY" id="p7J-Ek-Vgy"/>
+                                                <constraint firstItem="rt8-Py-GK2" firstAttribute="centerY" secondItem="Rmh-fc-81j" secondAttribute="centerY" id="U2F-KW-sSE"/>
+                                                <constraint firstItem="rt8-Py-GK2" firstAttribute="centerY" secondItem="bpz-Oi-siJ" secondAttribute="centerY" id="V9v-jJ-h5B"/>
+                                                <constraint firstItem="rt8-Py-GK2" firstAttribute="leading" secondItem="bpz-Oi-siJ" secondAttribute="leadingMargin" constant="10" id="jFQ-lm-Wd8"/>
+                                                <constraint firstItem="Rmh-fc-81j" firstAttribute="centerY" secondItem="e9C-Jv-HvF" secondAttribute="centerY" id="jvC-6b-PBW"/>
+                                                <constraint firstItem="Rmh-fc-81j" firstAttribute="leading" secondItem="rt8-Py-GK2" secondAttribute="trailing" constant="20" id="mzv-7u-dEK"/>
+                                                <constraint firstAttribute="trailingMargin" secondItem="e9C-Jv-HvF" secondAttribute="trailing" constant="15" id="uvK-8g-KPH"/>
                                             </constraints>
                                         </tableViewCellContentView>
                                         <connections>
-                                            <outlet property="albumArt" destination="qRM-vb-quh" id="3eX-80-0jM"/>
                                             <outlet property="artistName" destination="kxl-HZ-CKU" id="6Zx-Ky-Sxo"/>
+                                            <outlet property="artworkImageView" destination="rt8-Py-GK2" id="qmN-2x-NMQ"/>
                                             <outlet property="trackName" destination="2DO-4R-Sug" id="UIA-6i-ixn"/>
                                         </connections>
                                     </tableViewCell>

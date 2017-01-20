@@ -107,6 +107,7 @@ class AddSongViewController: UIViewController, UITextFieldDelegate, UITableViewD
         cell.preservesSuperviewLayoutMargins = false
         cell.separatorInset = UIEdgeInsets.zero
         cell.layoutMargins = UIEdgeInsets.zero
+        cell.backgroundColor = .clear
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -116,9 +117,9 @@ class AddSongViewController: UIViewController, UITextFieldDelegate, UITableViewD
         
         cell.trackName.text = tracksList[indexPath.row].name
         cell.artistName.text = tracksList[indexPath.row].artist
-        /*if let artwork = fetchImage(fromURL: tracksList[indexPath.row].artworkURL) {
-            cell.albumArt.image = artwork
-        }*/
+        if let artwork = fetchImage(fromURL: tracksList[indexPath.row].artworkURL) {
+            cell.artworkImageView.image = artwork
+        }
         
         return cell
     }

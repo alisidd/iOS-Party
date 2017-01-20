@@ -21,18 +21,7 @@ import UIKit
 
 class TrackTableViewCell: UITableViewCell {
     
-    @IBOutlet weak var albumArt: UIImageView! {
-        didSet {
-            let blurEffect: UIBlurEffect = UIBlurEffect(style: UIBlurEffectStyle.dark)
-            
-            let blurView = UIVisualEffectView(effect: blurEffect)
-            blurView.alpha = 0.9
-            blurView.frame = albumArt.bounds
-            blurView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
-            albumArt.addSubview(blurView)
-            albumArt.contentMode = .scaleAspectFill
-        }
-    }
+    @IBOutlet weak var artworkImageView: UIImageView!
     @IBOutlet weak var trackName: UILabel!
     @IBOutlet weak var artistName: UILabel!
     
