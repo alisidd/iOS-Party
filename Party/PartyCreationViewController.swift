@@ -106,7 +106,11 @@ class PartyCreationViewController: UIViewController, UITextFieldDelegate, UIPick
     // MARK: - Navigation
     
     override func shouldPerformSegue(withIdentifier identifier: String, sender: Any?) -> Bool {
-        if (self.partyNameField.text?.isEmpty)! && identifier == "Create Party" {
+        if let text = partyNameField.text {
+            partyMade.partyName = text
+        }
+        
+        if self.partyMade.partyName.isEmpty && identifier == "Create Party" {
             alertUser()
             return false
         } else {

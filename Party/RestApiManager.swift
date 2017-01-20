@@ -42,6 +42,7 @@ class RestApiManager {
             newTrack.name = track["trackName"].stringValue
             newTrack.artist = track["artistName"].stringValue
             newTrack.album = track["collectionName"].stringValue
+            newTrack.artworkURL = track["artworkUrl60"].stringValue
             
             tracksList.append(newTrack)
         }

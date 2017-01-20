@@ -23,6 +23,7 @@ class AddSongViewController: UIViewController, UITextFieldDelegate, UITableViewD
         blurBackgroundImageView()
         customizeNavigationBar()
         setDelegates()
+        adjustViews()
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -50,6 +51,12 @@ class AddSongViewController: UIViewController, UITextFieldDelegate, UITableViewD
         self.searchSongsField.delegate = self
         self.trackTableView.delegate = self
         self.trackTableView.dataSource = self
+    }
+    
+    func adjustViews() {
+        trackTableView.backgroundColor = .clear
+        trackTableView.separatorColor = UIColor(colorLiteralRed: 15/255, green: 15/255, blue: 15/255, alpha: 1)
+        trackTableView.tableFooterView = UIView()
     }
     
     func customizeTextField() {
@@ -95,11 +102,40 @@ class AddSongViewController: UIViewController, UITextFieldDelegate, UITableViewD
         return tracksList.count
     }
     
+    func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
+        cell.preservesSuperviewLayoutMargins = false
+        cell.separatorInset = UIEdgeInsets.zero
+        cell.layoutMargins = UIEdgeInsets.zero
+    }
+    
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = trackTableView.dequeueReusableCell(withIdentifier: "TrackCell", for: indexPath) as! TrackTableViewCell
+        
+        
+        
         cell.trackName.text = tracksList[indexPath.row].name
+        cell.artistName.text = tracksList[indexPath.row].artist
+        /*if let artwork = fetchImage(fromURL: tracksList[indexPath.row].artworkURL) {
+            cell.albumArt.image = artwork
+        }*/
         
         return cell
+    }
+    
+    func fetchImage(fromURL urlString: String) -> UIImage? {
+        if let url = URL(string: urlString) {
+            do {
+                let data = try Data(contentsOf: url)
+                return UIImage(data: data)
+            } catch {
+                print("Error trying to get data from Artwork URL")
+            }
+        }
+        return nil
+    }
+    
+    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        return 80
     }
     
 

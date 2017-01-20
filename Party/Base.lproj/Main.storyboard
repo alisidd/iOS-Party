@@ -159,11 +159,11 @@
                                 <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                             </imageView>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="PzI-h2-MC8" customClass="addButton" customModule="Party" customModuleProvider="target">
-                                <rect key="frame" x="162" y="597" width="50" height="50"/>
+                                <rect key="frame" x="152" y="577" width="70" height="70"/>
                                 <color key="backgroundColor" red="1" green="0.43529411759999997" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <constraints>
-                                    <constraint firstAttribute="width" constant="50" id="UfC-jM-jmp"/>
-                                    <constraint firstAttribute="height" constant="50" id="cLU-2M-u8D"/>
+                                    <constraint firstAttribute="width" constant="70" id="UfC-jM-jmp"/>
+                                    <constraint firstAttribute="height" constant="70" id="cLU-2M-u8D"/>
                                 </constraints>
                                 <fontDescription key="fontDescription" style="UICTFontTextStyleTitle1"/>
                                 <state key="normal" title="+">
@@ -208,18 +208,18 @@
                                 <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                             </imageView>
                             <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Search Songs" textAlignment="center" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="Lqd-ya-Vio">
-                                <rect key="frame" x="0.0" y="64" width="375" height="70"/>
+                                <rect key="frame" x="0.0" y="64" width="375" height="60"/>
                                 <color key="backgroundColor" red="0.1450980392" green="0.1450980392" blue="0.1450980392" alpha="0.0" colorSpace="custom" customColorSpace="sRGB"/>
                                 <color key="tintColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                                 <constraints>
-                                    <constraint firstAttribute="height" constant="70" id="0yH-W2-vuw"/>
+                                    <constraint firstAttribute="height" constant="60" id="0yH-W2-vuw"/>
                                 </constraints>
                                 <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <fontDescription key="fontDescription" style="UICTFontTextStyleTitle2"/>
                                 <textInputTraits key="textInputTraits"/>
                             </textField>
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="snT-CL-AJC">
-                                <rect key="frame" x="0.0" y="134" width="375" height="533"/>
+                                <rect key="frame" x="0.0" y="124" width="375" height="543"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <prototypes>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="TrackCell" id="L1I-KA-fw5" customClass="TrackTableViewCell" customModule="Party" customModuleProvider="target">
@@ -229,19 +229,51 @@
                                             <rect key="frame" x="0.0" y="0.0" width="375" height="43"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
-                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="2DO-4R-Sug">
-                                                    <rect key="frame" x="23" y="11" width="42" height="21"/>
-                                                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                                    <nil key="textColor"/>
-                                                    <nil key="highlightedColor"/>
-                                                </label>
+                                                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="background" translatesAutoresizingMaskIntoConstraints="NO" id="qRM-vb-quh">
+                                                    <rect key="frame" x="0.0" y="0.0" width="375" height="43"/>
+                                                </imageView>
+                                                <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" alignment="center" translatesAutoresizingMaskIntoConstraints="NO" id="Rmh-fc-81j">
+                                                    <rect key="frame" x="23" y="4.5" width="98" height="35"/>
+                                                    <subviews>
+                                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Track Name" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="2DO-4R-Sug">
+                                                            <rect key="frame" x="3" y="0.0" width="92" height="20.5"/>
+                                                            <fontDescription key="fontDescription" style="UICTFontTextStyleBody"/>
+                                                            <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                                            <nil key="highlightedColor"/>
+                                                        </label>
+                                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Artist Name" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="kxl-HZ-CKU">
+                                                            <rect key="frame" x="15.5" y="20.5" width="67.5" height="14.5"/>
+                                                            <fontDescription key="fontDescription" style="UICTFontTextStyleCaption1"/>
+                                                            <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                                            <nil key="highlightedColor"/>
+                                                        </label>
+                                                    </subviews>
+                                                    <constraints>
+                                                        <constraint firstItem="2DO-4R-Sug" firstAttribute="leading" secondItem="Rmh-fc-81j" secondAttribute="leading" constant="3" id="EiK-KT-QAl"/>
+                                                    </constraints>
+                                                </stackView>
+                                                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="e9C-Jv-HvF">
+                                                    <rect key="frame" x="322" y="-2" width="30" height="46"/>
+                                                    <fontDescription key="fontDescription" style="UICTFontTextStyleTitle1"/>
+                                                    <state key="normal" title="+">
+                                                        <color key="titleColor" red="1" green="0.4344842136" blue="0.005222451407" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                                    </state>
+                                                </button>
                                             </subviews>
                                             <constraints>
-                                                <constraint firstItem="2DO-4R-Sug" firstAttribute="leading" secondItem="bpz-Oi-siJ" secondAttribute="leadingMargin" constant="15" id="REp-cb-sj0"/>
-                                                <constraint firstItem="2DO-4R-Sug" firstAttribute="centerY" secondItem="bpz-Oi-siJ" secondAttribute="centerY" id="dJJ-rv-mXC"/>
+                                                <constraint firstAttribute="trailing" secondItem="qRM-vb-quh" secondAttribute="trailing" id="CKj-po-bHv"/>
+                                                <constraint firstItem="Rmh-fc-81j" firstAttribute="leading" secondItem="bpz-Oi-siJ" secondAttribute="leadingMargin" constant="15" id="Gk7-4a-90U"/>
+                                                <constraint firstAttribute="bottom" secondItem="qRM-vb-quh" secondAttribute="bottom" id="H83-KE-dFt"/>
+                                                <constraint firstItem="qRM-vb-quh" firstAttribute="leading" secondItem="bpz-Oi-siJ" secondAttribute="leading" id="Iop-NQ-1Ne"/>
+                                                <constraint firstAttribute="trailingMargin" secondItem="e9C-Jv-HvF" secondAttribute="trailing" constant="15" id="QX0-m9-ZwT"/>
+                                                <constraint firstItem="qRM-vb-quh" firstAttribute="centerY" secondItem="Rmh-fc-81j" secondAttribute="centerY" id="cae-Ei-VTl"/>
+                                                <constraint firstItem="qRM-vb-quh" firstAttribute="top" secondItem="bpz-Oi-siJ" secondAttribute="top" id="hoe-Rf-fpw"/>
+                                                <constraint firstItem="qRM-vb-quh" firstAttribute="centerY" secondItem="e9C-Jv-HvF" secondAttribute="centerY" id="p7J-Ek-Vgy"/>
                                             </constraints>
                                         </tableViewCellContentView>
                                         <connections>
+                                            <outlet property="albumArt" destination="qRM-vb-quh" id="3eX-80-0jM"/>
+                                            <outlet property="artistName" destination="kxl-HZ-CKU" id="6Zx-Ky-Sxo"/>
                                             <outlet property="trackName" destination="2DO-4R-Sug" id="UIA-6i-ixn"/>
                                         </connections>
                                     </tableViewCell>

@@ -13,6 +13,7 @@ class Track: NSObject {
     var name = String()
     var artist = String()
     var album = String()
+    var artworkURL = String()
     
     var danceability: Int?
 }

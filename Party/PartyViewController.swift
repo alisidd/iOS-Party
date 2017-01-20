@@ -37,7 +37,6 @@ class PartyViewController: UIViewController {
     
     func setupNavigationBar() {
         self.title = party.partyName
-        
     }
 
     override func didReceiveMemoryWarning() {
