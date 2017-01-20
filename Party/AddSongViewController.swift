@@ -8,20 +8,21 @@
 
 import UIKit
 
-class AddSongViewController: UIViewController, UITextFieldDelegate {
+class AddSongViewController: UIViewController, UITextFieldDelegate, UITableViewDataSource, UITableViewDelegate {
 
     @IBOutlet weak var backgroundImageView: UIImageView!
     @IBOutlet weak var searchSongsField: UITextField!
+    @IBOutlet weak var trackTableView: UITableView!
     
     var party = Party()
-    private var tracksList = [Track]()
+    private var tracksList = [Track]() { didSet { trackTableView.reloadData() } }
     let APIManager = RestApiManager()
     
     override func viewDidLoad() {
         super.viewDidLoad()
         blurBackgroundImageView()
         customizeNavigationBar()
-        self.searchSongsField.delegate = self
+        setDelegates()
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -43,6 +44,12 @@ class AddSongViewController: UIViewController, UITextFieldDelegate {
         self.navigationItem.rightBarButtonItem?.tintColor = UIColor(colorLiteralRed: 1, green: 111/255, blue: 1/255, alpha: 1)
         
         self.navigationItem.setHidesBackButton(true, animated: false)
+    }
+    
+    func setDelegates() {
+        self.searchSongsField.delegate = self
+        self.trackTableView.delegate = self
+        self.trackTableView.dataSource = self
     }
     
     func customizeTextField() {
@@ -77,5 +84,23 @@ class AddSongViewController: UIViewController, UITextFieldDelegate {
     func goBack() {
         _ = navigationController?.popViewController(animated: true)
     }
+    
+    // MARK: - Table
+    
+    func numberOfSections(in tableView: UITableView) -> Int {
+        return 1
+    }
+    
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return tracksList.count
+    }
+    
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let cell = trackTableView.dequeueReusableCell(withIdentifier: "TrackCell", for: indexPath) as! TrackTableViewCell
+        cell.trackName.text = tracksList[indexPath.row].name
+        
+        return cell
+    }
+    
 
 }
