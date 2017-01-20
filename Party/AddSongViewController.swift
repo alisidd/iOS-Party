@@ -139,6 +139,8 @@ class AddSongViewController: UIViewController, UITextFieldDelegate, UITableViewD
         
         if (self.delegate?.tracksQueue(hasTrack: tracksList[indexPath.row]))! {
             cell.addButton.setTitle("✓", for: .normal)
+        } else {
+            cell.addButton.setTitle("+", for: .normal)
         }
         
         return cell
