@@ -12,22 +12,18 @@ class PartyViewController: UIViewController {
     
     @IBOutlet weak var backgroundImageView: UIImageView!
     
-    private var partyName = String()
-    private var musicService = MusicService.appleMusic
-    private var selectedGenres = [String]()
+    private let party = Party()
     
-    func initializeVariables(withName name: String, withService service: MusicService, forGenres genres: [String]) {
-        partyName = name
-        musicService = service
-        selectedGenres = genres
+    func initializeVariables(withParty partyMade: Party) {
+        party.partyName = partyMade.partyName
+        party.musicService = partyMade.musicService
+        party.genres = partyMade.genres
     }
 
     override func viewDidLoad() {
         super.viewDidLoad()
         blurBackgroundImageView()
         setupNavigationBar()
-
-        // Do any additional setup after loading the view.
     }
     
     func blurBackgroundImageView() {
@@ -40,7 +36,7 @@ class PartyViewController: UIViewController {
     }
     
     func setupNavigationBar() {
-        self.title = partyName
+        self.title = party.partyName
         
     }
 
@@ -50,14 +46,18 @@ class PartyViewController: UIViewController {
     }
     
 
-    /*
+    
     // MARK: - Navigation
 
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destinationViewController.
-        // Pass the selected object to the new view controller.
+        if segue.identifier == "Add Songs" {
+            if let controller = segue.destination as? AddSongViewController {
+                self.navigationItem.backBarButtonItem = UIBarButtonItem(title: "", style: .plain, target: nil, action: nil)
+                controller.party = party
+            }
+        }
+        
     }
-    */
+    
 
 }

@@ -74,7 +74,7 @@ class PartyJoinedViewController: UITableViewController {
 
         // Configure the cell...
         cell.partyNameLabel.text = party.partyName
-        if (party.isLocked) {
+        if let _ = party.password {
             cell.isLockedImage.image = #imageLiteral(resourceName: "locked")
         } else {
             cell.isLockedImage.image = #imageLiteral(resourceName: "unlocked")
@@ -87,19 +87,19 @@ class PartyJoinedViewController: UITableViewController {
         let party = localParties[(indexPath.row)]
         let cell = tableView.dequeueReusableCell(withIdentifier: "partyListCell", for: indexPath) as! PartyListCell
         
-        if (party.isLocked && cell.passwordField.text == "") {
+        if party.isLocked && cell.passwordField.text == "" {
             // prompt for password
             UIView.animate(withDuration: 0.3) {
                 cell.passwordField.isHidden = false
             }
-        } else if (party.isLocked && cell.passwordField.text != party.password) {
+        } else if party.isLocked && cell.passwordField.text != party.password {
             // incorrect password, prompt
             
             let alertController = UIAlertController(title: "Party", message: "Incorrect Password", preferredStyle: UIAlertControllerStyle.alert)
             present(alertController, animated: true, completion: nil)
             cell.passwordField.text = ""
             
-        }else {
+        } else {
             // start segue
             self.performSegue(withIdentifier: "showParty", sender: nil)
         }
@@ -107,7 +107,7 @@ class PartyJoinedViewController: UITableViewController {
     
     override func tableView(_ tableView: UITableView, didDeselectRowAt indexPath: IndexPath) {
         let cell = tableView.dequeueReusableCell(withIdentifier: "partyListCell", for: indexPath) as! PartyListCell
-        if (!cell.passwordField.isHidden) { // if its not hidden and selected something else, hide the field again.
+        if !cell.passwordField.isHidden { // if its not hidden and selected something else, hide the field again.
             UIView.animate(withDuration: 0.3) {
                 cell.passwordField.isHidden = true
             }

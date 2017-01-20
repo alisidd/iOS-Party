@@ -21,8 +21,7 @@ class PartyCreationViewController: UIViewController, UITextFieldDelegate, UIPick
     @IBOutlet weak var partyNameField: UITextField!
     @IBOutlet weak var selectGenresButton: setupButton!
     
-    private var musicService = MusicService.appleMusic
-    private var selectedGenres = [String]()
+    private var partyMade = Party()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -42,7 +41,7 @@ class PartyCreationViewController: UIViewController, UITextFieldDelegate, UIPick
             sender.backgroundColor = UIColor(colorLiteralRed: 15/255, green: 15/255, blue: 15/255, alpha: 1)
             self.spotifyButton.backgroundColor = UIColor(colorLiteralRed: 37/255, green: 37/255, blue: 37/255, alpha: 1)
         })
-        musicService = .appleMusic
+        partyMade.musicService = .appleMusic
     }
     
     @IBAction func changeToSpotify(_ sender: setupButton) {
@@ -50,7 +49,7 @@ class PartyCreationViewController: UIViewController, UITextFieldDelegate, UIPick
             sender.backgroundColor = UIColor(colorLiteralRed: 15/255, green: 15/255, blue: 15/255, alpha: 1)
             self.appleMusicButton.backgroundColor = UIColor(colorLiteralRed: 37/255, green: 37/255, blue: 37/255, alpha: 1)
         })
-        musicService = .spotify
+        partyMade.musicService = .spotify
     }
     
     func customizeNavigationBar() {
@@ -91,11 +90,11 @@ class PartyCreationViewController: UIViewController, UITextFieldDelegate, UIPick
     }
     
     func addToGenresList(withGenre genre: String) {
-        selectedGenres.append(genre)
+        partyMade.genres.append(genre)
     }
     
     func removeFromGenresList(withGenre genre: String) {
-        selectedGenres.remove(at: selectedGenres.index(of: genre)!)
+        partyMade.genres.remove(at: partyMade.genres.index(of: genre)!)
     }
 
     override func didReceiveMemoryWarning() {
@@ -125,11 +124,11 @@ class PartyCreationViewController: UIViewController, UITextFieldDelegate, UIPick
         if segue.identifier == "Genre Popover" {
             if let controller = segue.destination as? GenrePickingTableViewController {
                 controller.delegate = self
-                controller.selectedGenres = selectedGenres
+                controller.party = partyMade
             }
         } else if segue.identifier == "Create Party" {
             if let controller = segue.destination as? PartyViewController {
-                controller.initializeVariables(withName: self.partyNameField.text!, withService: musicService, forGenres: selectedGenres)
+                controller.initializeVariables(withParty: partyMade)
                 self.navigationItem.backBarButtonItem = UIBarButtonItem(title: "", style: .plain, target: nil, action: nil)
             }
         }

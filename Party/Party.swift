@@ -9,10 +9,11 @@
 import UIKit
 
 class Party: NSObject {
-    var partyName: String = ""
-    var genre: String = ""
+    var partyName = String()
+    var genres = [String]()
+    var musicService = MusicService.appleMusic
     
-    var numPeople: Int = 0
-    var isLocked = false
+    var numPeople = 0
     var password: String?
+    var isLocked = false
 }

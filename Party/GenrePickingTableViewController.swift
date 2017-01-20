@@ -15,9 +15,9 @@ protocol changeSelectedGenresList: class {
 
 class GenrePickingTableViewController: UITableViewController {
     
-    var genres = ["Rock", "Pop", "Hip Hop", "Country", "Alternative"]
-    var selectedGenres = [String]()
     weak var delegate: changeSelectedGenresList?
+    var party = Party()
+    var genres = ["Rock", "Pop", "Hip Hop", "Country", "Alternative"]
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -39,7 +39,7 @@ class GenrePickingTableViewController: UITableViewController {
     }
     
     func selectGenres() {
-        for genre in selectedGenres {
+        for genre in party.genres {
             let index = genres.index(of: genre)!
             let rowToSelect = IndexPath(item: index, section: 0)
             
