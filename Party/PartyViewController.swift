@@ -20,7 +20,7 @@ class PartyViewController: UIViewController, UITableViewDataSource, UITableViewD
     @IBOutlet weak var tracksTableView: UITableView!
     
     private var party = Party()
-    private var tracksQueue = [Track]()
+    private var tracksQueue = [Track]() { didSet { self.tracksTableView.reloadData() } }
     
     func initializeVariables(withParty partyMade: Party) {
         party.partyName = partyMade.partyName
@@ -34,11 +34,6 @@ class PartyViewController: UIViewController, UITableViewDataSource, UITableViewD
         setupNavigationBar()
         setDelegates()
         adjustTableView()
-    }
-    
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-        tracksTableView.reloadData()
     }
     
     private func blurBackgroundImageView() {
@@ -138,6 +133,19 @@ class PartyViewController: UIViewController, UITableViewDataSource, UITableViewD
         cell.artistName.text = tracksQueue[indexPath.row].artist
         
         return cell
+    }
+    
+    func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
+        return indexPath.row != 0
+    }
+    
+    func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCellEditingStyle, forRowAt indexPath: IndexPath) {
+        if editingStyle == .delete {
+            tableView.beginUpdates()
+            removeFromQueue(track: tracksQueue[indexPath.row])
+            tableView.deleteRows(at: [indexPath], with: .automatic)
+            tableView.endUpdates()
+        }
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
