@@ -20,9 +20,18 @@ class AddSongViewController: UIViewController, UITextFieldDelegate, UITableViewD
     @IBOutlet weak var trackTableView: UITableView!
     
     var party = Party()
-    private var tracksList = [Track]() { didSet { trackTableView.reloadData() } }
+    private var tracksList = [Track]() {
+        didSet {
+            DispatchQueue.main.async {
+                self.trackTableView.reloadData()
+                self.indicator.stopAnimating()
+                self.indicator.hidesWhenStopped = true
+            }
+        }
+    }
     private var tracksQueue = [Track]()
     private let APIManager = RestApiManager()
+    private var indicator = UIActivityIndicatorView()
     weak var delegate: updateTracksQueue?
     
     override func viewDidLoad() {
@@ -30,6 +39,7 @@ class AddSongViewController: UIViewController, UITextFieldDelegate, UITableViewD
         blurBackgroundImageView()
         customizeNavigationBar()
         setDelegates()
+        initializeActivityIndicator()
         adjustTableView()
     }
     
@@ -60,6 +70,13 @@ class AddSongViewController: UIViewController, UITextFieldDelegate, UITableViewD
         self.trackTableView.dataSource = self
     }
     
+    func initializeActivityIndicator() {
+        indicator = UIActivityIndicatorView(frame: CGRect(x: 0, y: 0, width: 80, height: 80))
+        indicator.activityIndicatorViewStyle = UIActivityIndicatorViewStyle.whiteLarge
+        indicator.center = self.view.center
+        self.view.addSubview(indicator)
+    }
+    
     func adjustTableView() {
         trackTableView.backgroundColor = .clear
         trackTableView.separatorColor  = UIColor(colorLiteralRed: 15/255, green: 15/255, blue: 15/255, alpha: 1)
@@ -68,7 +85,7 @@ class AddSongViewController: UIViewController, UITextFieldDelegate, UITableViewD
     }
     
     func customizeTextField() {
-        searchSongsField.attributedPlaceholder = NSAttributedString(string: "Search Songs", attributes: [NSForegroundColorAttributeName: UIColor.lightGray])
+        searchSongsField.attributedPlaceholder = NSAttributedString(string: "Search Tracks", attributes: [NSForegroundColorAttributeName: UIColor.lightGray])
         searchSongsField.layer.borderWidth = 1.5
         
         searchSongsField.autocapitalizationType = UITextAutocapitalizationType.sentences
@@ -83,9 +100,12 @@ class AddSongViewController: UIViewController, UITextFieldDelegate, UITableViewD
     }
     
     func fetchResults(forQuery query: String) {
+        indicator.startAnimating()
         APIManager.makeHTTPRequestToApple(withString: query)
-        APIManager.dispatchGroup.notify(queue: .main) {
-            self.tracksList = self.APIManager.tracksList
+        DispatchQueue.global(qos: .userInitiated).async {
+            self.APIManager.dispatchGroup.notify(queue: .main) {
+                self.tracksList = self.APIManager.tracksList
+            }
         }
     }
     

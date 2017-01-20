@@ -48,6 +48,7 @@ class TrackTableViewCell: UITableViewCell {
             self.delegate?.removeFromQueue(track: track)
         } else {
             sender.setTitle("✓", for: .normal)
+            track.artwork = artworkImageView.image
             self.delegate?.addToQueue(track: track)
         }
         

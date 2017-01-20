@@ -21,17 +21,19 @@ class RestApiManager {
 
         let requestURL = URL(string: url + string.replacingOccurrences(of: " ", with: "+"))
         
-        let task = URLSession.shared.dataTask(with: requestURL!) { (data, response, error) in
-            let statusCode = (response as! HTTPURLResponse).statusCode
-            
-            if statusCode == 200 {
-                let json = JSON(data: data!)
-                self.parseAppleJSON(forJSON: json)
+        DispatchQueue.global(qos: .background).async {
+            let task = URLSession.shared.dataTask(with: requestURL!) { (data, response, error) in
+                if let statusCode = (response as? HTTPURLResponse)?.statusCode {
+                    if statusCode == 200 {
+                        let json = JSON(data: data!)
+                        self.parseAppleJSON(forJSON: json)
+                    }
+                }
+                
+                self.dispatchGroup.leave()
             }
-            self.dispatchGroup.leave()
+            task.resume()
         }
-        
-        task.resume()
     }
     
     func parseAppleJSON(forJSON json: JSON) {

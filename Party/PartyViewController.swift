@@ -14,9 +14,10 @@ protocol updateTracksQueue: class {
     func tracksQueue(hasTrack track: Track) -> Bool
 }
 
-class PartyViewController: UIViewController, updateTracksQueue {
+class PartyViewController: UIViewController, UITableViewDataSource, UITableViewDelegate, updateTracksQueue {
     
     @IBOutlet weak var backgroundImageView: UIImageView!
+    @IBOutlet weak var tracksTableView: UITableView!
     
     private var party = Party()
     private var tracksQueue = [Track]()
@@ -31,6 +32,13 @@ class PartyViewController: UIViewController, updateTracksQueue {
         super.viewDidLoad()
         blurBackgroundImageView()
         setupNavigationBar()
+        setDelegates()
+        adjustTableView()
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        tracksTableView.reloadData()
     }
     
     private func blurBackgroundImageView() {
@@ -44,6 +52,18 @@ class PartyViewController: UIViewController, updateTracksQueue {
     
     private func setupNavigationBar() {
         self.title = party.partyName
+    }
+    
+    private func setDelegates() {
+        self.tracksTableView.delegate = self
+        self.tracksTableView.dataSource = self
+    }
+    
+    func adjustTableView() {
+        tracksTableView.backgroundColor = .clear
+        tracksTableView.separatorColor  = UIColor(colorLiteralRed: 15/255, green: 15/255, blue: 15/255, alpha: 1)
+        tracksTableView.tableFooterView = UIView()
+        tracksTableView.allowsSelection = false
     }
     
     func addToQueue(track: Track) {
@@ -91,5 +111,36 @@ class PartyViewController: UIViewController, updateTracksQueue {
         
     }
     
-
+    // MARK: - Table
+    
+    func numberOfSections(in tableView: UITableView) -> Int {
+        return 1
+    }
+    
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return tracksQueue.count
+    }
+    
+    func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
+        cell.preservesSuperviewLayoutMargins = false
+        cell.separatorInset = UIEdgeInsets.zero
+        cell.layoutMargins = UIEdgeInsets.zero
+        cell.backgroundColor = .clear
+    }
+    
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let cell = tracksTableView.dequeueReusableCell(withIdentifier: "Track") as! TrackInQueueTableViewCell
+        
+        if let unwrappedArtwork = tracksQueue[indexPath.row].artwork {
+            cell.artwork.image = unwrappedArtwork
+        }
+        cell.trackName.text = tracksQueue[indexPath.row].name
+        cell.artistName.text = tracksQueue[indexPath.row].artist
+        
+        return cell
+    }
+    
+    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        return 80
+    }
 }
