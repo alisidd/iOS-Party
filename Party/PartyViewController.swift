@@ -12,13 +12,20 @@ class PartyViewController: UIViewController {
     
     @IBOutlet weak var backgroundImageView: UIImageView!
     
-    var partyName = String()
-    var musicService = MusicService.appleMusic
-    var selectedGenres = [String]()
+    private var partyName = String()
+    private var musicService = MusicService.appleMusic
+    private var selectedGenres = [String]()
+    
+    func initializeVariables(withName name: String, withService service: MusicService, forGenres genres: [String]) {
+        partyName = name
+        musicService = service
+        selectedGenres = genres
+    }
 
     override func viewDidLoad() {
         super.viewDidLoad()
         blurBackgroundImageView()
+        setupNavigationBar()
 
         // Do any additional setup after loading the view.
     }
@@ -30,6 +37,11 @@ class PartyViewController: UIViewController {
         blurView.frame = backgroundImageView.bounds
         blurView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
         backgroundImageView.addSubview(blurView)
+    }
+    
+    func setupNavigationBar() {
+        self.title = partyName
+        
     }
 
     override func didReceiveMemoryWarning() {

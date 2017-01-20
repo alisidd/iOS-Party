@@ -107,7 +107,7 @@ class PartyCreationViewController: UIViewController, UITextFieldDelegate, UIPick
     // MARK: - Navigation
     
     override func shouldPerformSegue(withIdentifier identifier: String, sender: Any?) -> Bool {
-        if (self.partyNameField.text?.isEmpty)! {
+        if (self.partyNameField.text?.isEmpty)! && identifier == "Create Party" {
             alertUser()
             return false
         } else {
@@ -129,9 +129,8 @@ class PartyCreationViewController: UIViewController, UITextFieldDelegate, UIPick
             }
         } else if segue.identifier == "Create Party" {
             if let controller = segue.destination as? PartyViewController {
-                controller.selectedGenres = selectedGenres
-                controller.musicService = musicService
-                controller.partyName = self.partyNameField.text!
+                controller.initializeVariables(withName: self.partyNameField.text!, withService: musicService, forGenres: selectedGenres)
+                self.navigationItem.backBarButtonItem = UIBarButtonItem(title: "", style: .plain, target: nil, action: nil)
             }
         }
     }
