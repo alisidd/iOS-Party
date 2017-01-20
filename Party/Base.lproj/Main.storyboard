@@ -274,6 +274,7 @@
                                             </constraints>
                                         </tableViewCellContentView>
                                         <connections>
+                                            <outlet property="addButton" destination="e9C-Jv-HvF" id="8wy-b7-TIi"/>
                                             <outlet property="artistName" destination="kxl-HZ-CKU" id="6Zx-Ky-Sxo"/>
                                             <outlet property="artworkImageView" destination="rt8-Py-GK2" id="qmN-2x-NMQ"/>
                                             <outlet property="trackName" destination="2DO-4R-Sug" id="UIA-6i-ixn"/>

@@ -8,7 +8,12 @@
 
 import UIKit
 
-class AddSongViewController: UIViewController, UITextFieldDelegate, UITableViewDataSource, UITableViewDelegate {
+protocol modifyTracksQueue: class {
+    func addToQueue(track: Track)
+    func removeFromQueue(track: Track)
+}
+
+class AddSongViewController: UIViewController, UITextFieldDelegate, UITableViewDataSource, UITableViewDelegate, modifyTracksQueue {
 
     @IBOutlet weak var backgroundImageView: UIImageView!
     @IBOutlet weak var searchSongsField: UITextField!
@@ -16,7 +21,9 @@ class AddSongViewController: UIViewController, UITextFieldDelegate, UITableViewD
     
     var party = Party()
     private var tracksList = [Track]() { didSet { trackTableView.reloadData() } }
-    let APIManager = RestApiManager()
+    private var tracksQueue = [Track]()
+    private let APIManager = RestApiManager()
+    weak var delegate: updateTracksQueue?
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -82,6 +89,18 @@ class AddSongViewController: UIViewController, UITextFieldDelegate, UITableViewD
         }
     }
     
+    func addToQueue(track: Track) {
+        tracksQueue.insert(track, at: tracksQueue.count)
+    }
+    
+    func removeFromQueue(track: Track) {
+        for trackInQueue in tracksQueue {
+            if trackInQueue.id == track.id {
+                tracksQueue.remove(at: tracksQueue.index(of: trackInQueue)!)
+            }
+        }
+    }
+    
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
@@ -91,6 +110,7 @@ class AddSongViewController: UIViewController, UITextFieldDelegate, UITableViewD
 
     func goBack() {
         _ = navigationController?.popViewController(animated: true)
+        self.delegate?.updateTracksQueue(withQueue: tracksQueue)
     }
     
     // MARK: - Table
@@ -114,11 +134,16 @@ class AddSongViewController: UIViewController, UITextFieldDelegate, UITableViewD
         let cell = trackTableView.dequeueReusableCell(withIdentifier: "TrackCell", for: indexPath) as! TrackTableViewCell
         
         
-        
+        cell.track = tracksList[indexPath.row]
         cell.trackName.text = tracksList[indexPath.row].name
         cell.artistName.text = tracksList[indexPath.row].artist
         if let artwork = fetchImage(fromURL: tracksList[indexPath.row].artworkURL) {
             cell.artworkImageView.image = artwork
+        }
+        cell.delegate = self
+        
+        if (self.delegate?.tracksQueue(hasTrack: tracksList[indexPath.row]))! {
+            cell.addButton.setTitle("✓", for: .normal)
         }
         
         return cell

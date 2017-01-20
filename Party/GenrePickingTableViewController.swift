@@ -8,11 +8,6 @@
 
 import UIKit
 
-protocol changeSelectedGenresList: class {
-    func addToGenresList(withGenre genre: String)
-    func removeFromGenresList(withGenre genre: String)
-}
-
 class GenrePickingTableViewController: UITableViewController {
     
     weak var delegate: changeSelectedGenresList?
@@ -31,14 +26,14 @@ class GenrePickingTableViewController: UITableViewController {
         selectGenres()
     }
     
-    func adjustTableView() {
+    private func adjustTableView() {
         tableView.allowsMultipleSelection = true
         tableView.rowHeight = 70
         tableView.separatorColor = UIColor(colorLiteralRed: 15/255, green: 15/255, blue: 15/255, alpha: 1)
         tableView.contentInset = UIEdgeInsetsMake(20, 0, 0, 0);
     }
     
-    func selectGenres() {
+    private func selectGenres() {
         for genre in party.genres {
             let index = genres.index(of: genre)!
             let rowToSelect = IndexPath(item: index, section: 0)

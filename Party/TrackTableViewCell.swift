@@ -24,8 +24,17 @@ class TrackTableViewCell: UITableViewCell {
     @IBOutlet weak var artworkImageView: UIImageView!
     @IBOutlet weak var trackName: UILabel!
     @IBOutlet weak var artistName: UILabel!
+    @IBOutlet weak var addButton: UIButton!
     
-    private var isAdded = false
+    var track = Track()
+    private var isAdded: Bool {
+        if addButton.titleLabel!.text == "✓" {
+            return true
+        } else {
+            return false
+        }
+    }
+    weak var delegate: modifyTracksQueue?
     
     override func awakeFromNib() {
         super.awakeFromNib()
@@ -36,16 +45,15 @@ class TrackTableViewCell: UITableViewCell {
         sender.fadeTransition(duration: 0.4)
         if isAdded {
             sender.setTitle("+", for: .normal)
-            isAdded = false
+            self.delegate?.removeFromQueue(track: track)
         } else {
             sender.setTitle("✓", for: .normal)
-            isAdded = true
+            self.delegate?.addToQueue(track: track)
         }
         
     }
     override func setSelected(_ selected: Bool, animated: Bool) {
         super.setSelected(selected, animated: animated)
-
         // Configure the view for the selected state
     }
 

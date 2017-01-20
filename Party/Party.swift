@@ -8,6 +8,11 @@
 
 import Foundation
 
+enum MusicService {
+    case appleMusic
+    case spotify
+}
+
 class Party: NSObject {
     var partyName = String()
     var genres = [String]()

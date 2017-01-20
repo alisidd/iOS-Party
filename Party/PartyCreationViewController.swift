@@ -8,9 +8,9 @@
 
 import UIKit
 
-enum MusicService {
-    case appleMusic
-    case spotify
+protocol changeSelectedGenresList: class {
+    func addToGenresList(withGenre genre: String)
+    func removeFromGenresList(withGenre genre: String)
 }
 
 class PartyCreationViewController: UIViewController, UITextFieldDelegate, UIPickerViewDelegate, changeSelectedGenresList {

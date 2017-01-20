@@ -8,11 +8,21 @@
 
 import UIKit
 
-class PartyViewController: UIViewController {
+protocol updateTracksQueue: class {
+    func updateTracksQueue(withQueue queue: [Track])
+    func tracksQueue(hasTrack track: Track) -> Bool
+}
+
+class PartyViewController: UIViewController, updateTracksQueue {
     
     @IBOutlet weak var backgroundImageView: UIImageView!
     
     private var party = Party()
+    private var tracksQueue = [Track]() {
+        didSet {
+            print(tracksQueue)
+        }
+    }
     
     func initializeVariables(withParty partyMade: Party) {
         party.partyName = partyMade.partyName
@@ -26,7 +36,7 @@ class PartyViewController: UIViewController {
         setupNavigationBar()
     }
     
-    func blurBackgroundImageView() {
+    private func blurBackgroundImageView() {
         let blurEffect: UIBlurEffect = UIBlurEffect(style: UIBlurEffectStyle.dark)
         
         let blurView = UIVisualEffectView(effect: blurEffect)
@@ -35,8 +45,21 @@ class PartyViewController: UIViewController {
         backgroundImageView.addSubview(blurView)
     }
     
-    func setupNavigationBar() {
+    private func setupNavigationBar() {
         self.title = party.partyName
+    }
+    
+    func updateTracksQueue(withQueue queue: [Track]) {
+        tracksQueue = queue
+    }
+    
+    func tracksQueue(hasTrack track: Track) -> Bool {
+        for trackInQueue in tracksQueue {
+            if track.id == trackInQueue.id {
+                return true
+            }
+        }
+        return false
     }
 
     override func didReceiveMemoryWarning() {
@@ -53,6 +76,7 @@ class PartyViewController: UIViewController {
             if let controller = segue.destination as? AddSongViewController {
                 self.navigationItem.backBarButtonItem = UIBarButtonItem(title: "", style: .plain, target: nil, action: nil)
                 controller.party = party
+                controller.delegate = self
             }
         }
         
