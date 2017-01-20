@@ -14,7 +14,8 @@ class AddSongViewController: UIViewController, UITextFieldDelegate {
     @IBOutlet weak var searchSongsField: UITextField!
     
     var party = Party()
-    private var songsList = [String]()
+    private var tracksList = [Track]()
+    let APIManager = RestApiManager()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -60,7 +61,10 @@ class AddSongViewController: UIViewController, UITextFieldDelegate {
     }
     
     func fetchResults(forQuery query: String) {
-        
+        APIManager.makeHTTPRequestToApple(withString: query)
+        APIManager.dispatchGroup.notify(queue: .main) {
+            self.tracksList = self.APIManager.tracksList
+        }
     }
     
     override func didReceiveMemoryWarning() {

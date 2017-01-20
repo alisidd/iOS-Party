@@ -6,7 +6,7 @@
 //  Copyright © 2016 Ali Siddiqui.MatthewPaletta. All rights reserved.
 //
 
-import UIKit
+import Foundation
 
 class Party: NSObject {
     var partyName = String()
