@@ -18,9 +18,8 @@ class RestApiManager {
     
     func makeHTTPRequestToApple(withString string: String) {
         dispatchGroup.enter()
-        url += string.replacingOccurrences(of: " ", with: "+")
-        
-        let requestURL = URL(string: url)
+
+        let requestURL = URL(string: url + string.replacingOccurrences(of: " ", with: "+"))
         
         let task = URLSession.shared.dataTask(with: requestURL!) { (data, response, error) in
             let statusCode = (response as! HTTPURLResponse).statusCode
