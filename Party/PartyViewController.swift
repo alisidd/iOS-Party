@@ -9,7 +9,8 @@
 import UIKit
 
 protocol updateTracksQueue: class {
-    func updateTracksQueue(withQueue queue: [Track])
+    func addToQueue(track: Track)
+    func removeFromQueue(track: Track)
     func tracksQueue(hasTrack track: Track) -> Bool
 }
 
@@ -18,11 +19,7 @@ class PartyViewController: UIViewController, updateTracksQueue {
     @IBOutlet weak var backgroundImageView: UIImageView!
     
     private var party = Party()
-    private var tracksQueue = [Track]() {
-        didSet {
-            print(tracksQueue)
-        }
-    }
+    private var tracksQueue = [Track]()
     
     func initializeVariables(withParty partyMade: Party) {
         party.partyName = partyMade.partyName
@@ -47,6 +44,18 @@ class PartyViewController: UIViewController, updateTracksQueue {
     
     private func setupNavigationBar() {
         self.title = party.partyName
+    }
+    
+    func addToQueue(track: Track) {
+        tracksQueue.insert(track, at: tracksQueue.count)
+    }
+    
+    func removeFromQueue(track: Track) {
+        for trackInQueue in tracksQueue {
+            if trackInQueue.id == track.id {
+                tracksQueue.remove(at: tracksQueue.index(of: trackInQueue)!)
+            }
+        }
     }
     
     func updateTracksQueue(withQueue queue: [Track]) {

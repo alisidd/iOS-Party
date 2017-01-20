@@ -90,15 +90,11 @@ class AddSongViewController: UIViewController, UITextFieldDelegate, UITableViewD
     }
     
     func addToQueue(track: Track) {
-        tracksQueue.insert(track, at: tracksQueue.count)
+        self.delegate?.addToQueue(track: track)
     }
     
     func removeFromQueue(track: Track) {
-        for trackInQueue in tracksQueue {
-            if trackInQueue.id == track.id {
-                tracksQueue.remove(at: tracksQueue.index(of: trackInQueue)!)
-            }
-        }
+        self.delegate?.removeFromQueue(track: track)
     }
     
     override func didReceiveMemoryWarning() {
@@ -110,7 +106,6 @@ class AddSongViewController: UIViewController, UITextFieldDelegate, UITableViewD
 
     func goBack() {
         _ = navigationController?.popViewController(animated: true)
-        self.delegate?.updateTracksQueue(withQueue: tracksQueue)
     }
     
     // MARK: - Table
