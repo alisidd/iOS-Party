@@ -23,7 +23,7 @@ class AddSongViewController: UIViewController, UITextFieldDelegate, UITableViewD
         blurBackgroundImageView()
         customizeNavigationBar()
         setDelegates()
-        adjustViews()
+        adjustTableView()
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -49,14 +49,15 @@ class AddSongViewController: UIViewController, UITextFieldDelegate, UITableViewD
     
     func setDelegates() {
         self.searchSongsField.delegate = self
-        self.trackTableView.delegate = self
+        self.trackTableView.delegate   = self
         self.trackTableView.dataSource = self
     }
     
-    func adjustViews() {
+    func adjustTableView() {
         trackTableView.backgroundColor = .clear
-        trackTableView.separatorColor = UIColor(colorLiteralRed: 15/255, green: 15/255, blue: 15/255, alpha: 1)
+        trackTableView.separatorColor  = UIColor(colorLiteralRed: 15/255, green: 15/255, blue: 15/255, alpha: 1)
         trackTableView.tableFooterView = UIView()
+        trackTableView.allowsSelection = false
     }
     
     func customizeTextField() {

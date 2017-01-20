@@ -12,7 +12,7 @@ class PartyViewController: UIViewController {
     
     @IBOutlet weak var backgroundImageView: UIImageView!
     
-    private let party = Party()
+    private var party = Party()
     
     func initializeVariables(withParty partyMade: Party) {
         party.partyName = partyMade.partyName

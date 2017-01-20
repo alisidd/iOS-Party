@@ -61,7 +61,6 @@ class PartyCreationViewController: UIViewController, UITextFieldDelegate, UIPick
     
     func blurBackgroundImageView() {
         let blurEffect: UIBlurEffect = UIBlurEffect(style: UIBlurEffectStyle.dark)
-        
         let blurView = UIVisualEffectView(effect: blurEffect)
         blurView.frame = backgroundImageView.bounds
         blurView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
