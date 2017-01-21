@@ -11,9 +11,15 @@ import UIKit
 class PartyJoinedViewController: UITableViewController {
 
     var localParties = [Party]()
+    let partiesListManager = NetworkServiceManager()
     
     override func viewDidLoad() {
         super.viewDidLoad()
+
+        partiesListManager.delegate = self
+        // Will browse as device name
+        partiesListManager.isHost = false // Only browse, don't advertise
+        
         
         // Add a background view to the table view
         let imageView = UIImageView(image: #imageLiteral(resourceName: "background"))
@@ -159,5 +165,23 @@ class PartyJoinedViewController: UITableViewController {
     }
     
 
+}
+
+// MARK: NetworkManagerDelegate
+
+extension PartyJoinedViewController: NetworkManagerDelegate {
+    
+    func connectedDevicesChanged(_ manager: NetworkServiceManager, connectedDevices: [String]) {
+        OperationQueue.main.addOperation { () -> Void in
+            print("Connections: \(connectedDevices)")
+        }
+    }
+    
+    func messageChanged(_ manager: NetworkServiceManager, messageString: String) {
+        OperationQueue.main.addOperation { () -> Void in
+            print(messageString)
+        }
+    }
+    
 }
 
