@@ -12,7 +12,7 @@ import MediaPlayer
 
 class MusicPlayer: NSObject {
     private let serviceController = SKCloudServiceController()
-    let player = MPMusicPlayerController.systemMusicPlayer()
+    let player = MPMusicPlayerController.applicationMusicPlayer()
     let commandCenter = MPRemoteCommandCenter.shared()
 
     

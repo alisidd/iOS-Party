@@ -75,6 +75,7 @@ class PartyViewController: UIViewController, UITableViewDataSource, UITableViewD
         // Appearance
         tracksTableView.backgroundColor = .clear
         tracksTableView.separatorColor  = UIColor(colorLiteralRed: 15/255, green: 15/255, blue: 15/255, alpha: 1)
+        tracksTableView.contentInset = UIEdgeInsetsMake(0, 0, 110, 0)
         tracksTableView.tableFooterView = UIView()
         tracksTableView.allowsSelection = false
         
