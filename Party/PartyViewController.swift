@@ -160,6 +160,19 @@ class PartyViewController: UIViewController, UITableViewDataSource, UITableViewD
         }
         return false
     }
+    
+    func fetchImage(forTrack track: Track) -> UIImage? {
+        if let url = URL(string: track.highResArtworkURL) {
+            do {
+                let data = try Data(contentsOf: url)
+                return UIImage(data: data)
+            } catch {
+                print("Error trying to get high resolution artwork")
+                return track.artwork
+            }
+        }
+        return track.artwork
+    }
 
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
@@ -199,7 +212,7 @@ class PartyViewController: UIViewController, UITableViewDataSource, UITableViewD
         
         if indexPath.row == 0 {
             let cell = tableView.dequeueReusableCell(withIdentifier: "CurrentlyPlayingTrack") as!CurrentlyPlayingTrackTableViewCell
-            if let unwrappedArtwork = tracksQueue[indexPath.row].artwork {
+            if let unwrappedArtwork = fetchImage(forTrack: tracksQueue[indexPath.row]) {
                 cell.artwork.image = unwrappedArtwork
             }
             cell.trackName.text = tracksQueue[indexPath.row].name
@@ -250,7 +263,7 @@ class PartyViewController: UIViewController, UITableViewDataSource, UITableViewD
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return indexPath.row == 0 ? 300 : 80
+        return indexPath.row == 0 ? 350 : 80
     }
 }
 

@@ -44,7 +44,9 @@ class RestApiManager {
             newTrack.name = track["trackName"].stringValue
             newTrack.artist = track["artistName"].stringValue
             newTrack.album = track["collectionName"].stringValue
-            newTrack.artworkURL = track["artworkUrl60"].stringValue
+            
+            newTrack.lowResArtworkURL = track["artworkUrl100"].stringValue
+            newTrack.highResArtworkURL = newTrack.lowResArtworkURL.replacingOccurrences(of: "100x100", with: "600x600")
             
             tracksList.append(newTrack)
         }

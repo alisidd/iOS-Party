@@ -14,7 +14,7 @@ class CurrentlyPlayingTrackTableViewCell: UITableViewCell {
         didSet {
             let blurEffect: UIBlurEffect = UIBlurEffect(style: UIBlurEffectStyle.dark)
             let blurView = UIVisualEffectView(effect: blurEffect)
-            blurView.alpha = 0.8
+            blurView.alpha = 0.6
             blurView.frame = artwork.bounds
             blurView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
             

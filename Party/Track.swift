@@ -15,7 +15,8 @@ class Track: NSObject {
     var artist = String()
     var album = String()
     
-    var artworkURL = String()
+    var lowResArtworkURL = String()
+    var highResArtworkURL = String()
     var artwork: UIImage?
     
     var danceability: Int?

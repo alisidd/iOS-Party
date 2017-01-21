@@ -171,7 +171,7 @@ class AddSongViewController: UIViewController, UITextFieldDelegate, UITableViewD
         cell.track = tracksList[indexPath.row]
         cell.trackName.text = tracksList[indexPath.row].name
         cell.artistName.text = tracksList[indexPath.row].artist
-        if let artwork = fetchImage(fromURL: tracksList[indexPath.row].artworkURL) {
+        if let artwork = fetchImage(fromURL: tracksList[indexPath.row].lowResArtworkURL) {
             cell.artworkImageView.image = artwork
         }
         cell.delegate = self

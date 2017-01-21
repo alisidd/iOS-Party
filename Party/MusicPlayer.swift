@@ -10,9 +10,11 @@ import Foundation
 import StoreKit
 import MediaPlayer
 
-class MusicPlayer {
+class MusicPlayer: NSObject {
     private let serviceController = SKCloudServiceController()
-    let player = MPMusicPlayerController.applicationMusicPlayer()
+    let player = MPMusicPlayerController.systemMusicPlayer()
+    let commandCenter = MPRemoteCommandCenter.shared()
+
     
     func hasCapabilities() {
         serviceController.requestCapabilities{ (capability, error) in
@@ -31,6 +33,7 @@ class MusicPlayer {
             case .authorized:
                 print("Authorized")
                 self.player.beginGeneratingPlaybackNotifications()
+                self.initializeCommandCenter()
             default:
                 print("Not authorized")
             }
@@ -38,11 +41,29 @@ class MusicPlayer {
         }
     }
     
+    func initializeCommandCenter() {
+        commandCenter.pauseCommand.isEnabled = true
+        commandCenter.playCommand.isEnabled = true
+        
+        UIApplication.shared.beginReceivingRemoteControlEvents()
+        
+        commandCenter.pauseCommand.addTarget { (commandEvent) -> MPRemoteCommandHandlerStatus in
+            self.player.pause()
+            return MPRemoteCommandHandlerStatus.success
+        }
+        
+        commandCenter.playCommand.addTarget { (commandEvent) -> MPRemoteCommandHandlerStatus in
+            self.player.prepareToPlay()
+            self.player.play()
+            return MPRemoteCommandHandlerStatus.success
+        }
+    }
+    
     func modifyQueue(withTracks tracks: [Track]) {
         if tracks.count != 0 {
             let ids = [String(tracks[0].id)]
             player.setQueueWithStoreIDs(ids)
-            player.play()
+            playTrack()
         } else {
             player.setQueueWithStoreIDs([])
             player.stop()
@@ -53,13 +74,15 @@ class MusicPlayer {
         return player.playbackState == .stopped && player.nowPlayingItem == nil
     }
     
-    func playTrack() {
+    @objc func playTrack() {
+        player.prepareToPlay()
         player.play()
     }
     
-    func pauseTrack() {
+    @objc func pauseTrack() {
         player.pause()
     }
+    
     
     func isPaused() -> Bool {
         return player.playbackState == .paused
