@@ -16,7 +16,7 @@ protocol modifyTracksQueue: class {
 class AddSongViewController: UIViewController, UITextFieldDelegate, UITableViewDataSource, UITableViewDelegate, modifyTracksQueue {
 
     @IBOutlet weak var backgroundImageView: UIImageView!
-    @IBOutlet weak var searchSongsField: UITextField!
+    @IBOutlet weak var searchTracksField: UITextField!
     @IBOutlet weak var trackTableView: UITableView!
     
     var party = Party()
@@ -32,6 +32,7 @@ class AddSongViewController: UIViewController, UITextFieldDelegate, UITableViewD
     private var tracksQueue = [Track]()
     private let APIManager = RestApiManager()
     private var indicator = UIActivityIndicatorView()
+    private let noTracksFoundLabel = UILabel(frame: CGRect(x: 0, y: 0, width: 350, height: 30))
     weak var delegate: updateTracksQueue?
     
     override func viewDidLoad() {
@@ -65,7 +66,7 @@ class AddSongViewController: UIViewController, UITextFieldDelegate, UITableViewD
     }
     
     func setDelegates() {
-        self.searchSongsField.delegate = self
+        self.searchTracksField.delegate = self
         self.trackTableView.delegate   = self
         self.trackTableView.dataSource = self
     }
@@ -85,10 +86,10 @@ class AddSongViewController: UIViewController, UITextFieldDelegate, UITableViewD
     }
     
     func customizeTextField() {
-        searchSongsField.attributedPlaceholder = NSAttributedString(string: "Search Tracks", attributes: [NSForegroundColorAttributeName: UIColor.lightGray])
-        searchSongsField.layer.borderWidth = 1.5
+        searchTracksField.attributedPlaceholder = NSAttributedString(string: "Search Tracks", attributes: [NSForegroundColorAttributeName: UIColor.lightGray])
+        searchTracksField.layer.borderWidth = 1.5
         
-        searchSongsField.autocapitalizationType = UITextAutocapitalizationType.sentences
+        searchTracksField.autocapitalizationType = UITextAutocapitalizationType.sentences
     }
     
     func textFieldShouldReturn(_ searchSongsField: UITextField) -> Bool {
@@ -105,8 +106,26 @@ class AddSongViewController: UIViewController, UITextFieldDelegate, UITableViewD
         DispatchQueue.global(qos: .userInitiated).async {
             self.APIManager.dispatchGroup.notify(queue: .main) {
                 self.tracksList = self.APIManager.tracksList
+                if self.tracksList.count == 0 {
+                    self.displayNoTracksFoundLabel()
+                } else {
+                    self.removeNoTracksFoundLabel()
+                }
             }
         }
+    }
+    
+    func displayNoTracksFoundLabel() {
+        noTracksFoundLabel.text = "No Tracks Found"
+        noTracksFoundLabel.textColor = .white
+        noTracksFoundLabel.textAlignment = .center
+        
+        noTracksFoundLabel.center = self.view.center
+        self.view.addSubview(noTracksFoundLabel)
+    }
+    
+    func removeNoTracksFoundLabel() {
+        self.noTracksFoundLabel.removeFromSuperview()
     }
     
     func addToQueue(track: Track) {

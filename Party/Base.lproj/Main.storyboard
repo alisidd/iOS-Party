@@ -413,7 +413,7 @@
                     <navigationItem key="navigationItem" id="SMw-9E-B5m"/>
                     <connections>
                         <outlet property="backgroundImageView" destination="uHB-ca-aJf" id="4I1-pW-svc"/>
-                        <outlet property="searchSongsField" destination="Lqd-ya-Vio" id="4hb-ui-aOc"/>
+                        <outlet property="searchTracksField" destination="Lqd-ya-Vio" id="9Vd-cT-Cr4"/>
                         <outlet property="trackTableView" destination="snT-CL-AJC" id="vMH-UJ-EBr"/>
                     </connections>
                 </viewController>

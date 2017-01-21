@@ -11,10 +11,8 @@ import Foundation
 import MultipeerConnectivity
 
 protocol NetworkManagerDelegate {
-    
     func connectedDevicesChanged(_ manager : NetworkServiceManager, connectedDevices: [String])
     func messageChanged(_ manager : NetworkServiceManager, messageString: String)
-    
 }
 
 
@@ -49,7 +47,6 @@ class NetworkServiceManager: NSObject {
     
     deinit {
         self.serviceAdvertiser.stopAdvertisingPeer()
-        
         self.serviceBrowser.stopBrowsingForPeers()
     }
     
@@ -63,11 +60,9 @@ class NetworkServiceManager: NSObject {
         NSLog("%@", "sendMessage: \(messageData)")
         
         if session.connectedPeers.count > 0 {
-            var error : NSError?
             do {
-                if let result = try self.session.send(messageData.data(using: String.Encoding.utf8, allowLossyConversion: false)!, toPeers: session.connectedPeers, with: MCSessionSendDataMode.reliable) as? Any {
-                    print(result)
-                }
+                let result = try self.session.send(messageData.data(using: String.Encoding.utf8, allowLossyConversion: false)!, toPeers: session.connectedPeers, with: MCSessionSendDataMode.reliable) as Any
+                print(result)
             } catch let error as NSError {
                 print(error.localizedDescription)
             }
@@ -113,11 +108,10 @@ extension NetworkServiceManager : MCNearbyServiceBrowserDelegate {
 extension MCSessionState {
     
     func stringValue() -> String {
-        switch(self) {
+        switch self {
         case .notConnected: return "NotConnected"
         case .connecting: return "Connecting"
         case .connected: return "Connected"
-        default: return "Unknown"
         }
     }
     

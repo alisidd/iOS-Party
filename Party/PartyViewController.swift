@@ -39,8 +39,8 @@ class PartyViewController: UIViewController, UITableViewDataSource, UITableViewD
         party.partyName = partyMade.partyName
         party.musicService = partyMade.musicService
         party.genres = partyMade.genres
-        tracksListManager.partyName = partyMade.partyName
-        tracksListManager.isHost = true // Setup as host so browse & advertise
+        tracksListManager.partyName = party.partyName
+        //tracksListManager.isHost = true // Setup as host so browse & advertise
     }
 
     override func viewDidLoad() {

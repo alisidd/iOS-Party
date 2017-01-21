@@ -11,7 +11,6 @@ import StoreKit
 import MediaPlayer
 
 class MusicPlayer {
-    
     private let serviceController = SKCloudServiceController()
     let player = MPMusicPlayerController.applicationMusicPlayer()
     
