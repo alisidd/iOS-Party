@@ -20,6 +20,8 @@ class PartyViewController: UIViewController, UITableViewDataSource, UITableViewD
     @IBOutlet weak var backgroundImageView: UIImageView!
     @IBOutlet weak var tracksTableView: UITableView!
     
+    let tracksListManager = NetworkServiceManager() // Holds the tracks for the current party & advertises the current party
+    
     private var party = Party()
     private var tracksQueue = [Track]() {
         didSet
@@ -37,6 +39,8 @@ class PartyViewController: UIViewController, UITableViewDataSource, UITableViewD
         party.partyName = partyMade.partyName
         party.musicService = partyMade.musicService
         party.genres = partyMade.genres
+        tracksListManager.partyName = partyMade.partyName
+        tracksListManager.isHost = true // Setup as host so browse & advertise
     }
 
     override func viewDidLoad() {
@@ -65,6 +69,8 @@ class PartyViewController: UIViewController, UITableViewDataSource, UITableViewD
     private func setDelegates() {
         self.tracksTableView.delegate = self
         self.tracksTableView.dataSource = self
+        
+        tracksListManager.delegate = self
     }
     
     func adjustTableView() {
@@ -205,4 +211,22 @@ class PartyViewController: UIViewController, UITableViewDataSource, UITableViewD
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return 80
     }
+}
+
+// MARK: NetworkManagerDelegate
+
+extension PartyViewController: NetworkManagerDelegate {
+    
+    func connectedDevicesChanged(_ manager: NetworkServiceManager, connectedDevices: [String]) {
+        OperationQueue.main.addOperation { () -> Void in
+            print("Connections: \(connectedDevices)")
+        }
+    }
+    
+    func messageChanged(_ manager: NetworkServiceManager, messageString: String) {
+        OperationQueue.main.addOperation { () -> Void in
+            print(messageString)
+        }
+    }
+    
 }
