@@ -233,6 +233,22 @@ class PartyViewController: UIViewController, UITableViewDataSource, UITableViewD
         }
     }
     
+    func tableView(_ tableView: UITableView, editActionsForRowAt indexPath: IndexPath) -> [UITableViewRowAction]? {
+        let deleteButton = UITableViewRowAction(style: .default, title: "Delete", handler: { (action, indexPath) in
+            tableView.dataSource?.tableView?(
+                tableView,
+                commit: .delete,
+                forRowAt: indexPath
+            )
+            return
+        })
+        
+        UIButton.appearance().setTitleColor(UIColor(colorLiteralRed: 37/255, green: 37/255, blue: 37/255, alpha: 1), for: UIControlState.normal)
+        deleteButton.backgroundColor = UIColor(colorLiteralRed: 1, green: 111/255, blue: 1/255, alpha: 1)
+        
+        return [deleteButton]
+    }
+    
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return indexPath.row == 0 ? 200 : 80
     }
