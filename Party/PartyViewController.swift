@@ -20,7 +20,14 @@ class PartyViewController: UIViewController, UITableViewDataSource, UITableViewD
     @IBOutlet weak var tracksTableView: UITableView!
     
     private var party = Party()
-    private var tracksQueue = [Track]() { didSet { self.tracksTableView.reloadData() } }
+    private var tracksQueue = [Track]() {
+        didSet
+        {
+            self.tracksTableView.reloadData()
+            initializeMusicPlayer()
+        }
+    }
+    private var musicPlayer = MusicPlayer()
     
     func initializeVariables(withParty partyMade: Party) {
         party.partyName = partyMade.partyName
@@ -34,6 +41,8 @@ class PartyViewController: UIViewController, UITableViewDataSource, UITableViewD
         setupNavigationBar()
         setDelegates()
         adjustTableView()
+        
+        initializeMusicPlayer()
     }
     
     private func blurBackgroundImageView() {
@@ -55,10 +64,27 @@ class PartyViewController: UIViewController, UITableViewDataSource, UITableViewD
     }
     
     func adjustTableView() {
+        // Appearance
         tracksTableView.backgroundColor = .clear
         tracksTableView.separatorColor  = UIColor(colorLiteralRed: 15/255, green: 15/255, blue: 15/255, alpha: 1)
         tracksTableView.tableFooterView = UIView()
         tracksTableView.allowsSelection = false
+        
+        // Gesture
+        let recognizer = UILongPressGestureRecognizer(target: self, action: #selector(PartyViewController.longPressGestureRecognized(gestureRecognizer:)))
+        tracksTableView.addGestureRecognizer(recognizer)
+    }
+    
+    func initializeMusicPlayer() {
+        musicPlayer.hasCapabilities()
+        musicPlayer.haveAuthorization()
+        musicPlayer.playTracks(tracks: tracksQueue)
+    }
+    
+    func longPressGestureRecognized(gestureRecognizer: UIGestureRecognizer) {
+        let recognizer = gestureRecognizer as! UILongPressGestureRecognizer
+        
+        
     }
     
     func addToQueue(track: Track) {
@@ -124,15 +150,28 @@ class PartyViewController: UIViewController, UITableViewDataSource, UITableViewD
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tracksTableView.dequeueReusableCell(withIdentifier: "Track") as! TrackInQueueTableViewCell
         
-        if let unwrappedArtwork = tracksQueue[indexPath.row].artwork {
-            cell.artwork.image = unwrappedArtwork
+        if let cell = tableView.dequeueReusableCell(withIdentifier: "CurrentlyPlayingTrack") as?CurrentlyPlayingTrackTableViewCell {
+            if let unwrappedArtwork = tracksQueue[indexPath.row].artwork {
+                cell.artwork.image = unwrappedArtwork
+            }
+            cell.trackName.text = tracksQueue[indexPath.row].name
+            cell.artistName.text = tracksQueue[indexPath.row].artist
+            
+            return cell
+            
+        } else {
+            let cell = tableView.dequeueReusableCell(withIdentifier: "Track") as! TrackInQueueTableViewCell
+            
+            if let unwrappedArtwork = tracksQueue[indexPath.row].artwork {
+                cell.artwork.image = unwrappedArtwork
+            }
+            cell.trackName.text = tracksQueue[indexPath.row].name
+            cell.artistName.text = tracksQueue[indexPath.row].artist
+            
+            return cell
         }
-        cell.trackName.text = tracksQueue[indexPath.row].name
-        cell.artistName.text = tracksQueue[indexPath.row].artist
         
-        return cell
     }
     
     func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {

@@ -162,7 +162,7 @@
                                 <rect key="frame" x="0.0" y="64" width="375" height="603"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <prototypes>
-                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="Track" id="RmX-UX-SKb" customClass="TrackInQueueTableViewCell" customModule="Party" customModuleProvider="target">
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="CurrentlyPlayingTrack" id="RmX-UX-SKb" customClass="CurrentlyPlayingTrackTableViewCell" customModule="Party" customModuleProvider="target">
                                         <rect key="frame" x="0.0" y="28" width="375" height="44"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="RmX-UX-SKb" id="CSL-k7-suC">
@@ -202,9 +202,54 @@
                                             </constraints>
                                         </tableViewCellContentView>
                                         <connections>
-                                            <outlet property="artistName" destination="Jhb-hH-3Mb" id="iye-kg-mMb"/>
-                                            <outlet property="artwork" destination="CwV-VT-Vj2" id="lqD-Q0-h68"/>
-                                            <outlet property="trackName" destination="jsg-78-Gfg" id="vQI-nj-Rfc"/>
+                                            <outlet property="artistName" destination="Jhb-hH-3Mb" id="8Ow-s9-y0V"/>
+                                            <outlet property="artwork" destination="CwV-VT-Vj2" id="18n-jz-2ga"/>
+                                            <outlet property="trackName" destination="jsg-78-Gfg" id="Hag-sS-cdF"/>
+                                        </connections>
+                                    </tableViewCell>
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="Track" id="FXK-8e-Jar" customClass="TrackInQueueTableViewCell" customModule="Party" customModuleProvider="target">
+                                        <rect key="frame" x="0.0" y="72" width="375" height="44"/>
+                                        <autoresizingMask key="autoresizingMask"/>
+                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="FXK-8e-Jar" id="R5n-2s-FBb">
+                                            <rect key="frame" x="0.0" y="0.0" width="375" height="43"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <subviews>
+                                                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="FrS-Bv-IvM">
+                                                    <rect key="frame" x="8" y="-4" width="50" height="50"/>
+                                                    <constraints>
+                                                        <constraint firstAttribute="height" constant="50" id="AMX-RJ-RQh"/>
+                                                        <constraint firstAttribute="width" constant="50" id="PJT-bu-su8"/>
+                                                    </constraints>
+                                                </imageView>
+                                                <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" distribution="fillProportionally" alignment="top" translatesAutoresizingMaskIntoConstraints="NO" id="NyS-a1-EVS">
+                                                    <rect key="frame" x="77" y="3.5" width="92" height="35"/>
+                                                    <subviews>
+                                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Track Name" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="rTo-Zq-v0R">
+                                                            <rect key="frame" x="0.0" y="0.0" width="92" height="20.5"/>
+                                                            <fontDescription key="fontDescription" style="UICTFontTextStyleBody"/>
+                                                            <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                                            <nil key="highlightedColor"/>
+                                                        </label>
+                                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Artist Name" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="OdD-ty-8D6">
+                                                            <rect key="frame" x="0.0" y="20.5" width="67.5" height="14.5"/>
+                                                            <fontDescription key="fontDescription" style="UICTFontTextStyleCaption1"/>
+                                                            <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                                            <nil key="highlightedColor"/>
+                                                        </label>
+                                                    </subviews>
+                                                </stackView>
+                                            </subviews>
+                                            <constraints>
+                                                <constraint firstItem="NyS-a1-EVS" firstAttribute="leading" secondItem="FrS-Bv-IvM" secondAttribute="trailing" constant="19" id="46o-hh-kPB"/>
+                                                <constraint firstItem="FrS-Bv-IvM" firstAttribute="leading" secondItem="R5n-2s-FBb" secondAttribute="leadingMargin" id="773-9Q-u22"/>
+                                                <constraint firstItem="FrS-Bv-IvM" firstAttribute="centerY" secondItem="NyS-a1-EVS" secondAttribute="centerY" id="hGO-gl-zOx"/>
+                                                <constraint firstItem="FrS-Bv-IvM" firstAttribute="centerY" secondItem="R5n-2s-FBb" secondAttribute="centerY" id="sP7-Fr-GY9"/>
+                                            </constraints>
+                                        </tableViewCellContentView>
+                                        <connections>
+                                            <outlet property="artistName" destination="OdD-ty-8D6" id="NgG-Nw-WaG"/>
+                                            <outlet property="artwork" destination="FrS-Bv-IvM" id="R7h-lr-8rO"/>
+                                            <outlet property="trackName" destination="rTo-Zq-v0R" id="nPR-Gj-pXl"/>
                                         </connections>
                                     </tableViewCell>
                                 </prototypes>

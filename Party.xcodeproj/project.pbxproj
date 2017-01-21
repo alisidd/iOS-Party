@@ -12,6 +12,8 @@
 		3472FB141DDAC6FC00A35FCB /* PartyListCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3472FB131DDAC6FC00A35FCB /* PartyListCell.swift */; };
 		3472FB161DDAC81E00A35FCB /* Party.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3472FB151DDAC81E00A35FCB /* Party.swift */; };
 		412FBECD1E32A506007FFB6A /* TrackInQueueTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 412FBECC1E32A506007FFB6A /* TrackInQueueTableViewCell.swift */; };
+		412FBECF1E32CA0E007FFB6A /* CurrentlyPlayingTrackTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 412FBECE1E32CA0E007FFB6A /* CurrentlyPlayingTrackTableViewCell.swift */; };
+		412FBED11E32CFA7007FFB6A /* MusicPlayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 412FBED01E32CFA7007FFB6A /* MusicPlayer.swift */; };
 		417B9D4B1E317C3C0021F36E /* PartyViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 417B9D4A1E317C3C0021F36E /* PartyViewController.swift */; };
 		417B9D4D1E3187570021F36E /* addButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 417B9D4C1E3187570021F36E /* addButton.swift */; };
 		417B9D4F1E318D0D0021F36E /* AddSongViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 417B9D4E1E318D0D0021F36E /* AddSongViewController.swift */; };
@@ -35,6 +37,8 @@
 		3472FB131DDAC6FC00A35FCB /* PartyListCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PartyListCell.swift; sourceTree = "<group>"; };
 		3472FB151DDAC81E00A35FCB /* Party.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Party.swift; sourceTree = "<group>"; };
 		412FBECC1E32A506007FFB6A /* TrackInQueueTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TrackInQueueTableViewCell.swift; sourceTree = "<group>"; };
+		412FBECE1E32CA0E007FFB6A /* CurrentlyPlayingTrackTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CurrentlyPlayingTrackTableViewCell.swift; sourceTree = "<group>"; };
+		412FBED01E32CFA7007FFB6A /* MusicPlayer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MusicPlayer.swift; sourceTree = "<group>"; };
 		417B9D4A1E317C3C0021F36E /* PartyViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PartyViewController.swift; sourceTree = "<group>"; };
 		417B9D4C1E3187570021F36E /* addButton.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = addButton.swift; sourceTree = "<group>"; };
 		417B9D4E1E318D0D0021F36E /* AddSongViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AddSongViewController.swift; sourceTree = "<group>"; };
@@ -105,7 +109,9 @@
 				417C38E21DDA447600F59926 /* PartyCreationViewController.swift */,
 				418503F81E307E3D00472006 /* GenrePickingTableViewController.swift */,
 				417B9D4A1E317C3C0021F36E /* PartyViewController.swift */,
+				412FBED01E32CFA7007FFB6A /* MusicPlayer.swift */,
 				412FBECC1E32A506007FFB6A /* TrackInQueueTableViewCell.swift */,
+				412FBECE1E32CA0E007FFB6A /* CurrentlyPlayingTrackTableViewCell.swift */,
 				417B9D4E1E318D0D0021F36E /* AddSongViewController.swift */,
 				417B9D561E31CD8D0021F36E /* TrackTableViewCell.swift */,
 				417B9D541E31BC120021F36E /* RestApiManager.swift */,
@@ -170,6 +176,11 @@
 						CreatedOnToolsVersion = 8.1;
 						DevelopmentTeam = M88ZYQ7793;
 						ProvisioningStyle = Automatic;
+						SystemCapabilities = {
+							com.apple.BackgroundModes = {
+								enabled = 1;
+							};
+						};
 					};
 				};
 			};
@@ -259,6 +270,8 @@
 			buildActionMask = 2147483647;
 			files = (
 				3472FB121DDAC68900A35FCB /* PartyJoinedViewController.swift in Sources */,
+				412FBECF1E32CA0E007FFB6A /* CurrentlyPlayingTrackTableViewCell.swift in Sources */,
+				412FBED11E32CFA7007FFB6A /* MusicPlayer.swift in Sources */,
 				417B9D4F1E318D0D0021F36E /* AddSongViewController.swift in Sources */,
 				418503F71E307BE900472006 /* setupButton.swift in Sources */,
 				3472FB141DDAC6FC00A35FCB /* PartyListCell.swift in Sources */,
