@@ -45,14 +45,9 @@ class PartyViewController: UIViewController, UITableViewDataSource, UITableViewD
         blurBackgroundImageView()
         setupNavigationBar()
         setDelegates()
-        adjustTableView()
+        adjustViews()
         
         initializeMusicPlayer()
-    }
-    
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-        UIButton.appearance().setTitleColor(UIColor(colorLiteralRed: 37/255, green: 37/255, blue: 37/255, alpha: 1), for: UIControlState.normal)
     }
     
     private func blurBackgroundImageView() {
@@ -65,7 +60,8 @@ class PartyViewController: UIViewController, UITableViewDataSource, UITableViewD
     }
     
     private func setupNavigationBar() {
-        self.title = party.partyName
+        self.title = party.partyName.uppercased()
+        navigationController?.navigationBar.isTranslucent = true
     }
     
     private func setDelegates() {
@@ -75,7 +71,7 @@ class PartyViewController: UIViewController, UITableViewDataSource, UITableViewD
         //tracksListManager.delegate = self
     }
     
-    func adjustTableView() {
+    func adjustViews() {
         // Appearance
         tracksTableView.backgroundColor = .clear
         tracksTableView.separatorColor  = UIColor(colorLiteralRed: 15/255, green: 15/255, blue: 15/255, alpha: 1)
@@ -254,7 +250,7 @@ class PartyViewController: UIViewController, UITableViewDataSource, UITableViewD
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return indexPath.row == 0 ? 200 : 80
+        return indexPath.row == 0 ? 300 : 80
     }
 }
 
