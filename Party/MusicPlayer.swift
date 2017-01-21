@@ -53,12 +53,16 @@ class MusicPlayer {
         return player.playbackState == .stopped && player.nowPlayingItem == nil
     }
     
-    func playTracks() {
+    func playTrack() {
         player.play()
     }
     
-    func skipTrack() {
-        player.skipToNextItem()
+    func pauseTrack() {
+        player.pause()
+    }
+    
+    func isPaused() -> Bool {
+        return player.playbackState == .paused
     }
     
 }

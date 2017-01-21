@@ -5,7 +5,7 @@
 //  Created by Matthew on 2017-01-20.
 //  Copyright © 2017 Ali Siddiqui.MatthewPaletta. All rights reserved.
 //
-
+/*
 import UIKit
 import Foundation
 import MultipeerConnectivity
@@ -47,6 +47,7 @@ class NetworkServiceManager: NSObject {
     
     deinit {
         self.serviceAdvertiser.stopAdvertisingPeer()
+        
         self.serviceBrowser.stopBrowsingForPeers()
     }
     
@@ -142,4 +143,4 @@ extension NetworkServiceManager : MCSessionDelegate {
         NSLog("%@", "didStartReceivingResourceWithName")
     }
     
-}
+}*/

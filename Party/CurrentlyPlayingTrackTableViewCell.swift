@@ -10,7 +10,27 @@ import UIKit
 
 class CurrentlyPlayingTrackTableViewCell: UITableViewCell {
 
-    @IBOutlet weak var artwork: UIImageView!
+    @IBOutlet weak var artwork: UIImageView! {
+        didSet {
+            let blurEffect: UIBlurEffect = UIBlurEffect(style: UIBlurEffectStyle.dark)
+            let blurView = UIVisualEffectView(effect: blurEffect)
+            blurView.alpha = 0.8
+            blurView.frame = artwork.bounds
+            blurView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
+            
+            artwork.addSubview(blurView)
+        }
+    }
+    @IBOutlet weak var playPauseButton: UIButton! {
+        didSet {
+            playPauseButton.alpha = 0.6
+        }
+    }
+    @IBOutlet weak var nextButton: UIButton! {
+        didSet {
+            nextButton.alpha = 0.6
+        }
+    }
     @IBOutlet weak var trackName: UILabel!
     @IBOutlet weak var artistName: UILabel!
     

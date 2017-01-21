@@ -20,26 +20,23 @@ class PartyViewController: UIViewController, UITableViewDataSource, UITableViewD
     @IBOutlet weak var backgroundImageView: UIImageView!
     @IBOutlet weak var tracksTableView: UITableView!
     
-    let tracksListManager = NetworkServiceManager() // Holds the tracks for the current party & advertises the current party
+    //let tracksListManager = NetworkServiceManager() // Holds the tracks for the current party & advertises the current party
     
     private var party = Party()
+    private var musicPlayer = MusicPlayer()
     private var tracksQueue = [Track]() {
         didSet
         {
             self.tracksTableView.reloadData()
             initializeMusicPlayer()
-            if tracksQueue.count == 1 {
-                musicPlayer.modifyQueue(withTracks: tracksQueue)
-            }
         }
     }
-    private var musicPlayer = MusicPlayer()    
     
     func initializeVariables(withParty partyMade: Party) {
         party.partyName = partyMade.partyName
         party.musicService = partyMade.musicService
         party.genres = partyMade.genres
-        tracksListManager.partyName = party.partyName
+        //tracksListManager.partyName = party.partyName
         //tracksListManager.isHost = true // Setup as host so browse & advertise
     }
 
@@ -70,7 +67,7 @@ class PartyViewController: UIViewController, UITableViewDataSource, UITableViewD
         self.tracksTableView.delegate = self
         self.tracksTableView.dataSource = self
         
-        tracksListManager.delegate = self
+        //tracksListManager.delegate = self
     }
     
     func adjustTableView() {
@@ -91,6 +88,38 @@ class PartyViewController: UIViewController, UITableViewDataSource, UITableViewD
         NotificationCenter.default.addObserver(self, selector: #selector(PartyViewController.playNextTrack), name:NSNotification.Name.MPMusicPlayerControllerPlaybackStateDidChange, object: MPMusicPlayerController.applicationMusicPlayer())
     }
     
+    // Implement these in the cell itself!!
+    @IBAction func playPauseChange(_ sender: UIButton) {
+        if musicPlayer.isPaused() {
+            UIView.animate(withDuration: 0.1, animations: {
+                sender.alpha = 0.0
+            }, completion:{ (finished) in
+                sender.setImage(#imageLiteral(resourceName: "pause"), for: .normal)
+                UIView.animate(withDuration: 0.25, animations: {
+                    sender.alpha = 0.6
+                }, completion:nil)
+            })
+            musicPlayer.playTrack()
+        } else {
+            UIView.animate(withDuration: 0.1, animations: {
+                sender.alpha = 0.0
+            }, completion:{ (finished) in
+                sender.setImage(#imageLiteral(resourceName: "play"), for: .normal)
+                UIView.animate(withDuration: 0.25, animations: {
+                    sender.alpha = 0.6
+                }, completion:nil)
+            })
+            musicPlayer.pauseTrack()
+        }
+    }
+    
+    @IBAction func nextTrackChange(_ sender: UIButton) {
+        if tracksQueue.count > 0 {
+            tracksQueue.removeFirst()
+            musicPlayer.modifyQueue(withTracks: tracksQueue)
+        }
+    }
+    
     func playNextTrack() {
         if tracksQueue.count > 1 && musicPlayer.safeToPlayNextTrack() {
             print("Removing \(tracksQueue.removeFirst().name)")
@@ -99,17 +128,15 @@ class PartyViewController: UIViewController, UITableViewDataSource, UITableViewD
         }
     }
     
-    @IBAction func skipTrack(_ sender: UIButton) {
-        tracksQueue.removeFirst()
-        musicPlayer.modifyQueue(withTracks: tracksQueue)
-    }
-    
     func longPressGestureRecognized(gestureRecognizer: UIGestureRecognizer) {
         let recognizer = gestureRecognizer as! UILongPressGestureRecognizer
     }
     
     func addToQueue(track: Track) {
         tracksQueue.insert(track, at: tracksQueue.count)
+        if tracksQueue.count == 1 {
+            musicPlayer.modifyQueue(withTracks: tracksQueue)
+        }
     }
     
     func removeFromQueue(track: Track) {
@@ -138,8 +165,6 @@ class PartyViewController: UIViewController, UITableViewDataSource, UITableViewD
         // Dispose of any resources that can be recreated.
     }
     
-
-    
     // MARK: - Navigation
 
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
@@ -150,7 +175,6 @@ class PartyViewController: UIViewController, UITableViewDataSource, UITableViewD
                 controller.delegate = self
             }
         }
-        
     }
     
     // MARK: - Table
@@ -172,7 +196,8 @@ class PartyViewController: UIViewController, UITableViewDataSource, UITableViewD
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         
-        if let cell = tableView.dequeueReusableCell(withIdentifier: "CurrentlyPlayingTrack") as?CurrentlyPlayingTrackTableViewCell {
+        if indexPath.row == 0 {
+            let cell = tableView.dequeueReusableCell(withIdentifier: "CurrentlyPlayingTrack") as!CurrentlyPlayingTrackTableViewCell
             if let unwrappedArtwork = tracksQueue[indexPath.row].artwork {
                 cell.artwork.image = unwrappedArtwork
             }
@@ -209,12 +234,12 @@ class PartyViewController: UIViewController, UITableViewDataSource, UITableViewD
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return 80
+        return indexPath.row == 0 ? 200 : 80
     }
 }
 
 // MARK: NetworkManagerDelegate
-
+/*
 extension PartyViewController: NetworkManagerDelegate {
     
     func connectedDevicesChanged(_ manager: NetworkServiceManager, connectedDevices: [String]) {
@@ -229,4 +254,4 @@ extension PartyViewController: NetworkManagerDelegate {
         }
     }
     
-}
+}*/
