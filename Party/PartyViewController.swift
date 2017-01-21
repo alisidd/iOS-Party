@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import MediaPlayer
 
 protocol updateTracksQueue: class {
     func addToQueue(track: Track)
@@ -25,9 +26,12 @@ class PartyViewController: UIViewController, UITableViewDataSource, UITableViewD
         {
             self.tracksTableView.reloadData()
             initializeMusicPlayer()
+            if tracksQueue.count == 1 {
+                musicPlayer.modifyQueue(withTracks: tracksQueue)
+            }
         }
     }
-    private var musicPlayer = MusicPlayer()
+    private var musicPlayer = MusicPlayer()    
     
     func initializeVariables(withParty partyMade: Party) {
         party.partyName = partyMade.partyName
@@ -78,13 +82,24 @@ class PartyViewController: UIViewController, UITableViewDataSource, UITableViewD
     func initializeMusicPlayer() {
         musicPlayer.hasCapabilities()
         musicPlayer.haveAuthorization()
-        musicPlayer.playTracks(tracks: tracksQueue)
+        NotificationCenter.default.addObserver(self, selector: #selector(PartyViewController.playNextTrack), name:NSNotification.Name.MPMusicPlayerControllerPlaybackStateDidChange, object: MPMusicPlayerController.applicationMusicPlayer())
+    }
+    
+    func playNextTrack() {
+        if tracksQueue.count > 1 && musicPlayer.safeToPlayNextTrack() {
+            print("Removing \(tracksQueue.removeFirst().name)")
+            print("Playing \(tracksQueue[0].name)")
+            musicPlayer.modifyQueue(withTracks: tracksQueue)
+        }
+    }
+    
+    @IBAction func skipTrack(_ sender: UIButton) {
+        tracksQueue.removeFirst()
+        musicPlayer.modifyQueue(withTracks: tracksQueue)
     }
     
     func longPressGestureRecognized(gestureRecognizer: UIGestureRecognizer) {
         let recognizer = gestureRecognizer as! UILongPressGestureRecognizer
-        
-        
     }
     
     func addToQueue(track: Track) {

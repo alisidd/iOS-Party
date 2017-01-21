@@ -268,6 +268,15 @@
                                     <segue destination="wZL-ui-Jhx" kind="show" identifier="Add Songs" id="cPF-ew-7oW"/>
                                 </connections>
                             </button>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Ne1-oi-Hwq">
+                                <rect key="frame" x="329" y="547" width="30" height="30"/>
+                                <state key="normal" title="Skip">
+                                    <color key="titleColor" red="1" green="0.4344842136" blue="0.005222451407" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                </state>
+                                <connections>
+                                    <action selector="skipTrack:" destination="IhU-0X-egj" eventType="touchUpInside" id="6uZ-fY-w2D"/>
+                                </connections>
+                            </button>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
@@ -276,12 +285,14 @@
                             <constraint firstItem="982-wm-VJO" firstAttribute="centerX" secondItem="PzI-h2-MC8" secondAttribute="centerX" id="9RM-qi-MTz"/>
                             <constraint firstItem="982-wm-VJO" firstAttribute="bottom" secondItem="IwS-71-ORn" secondAttribute="top" id="JUK-Ph-Ecw"/>
                             <constraint firstItem="3Iu-Is-JTy" firstAttribute="trailing" secondItem="982-wm-VJO" secondAttribute="trailing" id="L7a-P0-Nv9"/>
+                            <constraint firstAttribute="trailingMargin" secondItem="Ne1-oi-Hwq" secondAttribute="trailing" id="aMO-Dl-IgB"/>
                             <constraint firstItem="3Iu-Is-JTy" firstAttribute="bottom" secondItem="IwS-71-ORn" secondAttribute="top" id="cdk-46-P6z"/>
                             <constraint firstItem="3Iu-Is-JTy" firstAttribute="leading" secondItem="ZZK-fY-JAX" secondAttribute="leading" id="dQr-SD-Oy1"/>
                             <constraint firstItem="3Iu-Is-JTy" firstAttribute="leading" secondItem="982-wm-VJO" secondAttribute="leading" id="fWD-LG-UdA"/>
                             <constraint firstItem="3Iu-Is-JTy" firstAttribute="top" secondItem="ZZK-fY-JAX" secondAttribute="top" id="i9V-vs-3bd"/>
                             <constraint firstItem="982-wm-VJO" firstAttribute="top" secondItem="aeu-Sl-Wwd" secondAttribute="bottom" id="iXh-Vk-ptp"/>
                             <constraint firstAttribute="bottom" secondItem="PzI-h2-MC8" secondAttribute="bottom" constant="20" symbolic="YES" id="ojf-8P-eaB"/>
+                            <constraint firstItem="PzI-h2-MC8" firstAttribute="top" secondItem="Ne1-oi-Hwq" secondAttribute="bottom" id="sh1-5g-IhN"/>
                         </constraints>
                     </view>
                     <connections>

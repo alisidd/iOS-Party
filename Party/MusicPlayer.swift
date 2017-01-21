@@ -12,7 +12,7 @@ import MediaPlayer
 
 class MusicPlayer {
     
-    let serviceController = SKCloudServiceController()
+    private let serviceController = SKCloudServiceController()
     let player = MPMusicPlayerController.applicationMusicPlayer()
     
     func hasCapabilities() {
@@ -31,6 +31,7 @@ class MusicPlayer {
             switch status {
             case .authorized:
                 print("Authorized")
+                self.player.beginGeneratingPlaybackNotifications()
             default:
                 print("Not authorized")
             }
@@ -38,13 +39,27 @@ class MusicPlayer {
         }
     }
     
-    func playTracks(tracks: [Track]) {
-        var ids = [String]()
-        for track in tracks {
-            ids.append(String(track.id))
+    func modifyQueue(withTracks tracks: [Track]) {
+        if tracks.count != 0 {
+            let ids = [String(tracks[0].id)]
+            player.setQueueWithStoreIDs(ids)
+            player.play()
+        } else {
+            player.setQueueWithStoreIDs([])
+            player.stop()
         }
-        player.setQueueWithStoreIDs(ids)
+    }
+    
+    func safeToPlayNextTrack() -> Bool {
+        return player.playbackState == .stopped && player.nowPlayingItem == nil
+    }
+    
+    func playTracks() {
         player.play()
+    }
+    
+    func skipTrack() {
+        player.skipToNextItem()
     }
     
 }
