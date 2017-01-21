@@ -50,6 +50,11 @@ class PartyViewController: UIViewController, UITableViewDataSource, UITableViewD
         initializeMusicPlayer()
     }
     
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        UIButton.appearance().setTitleColor(UIColor(colorLiteralRed: 37/255, green: 37/255, blue: 37/255, alpha: 1), for: UIControlState.normal)
+    }
+    
     private func blurBackgroundImageView() {
         let blurEffect: UIBlurEffect = UIBlurEffect(style: UIBlurEffectStyle.dark)
         
@@ -243,7 +248,6 @@ class PartyViewController: UIViewController, UITableViewDataSource, UITableViewD
             return
         })
         
-        UIButton.appearance().setTitleColor(UIColor(colorLiteralRed: 37/255, green: 37/255, blue: 37/255, alpha: 1), for: UIControlState.normal)
         deleteButton.backgroundColor = UIColor(colorLiteralRed: 1, green: 111/255, blue: 1/255, alpha: 1)
         
         return [deleteButton]

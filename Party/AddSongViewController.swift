@@ -83,6 +83,8 @@ class AddSongViewController: UIViewController, UITextFieldDelegate, UITableViewD
         trackTableView.separatorColor  = UIColor(colorLiteralRed: 15/255, green: 15/255, blue: 15/255, alpha: 1)
         trackTableView.tableFooterView = UIView()
         trackTableView.allowsSelection = false
+        
+        UIButton.appearance().setTitleColor(UIColor(colorLiteralRed: 1, green: 111/255, blue: 1/255, alpha: 1), for: UIControlState.normal)
     }
     
     func customizeTextField() {
