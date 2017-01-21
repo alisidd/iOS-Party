@@ -11,6 +11,7 @@
 		3472FB121DDAC68900A35FCB /* PartyJoinedViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3472FB111DDAC68900A35FCB /* PartyJoinedViewController.swift */; };
 		3472FB141DDAC6FC00A35FCB /* PartyListCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3472FB131DDAC6FC00A35FCB /* PartyListCell.swift */; };
 		3472FB161DDAC81E00A35FCB /* Party.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3472FB151DDAC81E00A35FCB /* Party.swift */; };
+		34D750E01E32E9C5009AFD63 /* NetworkServiceManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 34D750DF1E32E9C5009AFD63 /* NetworkServiceManager.swift */; };
 		412FBECD1E32A506007FFB6A /* TrackInQueueTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 412FBECC1E32A506007FFB6A /* TrackInQueueTableViewCell.swift */; };
 		412FBECF1E32CA0E007FFB6A /* CurrentlyPlayingTrackTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 412FBECE1E32CA0E007FFB6A /* CurrentlyPlayingTrackTableViewCell.swift */; };
 		412FBED11E32CFA7007FFB6A /* MusicPlayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 412FBED01E32CFA7007FFB6A /* MusicPlayer.swift */; };
@@ -36,13 +37,14 @@
 		3472FB111DDAC68900A35FCB /* PartyJoinedViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PartyJoinedViewController.swift; sourceTree = "<group>"; };
 		3472FB131DDAC6FC00A35FCB /* PartyListCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PartyListCell.swift; sourceTree = "<group>"; };
 		3472FB151DDAC81E00A35FCB /* Party.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Party.swift; sourceTree = "<group>"; };
+		34D750DF1E32E9C5009AFD63 /* NetworkServiceManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NetworkServiceManager.swift; sourceTree = "<group>"; };
 		412FBECC1E32A506007FFB6A /* TrackInQueueTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TrackInQueueTableViewCell.swift; sourceTree = "<group>"; };
 		412FBECE1E32CA0E007FFB6A /* CurrentlyPlayingTrackTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CurrentlyPlayingTrackTableViewCell.swift; sourceTree = "<group>"; };
 		412FBED01E32CFA7007FFB6A /* MusicPlayer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MusicPlayer.swift; sourceTree = "<group>"; };
 		417B9D4A1E317C3C0021F36E /* PartyViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PartyViewController.swift; sourceTree = "<group>"; };
 		417B9D4C1E3187570021F36E /* addButton.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = addButton.swift; sourceTree = "<group>"; };
 		417B9D4E1E318D0D0021F36E /* AddSongViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AddSongViewController.swift; sourceTree = "<group>"; };
-		417B9D501E31AE1A0021F36E /* Podfile */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = Podfile; sourceTree = "<group>"; };
+		417B9D501E31AE1A0021F36E /* Podfile */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = Podfile; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.ruby; };
 		417B9D521E31B3CE0021F36E /* Track.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Track.swift; sourceTree = "<group>"; };
 		417B9D541E31BC120021F36E /* RestApiManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RestApiManager.swift; sourceTree = "<group>"; };
 		417B9D561E31CD8D0021F36E /* TrackTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TrackTableViewCell.swift; sourceTree = "<group>"; };
@@ -109,6 +111,7 @@
 				417C38E21DDA447600F59926 /* PartyCreationViewController.swift */,
 				418503F81E307E3D00472006 /* GenrePickingTableViewController.swift */,
 				417B9D4A1E317C3C0021F36E /* PartyViewController.swift */,
+				34D750DF1E32E9C5009AFD63 /* NetworkServiceManager.swift */,
 				412FBED01E32CFA7007FFB6A /* MusicPlayer.swift */,
 				412FBECC1E32A506007FFB6A /* TrackInQueueTableViewCell.swift */,
 				412FBECE1E32CA0E007FFB6A /* CurrentlyPlayingTrackTableViewCell.swift */,
@@ -169,7 +172,7 @@
 			isa = PBXProject;
 			attributes = {
 				LastSwiftUpdateCheck = 0810;
-				LastUpgradeCheck = 0810;
+				LastUpgradeCheck = 0820;
 				ORGANIZATIONNAME = "Ali Siddiqui.MatthewPaletta";
 				TargetAttributes = {
 					417C38C81DDA43FD00F59926 = {
@@ -281,6 +284,7 @@
 				417C38EC1DDA91A800F59926 /* InitialSetupViewController.swift in Sources */,
 				3472FB161DDAC81E00A35FCB /* Party.swift in Sources */,
 				417C38EA1DDA91A100F59926 /* PartyCreationViewController.swift in Sources */,
+				34D750E01E32E9C5009AFD63 /* NetworkServiceManager.swift in Sources */,
 				417B9D571E31CD8D0021F36E /* TrackTableViewCell.swift in Sources */,
 				417B9D4D1E3187570021F36E /* addButton.swift in Sources */,
 				417B9D531E31B3CE0021F36E /* Track.swift in Sources */,

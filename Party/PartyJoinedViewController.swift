@@ -18,7 +18,6 @@ class PartyJoinedViewController: UITableViewController {
 
         partiesListManager.delegate = self
         // Will browse as device name
-        partiesListManager.isHost = false // Only browse, don't advertise
         
         
         // Add a background view to the table view
