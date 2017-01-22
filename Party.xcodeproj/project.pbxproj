@@ -12,6 +12,8 @@
 		3472FB141DDAC6FC00A35FCB /* PartyListCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3472FB131DDAC6FC00A35FCB /* PartyListCell.swift */; };
 		3472FB161DDAC81E00A35FCB /* Party.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3472FB151DDAC81E00A35FCB /* Party.swift */; };
 		34D750E01E32E9C5009AFD63 /* NetworkServiceManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 34D750DF1E32E9C5009AFD63 /* NetworkServiceManager.swift */; };
+		411EEF3E1E346BD800216016 /* GenrePickingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 411EEF3D1E346BD800216016 /* GenrePickingViewController.swift */; };
+		411EEF401E346E2200216016 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 411EEF3F1E346E2200216016 /* Main.storyboard */; };
 		412FBECD1E32A506007FFB6A /* TrackInQueueTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 412FBECC1E32A506007FFB6A /* TrackInQueueTableViewCell.swift */; };
 		412FBECF1E32CA0E007FFB6A /* CurrentlyPlayingTrackTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 412FBECE1E32CA0E007FFB6A /* CurrentlyPlayingTrackTableViewCell.swift */; };
 		412FBED11E32CFA7007FFB6A /* MusicPlayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 412FBED01E32CFA7007FFB6A /* MusicPlayer.swift */; };
@@ -22,7 +24,6 @@
 		417B9D531E31B3CE0021F36E /* Track.swift in Sources */ = {isa = PBXBuildFile; fileRef = 417B9D521E31B3CE0021F36E /* Track.swift */; };
 		417B9D551E31BC120021F36E /* RestApiManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 417B9D541E31BC120021F36E /* RestApiManager.swift */; };
 		417B9D571E31CD8D0021F36E /* TrackTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 417B9D561E31CD8D0021F36E /* TrackTableViewCell.swift */; };
-		417C38D21DDA43FD00F59926 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 417C38D01DDA43FD00F59926 /* Main.storyboard */; };
 		417C38D71DDA43FD00F59926 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 417C38D61DDA43FD00F59926 /* Assets.xcassets */; };
 		417C38DA1DDA43FD00F59926 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 417C38D81DDA43FD00F59926 /* LaunchScreen.storyboard */; };
 		417C38EA1DDA91A100F59926 /* PartyCreationViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 417C38E21DDA447600F59926 /* PartyCreationViewController.swift */; };
@@ -30,7 +31,6 @@
 		417C38EE1DDA91B100F59926 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 417C38CC1DDA43FD00F59926 /* AppDelegate.swift */; };
 		417C38EF1DDA91B500F59926 /* Party.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 417C38D31DDA43FD00F59926 /* Party.xcdatamodeld */; };
 		418503F71E307BE900472006 /* setupButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 418503F61E307BE900472006 /* setupButton.swift */; };
-		418503F91E307E3D00472006 /* GenrePickingTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 418503F81E307E3D00472006 /* GenrePickingTableViewController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -38,6 +38,8 @@
 		3472FB131DDAC6FC00A35FCB /* PartyListCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PartyListCell.swift; sourceTree = "<group>"; };
 		3472FB151DDAC81E00A35FCB /* Party.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Party.swift; sourceTree = "<group>"; };
 		34D750DF1E32E9C5009AFD63 /* NetworkServiceManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NetworkServiceManager.swift; sourceTree = "<group>"; };
+		411EEF3D1E346BD800216016 /* GenrePickingViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GenrePickingViewController.swift; sourceTree = "<group>"; };
+		411EEF3F1E346E2200216016 /* Main.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = Main.storyboard; sourceTree = "<group>"; };
 		412FBECC1E32A506007FFB6A /* TrackInQueueTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TrackInQueueTableViewCell.swift; sourceTree = "<group>"; };
 		412FBECE1E32CA0E007FFB6A /* CurrentlyPlayingTrackTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CurrentlyPlayingTrackTableViewCell.swift; sourceTree = "<group>"; };
 		412FBED01E32CFA7007FFB6A /* MusicPlayer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MusicPlayer.swift; sourceTree = "<group>"; };
@@ -50,7 +52,6 @@
 		417B9D561E31CD8D0021F36E /* TrackTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TrackTableViewCell.swift; sourceTree = "<group>"; };
 		417C38C91DDA43FD00F59926 /* Party.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Party.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		417C38CC1DDA43FD00F59926 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
-		417C38D11DDA43FD00F59926 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		417C38D41DDA43FD00F59926 /* Party.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = Party.xcdatamodel; sourceTree = "<group>"; };
 		417C38D61DDA43FD00F59926 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		417C38D91DDA43FD00F59926 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
@@ -58,7 +59,6 @@
 		417C38E11DDA447600F59926 /* InitialSetupViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = InitialSetupViewController.swift; sourceTree = "<group>"; };
 		417C38E21DDA447600F59926 /* PartyCreationViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PartyCreationViewController.swift; sourceTree = "<group>"; };
 		418503F61E307BE900472006 /* setupButton.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = setupButton.swift; sourceTree = "<group>"; };
-		418503F81E307E3D00472006 /* GenrePickingTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GenrePickingTableViewController.swift; sourceTree = "<group>"; };
 		66422AE3EA2F04836109AFE5 /* Pods_Party.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Party.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		6A26B4AEA07B3D4EA48B5C48 /* Pods-Party.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Party.release.xcconfig"; path = "Pods/Target Support Files/Pods-Party/Pods-Party.release.xcconfig"; sourceTree = "<group>"; };
 		BC65DBE49C35011FA75364E2 /* Pods-Party.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Party.debug.xcconfig"; path = "Pods/Target Support Files/Pods-Party/Pods-Party.debug.xcconfig"; sourceTree = "<group>"; };
@@ -110,7 +110,7 @@
 				417B9D541E31BC120021F36E /* RestApiManager.swift */,
 				417C38E11DDA447600F59926 /* InitialSetupViewController.swift */,
 				417C38E21DDA447600F59926 /* PartyCreationViewController.swift */,
-				418503F81E307E3D00472006 /* GenrePickingTableViewController.swift */,
+				411EEF3D1E346BD800216016 /* GenrePickingViewController.swift */,
 				417B9D4A1E317C3C0021F36E /* PartyViewController.swift */,
 				34D750DF1E32E9C5009AFD63 /* NetworkServiceManager.swift */,
 				412FBED01E32CFA7007FFB6A /* MusicPlayer.swift */,
@@ -125,7 +125,7 @@
 				418503F61E307BE900472006 /* setupButton.swift */,
 				417B9D4C1E3187570021F36E /* addButton.swift */,
 				417C38CC1DDA43FD00F59926 /* AppDelegate.swift */,
-				417C38D01DDA43FD00F59926 /* Main.storyboard */,
+				411EEF3F1E346E2200216016 /* Main.storyboard */,
 				417C38D81DDA43FD00F59926 /* LaunchScreen.storyboard */,
 				417C38D61DDA43FD00F59926 /* Assets.xcassets */,
 				417C38DB1DDA43FD00F59926 /* Info.plist */,
@@ -213,7 +213,7 @@
 				417C38DA1DDA43FD00F59926 /* LaunchScreen.storyboard in Resources */,
 				417C38D71DDA43FD00F59926 /* Assets.xcassets in Resources */,
 				417B9D511E31AE1A0021F36E /* Podfile in Resources */,
-				417C38D21DDA43FD00F59926 /* Main.storyboard in Resources */,
+				411EEF401E346E2200216016 /* Main.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -272,6 +272,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				411EEF3E1E346BD800216016 /* GenrePickingViewController.swift in Sources */,
 				3472FB121DDAC68900A35FCB /* PartyJoinedViewController.swift in Sources */,
 				412FBECF1E32CA0E007FFB6A /* CurrentlyPlayingTrackTableViewCell.swift in Sources */,
 				412FBED11E32CFA7007FFB6A /* MusicPlayer.swift in Sources */,
@@ -280,7 +281,6 @@
 				3472FB141DDAC6FC00A35FCB /* PartyListCell.swift in Sources */,
 				417C38EF1DDA91B500F59926 /* Party.xcdatamodeld in Sources */,
 				417C38EE1DDA91B100F59926 /* AppDelegate.swift in Sources */,
-				418503F91E307E3D00472006 /* GenrePickingTableViewController.swift in Sources */,
 				417C38EC1DDA91A800F59926 /* InitialSetupViewController.swift in Sources */,
 				3472FB161DDAC81E00A35FCB /* Party.swift in Sources */,
 				417C38EA1DDA91A100F59926 /* PartyCreationViewController.swift in Sources */,
@@ -297,14 +297,6 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXVariantGroup section */
-		417C38D01DDA43FD00F59926 /* Main.storyboard */ = {
-			isa = PBXVariantGroup;
-			children = (
-				417C38D11DDA43FD00F59926 /* Base */,
-			);
-			name = Main.storyboard;
-			sourceTree = "<group>";
-		};
 		417C38D81DDA43FD00F59926 /* LaunchScreen.storyboard */ = {
 			isa = PBXVariantGroup;
 			children = (

@@ -125,7 +125,7 @@ class PartyCreationViewController: UIViewController, UITextFieldDelegate, UIPick
 
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if segue.identifier == "Genre Popover" {
-            if let controller = segue.destination as? GenrePickingTableViewController {
+            if let controller = segue.destination as? GenrePickingViewController {
                 controller.delegate = self
                 controller.party = partyMade
             }
