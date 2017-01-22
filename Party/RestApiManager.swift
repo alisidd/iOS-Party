@@ -7,21 +7,32 @@
 //
 
 import Foundation
+import StoreKit
 import SwiftyJSON
 
 class RestApiManager {
     
     private var url = "https://itunes.apple.com/search?media=music&term="
+    private let serviceController = SKCloudServiceController()
+    private var storefrontIdentifierFound = String()
     var tracksList = [Track]()
     let dispatchGroup = DispatchGroup()
+    let secondDispatchGroup = DispatchGroup()
     
     
     func makeHTTPRequestToApple(withString string: String) {
         dispatchGroup.enter()
-
-        let requestURL = URL(string: url + string.replacingOccurrences(of: " ", with: "+"))
         
-        DispatchQueue.global(qos: .background).async {
+        DispatchQueue.global(qos: .userInitiated).async {
+            
+            if self.storefrontIdentifierFound.isEmpty {
+                self.secondDispatchGroup.enter()
+                self.fetchStorefrontIdentifier()
+                self.secondDispatchGroup.wait()
+            }
+            
+            let requestURL = URL(string: self.url + string.replacingOccurrences(of: " ", with: "+") + "&s=" + self.storefrontIdentifierFound)
+            
             let task = URLSession.shared.dataTask(with: requestURL!) { (data, response, error) in
                 if let statusCode = (response as? HTTPURLResponse)?.statusCode {
                     if statusCode == 200 {
@@ -33,6 +44,18 @@ class RestApiManager {
                 self.dispatchGroup.leave()
             }
             task.resume()
+        }
+        
+    }
+    
+    func fetchStorefrontIdentifier() {
+        serviceController.requestStorefrontIdentifier { (storefrontIdentifier, error) in
+            if let storefrontId = storefrontIdentifier, storefrontId.characters.count >= 6 {
+                let range = storefrontId.startIndex...storefrontId.index(storefrontId.startIndex, offsetBy: 5)
+                self.storefrontIdentifierFound = storefrontId[range]
+            }
+            
+            self.secondDispatchGroup.leave()
         }
     }
     

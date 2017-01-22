@@ -104,11 +104,14 @@ class AddSongViewController: UIViewController, UITextFieldDelegate, UITableViewD
         indicator.startAnimating()
         APIManager.makeHTTPRequestToApple(withString: query)
         DispatchQueue.global(qos: .userInitiated).async {
-            self.APIManager.dispatchGroup.notify(queue: .main) {
-                self.tracksList = self.APIManager.tracksList
-                if self.tracksList.count == 0 {
+            self.APIManager.dispatchGroup.wait()
+            self.tracksList = self.APIManager.tracksList
+            if self.tracksList.count == 0 {
+                DispatchQueue.main.async {
                     self.displayNoTracksFoundLabel()
-                } else {
+                }
+            } else {
+                DispatchQueue.main.async {
                     self.removeNoTracksFoundLabel()
                 }
             }
