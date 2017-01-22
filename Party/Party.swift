@@ -18,6 +18,8 @@ class Party: NSObject {
     var genres = [String]()
     var musicService = MusicService.appleMusic
     
+    var tracksQueue = [Track]()
+    
     var numPeople = 0
     var password: String?
     var isLocked = false

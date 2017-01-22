@@ -23,11 +23,8 @@ class PartyViewController: UIViewController, UITableViewDataSource, UITableViewD
     //let tracksListManager = NetworkServiceManager() // Holds the tracks for the current party & advertises the current party
     
     private var party = Party()
-    private var musicPlayer = MusicPlayer()
-    private var tracksQueue = [Track]() {
-        didSet
-        {
-            self.tracksTableView.reloadData()
+    private var musicPlayer = MusicPlayer() {
+        didSet {
             initializeMusicPlayer()
         }
     }
@@ -88,6 +85,8 @@ class PartyViewController: UIViewController, UITableViewDataSource, UITableViewD
         musicPlayer.hasCapabilities()
         musicPlayer.haveAuthorization()
         NotificationCenter.default.addObserver(self, selector: #selector(PartyViewController.playNextTrack), name:NSNotification.Name.MPMusicPlayerControllerPlaybackStateDidChange, object: MPMusicPlayerController.applicationMusicPlayer())
+        NotificationCenter.default.addObserver(self, selector: #selector(PartyViewController.nowPlayingItemChanged), name:NSNotification.Name.MPMusicPlayerControllerNowPlayingItemDidChange, object: MPMusicPlayerController.applicationMusicPlayer())
+        
     }
     
     // Implement these in the cell itself!!
@@ -116,18 +115,24 @@ class PartyViewController: UIViewController, UITableViewDataSource, UITableViewD
     }
     
     @IBAction func nextTrackChange(_ sender: UIButton) {
-        if tracksQueue.count > 0 {
-            tracksQueue.removeFirst()
-            musicPlayer.modifyQueue(withTracks: tracksQueue)
+        if party.tracksQueue.count > 0 {
+            party.tracksQueue.removeFirst()
+            self.tracksTableView.reloadData()
+            musicPlayer.modifyQueue(withTracks: party.tracksQueue)
         }
     }
     
     func playNextTrack() {
-        if tracksQueue.count > 1 && musicPlayer.safeToPlayNextTrack() {
-            print("Removing \(tracksQueue.removeFirst().name)")
-            print("Playing \(tracksQueue[0].name)")
-            musicPlayer.modifyQueue(withTracks: tracksQueue)
+        if party.tracksQueue.count > 1 && musicPlayer.safeToPlayNextTrack() {
+            print("Removing \(party.tracksQueue.removeFirst().name)")
+            print("Playing \(party.tracksQueue[0].name)")
+            musicPlayer.modifyQueue(withTracks: party.tracksQueue)
         }
+    }
+    
+    func nowPlayingItemChanged() {
+        print(musicPlayer.player.nowPlayingItem?.playbackDuration ?? "not found")
+        print(musicPlayer.player.nowPlayingItem?.lyrics ?? "not found lyrics")
     }
     
     func longPressGestureRecognized(gestureRecognizer: UIGestureRecognizer) {
@@ -135,26 +140,28 @@ class PartyViewController: UIViewController, UITableViewDataSource, UITableViewD
     }
     
     func addToQueue(track: Track) {
-        tracksQueue.insert(track, at: tracksQueue.count)
-        if tracksQueue.count == 1 {
-            musicPlayer.modifyQueue(withTracks: tracksQueue)
+        party.tracksQueue.insert(track, at: party.tracksQueue.count)
+        if party.tracksQueue.count == 1 {
+            musicPlayer.modifyQueue(withTracks: party.tracksQueue)
         }
+        self.tracksTableView.reloadData()
     }
     
     func removeFromQueue(track: Track) {
-        for trackInQueue in tracksQueue {
+        for trackInQueue in party.tracksQueue {
             if trackInQueue.id == track.id {
-                tracksQueue.remove(at: tracksQueue.index(of: trackInQueue)!)
+                party.tracksQueue.remove(at: party.tracksQueue.index(of: trackInQueue)!)
             }
         }
+        self.tracksTableView.reloadData()
     }
     
     func updateTracksQueue(withQueue queue: [Track]) {
-        tracksQueue = queue
+        party.tracksQueue = queue
     }
     
     func tracksQueue(hasTrack track: Track) -> Bool {
-        for trackInQueue in tracksQueue {
+        for trackInQueue in party.tracksQueue {
             if track.id == trackInQueue.id {
                 return true
             }
@@ -199,7 +206,7 @@ class PartyViewController: UIViewController, UITableViewDataSource, UITableViewD
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return tracksQueue.count
+        return party.tracksQueue.count
     }
     
     func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
@@ -213,22 +220,22 @@ class PartyViewController: UIViewController, UITableViewDataSource, UITableViewD
         
         if indexPath.row == 0 {
             let cell = tableView.dequeueReusableCell(withIdentifier: "CurrentlyPlayingTrack") as!CurrentlyPlayingTrackTableViewCell
-            if let unwrappedArtwork = fetchImage(forTrack: tracksQueue[indexPath.row]) {
+            if let unwrappedArtwork = fetchImage(forTrack: party.tracksQueue[indexPath.row]) {
                 cell.artwork.image = unwrappedArtwork
             }
-            cell.trackName.text = tracksQueue[indexPath.row].name
-            cell.artistName.text = tracksQueue[indexPath.row].artist
+            cell.trackName.text = party.tracksQueue[indexPath.row].name
+            cell.artistName.text = party.tracksQueue[indexPath.row].artist
             
             return cell
             
         } else {
             let cell = tableView.dequeueReusableCell(withIdentifier: "Track") as! TrackInQueueTableViewCell
             
-            if let unwrappedArtwork = tracksQueue[indexPath.row].artwork {
+            if let unwrappedArtwork = party.tracksQueue[indexPath.row].artwork {
                 cell.artwork.image = unwrappedArtwork
             }
-            cell.trackName.text = tracksQueue[indexPath.row].name
-            cell.artistName.text = tracksQueue[indexPath.row].artist
+            cell.trackName.text = party.tracksQueue[indexPath.row].name
+            cell.artistName.text = party.tracksQueue[indexPath.row].artist
             
             return cell
         }
@@ -242,7 +249,7 @@ class PartyViewController: UIViewController, UITableViewDataSource, UITableViewD
     func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCellEditingStyle, forRowAt indexPath: IndexPath) {
         if editingStyle == .delete {
             tableView.beginUpdates()
-            removeFromQueue(track: tracksQueue[indexPath.row])
+            removeFromQueue(track: party.tracksQueue[indexPath.row])
             tableView.deleteRows(at: [indexPath], with: .automatic)
             tableView.endUpdates()
         }

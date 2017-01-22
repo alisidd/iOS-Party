@@ -12,12 +12,15 @@ import SwiftyJSON
 
 class RestApiManager {
     
-    private var url = "https://itunes.apple.com/search?media=music&term="
+    private var tracksUrl = "https://itunes.apple.com/search?media=music&term="
+    private let genresUrl = "https://itunes.apple.com/WebObjects/MZStoreServices.woa/ws/genres?id=34"
     private let serviceController = SKCloudServiceController()
     private var storefrontIdentifierFound = String()
     var tracksList = [Track]()
+    var genresList = [String]()
     let dispatchGroup = DispatchGroup()
-    let secondDispatchGroup = DispatchGroup()
+    let dispatchGroupForStorefrontFetch = DispatchGroup()
+    let dispatchGroupForGenreFetch = DispatchGroup()
     
     
     func makeHTTPRequestToApple(withString string: String) {
@@ -26,24 +29,23 @@ class RestApiManager {
         DispatchQueue.global(qos: .userInitiated).async {
             
             if self.storefrontIdentifierFound.isEmpty {
-                self.secondDispatchGroup.enter()
+                self.dispatchGroupForStorefrontFetch.enter()
                 self.fetchStorefrontIdentifier()
-                self.secondDispatchGroup.wait()
+                self.dispatchGroupForStorefrontFetch.wait()
             }
             
-            let requestURL = URL(string: self.url + string.replacingOccurrences(of: " ", with: "+") + "&s=" + self.storefrontIdentifierFound)
+            let requestURL = URL(string: self.tracksUrl + string.replacingOccurrences(of: " ", with: "+") + "&s=" + self.storefrontIdentifierFound)
             
-            let task = URLSession.shared.dataTask(with: requestURL!) { (data, response, error) in
+            URLSession.shared.dataTask(with: requestURL!) { (data, response, error) in
                 if let statusCode = (response as? HTTPURLResponse)?.statusCode {
                     if statusCode == 200 {
                         let json = JSON(data: data!)
-                        self.parseAppleJSON(forJSON: json)
+                        self.parseTrackJSON(forJSON: json)
                     }
                 }
                 
                 self.dispatchGroup.leave()
-            }
-            task.resume()
+            }.resume()
         }
         
     }
@@ -55,11 +57,11 @@ class RestApiManager {
                 self.storefrontIdentifierFound = storefrontId[range]
             }
             
-            self.secondDispatchGroup.leave()
+            self.dispatchGroupForStorefrontFetch.leave()
         }
     }
     
-    func parseAppleJSON(forJSON json: JSON) {
+    func parseTrackJSON(forJSON json: JSON) {
         tracksList.removeAll()
         for track in json["results"].arrayValue {
             let newTrack = Track()
@@ -72,6 +74,34 @@ class RestApiManager {
             newTrack.highResArtworkURL = newTrack.lowResArtworkURL.replacingOccurrences(of: "100x100", with: "600x600")
             
             tracksList.append(newTrack)
+        }
+    }
+    
+    func requestGenresFromApple() {
+        dispatchGroupForGenreFetch.enter()
+        DispatchQueue.global(qos: .userInitiated).async {
+            let requestURL = URL(string: self.genresUrl)
+            URLSession.shared.dataTask(with: requestURL!) { (data, response, error) in
+                if let statusCode = (response as? HTTPURLResponse)?.statusCode {
+                    if statusCode == 200 {
+                        let json = JSON(data: data!)
+                        self.parseGenreJSON(forJSON: json)
+                    }
+                }
+                self.dispatchGroupForGenreFetch.leave()
+            }.resume()
+        }
+    }
+    
+    func parseGenreJSON(forJSON json: JSON) {
+        for (type,subJson):(String, JSON) in json["34"] {
+            if type == "subgenres" {
+                for(genres, allTheGenres):(String, JSON) in subJson {
+                    if genres.characters.count <= 2 {
+                        genresList.append(allTheGenres["name"].stringValue)
+                    }
+                }
+            }
         }
     }
 }

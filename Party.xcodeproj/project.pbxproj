@@ -107,6 +107,7 @@
 		417C38CB1DDA43FD00F59926 /* Party */ = {
 			isa = PBXGroup;
 			children = (
+				417B9D541E31BC120021F36E /* RestApiManager.swift */,
 				417C38E11DDA447600F59926 /* InitialSetupViewController.swift */,
 				417C38E21DDA447600F59926 /* PartyCreationViewController.swift */,
 				418503F81E307E3D00472006 /* GenrePickingTableViewController.swift */,
@@ -117,7 +118,6 @@
 				412FBECC1E32A506007FFB6A /* TrackInQueueTableViewCell.swift */,
 				417B9D4E1E318D0D0021F36E /* AddSongViewController.swift */,
 				417B9D561E31CD8D0021F36E /* TrackTableViewCell.swift */,
-				417B9D541E31BC120021F36E /* RestApiManager.swift */,
 				3472FB111DDAC68900A35FCB /* PartyJoinedViewController.swift */,
 				3472FB131DDAC6FC00A35FCB /* PartyListCell.swift */,
 				3472FB151DDAC81E00A35FCB /* Party.swift */,

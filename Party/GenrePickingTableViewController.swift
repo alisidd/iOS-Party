@@ -12,18 +12,25 @@ class GenrePickingTableViewController: UITableViewController {
     
     weak var delegate: changeSelectedGenresList?
     var party = Party()
-    var genres = ["Rock", "Pop", "Hip Hop", "Country", "Alternative"]
+    var genres = [String]() {
+        didSet {
+            DispatchQueue.main.async {
+                self.tableView.reloadData()
+            }
+        }
+    }
+    let APIManager = RestApiManager()
     
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = UIColor(colorLiteralRed: 37/255, green: 37/255, blue: 37/255, alpha: 1)
         
         adjustTableView()
+        populateGenres()
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        selectGenres()
     }
     
     private func adjustTableView() {
@@ -33,16 +40,11 @@ class GenrePickingTableViewController: UITableViewController {
         tableView.contentInset = UIEdgeInsetsMake(20, 0, 0, 0);
     }
     
-    private func selectGenres() {
-        for genre in party.genres {
-            let index = genres.index(of: genre)!
-            let rowToSelect = IndexPath(item: index, section: 0)
-            
-            if let cell = tableView.cellForRow(at: rowToSelect) {
-                cell.accessoryType = .checkmark
-                cell.tintColor = UIColor(colorLiteralRed: 1, green: 111/255, blue: 1/255, alpha: 1)
-            }
-            tableView.selectRow(at: rowToSelect, animated: false, scrollPosition: UITableViewScrollPosition.none)
+    private func populateGenres() {
+        APIManager.requestGenresFromApple()
+        DispatchQueue.global(qos: .userInitiated).async {
+            self.APIManager.dispatchGroupForGenreFetch.wait()
+            self.genres = self.APIManager.genresList
         }
     }
 
@@ -63,6 +65,14 @@ class GenrePickingTableViewController: UITableViewController {
         cell.textLabel?.text = genres[indexPath.row]
         cell.textLabel?.textColor = UIColor(colorLiteralRed: 1, green: 111/255, blue: 1/255, alpha: 1)
         cell.backgroundColor = UIColor(colorLiteralRed: 37/255, green: 37/255, blue: 37/255, alpha: 1)
+        cell.tintColor = UIColor(colorLiteralRed: 1, green: 111/255, blue: 1/255, alpha: 1)
+        
+        if party.genres.contains(genres[indexPath.row]) {
+            cell.accessoryType = .checkmark
+        } else {
+            cell.accessoryType = .none
+        }
+        
         return cell
     }
     
