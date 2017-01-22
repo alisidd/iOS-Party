@@ -20,7 +20,6 @@
 		417B9D4B1E317C3C0021F36E /* PartyViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 417B9D4A1E317C3C0021F36E /* PartyViewController.swift */; };
 		417B9D4D1E3187570021F36E /* addButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 417B9D4C1E3187570021F36E /* addButton.swift */; };
 		417B9D4F1E318D0D0021F36E /* AddSongViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 417B9D4E1E318D0D0021F36E /* AddSongViewController.swift */; };
-		417B9D511E31AE1A0021F36E /* Podfile in Resources */ = {isa = PBXBuildFile; fileRef = 417B9D501E31AE1A0021F36E /* Podfile */; };
 		417B9D531E31B3CE0021F36E /* Track.swift in Sources */ = {isa = PBXBuildFile; fileRef = 417B9D521E31B3CE0021F36E /* Track.swift */; };
 		417B9D551E31BC120021F36E /* RestApiManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 417B9D541E31BC120021F36E /* RestApiManager.swift */; };
 		417B9D571E31CD8D0021F36E /* TrackTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 417B9D561E31CD8D0021F36E /* TrackTableViewCell.swift */; };
@@ -46,7 +45,6 @@
 		417B9D4A1E317C3C0021F36E /* PartyViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PartyViewController.swift; sourceTree = "<group>"; };
 		417B9D4C1E3187570021F36E /* addButton.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = addButton.swift; sourceTree = "<group>"; };
 		417B9D4E1E318D0D0021F36E /* AddSongViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AddSongViewController.swift; sourceTree = "<group>"; };
-		417B9D501E31AE1A0021F36E /* Podfile */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = Podfile; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.ruby; };
 		417B9D521E31B3CE0021F36E /* Track.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Track.swift; sourceTree = "<group>"; };
 		417B9D541E31BC120021F36E /* RestApiManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RestApiManager.swift; sourceTree = "<group>"; };
 		417B9D561E31CD8D0021F36E /* TrackTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TrackTableViewCell.swift; sourceTree = "<group>"; };
@@ -88,7 +86,6 @@
 		417C38C01DDA43FD00F59926 = {
 			isa = PBXGroup;
 			children = (
-				417B9D501E31AE1A0021F36E /* Podfile */,
 				417C38CB1DDA43FD00F59926 /* Party */,
 				417C38CA1DDA43FD00F59926 /* Products */,
 				0EC59A47A2A686C3B2C8F22B /* Pods */,
@@ -212,7 +209,6 @@
 			files = (
 				417C38DA1DDA43FD00F59926 /* LaunchScreen.storyboard in Resources */,
 				417C38D71DDA43FD00F59926 /* Assets.xcassets in Resources */,
-				417B9D511E31AE1A0021F36E /* Podfile in Resources */,
 				411EEF401E346E2200216016 /* Main.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
