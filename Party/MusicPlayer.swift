@@ -13,7 +13,11 @@ import MediaPlayer
 class MusicPlayer: NSObject {
     private let serviceController = SKCloudServiceController()
     let appleMusicPlayer = MPMusicPlayerController.applicationMusicPlayer()
-    var spotifyPlayer = SPTAudioStreamingController.sharedInstance()
+    var spotifyPlayer = SPTAudioStreamingController.sharedInstance() {
+        didSet {
+            initializeCommandCenter()
+        }
+    }
     let commandCenter = MPRemoteCommandCenter.shared()
     
     var party = Party()
@@ -51,14 +55,13 @@ class MusicPlayer: NSObject {
         UIApplication.shared.beginReceivingRemoteControlEvents()
         
         commandCenter.pauseCommand.addTarget { (commandEvent) -> MPRemoteCommandHandlerStatus in
-            self.appleMusicPlayer.pause()
-            return MPRemoteCommandHandlerStatus.success
+            self.pauseTrack()
+            return .success
         }
         
         commandCenter.playCommand.addTarget { (commandEvent) -> MPRemoteCommandHandlerStatus in
-            self.appleMusicPlayer.prepareToPlay()
-            self.appleMusicPlayer.play()
-            return MPRemoteCommandHandlerStatus.success
+            self.playTrack()
+            return .success
         }
     }
     

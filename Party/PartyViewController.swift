@@ -20,7 +20,7 @@ class PartyViewController: UIViewController, UITableViewDataSource, UITableViewD
     @IBOutlet weak var backgroundImageView: UIImageView!
     @IBOutlet weak var tracksTableView: UITableView!
     
-    //let tracksListManager = NetworkServiceManager() // Holds the tracks for the current party & advertises the current party
+    let tracksListManager = NetworkServiceManager() // Holds the tracks for the current party & advertises the current party
     
     private var party = Party()
     private var musicPlayer = MusicPlayer() {
@@ -65,7 +65,7 @@ class PartyViewController: UIViewController, UITableViewDataSource, UITableViewD
         self.tracksTableView.delegate = self
         self.tracksTableView.dataSource = self
         
-        //tracksListManager.delegate = self
+        tracksListManager.delegate = self
     }
     
     func adjustViews() {
@@ -111,10 +111,12 @@ class PartyViewController: UIViewController, UITableViewDataSource, UITableViewD
     
     func startAuthenticationFlow(_ authentication: SPTAuth) {
         let authURL = authentication.spotifyWebAuthenticationURL()
-        
+       
         NotificationCenter.default.addObserver(self, selector: #selector(PartyViewController.spotifyLogin), name: NSNotification.Name(rawValue: "Successful Login"), object: nil)
         
         UIApplication.shared.open(authURL!, options: [:])
+        /*let authViewController = SFSafariViewController(url: authURL!)
+        present(authViewController, animated: true)*/
     }
     
     func spotifyLogin() {
@@ -140,7 +142,7 @@ class PartyViewController: UIViewController, UITableViewDataSource, UITableViewD
     }
     
     func audioStreamingDidLogin(_ audioStreaming: SPTAudioStreamingController!) {
-        //musicPlayer.playTrack()
+        // Make sure it's a premium account
     }
     
     func audioStreaming(_ audioStreaming: SPTAudioStreamingController!, didChangePlaybackStatus isPlaying: Bool) {
@@ -347,7 +349,7 @@ class PartyViewController: UIViewController, UITableViewDataSource, UITableViewD
 }
 
 // MARK: NetworkManagerDelegate
-/*
+
 extension PartyViewController: NetworkManagerDelegate {
     
     func connectedDevicesChanged(_ manager: NetworkServiceManager, connectedDevices: [String]) {
@@ -362,4 +364,4 @@ extension PartyViewController: NetworkManagerDelegate {
         }
     }
     
-}*/
+}
