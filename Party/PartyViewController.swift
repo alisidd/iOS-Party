@@ -15,7 +15,7 @@ protocol updateTracksQueue: class {
     func tracksQueue(hasTrack track: Track) -> Bool
 }
 
-class PartyViewController: UIViewController, UITableViewDataSource, UITableViewDelegate, updateTracksQueue {
+class PartyViewController: UIViewController, UITableViewDataSource, UITableViewDelegate, SPTAudioStreamingDelegate, updateTracksQueue {
     
     @IBOutlet weak var backgroundImageView: UIImageView!
     @IBOutlet weak var tracksTableView: UITableView!
@@ -82,11 +82,40 @@ class PartyViewController: UIViewController, UITableViewDataSource, UITableViewD
     }
     
     func initializeMusicPlayer() {
-        musicPlayer.hasCapabilities()
-        musicPlayer.haveAuthorization()
-        NotificationCenter.default.addObserver(self, selector: #selector(PartyViewController.playNextTrack), name:NSNotification.Name.MPMusicPlayerControllerPlaybackStateDidChange, object: MPMusicPlayerController.applicationMusicPlayer())
-        NotificationCenter.default.addObserver(self, selector: #selector(PartyViewController.nowPlayingItemChanged), name:NSNotification.Name.MPMusicPlayerControllerNowPlayingItemDidChange, object: MPMusicPlayerController.applicationMusicPlayer())
+        musicPlayer.party = party
         
+        if party.musicService == .appleMusic {
+            musicPlayer.hasCapabilities()
+            musicPlayer.haveAuthorization()
+            musicPlayer.appleMusicPlayer.beginGeneratingPlaybackNotifications()
+            NotificationCenter.default.addObserver(self, selector: #selector(PartyViewController.playNextTrack), name:NSNotification.Name.MPMusicPlayerControllerPlaybackStateDidChange, object: musicPlayer.appleMusicPlayer)
+            
+        } else {
+            let APIManager = RestApiManager()
+            
+            let auth = APIManager.makeHTTPRequestToSpotify()
+            musicPlayer.spotifyPlayer?.delegate = self
+            
+            do {
+                try musicPlayer.spotifyPlayer?.start(withClientId: auth?.clientID)
+                DispatchQueue.main.async {
+                    self.startAuthenticationFlow(auth!) //CHeck unwrap
+                }
+            } catch {
+                print("Error starting player")
+            }
+            
+        }
+    }
+    
+    func startAuthenticationFlow(_ authentication: SPTAuth) {
+        if authentication.session.isValid() {
+            // Login here
+        } else {
+            let authURL = authentication.spotifyWebAuthenticationURL()
+            let authViewController = SFSafariViewController(url: authURL!)
+            present(authViewController, animated: true)
+        }
     }
     
     // Implement these in the cell itself!!
@@ -123,16 +152,17 @@ class PartyViewController: UIViewController, UITableViewDataSource, UITableViewD
     }
     
     func playNextTrack() {
+        print("Notification Detected")
         if party.tracksQueue.count > 1 && musicPlayer.safeToPlayNextTrack() {
             print("Removing \(party.tracksQueue.removeFirst().name)")
             print("Playing \(party.tracksQueue[0].name)")
             musicPlayer.modifyQueue(withTracks: party.tracksQueue)
+            tracksTableView.reloadData()
         }
     }
     
     func nowPlayingItemChanged() {
-        print(musicPlayer.player.nowPlayingItem?.playbackDuration ?? "not found")
-        print(musicPlayer.player.nowPlayingItem?.lyrics ?? "not found lyrics")
+        print(musicPlayer.appleMusicPlayer.nowPlayingItem?.playbackDuration ?? "not found")
     }
     
     func longPressGestureRecognized(gestureRecognizer: UIGestureRecognizer) {

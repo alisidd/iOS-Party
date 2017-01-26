@@ -12,8 +12,11 @@ import MediaPlayer
 
 class MusicPlayer: NSObject {
     private let serviceController = SKCloudServiceController()
-    let player = MPMusicPlayerController.applicationMusicPlayer()
+    let appleMusicPlayer = MPMusicPlayerController.applicationMusicPlayer()
+    let spotifyPlayer = SPTAudioStreamingController.sharedInstance()
     let commandCenter = MPRemoteCommandCenter.shared()
+    
+    var party = Party()
 
     
     func hasCapabilities() {
@@ -32,7 +35,7 @@ class MusicPlayer: NSObject {
             switch status {
             case .authorized:
                 print("Authorized")
-                self.player.beginGeneratingPlaybackNotifications()
+                self.appleMusicPlayer.beginGeneratingPlaybackNotifications()
                 self.initializeCommandCenter()
             default:
                 print("Not authorized")
@@ -48,13 +51,13 @@ class MusicPlayer: NSObject {
         UIApplication.shared.beginReceivingRemoteControlEvents()
         
         commandCenter.pauseCommand.addTarget { (commandEvent) -> MPRemoteCommandHandlerStatus in
-            self.player.pause()
+            self.appleMusicPlayer.pause()
             return MPRemoteCommandHandlerStatus.success
         }
         
         commandCenter.playCommand.addTarget { (commandEvent) -> MPRemoteCommandHandlerStatus in
-            self.player.prepareToPlay()
-            self.player.play()
+            self.appleMusicPlayer.prepareToPlay()
+            self.appleMusicPlayer.play()
             return MPRemoteCommandHandlerStatus.success
         }
     }
@@ -62,30 +65,35 @@ class MusicPlayer: NSObject {
     func modifyQueue(withTracks tracks: [Track]) {
         if tracks.count != 0 {
             let ids = [String(tracks[0].id)]
-            player.setQueueWithStoreIDs(ids)
+            appleMusicPlayer.setQueueWithStoreIDs(ids)
             playTrack()
         } else {
-            player.setQueueWithStoreIDs([])
-            player.stop()
+            appleMusicPlayer.setQueueWithStoreIDs([])
+            appleMusicPlayer.stop()
         }
     }
     
     func safeToPlayNextTrack() -> Bool {
-        return player.playbackState == .stopped && player.nowPlayingItem == nil
+        return appleMusicPlayer.playbackState == .stopped && appleMusicPlayer.nowPlayingItem == nil
     }
     
     @objc func playTrack() {
-        player.prepareToPlay()
-        player.play()
+        if party.musicService == .appleMusic {
+            appleMusicPlayer.prepareToPlay()
+            appleMusicPlayer.play()
+        }
+        
     }
     
     @objc func pauseTrack() {
-        player.pause()
+        if party.musicService == .appleMusic {
+            appleMusicPlayer.pause()
+        }
     }
     
     
     func isPaused() -> Bool {
-        return player.playbackState == .paused
+        return appleMusicPlayer.playbackState == .paused
     }
     
 }
