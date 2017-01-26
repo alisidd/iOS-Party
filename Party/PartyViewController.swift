@@ -146,25 +146,18 @@ class PartyViewController: UIViewController, UITableViewDataSource, UITableViewD
     func audioStreaming(_ audioStreaming: SPTAudioStreamingController!, didChangePlaybackStatus isPlaying: Bool) {
         if isPlaying {
             activateAudioSession()
-        } else {
-            print("WUT")
-            deactivateAudioSession()
         }
     }
     
-    func audioStreaming(_ audioStreaming: SPTAudioStreamingController!, didStopPlayingTrack trackUri: String!) {
-        playNextTrack()
-    }
-        
     func activateAudioSession() {
         try? AVAudioSession.sharedInstance().setCategory(AVAudioSessionCategoryPlayback)
         try? AVAudioSession.sharedInstance().setActive(true)
     }
     
-    // MARK: Deactivate audio session
-    
-    func deactivateAudioSession() {
-        try? AVAudioSession.sharedInstance().setActive(false)
+    func audioStreaming(_ audioStreaming: SPTAudioStreamingController!, didReceive event: SpPlaybackEvent) {
+        if event == SPPlaybackNotifyTrackChanged && musicPlayer.isPaused() {
+            playNextTrack()
+        }
     }
     
     // Implement these in the cell itself!!
@@ -201,7 +194,6 @@ class PartyViewController: UIViewController, UITableViewDataSource, UITableViewD
     }
     
     func playNextTrack() {
-        print("Notification Detected")
         if party.tracksQueue.count > 1 && musicPlayer.safeToPlayNextTrack() {
             print("Removing \(party.tracksQueue.removeFirst().name)")
             print("Playing \(party.tracksQueue[0].name)")

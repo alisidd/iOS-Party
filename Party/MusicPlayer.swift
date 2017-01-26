@@ -74,6 +74,7 @@ class MusicPlayer: NSObject {
             }
         } else {
             if tracks.count != 0 {
+                try? AVAudioSession.sharedInstance().setActive(true)
                 spotifyPlayer?.playSpotifyURI("spotify:track:" + tracks[0].id, startingWith: 0, startingWithPosition: 0, callback: nil)
                 //spotifyPlayer?.queueSpotifyURI("spotify:track:" + tracks[0].id, callback: nil)
                 //playTrack()
@@ -88,7 +89,6 @@ class MusicPlayer: NSObject {
     }
     
     @objc func playTrack() {
-        print("Trying")
         if party.musicService == .appleMusic {
             appleMusicPlayer.prepareToPlay()
             appleMusicPlayer.play()

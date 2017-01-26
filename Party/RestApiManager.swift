@@ -123,7 +123,6 @@ class RestApiManager {
         
         DispatchQueue.global(qos: .userInitiated).async {
             let requestURL = URL(string: self.spotifyTracksUrl + string.replacingOccurrences(of: " ", with: "+") + "&type=track")
-            print(requestURL!.absoluteString)
             
             URLSession.shared.dataTask(with: requestURL!) { (data, response, error) in
                 if let statusCode = (response as? HTTPURLResponse)?.statusCode {
