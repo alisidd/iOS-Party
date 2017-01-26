@@ -12,10 +12,13 @@ import SwiftyJSON
 
 class RestApiManager {
     
-    private var tracksUrl = "https://itunes.apple.com/search?media=music&term="
+    private var appleTracksUrl = "https://itunes.apple.com/search?media=music&term="
     private let genresUrl = "https://itunes.apple.com/WebObjects/MZStoreServices.woa/ws/genres?id=34"
     private let serviceController = SKCloudServiceController()
     private var storefrontIdentifierFound = String()
+    
+    private var spotifyTracksUrl = "https://api.spotify.com/v1/search?q="
+    
     var tracksList = [Track]()
     var genresList = [String]()
     let dispatchGroup = DispatchGroup()
@@ -34,29 +37,19 @@ class RestApiManager {
                 self.dispatchGroupForStorefrontFetch.wait()
             }
             
-            let requestURL = URL(string: self.tracksUrl + string.replacingOccurrences(of: " ", with: "+") + "&s=" + self.storefrontIdentifierFound)
+            let requestURL = URL(string: self.appleTracksUrl + string.replacingOccurrences(of: " ", with: "+") + "&s=" + self.storefrontIdentifierFound)
             
             URLSession.shared.dataTask(with: requestURL!) { (data, response, error) in
                 if let statusCode = (response as? HTTPURLResponse)?.statusCode {
                     if statusCode == 200 {
                         let json = JSON(data: data!)
-                        self.parseTrackJSON(forJSON: json)
+                        self.parseAppleTrackJSON(forJSON: json)
                     }
                 }
                 
                 self.dispatchGroup.leave()
             }.resume()
         }
-        
-    }
-    
-    func makeHTTPRequestToSpotify() -> SPTAuth? {
-        let auth = SPTAuth.defaultInstance()
-        auth?.clientID = "308657d9662146ecae57855ac2a01045"
-        auth?.redirectURL = URL(string: "partyapp://returnafterlogin")
-        auth?.requestedScopes = [SPTAuthStreamingScope]
-        
-        return auth
         
     }
     
@@ -71,7 +64,7 @@ class RestApiManager {
         }
     }
     
-    func parseTrackJSON(forJSON json: JSON) {
+    func parseAppleTrackJSON(forJSON json: JSON) {
         tracksList.removeAll()
         for track in json["results"].arrayValue {
             let newTrack = Track()
@@ -110,6 +103,65 @@ class RestApiManager {
                     if genres.characters.count <= 2 {
                         genresList.append(allTheGenres["name"].stringValue)
                     }
+                }
+            }
+        }
+    }
+    
+    func getAuthentication() -> SPTAuth? {
+        let auth = SPTAuth.defaultInstance()
+        auth?.clientID = "308657d9662146ecae57855ac2a01045"
+        auth?.redirectURL = URL(string: "partyapp://returnafterlogin")
+        auth?.requestedScopes = [SPTAuthStreamingScope]
+        
+        return auth
+        
+    }
+    
+    func makeHTTPRequestToSpotify(withString string: String) {
+        dispatchGroup.enter()
+        
+        DispatchQueue.global(qos: .userInitiated).async {
+            let requestURL = URL(string: self.spotifyTracksUrl + string.replacingOccurrences(of: " ", with: "+") + "&type=track")
+            print(requestURL!.absoluteString)
+            
+            URLSession.shared.dataTask(with: requestURL!) { (data, response, error) in
+                if let statusCode = (response as? HTTPURLResponse)?.statusCode {
+                    if statusCode == 200 {
+                        let json = JSON(data: data!)
+                        self.parseSpotifyTrackJSON(forJSON: json)
+                    }
+                }
+                self.dispatchGroup.leave()
+            }.resume()
+        }
+    }
+    
+    func parseSpotifyTrackJSON(forJSON json: JSON) {
+        tracksList.removeAll()
+        for (type,subJson):(String, JSON) in json["tracks"] {
+            if type == "items" {
+                for track in subJson.arrayValue {
+                    let newTrack = Track()
+                    
+                    newTrack.name = track["name"].stringValue
+                    
+                    for artists in track["artists"].arrayValue { //get other artists too
+                        newTrack.artist = artists["name"].stringValue
+                        break
+                    }
+                    
+                    for images in track["album"]["images"].arrayValue {
+                        if images["height"].stringValue == "640" {
+                            newTrack.highResArtworkURL = images["url"].stringValue
+                        }
+                        if images["height"].stringValue == "64" {
+                            newTrack.lowResArtworkURL = images["url"].stringValue
+                        }
+                        
+                    }
+                    
+                    tracksList.append(newTrack)
                 }
             }
         }

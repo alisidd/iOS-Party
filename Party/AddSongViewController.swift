@@ -102,7 +102,12 @@ class AddSongViewController: UIViewController, UITextFieldDelegate, UITableViewD
     
     func fetchResults(forQuery query: String) {
         indicator.startAnimating()
-        APIManager.makeHTTPRequestToApple(withString: query)
+        if party.musicService == .appleMusic {
+            APIManager.makeHTTPRequestToApple(withString: query)
+        } else {
+            APIManager.makeHTTPRequestToSpotify(withString: query)
+        }
+        
         DispatchQueue.global(qos: .userInitiated).async {
             self.APIManager.dispatchGroup.wait()
             self.tracksList = self.APIManager.tracksList

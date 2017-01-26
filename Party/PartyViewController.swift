@@ -93,7 +93,7 @@ class PartyViewController: UIViewController, UITableViewDataSource, UITableViewD
         } else {
             let APIManager = RestApiManager()
             
-            let auth = APIManager.makeHTTPRequestToSpotify()
+            let auth = APIManager.getAuthentication()
             musicPlayer.spotifyPlayer?.delegate = self
             musicPlayer.spotifyPlayer?.playbackDelegate = self
             
@@ -140,7 +140,7 @@ class PartyViewController: UIViewController, UITableViewDataSource, UITableViewD
     }
     
     func audioStreamingDidLogin(_ audioStreaming: SPTAudioStreamingController!) {
-        musicPlayer.playTrack()
+        //musicPlayer.playTrack()
     }
     
     func audioStreaming(_ audioStreaming: SPTAudioStreamingController!, didChangePlaybackStatus isPlaying: Bool) {
