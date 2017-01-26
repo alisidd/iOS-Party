@@ -15,7 +15,7 @@ protocol updateTracksQueue: class {
     func tracksQueue(hasTrack track: Track) -> Bool
 }
 
-class PartyViewController: UIViewController, UITableViewDataSource, UITableViewDelegate, SPTAudioStreamingDelegate, updateTracksQueue {
+class PartyViewController: UIViewController, UITableViewDataSource, UITableViewDelegate, SPTAudioStreamingDelegate, SPTAudioStreamingPlaybackDelegate, updateTracksQueue {
     
     @IBOutlet weak var backgroundImageView: UIImageView!
     @IBOutlet weak var tracksTableView: UITableView!
@@ -95,11 +95,12 @@ class PartyViewController: UIViewController, UITableViewDataSource, UITableViewD
             
             let auth = APIManager.makeHTTPRequestToSpotify()
             musicPlayer.spotifyPlayer?.delegate = self
+            musicPlayer.spotifyPlayer?.playbackDelegate = self
             
             do {
                 try musicPlayer.spotifyPlayer?.start(withClientId: auth?.clientID)
                 DispatchQueue.main.async {
-                    self.startAuthenticationFlow(auth!) //CHeck unwrap
+                    self.startAuthenticationFlow(auth!) //Check unwrap
                 }
             } catch {
                 print("Error starting player")
@@ -109,13 +110,57 @@ class PartyViewController: UIViewController, UITableViewDataSource, UITableViewD
     }
     
     func startAuthenticationFlow(_ authentication: SPTAuth) {
-        if authentication.session.isValid() {
-            // Login here
-        } else {
-            let authURL = authentication.spotifyWebAuthenticationURL()
-            let authViewController = SFSafariViewController(url: authURL!)
-            present(authViewController, animated: true)
+        let authURL = authentication.spotifyWebAuthenticationURL()
+        
+        NotificationCenter.default.addObserver(self, selector: #selector(PartyViewController.spotifyLogin), name: NSNotification.Name(rawValue: "Successful Login"), object: nil)
+        
+        UIApplication.shared.open(authURL!, options: [:])
+    }
+    
+    func spotifyLogin() {
+        let userDefaults = UserDefaults.standard
+        
+        if let sessionDataObj = userDefaults.object(forKey: "SpotifySession") {
+            let sessionData = sessionDataObj as! Data
+            
+            let session = NSKeyedUnarchiver.unarchiveObject(with: sessionData) as! SPTSession
+            
+            if session.isValid() {
+                playUsingSession(session: session)
+            } else {
+                /*SPTAuth.defaultInstance().renewSession(session) { (error, session) in
+                    
+                }*/
+            }
         }
+    }
+    
+    func playUsingSession(session: SPTSession) {
+        musicPlayer.spotifyPlayer?.login(withAccessToken: session.accessToken)
+    }
+    
+    func audioStreamingDidLogin(_ audioStreaming: SPTAudioStreamingController!) {
+        musicPlayer.playTrack()
+    }
+    
+    func audioStreaming(_ audioStreaming: SPTAudioStreamingController!, didChangePlaybackStatus isPlaying: Bool) {
+        if isPlaying {
+            activateAudioSession()
+        } else {
+            print("WUT")
+            deactivateAudioSession()
+        }
+    }
+    
+    func activateAudioSession() {
+        try? AVAudioSession.sharedInstance().setCategory(AVAudioSessionCategoryPlayback)
+        try? AVAudioSession.sharedInstance().setActive(true)
+    }
+    
+    // MARK: Deactivate audio session
+    
+    func deactivateAudioSession() {
+        try? AVAudioSession.sharedInstance().setActive(false)
     }
     
     // Implement these in the cell itself!!
