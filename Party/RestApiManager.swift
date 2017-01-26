@@ -68,7 +68,7 @@ class RestApiManager {
         tracksList.removeAll()
         for track in json["results"].arrayValue {
             let newTrack = Track()
-            newTrack.id = track["trackId"].intValue
+            newTrack.id = track["trackId"].stringValue
             newTrack.name = track["trackName"].stringValue
             newTrack.artist = track["artistName"].stringValue
             newTrack.album = track["collectionName"].stringValue
@@ -144,6 +144,7 @@ class RestApiManager {
                 for track in subJson.arrayValue {
                     let newTrack = Track()
                     
+                    newTrack.id = track["id"].stringValue
                     newTrack.name = track["name"].stringValue
                     
                     for artists in track["artists"].arrayValue { //get other artists too

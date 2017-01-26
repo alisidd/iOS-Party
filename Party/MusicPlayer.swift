@@ -63,13 +63,23 @@ class MusicPlayer: NSObject {
     }
     
     func modifyQueue(withTracks tracks: [Track]) {
-        if tracks.count != 0 {
-            let ids = [String(tracks[0].id)]
-            appleMusicPlayer.setQueueWithStoreIDs(ids)
-            playTrack()
+        if party.musicService == .appleMusic {
+            if tracks.count != 0 {
+                let ids = [tracks[0].id]
+                appleMusicPlayer.setQueueWithStoreIDs(ids)
+                playTrack()
+            } else {
+                appleMusicPlayer.setQueueWithStoreIDs([])
+                appleMusicPlayer.stop()
+            }
         } else {
-            appleMusicPlayer.setQueueWithStoreIDs([])
-            appleMusicPlayer.stop()
+            if tracks.count != 0 {
+                spotifyPlayer?.playSpotifyURI("spotify:track:" + tracks[0].id, startingWith: 0, startingWithPosition: 0, callback: nil)
+                //spotifyPlayer?.queueSpotifyURI("spotify:track:" + tracks[0].id, callback: nil)
+                //playTrack()
+            } else {
+                spotifyPlayer?.skipNext(nil)
+            }
         }
     }
     
@@ -83,12 +93,7 @@ class MusicPlayer: NSObject {
             appleMusicPlayer.prepareToPlay()
             appleMusicPlayer.play()
         } else {
-            spotifyPlayer?.playSpotifyURI("spotify:track:58s6EuEYJdlb0kO7awm3Vp", startingWith: 0, startingWithPosition: 0) { (error) in
-                if error != nil {
-                    print("Failed to play track: \(error)")
-                    return
-                }
-            }
+            spotifyPlayer?.setIsPlaying(true, callback: nil)
         }
         
     }
@@ -96,12 +101,14 @@ class MusicPlayer: NSObject {
     @objc func pauseTrack() {
         if party.musicService == .appleMusic {
             appleMusicPlayer.pause()
+        } else {
+            spotifyPlayer?.setIsPlaying(false, callback: nil)
         }
     }
     
     
     func isPaused() -> Bool {
-        return appleMusicPlayer.playbackState == .paused
+        return party.musicService == .appleMusic ? appleMusicPlayer.playbackState == .paused : spotifyPlayer?.playbackState.isPlaying == false
     }
     
 }

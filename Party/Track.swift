@@ -10,7 +10,7 @@ import Foundation
 import UIKit
 
 class Track: NSObject {
-    var id = 0
+    var id = String()
     var name = String()
     var artist = String()
     var album = String()
