@@ -157,6 +157,7 @@ class RestApiManager {
                         }
                         if images["height"].stringValue == "64" {
                             newTrack.lowResArtworkURL = images["url"].stringValue
+                            newTrack.artwork = fetchImage(fromURL: newTrack.lowResArtworkURL)
                         }
                         
                     }
@@ -165,5 +166,17 @@ class RestApiManager {
                 }
             }
         }
+    }
+    
+    func fetchImage(fromURL urlString: String) -> UIImage? {
+        if let url = URL(string: urlString) {
+            do {
+                let data = try Data(contentsOf: url)
+                return UIImage(data: data)
+            } catch {
+                print("Error trying to get data from Artwork URL")
+            }
+        }
+        return nil
     }
 }

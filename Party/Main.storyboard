@@ -358,7 +358,7 @@
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" distribution="fillProportionally" alignment="top" translatesAutoresizingMaskIntoConstraints="NO" id="Rmh-fc-81j">
-                                                    <rect key="frame" x="88" y="22" width="92" height="35"/>
+                                                    <rect key="frame" x="88" y="22.5" width="92" height="35"/>
                                                     <subviews>
                                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Track Name" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="2DO-4R-Sug">
                                                             <rect key="frame" x="0.0" y="0.0" width="92" height="20.5"/>
@@ -375,7 +375,7 @@
                                                     </subviews>
                                                 </stackView>
                                                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="e9C-Jv-HvF">
-                                                    <rect key="frame" x="322" y="17" width="30" height="46"/>
+                                                    <rect key="frame" x="322" y="17.5" width="30" height="46"/>
                                                     <fontDescription key="fontDescription" style="UICTFontTextStyleTitle1"/>
                                                     <state key="normal" title="+">
                                                         <color key="titleColor" red="1" green="0.4344842136" blue="0.005222451407" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>

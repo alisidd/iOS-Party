@@ -179,8 +179,9 @@ class AddSongViewController: UIViewController, UITextFieldDelegate, UITableViewD
         cell.track = tracksList[indexPath.row]
         cell.trackName.text = tracksList[indexPath.row].name
         cell.artistName.text = tracksList[indexPath.row].artist
-        if let artwork = fetchImage(fromURL: tracksList[indexPath.row].lowResArtworkURL) {
-            cell.artworkImageView.image = artwork
+
+        if let unwrappedArtwork = tracksList[indexPath.row].artwork {
+            cell.artworkImageView.image = unwrappedArtwork
         }
         cell.delegate = self
         
@@ -193,17 +194,7 @@ class AddSongViewController: UIViewController, UITextFieldDelegate, UITableViewD
         return cell
     }
     
-    func fetchImage(fromURL urlString: String) -> UIImage? {
-        if let url = URL(string: urlString) {
-            do {
-                let data = try Data(contentsOf: url)
-                return UIImage(data: data)
-            } catch {
-                print("Error trying to get data from Artwork URL")
-            }
-        }
-        return nil
-    }
+    
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return 80

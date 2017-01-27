@@ -37,12 +37,14 @@ class NetworkServiceManager: NSObject {
         
         super.init()
         
-        self.serviceAdvertiser.delegate = self
-        self.serviceAdvertiser.startAdvertisingPeer()
-        
-        
-        self.serviceBrowser.delegate = self
-        self.serviceBrowser.startBrowsingForPeers()
+        DispatchQueue.global(qos: .background).async {
+            self.serviceAdvertiser.delegate = self
+            self.serviceAdvertiser.startAdvertisingPeer()
+            
+            
+            self.serviceBrowser.delegate = self
+            self.serviceBrowser.startBrowsingForPeers()
+        }
     }
     
     deinit {
