@@ -119,8 +119,6 @@ class GenrePickingViewController: UIViewController, UITableViewDataSource, UITab
         }
     }
     
-
-    
     // MARK: - Navigation
     
     @IBAction func goBack(_ sender: setupButton) {

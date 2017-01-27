@@ -42,7 +42,7 @@ class TrackTableViewCell: UITableViewCell {
     }
 
     @IBAction func addTrack(_ sender: UIButton) {
-        sender.fadeTransition(duration: 0.4)
+        sender.fadeTransition(duration: 0.3)
         if isAdded {
             sender.setTitle("+", for: .normal)
             self.delegate?.removeFromQueue(track: track)

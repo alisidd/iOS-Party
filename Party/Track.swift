@@ -18,6 +18,7 @@ class Track: NSObject {
     var lowResArtworkURL = String()
     var highResArtworkURL = String()
     var artwork: UIImage?
+    var highResArtwork: UIImage?
     
     var danceability: Int?
 }

@@ -29,11 +29,10 @@ class AddSongViewController: UIViewController, UITextFieldDelegate, UITableViewD
             }
         }
     }
-    private var tracksQueue = [Track]()
+    var tracksQueue = [Track]()
     private let APIManager = RestApiManager()
     private var indicator = UIActivityIndicatorView()
     private let noTracksFoundLabel = UILabel(frame: CGRect(x: 0, y: 0, width: 350, height: 30))
-    weak var delegate: updateTracksQueue?
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -133,11 +132,15 @@ class AddSongViewController: UIViewController, UITextFieldDelegate, UITableViewD
     }
     
     func addToQueue(track: Track) {
-        self.delegate?.addToQueue(track: track)
+        tracksQueue.append(track)
     }
     
     func removeFromQueue(track: Track) {
-        self.delegate?.removeFromQueue(track: track)
+        for trackInQueue in tracksQueue {
+            if trackInQueue.id == track.id {
+                tracksQueue.remove(at: tracksQueue.index(of: trackInQueue)!)
+            }
+        }
     }
     
     override func didReceiveMemoryWarning() {
@@ -147,8 +150,7 @@ class AddSongViewController: UIViewController, UITextFieldDelegate, UITableViewD
     
     // MARK: - Navigation
 
-    func goBack() {
-        //prepare(for: "unwindToPartyViewControllerSegue", sender: self)
+    func emptyArrays() {
         tracksList.removeAll()
         tracksQueue.removeAll()
     }
@@ -183,7 +185,7 @@ class AddSongViewController: UIViewController, UITextFieldDelegate, UITableViewD
         }
         cell.delegate = self
         
-        if (self.delegate?.tracksQueue(hasTrack: (tracksList[indexPath.row])))! {
+        if (tracksQueue(hasTrack: (tracksList[indexPath.row]))) {
             cell.addButton.setTitle("✓", for: .normal)
         } else {
             cell.addButton.setTitle("+", for: .normal)
@@ -192,11 +194,16 @@ class AddSongViewController: UIViewController, UITextFieldDelegate, UITableViewD
         return cell
     }
     
-    
+    func tracksQueue(hasTrack track: Track) -> Bool {
+        for trackInQueue in party.tracksQueue {
+            if track.id == trackInQueue.id {
+                return true
+            }
+        }
+        return false
+    }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return 80
     }
-    
-
 }

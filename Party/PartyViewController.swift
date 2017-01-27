@@ -9,13 +9,7 @@
 import UIKit
 import MediaPlayer
 
-protocol updateTracksQueue: class {
-    func addToQueue(track: Track)
-    func removeFromQueue(track: Track)
-    func tracksQueue(hasTrack track: Track) -> Bool
-}
-
-class PartyViewController: UIViewController, UITableViewDataSource, UITableViewDelegate, SPTAudioStreamingDelegate, SPTAudioStreamingPlaybackDelegate, updateTracksQueue {
+class PartyViewController: UIViewController, UITableViewDataSource, UITableViewDelegate, SPTAudioStreamingDelegate, SPTAudioStreamingPlaybackDelegate {
     
     @IBOutlet weak var backgroundImageView: UIImageView!
     @IBOutlet weak var tracksTableView: UITableView!
@@ -156,10 +150,8 @@ class PartyViewController: UIViewController, UITableViewDataSource, UITableViewD
         try? AVAudioSession.sharedInstance().setActive(true)
     }
     
-    func audioStreaming(_ audioStreaming: SPTAudioStreamingController!, didReceive event: SpPlaybackEvent) {
-        if event == SPPlaybackNotifyTrackChanged && musicPlayer.isPaused() {
-            playNextTrack()
-        }
+    func audioStreaming(_ audioStreaming: SPTAudioStreamingController!, didStopPlayingTrack trackUri: String!) {
+        playNextTrack()
     }
     
     // Implement these in the cell itself!!
@@ -191,7 +183,10 @@ class PartyViewController: UIViewController, UITableViewDataSource, UITableViewD
         if party.tracksQueue.count > 0 {
             party.tracksQueue.removeFirst()
             self.tracksTableView.reloadData()
-            musicPlayer.modifyQueue(withTracks: party.tracksQueue)
+            
+            DispatchQueue.global(qos: .userInitiated).async {
+                self.musicPlayer.modifyQueue(withTracks: self.party.tracksQueue)
+            }
         }
     }
     
@@ -212,34 +207,8 @@ class PartyViewController: UIViewController, UITableViewDataSource, UITableViewD
         let recognizer = gestureRecognizer as! UILongPressGestureRecognizer
     }
     
-    func addToQueue(track: Track) {
-        party.tracksQueue.insert(track, at: party.tracksQueue.count)
-        if party.tracksQueue.count == 1 {
-            musicPlayer.modifyQueue(withTracks: party.tracksQueue)
-        }
-        self.tracksTableView.reloadData()
-    }
-    
-    func removeFromQueue(track: Track) {
-        for trackInQueue in party.tracksQueue {
-            if trackInQueue.id == track.id {
-                party.tracksQueue.remove(at: party.tracksQueue.index(of: trackInQueue)!)
-            }
-        }
-        self.tracksTableView.reloadData()
-    }
-    
     func updateTracksQueue(withQueue queue: [Track]) {
         party.tracksQueue = queue
-    }
-    
-    func tracksQueue(hasTrack track: Track) -> Bool {
-        for trackInQueue in party.tracksQueue {
-            if track.id == trackInQueue.id {
-                return true
-            }
-        }
-        return false
     }
     
     func fetchImage(forTrack track: Track) -> UIImage? {
@@ -267,14 +236,32 @@ class PartyViewController: UIViewController, UITableViewDataSource, UITableViewD
             if let controller = segue.destination as? AddSongViewController {
                 self.navigationItem.backBarButtonItem = UIBarButtonItem(title: "", style: .plain, target: nil, action: nil)
                 controller.party = party
-                controller.delegate = self
             }
         }
     }
     
     @IBAction func unwindToPartyViewController(_ sender: UIStoryboardSegue) {
         if let VC = sender.source as? AddSongViewController {
-            VC.goBack()
+            DispatchQueue.global(qos: .userInitiated).async {
+                
+                for track in VC.tracksQueue {
+                    if let unwrappedArtwork = self.fetchImage(forTrack: track) {
+                        track.highResArtwork = unwrappedArtwork
+                    }
+                }
+                // improve speed that the tracks show up at
+                self.party.tracksQueue.append(contentsOf: VC.tracksQueue)
+                
+                DispatchQueue.main.async {
+                    self.tracksTableView.reloadData()
+                }
+                
+                if self.party.tracksQueue.count == VC.tracksQueue.count {
+                    self.musicPlayer.modifyQueue(withTracks: self.party.tracksQueue)
+                }
+                
+                VC.emptyArrays()
+            }
         }
     }
     
@@ -299,7 +286,7 @@ class PartyViewController: UIViewController, UITableViewDataSource, UITableViewD
         
         if indexPath.row == 0 {
             let cell = tableView.dequeueReusableCell(withIdentifier: "CurrentlyPlayingTrack") as!CurrentlyPlayingTrackTableViewCell
-            if let unwrappedArtwork = fetchImage(forTrack: party.tracksQueue[indexPath.row]) {
+            if let unwrappedArtwork = party.tracksQueue[indexPath.row].highResArtwork {
                 cell.artwork.image = unwrappedArtwork
             }
             cell.trackName.text = party.tracksQueue[indexPath.row].name
@@ -331,6 +318,14 @@ class PartyViewController: UIViewController, UITableViewDataSource, UITableViewD
             removeFromQueue(track: party.tracksQueue[indexPath.row])
             tableView.deleteRows(at: [indexPath], with: .automatic)
             tableView.endUpdates()
+        }
+    }
+    
+    func removeFromQueue(track: Track) {
+        for trackInQueue in party.tracksQueue {
+            if trackInQueue.id == track.id {
+                party.tracksQueue.remove(at: party.tracksQueue.index(of: trackInQueue)!)
+            }
         }
     }
     

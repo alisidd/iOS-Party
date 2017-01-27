@@ -18,9 +18,9 @@ protocol NetworkManagerDelegate {
 
 class NetworkServiceManager: NSObject {
     
-    fileprivate let MessageServiceType = "localParty"
-    fileprivate let serviceAdvertiser : MCNearbyServiceAdvertiser
-    fileprivate let serviceBrowser : MCNearbyServiceBrowser
+    private let MessageServiceType = "localParty"
+    private let serviceAdvertiser : MCNearbyServiceAdvertiser
+    private let serviceBrowser : MCNearbyServiceBrowser
     var delegate : NetworkManagerDelegate?
     
     var myPeerId: MCPeerID!
