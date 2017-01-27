@@ -19,6 +19,8 @@ class Party: NSObject {
     var musicService = MusicService.appleMusic
     
     var tracksQueue = [Track]()
+    var tracksFromPeers = [String]()
+    var isSorted = false
     
     var numPeople = 0
     var password: String?

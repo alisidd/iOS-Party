@@ -58,11 +58,7 @@ class AddSongViewController: UIViewController, UITextFieldDelegate, UITableViewD
         backgroundImageView.addSubview(blurView)
     }
     
-    func customizeNavigationBar() {
-        self.navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Done", style: .done, target: self, action: #selector(AddSongViewController.goBack))
-        self.navigationItem.rightBarButtonItem?.tintColor = UIColor(colorLiteralRed: 1, green: 111/255, blue: 1/255, alpha: 1)
-        
-        self.navigationItem.setHidesBackButton(true, animated: false)
+    func customizeNavigationBar() {self.navigationItem.setHidesBackButton(true, animated: false)
     }
     
     func setDelegates() {
@@ -152,7 +148,9 @@ class AddSongViewController: UIViewController, UITextFieldDelegate, UITableViewD
     // MARK: - Navigation
 
     func goBack() {
-        _ = navigationController?.popViewController(animated: true)
+        //prepare(for: "unwindToPartyViewControllerSegue", sender: self)
+        tracksList.removeAll()
+        tracksQueue.removeAll()
     }
     
     // MARK: - Table
@@ -176,7 +174,7 @@ class AddSongViewController: UIViewController, UITextFieldDelegate, UITableViewD
         let cell = trackTableView.dequeueReusableCell(withIdentifier: "TrackCell", for: indexPath) as! TrackTableViewCell
         
         
-        cell.track = tracksList[indexPath.row]
+        cell.track = (tracksList[indexPath.row])
         cell.trackName.text = tracksList[indexPath.row].name
         cell.artistName.text = tracksList[indexPath.row].artist
 
@@ -185,7 +183,7 @@ class AddSongViewController: UIViewController, UITextFieldDelegate, UITableViewD
         }
         cell.delegate = self
         
-        if (self.delegate?.tracksQueue(hasTrack: tracksList[indexPath.row]))! {
+        if (self.delegate?.tracksQueue(hasTrack: (tracksList[indexPath.row])))! {
             cell.addButton.setTitle("✓", for: .normal)
         } else {
             cell.addButton.setTitle("+", for: .normal)

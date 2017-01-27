@@ -41,7 +41,6 @@ class NetworkServiceManager: NSObject {
             self.serviceAdvertiser.delegate = self
             self.serviceAdvertiser.startAdvertisingPeer()
             
-            
             self.serviceBrowser.delegate = self
             self.serviceBrowser.startBrowsingForPeers()
         }
@@ -49,7 +48,6 @@ class NetworkServiceManager: NSObject {
     
     deinit {
         self.serviceAdvertiser.stopAdvertisingPeer()
-        
         self.serviceBrowser.stopBrowsingForPeers()
     }
     

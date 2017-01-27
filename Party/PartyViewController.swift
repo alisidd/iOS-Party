@@ -272,6 +272,12 @@ class PartyViewController: UIViewController, UITableViewDataSource, UITableViewD
         }
     }
     
+    @IBAction func unwindToPartyViewController(_ sender: UIStoryboardSegue) {
+        if let VC = sender.source as? AddSongViewController {
+            VC.goBack()
+        }
+    }
+    
     // MARK: - Table
     
     func numberOfSections(in tableView: UITableView) -> Int {
@@ -337,6 +343,7 @@ class PartyViewController: UIViewController, UITableViewDataSource, UITableViewD
             )
             return
         })
+        
         
         deleteButton.backgroundColor = UIColor(colorLiteralRed: 1, green: 111/255, blue: 1/255, alpha: 1)
         

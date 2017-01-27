@@ -426,7 +426,14 @@
                             <constraint firstItem="6fV-jh-Izh" firstAttribute="top" secondItem="snT-CL-AJC" secondAttribute="bottom" id="wax-WP-N9G"/>
                         </constraints>
                     </view>
-                    <navigationItem key="navigationItem" id="SMw-9E-B5m"/>
+                    <navigationItem key="navigationItem" id="SMw-9E-B5m">
+                        <barButtonItem key="rightBarButtonItem" systemItem="done" id="j1K-S4-deY">
+                            <color key="tintColor" red="1" green="0.4344842136" blue="0.005222451407" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                            <connections>
+                                <segue destination="eT7-Kn-jht" kind="unwind" identifier="unwindToPartyViewControllerSegue" unwindAction="unwindToPartyViewController:" id="4Us-fM-JyM"/>
+                            </connections>
+                        </barButtonItem>
+                    </navigationItem>
                     <connections>
                         <outlet property="backgroundImageView" destination="uHB-ca-aJf" id="4I1-pW-svc"/>
                         <outlet property="searchTracksField" destination="Lqd-ya-Vio" id="9Vd-cT-Cr4"/>
@@ -434,6 +441,7 @@
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="SjL-Yh-saS" userLabel="First Responder" sceneMemberID="firstResponder"/>
+                <exit id="eT7-Kn-jht" userLabel="Exit" sceneMemberID="exit"/>
             </objects>
             <point key="canvasLocation" x="4269.6000000000004" y="79.610194902548727"/>
         </scene>
