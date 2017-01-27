@@ -12,7 +12,7 @@ import MultipeerConnectivity
 
 protocol NetworkManagerDelegate {
     func connectedDevicesChanged(_ manager : NetworkServiceManager, connectedDevices: [String])
-    func messageChanged(_ manager : NetworkServiceManager, messageString: String)
+    func addTracksFromPeer(withTracks tracks: [String])
 }
 
 
@@ -57,18 +57,16 @@ class NetworkServiceManager: NSObject {
         return session
     }()
     
-    func sendMessage(_ messageData : String) {
-        print("sendMessage: \(messageData)")
-        
+    func sendTracks(_ tracksList: [String]) {
         if session.connectedPeers.count > 0 {
             do {
-                let result = try self.session.send(messageData.data(using: String.Encoding.utf8, allowLossyConversion: false)!, toPeers: session.connectedPeers, with: MCSessionSendDataMode.reliable) as Any
-                print(result)
+                let tracksListData = NSKeyedArchiver.archivedData(withRootObject: tracksList)
+                try self.session.send(tracksListData, toPeers: session.connectedPeers, with: .reliable)
+                print("SENDING DATA")
             } catch let error as NSError {
                 print(error.localizedDescription)
             }
         }
-        
     }
     
 }
@@ -125,9 +123,11 @@ extension NetworkServiceManager : MCSessionDelegate {
     }
     
     func session(_ session: MCSession, didReceive data: Data, fromPeer peerID: MCPeerID) {
-        print("didReceiveData: \(data.count) bytes")
-        let str = NSString(data: data, encoding: String.Encoding.utf8.rawValue) as! String
-        self.delegate?.messageChanged(self, messageString: str)
+        
+        if let tracksIDList = NSKeyedUnarchiver.unarchiveObject(with: data) as? [String] {
+            print("didReceiveData: \(data.count) bytes")
+            self.delegate?.addTracksFromPeer(withTracks: tracksIDList)
+        }
     }
     
     func session(_ session: MCSession, didReceive stream: InputStream, withName streamName: String, fromPeer peerID: MCPeerID) {

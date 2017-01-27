@@ -17,7 +17,7 @@ class RestApiManager {
     private let serviceController = SKCloudServiceController()
     private var storefrontIdentifierFound = String()
     
-    private var spotifyTracksUrl = "https://api.spotify.com/v1/search?q="
+    private var spotifyTracksUrl = "https://api.spotify.com/v1/"
     
     var tracksList = [Track]()
     var genresList = [String]()
@@ -74,7 +74,9 @@ class RestApiManager {
             newTrack.album = track["collectionName"].stringValue
             
             newTrack.lowResArtworkURL = track["artworkUrl100"].stringValue
+            newTrack.artwork = fetchImage(fromURL: newTrack.lowResArtworkURL)
             newTrack.highResArtworkURL = newTrack.lowResArtworkURL.replacingOccurrences(of: "100x100", with: "600x600")
+            newTrack.highResArtwork = fetchImage(fromURL: newTrack.highResArtworkURL)
             
             tracksList.append(newTrack)
         }
@@ -122,13 +124,13 @@ class RestApiManager {
         dispatchGroup.enter()
         
         DispatchQueue.global(qos: .userInitiated).async {
-            let requestURL = URL(string: self.spotifyTracksUrl + string.replacingOccurrences(of: " ", with: "+") + "&type=track")
+            let requestURL = URL(string: self.spotifyTracksUrl + "search?q=" + string.replacingOccurrences(of: " ", with: "+") + "&type=track")
             
             URLSession.shared.dataTask(with: requestURL!) { (data, response, error) in
                 if let statusCode = (response as? HTTPURLResponse)?.statusCode {
                     if statusCode == 200 {
                         let json = JSON(data: data!)
-                        self.parseSpotifyTrackJSON(forJSON: json)
+                        self.parseMultipleSpotifyTracksJSON(forJSON: json)
                     }
                 }
                 self.dispatchGroup.leave()
@@ -136,7 +138,7 @@ class RestApiManager {
         }
     }
     
-    func parseSpotifyTrackJSON(forJSON json: JSON) {
+    func parseMultipleSpotifyTracksJSON(forJSON json: JSON) {
         tracksList.removeAll()
         for (type,subJson):(String, JSON) in json["tracks"] {
             if type == "items" {
@@ -178,5 +180,49 @@ class RestApiManager {
             }
         }
         return nil
+    }
+    
+    func makeHTTPRequestToSpotifyForSingleTrack(withID id: String) {
+        dispatchGroup.enter()
+        
+        DispatchQueue.global(qos: .userInitiated).async {
+            let requestURL = URL(string: self.spotifyTracksUrl + "tracks/" + id)
+            
+            URLSession.shared.dataTask(with: requestURL!) { (data, response, error) in
+                if let statusCode = (response as? HTTPURLResponse)?.statusCode {
+                    if statusCode == 200 {
+                        let json = JSON(data: data!)
+                        self.parseSingleSpotifyTrackJSON(forTrack: json)
+                    }
+                }
+                self.dispatchGroup.leave()
+            }.resume()
+        }
+    }
+    
+    func parseSingleSpotifyTrackJSON(forTrack track: JSON) {
+        let newTrack = Track()
+        
+        newTrack.id = track["id"].stringValue
+        newTrack.name = track["name"].stringValue
+        
+        for artists in track["artists"].arrayValue { //get other artists too
+            newTrack.artist = artists["name"].stringValue
+            break
+        }
+        
+        for images in track["album"]["images"].arrayValue {
+            if images["height"].stringValue == "640" {
+                newTrack.highResArtworkURL = images["url"].stringValue
+                newTrack.highResArtwork = fetchImage(fromURL: newTrack.highResArtworkURL)
+            }
+            if images["height"].stringValue == "64" {
+                newTrack.lowResArtworkURL = images["url"].stringValue
+                newTrack.artwork = fetchImage(fromURL: newTrack.lowResArtworkURL)
+            }
+            
+        }
+        
+        tracksList.append(newTrack)
     }
 }

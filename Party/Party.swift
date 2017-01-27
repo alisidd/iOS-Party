@@ -16,7 +16,7 @@ enum MusicService {
 class Party: NSObject {
     var partyName = String()
     var genres = [String]()
-    var musicService = MusicService.appleMusic
+    var musicService = MusicService.spotify
     
     var tracksQueue = [Track]()
     var tracksFromPeers = [String]()

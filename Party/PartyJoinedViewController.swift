@@ -159,11 +159,13 @@ class PartyJoinedViewController: UITableViewController {
 
     // In a storyboard-based application, you will often want to do a little preparation before navigation
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destinationViewController.
-        // Pass the selected object to the new view controller.
+        if segue.identifier == "Go To Party" {
+            if let destinationVC = segue.destination as? PartyViewController {
+                print("Setting isHost to false")
+                destinationVC.isHost = false
+            }
+        }
     }
-    
-
 }
 
 // MARK: NetworkManagerDelegate
@@ -176,10 +178,8 @@ extension PartyJoinedViewController: NetworkManagerDelegate {
         }
     }
     
-    func messageChanged(_ manager: NetworkServiceManager, messageString: String) {
-        OperationQueue.main.addOperation { () -> Void in
-            print(messageString)
-        }
+    func addTracksFromPeer(withTracks tracks: [String]) {
+        // Add here
     }
     
 }

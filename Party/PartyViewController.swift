@@ -9,12 +9,13 @@
 import UIKit
 import MediaPlayer
 
-class PartyViewController: UIViewController, UITableViewDataSource, UITableViewDelegate, SPTAudioStreamingDelegate, SPTAudioStreamingPlaybackDelegate {
+class PartyViewController: UIViewController, UITableViewDataSource, UITableViewDelegate, SPTAudioStreamingDelegate, SPTAudioStreamingPlaybackDelegate, NetworkManagerDelegate {
     
     @IBOutlet weak var backgroundImageView: UIImageView!
     @IBOutlet weak var tracksTableView: UITableView!
     
-    let tracksListManager = NetworkServiceManager() // Holds the tracks for the current party & advertises the current party
+    private let tracksListManager = NetworkServiceManager() // Holds the tracks for the current party & advertises the current party
+    private let APIManager = RestApiManager()
     
     private var party = Party()
     private var musicPlayer = MusicPlayer() {
@@ -22,6 +23,7 @@ class PartyViewController: UIViewController, UITableViewDataSource, UITableViewD
             initializeMusicPlayer()
         }
     }
+    var isHost = true
     
     func initializeVariables(withParty partyMade: Party) {
         party.partyName = partyMade.partyName
@@ -94,7 +96,9 @@ class PartyViewController: UIViewController, UITableViewDataSource, UITableViewD
             do {
                 try musicPlayer.spotifyPlayer?.start(withClientId: auth?.clientID)
                 DispatchQueue.main.async {
-                    self.startAuthenticationFlow(auth!) //Check unwrap
+                    if self.isHost {
+                        self.startAuthenticationFlow(auth!) //Check unwrap
+                    }
                 }
             } catch {
                 print("Error starting player")
@@ -207,10 +211,6 @@ class PartyViewController: UIViewController, UITableViewDataSource, UITableViewD
         let recognizer = gestureRecognizer as! UILongPressGestureRecognizer
     }
     
-    func updateTracksQueue(withQueue queue: [Track]) {
-        party.tracksQueue = queue
-    }
-    
     func fetchImage(forTrack track: Track) -> UIImage? {
         if let url = URL(string: track.highResArtworkURL) {
             do {
@@ -254,15 +254,26 @@ class PartyViewController: UIViewController, UITableViewDataSource, UITableViewD
                 
                 DispatchQueue.main.async {
                     self.tracksTableView.reloadData()
+                    
+                    DispatchQueue.global(qos: .userInitiated).async {
+                        if self.party.tracksQueue.count == VC.tracksQueue.count {
+                            self.musicPlayer.modifyQueue(withTracks: self.party.tracksQueue)
+                        }
+                        
+                        self.tracksListManager.sendTracks(self.idOfTracks(VC.tracksQueue))
+                        VC.emptyArrays()
+                    }
                 }
-                
-                if self.party.tracksQueue.count == VC.tracksQueue.count {
-                    self.musicPlayer.modifyQueue(withTracks: self.party.tracksQueue)
-                }
-                
-                VC.emptyArrays()
             }
         }
+    }
+    
+    func idOfTracks(_ tracks: [Track]) -> [String] {
+        var result = [String]()
+        for track in tracks {
+            result.append(track.id)
+        }
+        return result
     }
     
     // MARK: - Table
@@ -348,11 +359,8 @@ class PartyViewController: UIViewController, UITableViewDataSource, UITableViewD
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return indexPath.row == 0 ? 350 : 80
     }
-}
-
-// MARK: NetworkManagerDelegate
-
-extension PartyViewController: NetworkManagerDelegate {
+    
+    // MARK: NetworkManagerDelegate
     
     func connectedDevicesChanged(_ manager: NetworkServiceManager, connectedDevices: [String]) {
         OperationQueue.main.addOperation { () -> Void in
@@ -360,10 +368,25 @@ extension PartyViewController: NetworkManagerDelegate {
         }
     }
     
-    func messageChanged(_ manager: NetworkServiceManager, messageString: String) {
-        OperationQueue.main.addOperation { () -> Void in
-            print(messageString)
+    func addTracksFromPeer(withTracks tracks: [String]) {
+        DispatchQueue.global(qos: .userInteractive).async {
+
+            for trackID in tracks {
+                self.APIManager.makeHTTPRequestToSpotifyForSingleTrack(withID: trackID)
+                self.APIManager.dispatchGroup.wait()
+            }
+            
+            self.party.tracksQueue.append(contentsOf: self.APIManager.tracksList)
+            
+            if self.party.tracksQueue.count == self.APIManager.tracksList.count {
+               self.musicPlayer.modifyQueue(withTracks: self.party.tracksQueue)
+            }
+            
+            self.APIManager.tracksList.removeAll()
+            
+            DispatchQueue.main.async {
+                self.tracksTableView.reloadData()
+            }
         }
     }
-    
 }
