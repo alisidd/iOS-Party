@@ -244,13 +244,12 @@ class PartyViewController: UIViewController, UITableViewDataSource, UITableViewD
         if let VC = sender.source as? AddSongViewController {
             DispatchQueue.global(qos: .userInitiated).async {
                 
-                for track in VC.tracksQueue {
-                    if let unwrappedArtwork = self.fetchImage(forTrack: track) {
-                        track.highResArtwork = unwrappedArtwork
-                    }
-                }
-                // improve speed that the tracks show up at
                 self.party.tracksQueue.append(contentsOf: VC.tracksQueue)
+                
+                if self.party.tracksQueue.count == VC.tracksQueue.count && self.party.tracksQueue.count > 0 {
+                    print("HERE")
+                    VC.tracksQueue[0].highResArtwork = self.fetchImage(forTrack: VC.tracksQueue[0])
+                }
                 
                 DispatchQueue.main.async {
                     self.tracksTableView.reloadData()
@@ -261,6 +260,18 @@ class PartyViewController: UIViewController, UITableViewDataSource, UITableViewD
                         }
                         
                         self.tracksListManager.sendTracks(self.idOfTracks(VC.tracksQueue))
+                        
+                        for track in VC.tracksQueue {
+                            if let unwrappedArtwork = self.fetchImage(forTrack: track) {
+                                track.highResArtwork = unwrappedArtwork
+                                if self.party.tracksQueue.count > 0 {
+                                    if track == self.party.tracksQueue[0] {
+                                        self.tracksTableView.reloadData()
+                                    }
+                                }    
+                            }
+                        }
+                        
                         VC.emptyArrays()
                     }
                 }
