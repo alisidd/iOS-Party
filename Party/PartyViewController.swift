@@ -9,7 +9,11 @@
 import UIKit
 import MediaPlayer
 
-class PartyViewController: UIViewController, UITableViewDataSource, UITableViewDelegate, SPTAudioStreamingDelegate, SPTAudioStreamingPlaybackDelegate, NetworkManagerDelegate {
+protocol UpdatePartyDelegate: class {
+    func updateEveryonesTableView()
+}
+
+class PartyViewController: UIViewController, UITableViewDataSource, UITableViewDelegate, SPTAudioStreamingDelegate, SPTAudioStreamingPlaybackDelegate, NetworkManagerDelegate, UpdatePartyDelegate {
     
     @IBOutlet weak var backgroundImageView: UIImageView!
     @IBOutlet weak var tracksTableView: UITableView!
@@ -43,6 +47,21 @@ class PartyViewController: UIViewController, UITableViewDataSource, UITableViewD
         initializeMusicPlayer()
     }
     
+    func updateEveryonesTableView() {
+        // Update own table view
+        DispatchQueue.main.async {
+            self.tracksTableView.reloadData()
+        }
+        
+        // Update peers tableview
+        if isHost {
+            sendTracksToPeers(forTracks: party.tracksQueue)
+        } else {
+            sendTracksToPeers(forTracks: party.tracksFromPeers)
+            party.tracksFromPeers.removeAll()
+        }
+    }
+    
     private func blurBackgroundImageView() {
         let blurEffect: UIBlurEffect = UIBlurEffect(style: UIBlurEffectStyle.dark)
         
@@ -62,6 +81,7 @@ class PartyViewController: UIViewController, UITableViewDataSource, UITableViewD
         self.tracksTableView.dataSource = self
         
         tracksListManager.delegate = self
+        party.delegate = self
     }
     
     func adjustViews() {
@@ -236,6 +256,7 @@ class PartyViewController: UIViewController, UITableViewDataSource, UITableViewD
             if let controller = segue.destination as? AddSongViewController {
                 self.navigationItem.backBarButtonItem = UIBarButtonItem(title: "", style: .plain, target: nil, action: nil)
                 controller.party = party
+                controller.isHost = isHost
             }
         }
     }
@@ -244,6 +265,7 @@ class PartyViewController: UIViewController, UITableViewDataSource, UITableViewD
         if let VC = sender.source as? AddSongViewController {
             DispatchQueue.global(qos: .userInitiated).async {
                 
+                self.party.tracksFromPeers.append(contentsOf: VC.tracksQueue)
                 self.party.tracksQueue.append(contentsOf: VC.tracksQueue)
                 
                 if self.party.tracksQueue.count == VC.tracksQueue.count && self.party.tracksQueue.count > 0 {
@@ -257,11 +279,7 @@ class PartyViewController: UIViewController, UITableViewDataSource, UITableViewD
                         if self.party.tracksQueue.count == VC.tracksQueue.count {
                             self.musicPlayer.modifyQueue(withTracks: self.party.tracksQueue)
                         }
-                        
-                        if !VC.tracksQueue.isEmpty {
-                            self.tracksListManager.sendTracks(self.idOfTracks(VC.tracksQueue))
-                        }
-                        
+                                                
                         for track in VC.tracksQueue {
                             if let unwrappedArtwork = self.fetchImage(forTrack: track) {
                                 track.highResArtwork = unwrappedArtwork
@@ -382,25 +400,32 @@ class PartyViewController: UIViewController, UITableViewDataSource, UITableViewD
         }
     }
     
+    func sendTracksToPeers(forTracks tracks: [Track]) {
+        let tracksIDString = idOfTracks(tracks)
+        if !tracksIDString.isEmpty {
+            self.tracksListManager.sendTracks(tracksIDString)
+        }
+    }
+    
     func addTracksFromPeer(withTracks tracks: [String]) {
         DispatchQueue.global(qos: .userInteractive).async {
-
             for trackID in tracks {
                 self.APIManager.makeHTTPRequestToSpotifyForSingleTrack(withID: trackID)
                 self.APIManager.dispatchGroup.wait()
             }
             
-            self.party.tracksQueue.append(contentsOf: self.APIManager.tracksList)
-            
-            if self.party.tracksQueue.count == self.APIManager.tracksList.count {
-               self.musicPlayer.modifyQueue(withTracks: self.party.tracksQueue)
+            if self.isHost {
+                self.party.tracksQueue.append(contentsOf: self.APIManager.tracksList)
+                
+                if self.party.tracksQueue.count == self.APIManager.tracksList.count {
+                    self.musicPlayer.modifyQueue(withTracks: self.party.tracksQueue)
+                }
+            } else {
+                self.party.tracksQueue = self.APIManager.tracksList
             }
+            
             
             self.APIManager.tracksList.removeAll()
-            
-            DispatchQueue.main.async {
-                self.tracksTableView.reloadData()
-            }
         }
     }
 }

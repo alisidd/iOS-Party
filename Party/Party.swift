@@ -14,12 +14,17 @@ enum MusicService {
 }
 
 class Party: NSObject {
+    weak var delegate: UpdatePartyDelegate?
     var partyName = String()
     var genres = [String]()
     var musicService = MusicService.spotify
     
-    var tracksQueue = [Track]()
-    var tracksFromPeers = [String]()
+    var tracksQueue = [Track]() {
+        didSet {
+            self.delegate?.updateEveryonesTableView()
+        }
+    }
+    var tracksFromPeers = [Track]()
     var isSorted = false
     
     var numPeople = 0

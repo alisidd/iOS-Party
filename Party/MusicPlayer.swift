@@ -21,7 +21,6 @@ class MusicPlayer: NSObject {
     let commandCenter = MPRemoteCommandCenter.shared()
     
     var party = Party()
-
     
     func hasCapabilities() {
         serviceController.requestCapabilities{ (capability, error) in

@@ -18,7 +18,6 @@
 		41045F311E39AD7E00A29830 /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 41045F301E39AD7E00A29830 /* SystemConfiguration.framework */; };
 		411EEF3E1E346BD800216016 /* GenrePickingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 411EEF3D1E346BD800216016 /* GenrePickingViewController.swift */; };
 		411EEF401E346E2200216016 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 411EEF3F1E346E2200216016 /* Main.storyboard */; };
-		412D13151E3C0D070056919D /* TestSide.swift in Sources */ = {isa = PBXBuildFile; fileRef = 412D13141E3C0D060056919D /* TestSide.swift */; };
 		412FBECD1E32A506007FFB6A /* TrackInQueueTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 412FBECC1E32A506007FFB6A /* TrackInQueueTableViewCell.swift */; };
 		412FBECF1E32CA0E007FFB6A /* CurrentlyPlayingTrackTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 412FBECE1E32CA0E007FFB6A /* CurrentlyPlayingTrackTableViewCell.swift */; };
 		412FBED11E32CFA7007FFB6A /* MusicPlayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 412FBED01E32CFA7007FFB6A /* MusicPlayer.swift */; };
@@ -49,7 +48,6 @@
 		41045F321E39B80300A29830 /* Party-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Party-Bridging-Header.h"; sourceTree = SOURCE_ROOT; };
 		411EEF3D1E346BD800216016 /* GenrePickingViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GenrePickingViewController.swift; sourceTree = "<group>"; };
 		411EEF3F1E346E2200216016 /* Main.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = Main.storyboard; sourceTree = "<group>"; };
-		412D13141E3C0D060056919D /* TestSide.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TestSide.swift; sourceTree = "<group>"; };
 		412FBECC1E32A506007FFB6A /* TrackInQueueTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TrackInQueueTableViewCell.swift; sourceTree = "<group>"; };
 		412FBECE1E32CA0E007FFB6A /* CurrentlyPlayingTrackTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CurrentlyPlayingTrackTableViewCell.swift; sourceTree = "<group>"; };
 		412FBED01E32CFA7007FFB6A /* MusicPlayer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MusicPlayer.swift; sourceTree = "<group>"; };
@@ -125,7 +123,6 @@
 				411EEF3D1E346BD800216016 /* GenrePickingViewController.swift */,
 				417B9D4A1E317C3C0021F36E /* PartyViewController.swift */,
 				34D750DF1E32E9C5009AFD63 /* NetworkServiceManager.swift */,
-				412D13141E3C0D060056919D /* TestSide.swift */,
 				412FBED01E32CFA7007FFB6A /* MusicPlayer.swift */,
 				412FBECE1E32CA0E007FFB6A /* CurrentlyPlayingTrackTableViewCell.swift */,
 				412FBECC1E32A506007FFB6A /* TrackInQueueTableViewCell.swift */,
@@ -296,7 +293,6 @@
 				412FBED11E32CFA7007FFB6A /* MusicPlayer.swift in Sources */,
 				417B9D4F1E318D0D0021F36E /* AddSongViewController.swift in Sources */,
 				418503F71E307BE900472006 /* setupButton.swift in Sources */,
-				412D13151E3C0D070056919D /* TestSide.swift in Sources */,
 				3472FB141DDAC6FC00A35FCB /* PartyListCell.swift in Sources */,
 				417C38EF1DDA91B500F59926 /* Party.xcdatamodeld in Sources */,
 				417C38EE1DDA91B100F59926 /* AppDelegate.swift in Sources */,

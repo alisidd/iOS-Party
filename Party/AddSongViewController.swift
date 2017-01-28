@@ -20,6 +20,7 @@ class AddSongViewController: UIViewController, UITextFieldDelegate, UITableViewD
     @IBOutlet weak var trackTableView: UITableView!
     
     var party = Party()
+    var isHost = true
     private var tracksList = [Track]() {
         didSet {
             DispatchQueue.main.async {
