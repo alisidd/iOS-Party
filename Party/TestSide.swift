@@ -5,10 +5,11 @@
 //  Created by Matthew on 2017-01-20.
 //  Copyright © 2017 Ali Siddiqui.MatthewPaletta. All rights reserved.
 //
+/*
 import Foundation
 import MultipeerConnectivity
 
-protocol NetworkManagerDelegate: class {
+protocol NetworkManagerDelegate {
     func connectedDevicesChanged(_ manager : NetworkServiceManager, connectedDevices: [String])
     func addTracksFromPeer(withTracks tracks: [String])
 }
@@ -18,7 +19,7 @@ class NetworkServiceManager: NSObject {
     private let MessageServiceType = "localParty"
     private let serviceAdvertiser : MCNearbyServiceAdvertiser
     private let serviceBrowser : MCNearbyServiceBrowser
-    weak var delegate : NetworkManagerDelegate?
+    var delegate : NetworkManagerDelegate?
     
     var myPeerId: MCPeerID!
     var partyName: String?
@@ -52,13 +53,12 @@ class NetworkServiceManager: NSObject {
         if sessions.count > 0 {
             do {
                 let tracksListData = NSKeyedArchiver.archivedData(withRootObject: tracksList)
-                print("Count of sessions: \(sessions.count)")
                 for session in sessions {
                     try session.send(tracksListData, toPeers: session.connectedPeers, with: .reliable)
                 }
                 print("SENDING DATA")
             } catch let error as NSError {
-                print(" 8 \(error.localizedDescription)")
+                print(error.localizedDescription)
             }
         }
     }
@@ -101,14 +101,7 @@ extension NetworkServiceManager : MCNearbyServiceBrowserDelegate {
     }
     
     func browser(_ browser: MCNearbyServiceBrowser, lostPeer peerID: MCPeerID) {
-        for session in sessions {
-            print("Connected Peers: \(session.connectedPeers.count)")
-            if session.connectedPeers.count == 0 {
-                session.disconnect()
-                sessions.remove(at: sessions.index(of: session)!)
-                print("lostPeer: \(peerID)")
-            }
-        }
+        print("lostPeer: \(peerID)")
     }
     
 }
@@ -129,7 +122,7 @@ extension NetworkServiceManager : MCSessionDelegate {
     
     func session(_ session: MCSession, peer peerID: MCPeerID, didChange state: MCSessionState) {
         print("peer \(peerID) didChangeState: \(state.stringValue())")
-        self.delegate?.connectedDevicesChanged(self, connectedDevices: session.connectedPeers.map{$0.displayName})
+        self.delegate?.connectedDevicesChanged(self, connectedDevices: session.connectedPeers.map({$0.displayName}))
     }
     
     func session(_ session: MCSession, didReceive data: Data, fromPeer peerID: MCPeerID) {
@@ -152,4 +145,4 @@ extension NetworkServiceManager : MCSessionDelegate {
         print("didStartReceivingResourceWithName")
     }
     
-}
+}*/

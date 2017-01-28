@@ -247,7 +247,6 @@ class PartyViewController: UIViewController, UITableViewDataSource, UITableViewD
                 self.party.tracksQueue.append(contentsOf: VC.tracksQueue)
                 
                 if self.party.tracksQueue.count == VC.tracksQueue.count && self.party.tracksQueue.count > 0 {
-                    print("HERE")
                     VC.tracksQueue[0].highResArtwork = self.fetchImage(forTrack: VC.tracksQueue[0])
                 }
                 
@@ -259,14 +258,18 @@ class PartyViewController: UIViewController, UITableViewDataSource, UITableViewD
                             self.musicPlayer.modifyQueue(withTracks: self.party.tracksQueue)
                         }
                         
-                        self.tracksListManager.sendTracks(self.idOfTracks(VC.tracksQueue))
+                        if !VC.tracksQueue.isEmpty {
+                            self.tracksListManager.sendTracks(self.idOfTracks(VC.tracksQueue))
+                        }
                         
                         for track in VC.tracksQueue {
                             if let unwrappedArtwork = self.fetchImage(forTrack: track) {
                                 track.highResArtwork = unwrappedArtwork
                                 if self.party.tracksQueue.count > 0 {
                                     if track == self.party.tracksQueue[0] {
-                                        self.tracksTableView.reloadData()
+                                        DispatchQueue.main.async {
+                                            self.tracksTableView.reloadData()
+                                        }
                                     }
                                 }    
                             }

@@ -11,12 +11,12 @@ import UIKit
 class PartyJoinedViewController: UITableViewController {
 
     var localParties = [Party]()
-    let partiesListManager = NetworkServiceManager()
+    //let partiesListManager = NetworkServiceManager()
     
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        partiesListManager.delegate = self
+        //partiesListManager.delegate = self
         // Will browse as device name
         
         
@@ -169,7 +169,7 @@ class PartyJoinedViewController: UITableViewController {
 }
 
 // MARK: NetworkManagerDelegate
-
+/*
 extension PartyJoinedViewController: NetworkManagerDelegate {
     
     func connectedDevicesChanged(_ manager: NetworkServiceManager, connectedDevices: [String]) {
@@ -182,5 +182,5 @@ extension PartyJoinedViewController: NetworkManagerDelegate {
         // Add here
     }
     
-}
+}*/
 

@@ -434,7 +434,7 @@
                         </constraints>
                     </view>
                     <navigationItem key="navigationItem" id="SMw-9E-B5m">
-                        <barButtonItem key="rightBarButtonItem" title="Add" id="j1K-S4-deY">
+                        <barButtonItem key="rightBarButtonItem" systemItem="done" id="j1K-S4-deY">
                             <color key="tintColor" red="1" green="0.4344842136" blue="0.005222451407" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                             <connections>
                                 <segue destination="eT7-Kn-jht" kind="unwind" identifier="unwindToPartyViewControllerSegue" unwindAction="unwindToPartyViewController:" id="4Us-fM-JyM"/>
