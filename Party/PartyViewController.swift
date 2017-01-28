@@ -8,9 +8,18 @@
 
 import UIKit
 import MediaPlayer
+import MultipeerConnectivity
+
+protocol NetworkManagerDelegate: class {
+    func connectedDevicesChanged(_ manager : NetworkServiceManager, connectedDevices: [String])
+    func sendPartyInfo(toSession session: MCSession)
+    func setupParty(withName name: String)
+    func addTracksFromPeer(withTracks tracks: [String])
+}
 
 protocol UpdatePartyDelegate: class {
     func updateEveryonesTableView()
+    func addTracksFromPeer(withTracks tracks: [String])
 }
 
 class PartyViewController: UIViewController, UITableViewDataSource, UITableViewDelegate, SPTAudioStreamingDelegate, SPTAudioStreamingPlaybackDelegate, NetworkManagerDelegate, UpdatePartyDelegate {
@@ -279,7 +288,7 @@ class PartyViewController: UIViewController, UITableViewDataSource, UITableViewD
                         if self.party.tracksQueue.count == VC.tracksQueue.count {
                             self.musicPlayer.modifyQueue(withTracks: self.party.tracksQueue)
                         }
-                                                
+                        
                         for track in VC.tracksQueue {
                             if let unwrappedArtwork = self.fetchImage(forTrack: track) {
                                 track.highResArtwork = unwrappedArtwork
@@ -298,14 +307,6 @@ class PartyViewController: UIViewController, UITableViewDataSource, UITableViewD
                 }
             }
         }
-    }
-    
-    func idOfTracks(_ tracks: [Track]) -> [String] {
-        var result = [String]()
-        for track in tracks {
-            result.append(track.id)
-        }
-        return result
     }
     
     // MARK: - Table
@@ -400,8 +401,20 @@ class PartyViewController: UIViewController, UITableViewDataSource, UITableViewD
         }
     }
     
+    func sendPartyInfo(toSession session: MCSession) {
+        if isHost {
+            tracksListManager.sendPartyInfo(withTracks: party.tracksQueue, withName: party.partyName, toSession: session)
+        }
+    }
+    
+    func setupParty(withName name: String) {
+        print("Setting up party using party info received")
+        party.partyName = name
+        title = name.uppercased()
+    }
+    
     func sendTracksToPeers(forTracks tracks: [Track]) {
-        let tracksIDString = idOfTracks(tracks)
+        let tracksIDString = Party.idOfTracks(tracks)
         if !tracksIDString.isEmpty {
             self.tracksListManager.sendTracks(tracksIDString)
         }

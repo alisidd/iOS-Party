@@ -8,11 +8,6 @@
 import Foundation
 import MultipeerConnectivity
 
-protocol NetworkManagerDelegate: class {
-    func connectedDevicesChanged(_ manager : NetworkServiceManager, connectedDevices: [String])
-    func addTracksFromPeer(withTracks tracks: [String])
-}
-
 class NetworkServiceManager: NSObject {
     
     private let MessageServiceType = "localParty"
@@ -52,17 +47,31 @@ class NetworkServiceManager: NSObject {
         if sessions.count > 0 {
             do {
                 let tracksListData = NSKeyedArchiver.archivedData(withRootObject: tracksList)
-                print("Count of sessions: \(sessions.count)")
+                print("Number of active sessions: \(sessions.count)")
                 for session in sessions {
                     try session.send(tracksListData, toPeers: session.connectedPeers, with: .reliable)
                 }
-                print("SENDING DATA")
+                print("Sending Data")
             } catch let error as NSError {
-                print(" 8 \(error.localizedDescription)")
+                print(error.localizedDescription)
             }
         }
     }
     
+    func sendPartyInfo(withTracks tracks: [Track], withName name: String, toSession session: MCSession) {
+        if sessions.count > 0 {
+            do {
+                let tracksData = NSKeyedArchiver.archivedData(withRootObject: Party.idOfTracks(tracks))
+                let partyNameData = NSKeyedArchiver.archivedData(withRootObject: name)
+                print("Number of active sessions: \(sessions.count)")
+                try session.send(tracksData, toPeers: session.connectedPeers, with: .reliable)
+                try session.send(partyNameData, toPeers: session.connectedPeers, with: .reliable)
+                print("Sending Party info to other device")
+            } catch let error as NSError {
+                print(error.localizedDescription)
+            }
+        }
+    }
 }
 
 extension NetworkServiceManager : MCNearbyServiceAdvertiserDelegate {
@@ -130,12 +139,20 @@ extension NetworkServiceManager : MCSessionDelegate {
     func session(_ session: MCSession, peer peerID: MCPeerID, didChange state: MCSessionState) {
         print("peer \(peerID) didChangeState: \(state.stringValue())")
         self.delegate?.connectedDevicesChanged(self, connectedDevices: session.connectedPeers.map{$0.displayName})
+        if session.connectedPeers.count > 0 {
+            if state == .connected {
+                print("Calling function to send party info")
+                self.delegate?.sendPartyInfo(toSession: session)
+            }
+        }
     }
     
     func session(_ session: MCSession, didReceive data: Data, fromPeer peerID: MCPeerID) {
-        
-        if let tracksIDList = NSKeyedUnarchiver.unarchiveObject(with: data) as? [String] {
-            print("didReceiveData: \(data.count) bytes")
+        print("didReceiveData: \(data.count) bytes")
+        let unarchivedData = NSKeyedUnarchiver.unarchiveObject(with: data)
+        if let partyName = unarchivedData as? String {
+            self.delegate?.setupParty(withName: partyName)
+        } else if let tracksIDList = unarchivedData as? [String] {
             self.delegate?.addTracksFromPeer(withTracks: tracksIDList)
         }
     }

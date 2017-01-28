@@ -108,7 +108,7 @@ class MusicPlayer: NSObject {
         }
     }
     
-    
+    // Improve - hard fails here randomly
     func isPaused() -> Bool {
         return party.musicService == .appleMusic ? appleMusicPlayer.playbackState == .paused : spotifyPlayer?.playbackState.isPlaying == false
     }
