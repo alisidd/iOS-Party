@@ -198,13 +198,21 @@
 				417C38CC1DDA43FD00F59926 /* AppDelegate.swift */,
 				411EEF3F1E346E2200216016 /* Main.storyboard */,
 				417C38D81DDA43FD00F59926 /* LaunchScreen.storyboard */,
-				41EB1B041E3FE1BD00FC326F /* Trajan Pro.ttf */,
-				417C38D61DDA43FD00F59926 /* Assets.xcassets */,
+				419448001E3FFFDD00B9370C /* Resources */,
 				417C38DB1DDA43FD00F59926 /* Info.plist */,
 				417C38D31DDA43FD00F59926 /* Party.xcdatamodeld */,
 				41045F321E39B80300A29830 /* Party-Bridging-Header.h */,
 			);
 			path = Party;
+			sourceTree = "<group>";
+		};
+		419448001E3FFFDD00B9370C /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				41EB1B041E3FE1BD00FC326F /* Trajan Pro.ttf */,
+				417C38D61DDA43FD00F59926 /* Assets.xcassets */,
+			);
+			name = Resources;
 			sourceTree = "<group>";
 		};
 		B2F645F37144B3727E5025EE /* Frameworks */ = {
