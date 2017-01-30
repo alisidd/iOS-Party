@@ -68,8 +68,8 @@ class Party: NSObject, NSCoding {
         self.partyName = (aDecoder.decodeObject(forKey: "partyName") as? String)!
         self.genres = (aDecoder.decodeObject(forKey: "genres") as? [String])!
         self.musicService = MusicService(rawValue: (aDecoder.decodeObject(forKey: "musicService") as? String)!)!
-        self.delegate?.addTracksFromPeer(withTracks: (aDecoder.decodeObject(forKey: "tracksQueue") as? [String])!)
-        self.delegate?.addTracksFromPeer(withTracks: (aDecoder.decodeObject(forKey: "tracksFromPeers") as? [String])!)
+        //self.delegate?.addTracksFromPeer(withTracks: (aDecoder.decodeObject(forKey: "tracksQueue") as? [String])!)
+        //self.delegate?.addTracksFromPeer(withTracks: (aDecoder.decodeObject(forKey: "tracksFromPeers") as? [String])!)
         self.isSorted = (aDecoder.decodeObject(forKey: "isSorted") as? Bool)!
         self.numPeople = (aDecoder.decodeObject(forKey: "numPeople") as? Int)!
         

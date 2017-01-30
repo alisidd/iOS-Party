@@ -20,7 +20,7 @@ protocol NetworkManagerDelegate: class {
 
 protocol UpdatePartyDelegate: class {
     func updateEveryonesTableView()
-    func addTracksFromPeer(withTracks tracks: [String])
+    //func addTracksFromPeer(withTracks tracks: [String])
 }
 
 protocol UpdateTableDelegate: class {
