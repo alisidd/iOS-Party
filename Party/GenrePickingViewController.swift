@@ -3,15 +3,19 @@
 //  Party
 //
 //  Created by Ali Siddiqui on 1/21/17.
-//  Copyright © 2017 Ali Siddiqui.MatthewPaletta. All rights reserved.
+//  Copyright © 2017 Ali Siddiqui and Matthew Paletta. All rights reserved.
 //
 
 import UIKit
 
 class GenrePickingViewController: UIViewController, UITableViewDataSource, UITableViewDelegate {
 
-    weak var delegate: changeSelectedGenresList?
+    // MARK: - Storyboard Variables
+    
     @IBOutlet weak var genresTableView: UITableView!
+    
+    // MARK: - General Variables
+    
     var party = Party()
     var genres = [String]() {
         didSet {
@@ -21,6 +25,9 @@ class GenrePickingViewController: UIViewController, UITableViewDataSource, UITab
         }
     }
     let APIManager = RestApiManager()
+    weak var delegate: ChangeSelectedGenresListDelegate?
+    
+    // MARK: - Lifecycle
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -28,9 +35,9 @@ class GenrePickingViewController: UIViewController, UITableViewDataSource, UITab
         setUpDelegates()
         adjustTableView()
         populateGenres()
-
-        // Do any additional setup after loading the view.
     }
+    
+    // MARK: - Functions
     
     func setUpDelegates() {
         genresTableView.delegate = self
@@ -62,6 +69,8 @@ class GenrePickingViewController: UIViewController, UITableViewDataSource, UITab
             }
         }
     }
+    
+    // MARK: - Table View
     
     func numberOfSections(in tableView: UITableView) -> Int {
         return 1

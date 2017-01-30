@@ -3,28 +3,35 @@
 //  Party
 //
 //  Created by Matthew on 2017-01-20.
-//  Copyright © 2017 Ali Siddiqui.MatthewPaletta. All rights reserved.
+//  Copyright © 2017 Ali Siddiqui and Matthew Paletta. All rights reserved.
 //
+
 import Foundation
 import MultipeerConnectivity
 
 class NetworkServiceManager: NSObject {
     
+    // MARK: - General Variables
+    
     private let MessageServiceType = "localParty"
     private let serviceAdvertiser : MCNearbyServiceAdvertiser
     private let serviceBrowser : MCNearbyServiceBrowser
-    weak var delegate : NetworkManagerDelegate?
     
     var myPeerId: MCPeerID!
-    var partyName: String?
+    var partyName = String()
     var sessions = [MCSession]()
+    weak var delegate : NetworkManagerDelegate?
     
-    override init() {
+    // MARK: - Lifecycle
+    
+    init(_ isHost: Bool) {
         // Broadcast as the party name or the device name if not applicable
-        myPeerId = MCPeerID(displayName: partyName ?? UIDevice.current.name)
+        myPeerId = MCPeerID(displayName: !partyName.isEmpty ? partyName : UIDevice.current.name)
         
-        serviceAdvertiser = MCNearbyServiceAdvertiser(peer: myPeerId, discoveryInfo: nil, serviceType: MessageServiceType)
+        let infoAboutHost = ["isHost": isHost.description]
+        print("Delegate info: \(isHost)")
         
+        serviceAdvertiser = MCNearbyServiceAdvertiser(peer: myPeerId, discoveryInfo: infoAboutHost, serviceType: MessageServiceType)
         serviceBrowser = MCNearbyServiceBrowser(peer: myPeerId, serviceType: MessageServiceType)
         
         super.init()
@@ -39,9 +46,12 @@ class NetworkServiceManager: NSObject {
     }
     
     deinit {
-        self.serviceAdvertiser.stopAdvertisingPeer()
-        self.serviceBrowser.stopBrowsingForPeers()
+        serviceAdvertiser.stopAdvertisingPeer()
+        serviceBrowser.stopBrowsingForPeers()
+        print("Destroying Network Manager")
     }
+    
+    // MARK: - Functions
     
     func sendTracks(_ tracksList: [String]) {
         if sessions.count > 0 {
@@ -61,7 +71,7 @@ class NetworkServiceManager: NSObject {
     func sendPartyInfo(withTracks tracks: [Track], withName name: String, toSession session: MCSession) {
         if sessions.count > 0 {
             do {
-                let tracksData = NSKeyedArchiver.archivedData(withRootObject: Party.idOfTracks(tracks))
+                let tracksData = NSKeyedArchiver.archivedData(withRootObject: Track.idOfTracks(tracks))
                 let partyNameData = NSKeyedArchiver.archivedData(withRootObject: name)
                 print("Number of active sessions: \(sessions.count)")
                 try session.send(tracksData, toPeers: session.connectedPeers, with: .reliable)
@@ -74,11 +84,9 @@ class NetworkServiceManager: NSObject {
     }
 }
 
+// MARK: - Invitation
+
 extension NetworkServiceManager : MCNearbyServiceAdvertiserDelegate {
-    
-    func advertiser(_ advertiser: MCNearbyServiceAdvertiser, didNotStartAdvertisingPeer error: Error) {
-        print("didNotStartAdvertisingPeer: \(error)")
-    }
     
     func advertiser(_ advertiser: MCNearbyServiceAdvertiser, didReceiveInvitationFromPeer peerID: MCPeerID, withContext context: Data?, invitationHandler: @escaping ((Bool, MCSession?) -> Void)) {
         
@@ -90,23 +98,39 @@ extension NetworkServiceManager : MCNearbyServiceAdvertiserDelegate {
             }
         }
     }
+    
+    func advertiser(_ advertiser: MCNearbyServiceAdvertiser, didNotStartAdvertisingPeer error: Error) {
+        print("didNotStartAdvertisingPeer: \(error)")
+    }
+      
 }
+
+// MARK: - Peer Discovery Callbacks
 
 extension NetworkServiceManager : MCNearbyServiceBrowserDelegate {
     
     @available(iOS 7.0, *)
     public func browser(_ browser: MCNearbyServiceBrowser, foundPeer peerID: MCPeerID, withDiscoveryInfo info: [String : String]?) {
         print("foundPeer: \(peerID)")
-        print("invitePeer: \(peerID)")
-        let newSession = MCSession(peer: myPeerId, securityIdentity: nil, encryptionPreference: MCEncryptionPreference.none)
-        newSession.delegate = self
-        sessions.append(newSession)
-        browser.invitePeer(peerID, to: newSession, withContext: nil, timeout: 10)
+        if !(delegate?.amHost() == false && info?["isHost"] == "false") {
+            let newSession = MCSession(peer: myPeerId, securityIdentity: nil, encryptionPreference: MCEncryptionPreference.none)
+            newSession.delegate = self
+            
+            var alreadyFound = false
+            for session in sessions {
+                // improve: make sure peerid display name is different for very user
+                if session.myPeerID.displayName == peerID.displayName {
+                    alreadyFound = true
+                }
+            }
+            if !alreadyFound {
+                sessions.append(newSession)
+            }
+            print("invitePeer: \(peerID)")
+            browser.invitePeer(peerID, to: newSession, withContext: nil, timeout: 10)
+        }
         
-    }
-    
-    func browser(_ browser: MCNearbyServiceBrowser, didNotStartBrowsingForPeers error: Error) {
-        print("didNotStartBrowsingForPeers: \(error)")
+        
     }
     
     func browser(_ browser: MCNearbyServiceBrowser, lostPeer peerID: MCPeerID) {
@@ -118,6 +142,10 @@ extension NetworkServiceManager : MCNearbyServiceBrowserDelegate {
                 print("lostPeer: \(peerID)")
             }
         }
+    }
+    
+    func browser(_ browser: MCNearbyServiceBrowser, didNotStartBrowsingForPeers error: Error) {
+        print("didNotStartBrowsingForPeers: \(error)")
     }
     
 }
@@ -134,15 +162,19 @@ extension MCSessionState {
     
 }
 
+// MARK: - Session Callbacks
+
 extension NetworkServiceManager : MCSessionDelegate {
     
     func session(_ session: MCSession, peer peerID: MCPeerID, didChange state: MCSessionState) {
         print("peer \(peerID) didChangeState: \(state.stringValue())")
-        self.delegate?.connectedDevicesChanged(self, connectedDevices: session.connectedPeers.map{$0.displayName})
+        delegate?.connectedDevicesChanged(self, connectedDevices: session.connectedPeers.map{$0.displayName})
         if session.connectedPeers.count > 0 {
             if state == .connected {
                 print("Calling function to send party info")
-                self.delegate?.sendPartyInfo(toSession: session)
+                delegate?.sendPartyInfo(toSession: session)
+            } else if state == .notConnected {
+                sessions.remove(at: sessions.index(of: session)!)
             }
         }
     }
@@ -151,9 +183,9 @@ extension NetworkServiceManager : MCSessionDelegate {
         print("didReceiveData: \(data.count) bytes")
         let unarchivedData = NSKeyedUnarchiver.unarchiveObject(with: data)
         if let partyName = unarchivedData as? String {
-            self.delegate?.setupParty(withName: partyName)
+            delegate?.setupParty(withName: partyName)
         } else if let tracksIDList = unarchivedData as? [String] {
-            self.delegate?.addTracksFromPeer(withTracks: tracksIDList)
+            delegate?.addTracksFromPeer(withTracks: tracksIDList)
         }
     }
     

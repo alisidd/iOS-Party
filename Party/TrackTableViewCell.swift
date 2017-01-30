@@ -3,7 +3,7 @@
 //  Party
 //
 //  Created by Ali Siddiqui on 1/19/17.
-//  Copyright © 2017 Ali Siddiqui.MatthewPaletta. All rights reserved.
+//  Copyright © 2017 Ali Siddiqui and Matthew Paletta. All rights reserved.
 //
 
 extension UIView {
@@ -21,6 +21,8 @@ import UIKit
 
 class TrackTableViewCell: UITableViewCell {
     
+    // MARK: - General Variables
+    
     @IBOutlet weak var artworkImageView: UIImageView!
     @IBOutlet weak var trackName: UILabel!
     @IBOutlet weak var artistName: UILabel!
@@ -34,12 +36,9 @@ class TrackTableViewCell: UITableViewCell {
             return false
         }
     }
-    weak var delegate: modifyTracksQueue?
+    weak var delegate: ModifyTracksQueueDelegate?
     
-    override func awakeFromNib() {
-        super.awakeFromNib()
-        // Initialization code
-    }
+    // MARK: - Functions
 
     @IBAction func addTrack(_ sender: UIButton) {
         sender.fadeTransition(duration: 0.3)
@@ -51,11 +50,5 @@ class TrackTableViewCell: UITableViewCell {
             track.artwork = artworkImageView.image
             self.delegate?.addToQueue(track: track)
         }
-        
     }
-    override func setSelected(_ selected: Bool, animated: Bool) {
-        super.setSelected(selected, animated: animated)
-        // Configure the view for the selected state
-    }
-
 }

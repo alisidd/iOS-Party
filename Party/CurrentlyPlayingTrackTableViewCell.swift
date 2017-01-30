@@ -3,13 +3,13 @@
 //  Party
 //
 //  Created by Ali Siddiqui on 1/20/17.
-//  Copyright © 2017 Ali Siddiqui.MatthewPaletta. All rights reserved.
+//  Copyright © 2017 Ali Siddiqui and Matthew Paletta. All rights reserved.
 //
 
 import UIKit
 
 class CurrentlyPlayingTrackTableViewCell: UITableViewCell {
-
+    
     @IBOutlet weak var artwork: UIImageView! {
         didSet {
             let blurEffect: UIBlurEffect = UIBlurEffect(style: UIBlurEffectStyle.dark)
@@ -33,16 +33,4 @@ class CurrentlyPlayingTrackTableViewCell: UITableViewCell {
     }
     @IBOutlet weak var trackName: UILabel!
     @IBOutlet weak var artistName: UILabel!
-    
-    override func awakeFromNib() {
-        super.awakeFromNib()
-        // Initialization code
-    }
-
-    override func setSelected(_ selected: Bool, animated: Bool) {
-        super.setSelected(selected, animated: animated)
-
-        // Configure the view for the selected state
-    }
-
 }

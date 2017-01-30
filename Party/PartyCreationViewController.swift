@@ -8,20 +8,26 @@
 
 import UIKit
 
-protocol changeSelectedGenresList: class {
+protocol ChangeSelectedGenresListDelegate: class {
     func addToGenresList(withGenre genre: String)
     func removeFromGenresList(withGenre genre: String)
 }
 
-class PartyCreationViewController: UIViewController, UITextFieldDelegate, UIPickerViewDelegate, changeSelectedGenresList {
-
+class PartyCreationViewController: UIViewController, UITextFieldDelegate, UIPickerViewDelegate, ChangeSelectedGenresListDelegate {
+    
+    // MARK: - Storyboard Variables
+    
     @IBOutlet weak var backgroundImageView: UIImageView!
     @IBOutlet weak var appleMusicButton: setupButton!
     @IBOutlet weak var spotifyButton: setupButton!
     @IBOutlet weak var partyNameField: UITextField!
     @IBOutlet weak var selectGenresButton: setupButton!
     
+    // MARK: - General Variables
+    
     private var partyMade = Party()
+    
+    // MARK: - Lifecycle
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -34,6 +40,25 @@ class PartyCreationViewController: UIViewController, UITextFieldDelegate, UIPick
         
         customizeNavigationBar()
         customizeTextField()
+    }
+    
+    // MARK: - Functions
+    
+    func blurBackgroundImageView() {
+        let blurEffect: UIBlurEffect = UIBlurEffect(style: UIBlurEffectStyle.dark)
+        let blurView = UIVisualEffectView(effect: blurEffect)
+        blurView.frame = backgroundImageView.bounds
+        blurView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
+        backgroundImageView.addSubview(blurView)
+    }
+    
+    func customizeNavigationBar() {
+        navigationController?.navigationBar.setBackgroundImage(UIImage(), for: UIBarMetrics.default)
+        navigationController?.navigationBar.shadowImage = UIImage()
+        navigationController?.navigationBar.isTranslucent = true
+        navigationController?.view.backgroundColor = UIColor.clear
+        
+        navigationController?.navigationBar.titleTextAttributes = [NSFontAttributeName : UIFont.systemFont(ofSize: 20), NSForegroundColorAttributeName: UIColor.white]
     }
     
     @IBAction func changeToAppleMusic(_ sender: setupButton) {
@@ -52,35 +77,21 @@ class PartyCreationViewController: UIViewController, UITextFieldDelegate, UIPick
         partyMade.musicService = .spotify
     }
     
-    func customizeNavigationBar() {
-        self.navigationController?.navigationBar.setBackgroundImage(UIImage(), for: UIBarMetrics.default)
-        self.navigationController?.navigationBar.shadowImage = UIImage()
-        self.navigationController?.navigationBar.isTranslucent = true
-        self.navigationController?.view.backgroundColor = UIColor.clear
-    }
-    
-    func blurBackgroundImageView() {
-        let blurEffect: UIBlurEffect = UIBlurEffect(style: UIBlurEffectStyle.dark)
-        let blurView = UIVisualEffectView(effect: blurEffect)
-        blurView.frame = backgroundImageView.bounds
-        blurView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
-        backgroundImageView.addSubview(blurView)
-    }
-    
     func initializeTextField() {
         partyNameField.delegate = self
     }
     
     func customizeTextField() {
         partyNameField.backgroundColor = UIColor(colorLiteralRed: 37/255, green: 37/255, blue: 37/255, alpha: 37/255)
-
         partyNameField.attributedPlaceholder = NSAttributedString(string: "Party Name", attributes: [NSForegroundColorAttributeName: UIColor.lightGray])
- 
         partyNameField.autocapitalizationType = UITextAutocapitalizationType.sentences
+        partyNameField.returnKeyType = .done
     }
     
-    func textFieldShouldReturn(_ partyNameField: UITextField) -> Bool {
-        partyNameField.resignFirstResponder()
+    func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
+        if string == "\n" {
+            partyNameField.resignFirstResponder()
+        }
         return true
     }
     
@@ -95,12 +106,6 @@ class PartyCreationViewController: UIViewController, UITextFieldDelegate, UIPick
     func removeFromGenresList(withGenre genre: String) {
         partyMade.genres.remove(at: partyMade.genres.index(of: genre)!)
     }
-
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
-    }
-
     
     // MARK: - Navigation
     
@@ -109,7 +114,7 @@ class PartyCreationViewController: UIViewController, UITextFieldDelegate, UIPick
             partyMade.partyName = text
         }
         
-        if self.partyMade.partyName.isEmpty && identifier == "Create Party" {
+        if partyMade.partyName.isEmpty && identifier == "Create Party" {
             alertUser()
             return false
         } else {
@@ -120,7 +125,8 @@ class PartyCreationViewController: UIViewController, UITextFieldDelegate, UIPick
     func alertUser() {
         let alert = UIAlertController(title: "No Party Name", message: "You have to provide a party name to continue", preferredStyle: UIAlertControllerStyle.alert)
         alert.addAction(UIAlertAction(title: "OK", style: UIAlertActionStyle.default, handler: nil))
-        self.present(alert, animated: true, completion: nil)
+        
+        present(alert, animated: true, completion: nil)
     }
 
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
@@ -131,8 +137,10 @@ class PartyCreationViewController: UIViewController, UITextFieldDelegate, UIPick
             }
         } else if segue.identifier == "Create Party" {
             if let controller = segue.destination as? PartyViewController {
-                controller.initializeVariables(withParty: partyMade)
-                self.navigationItem.backBarButtonItem = UIBarButtonItem(title: "", style: .plain, target: nil, action: nil)
+                controller.party = partyMade
+                controller.tracksListManager.partyName = partyMade.partyName
+                controller.tracksListManager.delegate = controller
+                navigationItem.backBarButtonItem = UIBarButtonItem(title: "", style: .plain, target: nil, action: nil)
             }
         }
     }

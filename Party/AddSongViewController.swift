@@ -3,24 +3,27 @@
 //  Party
 //
 //  Created by Ali Siddiqui on 1/19/17.
-//  Copyright © 2017 Ali Siddiqui.MatthewPaletta. All rights reserved.
+//  Copyright © 2017 Ali Siddiqui and Matthew Paletta. All rights reserved.
 //
 
 import UIKit
 
-protocol modifyTracksQueue: class {
+protocol ModifyTracksQueueDelegate: class {
     func addToQueue(track: Track)
     func removeFromQueue(track: Track)
 }
 
-class AddSongViewController: UIViewController, UITextFieldDelegate, UITableViewDataSource, UITableViewDelegate, modifyTracksQueue {
+class AddSongViewController: UIViewController, UITextFieldDelegate, UITableViewDataSource, UITableViewDelegate, ModifyTracksQueueDelegate {
+    
+    // MARK: - Storyboard Variables
 
     @IBOutlet weak var backgroundImageView: UIImageView!
     @IBOutlet weak var searchTracksField: UITextField!
     @IBOutlet weak var trackTableView: UITableView!
     
+    // MARK: - General Variables
+    
     var party = Party()
-    var isHost = true
     private var tracksList = [Track]() {
         didSet {
             DispatchQueue.main.async {
@@ -35,19 +38,22 @@ class AddSongViewController: UIViewController, UITextFieldDelegate, UITableViewD
     private var indicator = UIActivityIndicatorView()
     private let noTracksFoundLabel = UILabel(frame: CGRect(x: 0, y: 0, width: 350, height: 30))
     
+    // MARK: - Lifecycle
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         blurBackgroundImageView()
-        customizeNavigationBar()
         setDelegates()
         initializeActivityIndicator()
-        adjustTableView()
+        adjustView()
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         customizeTextField()
     }
+    
+    // MARK: - Functions
     
     func blurBackgroundImageView() {
         let blurEffect: UIBlurEffect = UIBlurEffect(style: UIBlurEffectStyle.dark)
@@ -58,27 +64,26 @@ class AddSongViewController: UIViewController, UITextFieldDelegate, UITableViewD
         backgroundImageView.addSubview(blurView)
     }
     
-    func customizeNavigationBar() {self.navigationItem.setHidesBackButton(true, animated: false)
-    }
-    
     func setDelegates() {
-        self.searchTracksField.delegate = self
-        self.trackTableView.delegate   = self
-        self.trackTableView.dataSource = self
+        searchTracksField.delegate = self
+        trackTableView.delegate   = self
+        trackTableView.dataSource = self
     }
     
     func initializeActivityIndicator() {
         indicator = UIActivityIndicatorView(frame: CGRect(x: 0, y: 0, width: 80, height: 80))
         indicator.activityIndicatorViewStyle = UIActivityIndicatorViewStyle.whiteLarge
         indicator.center = self.view.center
-        self.view.addSubview(indicator)
+        view.addSubview(indicator)
     }
     
-    func adjustTableView() {
+    func adjustView() {
         trackTableView.backgroundColor = .clear
         trackTableView.separatorColor  = UIColor(colorLiteralRed: 15/255, green: 15/255, blue: 15/255, alpha: 1)
         trackTableView.tableFooterView = UIView()
         trackTableView.allowsSelection = false
+        
+        navigationItem.hidesBackButton = true
     }
     
     func customizeTextField() {
@@ -86,6 +91,7 @@ class AddSongViewController: UIViewController, UITextFieldDelegate, UITableViewD
         searchTracksField.layer.borderWidth = 1.5
         
         searchTracksField.autocapitalizationType = UITextAutocapitalizationType.sentences
+        searchTracksField.returnKeyType = .search
     }
     
     func textFieldShouldReturn(_ searchSongsField: UITextField) -> Bool {
@@ -124,12 +130,12 @@ class AddSongViewController: UIViewController, UITextFieldDelegate, UITableViewD
         noTracksFoundLabel.textColor = .white
         noTracksFoundLabel.textAlignment = .center
         
-        noTracksFoundLabel.center = self.view.center
-        self.view.addSubview(noTracksFoundLabel)
+        noTracksFoundLabel.center = view.center
+        view.addSubview(noTracksFoundLabel)
     }
     
     func removeNoTracksFoundLabel() {
-        self.noTracksFoundLabel.removeFromSuperview()
+        noTracksFoundLabel.removeFromSuperview()
     }
     
     func addToQueue(track: Track) {
@@ -142,11 +148,6 @@ class AddSongViewController: UIViewController, UITextFieldDelegate, UITableViewD
                 tracksQueue.remove(at: tracksQueue.index(of: trackInQueue)!)
             }
         }
-    }
-    
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
     }
     
     // MARK: - Navigation
@@ -175,7 +176,9 @@ class AddSongViewController: UIViewController, UITextFieldDelegate, UITableViewD
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = trackTableView.dequeueReusableCell(withIdentifier: "TrackCell", for: indexPath) as! TrackTableViewCell
+        cell.delegate = self
         
+        // MARK: - Cell Properties
         
         cell.track = (tracksList[indexPath.row])
         cell.trackName.text = tracksList[indexPath.row].name
@@ -184,7 +187,8 @@ class AddSongViewController: UIViewController, UITextFieldDelegate, UITableViewD
         if let unwrappedArtwork = tracksList[indexPath.row].artwork {
             cell.artworkImageView.image = unwrappedArtwork
         }
-        cell.delegate = self
+        
+        // MARK: - Cell Selection
         
         if (tracksQueue(hasTrack: (tracksList[indexPath.row]))) {
             cell.addButton.setTitle("✓", for: .normal)

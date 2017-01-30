@@ -3,7 +3,7 @@
 //  Party
 //
 //  Created by Matthew on 2016-11-14.
-//  Copyright © 2016 Ali Siddiqui.MatthewPaletta. All rights reserved.
+//  Copyright © 2016 Ali Siddiqui and Matthew Paletta. All rights reserved.
 //
 
 import Foundation
@@ -14,14 +14,17 @@ enum MusicService: String {
 }
 
 class Party: NSObject, NSCoding {
-    weak var delegate: UpdatePartyDelegate?
+    
+    // MARK: - General Variables
+    
     var partyName = String()
     var genres = [String]()
     var musicService = MusicService.spotify
+    weak var delegate: UpdatePartyDelegate?
     
     var tracksQueue = [Track]() {
         didSet {
-            self.delegate?.updateEveryonesTableView()
+            delegate?.updateEveryonesTableView()
         }
     }
     var tracksFromPeers = [Track]()
@@ -35,23 +38,17 @@ class Party: NSObject, NSCoding {
         
     }
     
-    // Encode
+    // MARK: - NSCoding
+    
     func encode(with aCoder: NSCoder) {
-        print("ENCODING")
         if let unwrappedDelegate = self.delegate {
             aCoder.encode(unwrappedDelegate, forKey: "delegate")
         }
-        print("1")
         aCoder.encode(partyName, forKey: "partyName")
-        print("2")
         aCoder.encode(genres, forKey: "genres")
-        print("3")
         aCoder.encode(musicService.rawValue, forKey: "musicService")
-        print("4")
-        aCoder.encode(Party.idOfTracks(tracksQueue), forKey: "tracksQueue")
-        print("5")
-        aCoder.encode(Party.idOfTracks(tracksFromPeers), forKey: "tracksFromPeers")
-        print("6")
+        aCoder.encode(Track.idOfTracks(tracksQueue), forKey: "tracksQueue")
+        aCoder.encode(Track.idOfTracks(tracksFromPeers), forKey: "tracksFromPeers")
         aCoder.encode(isSorted, forKey: "isSorted")
         aCoder.encode(numPeople, forKey: "numPeople")
         
@@ -62,7 +59,6 @@ class Party: NSObject, NSCoding {
         aCoder.encode(isLocked, forKey: "isLocked")
     }
     
-    // Decode
     required init(coder aDecoder: NSCoder) {
         super.init()
         if let unwrappedDelegate = aDecoder.decodeObject(forKey: "delegate") as? UpdatePartyDelegate {
@@ -74,21 +70,14 @@ class Party: NSObject, NSCoding {
         self.musicService = MusicService(rawValue: (aDecoder.decodeObject(forKey: "musicService") as? String)!)!
         self.delegate?.addTracksFromPeer(withTracks: (aDecoder.decodeObject(forKey: "tracksQueue") as? [String])!)
         self.delegate?.addTracksFromPeer(withTracks: (aDecoder.decodeObject(forKey: "tracksFromPeers") as? [String])!)
-        //self.isSorted = (aDecoder.decodeObject(forKey: "isSorted") as? Bool)!
-        //self.numPeople = (aDecoder.decodeObject(forKey: "numPeople") as? Int)!
+        self.isSorted = (aDecoder.decodeObject(forKey: "isSorted") as? Bool)!
+        self.numPeople = (aDecoder.decodeObject(forKey: "numPeople") as? Int)!
         
         if let password = aDecoder.decodeObject(forKey: "password") as? String {
             self.password = password
         }
         
-        //self.isLocked = (aDecoder.decodeObject(forKey: "isLocked") as? Bool)!
+        self.isLocked = (aDecoder.decodeObject(forKey: "isLocked") as? Bool)!
     }
-    
-    static func idOfTracks(_ tracks: [Track]) -> [String] {
-        var result = [String]()
-        for track in tracks {
-            result.append(track.id)
-        }
-        return result
-    }
+
 }

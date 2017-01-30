@@ -12,18 +12,11 @@ class InitialSetupViewController: UIViewController {
     
     @IBOutlet weak var backgroundImageView: UIImageView!
     
+    // MARK: - Lifecycle
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         blurBackgroundImageView()
-    }
-    
-    func blurBackgroundImageView() {
-        let blurEffect: UIBlurEffect = UIBlurEffect(style: UIBlurEffectStyle.dark)
-        
-        let blurView = UIVisualEffectView(effect: blurEffect)
-        blurView.frame = backgroundImageView.bounds
-        blurView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
-        backgroundImageView.addSubview(blurView)
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -40,17 +33,25 @@ class InitialSetupViewController: UIViewController {
         }
     }
     
+    // MARK: - Functions
+    
+    func blurBackgroundImageView() {
+        let blurEffect: UIBlurEffect = UIBlurEffect(style: UIBlurEffectStyle.dark)
+        
+        let blurView = UIVisualEffectView(effect: blurEffect)
+        blurView.frame = backgroundImageView.bounds
+        blurView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
+        backgroundImageView.addSubview(blurView)
+    }
+    
+    // MARK: - Navigation
+    
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         let backItem = UIBarButtonItem()
         backItem.title = ""
         navigationItem.backBarButtonItem = backItem
         self.navigationController?.navigationBar.tintColor = UIColor.white;
         self.navigationController?.navigationBar.titleTextAttributes = [NSForegroundColorAttributeName: UIColor.white, NSFontAttributeName: UIFont(name: "Helvetica", size: 20)!]
-    }
-    
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
     }
 }
 

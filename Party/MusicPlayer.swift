@@ -3,7 +3,7 @@
 //  Party
 //
 //  Created by Ali Siddiqui on 1/20/17.
-//  Copyright © 2017 Ali Siddiqui.MatthewPaletta. All rights reserved.
+//  Copyright © 2017 Ali Siddiqui and Matthew Paletta. All rights reserved.
 //
 
 import Foundation
@@ -11,23 +11,33 @@ import StoreKit
 import MediaPlayer
 
 class MusicPlayer: NSObject {
+    
+    // MARK: - Apple Music Variables
+    
     private let serviceController = SKCloudServiceController()
     let appleMusicPlayer = MPMusicPlayerController.applicationMusicPlayer()
+    
+    // MARK: - Spotify Variables
+    
     var spotifyPlayer = SPTAudioStreamingController.sharedInstance() {
         didSet {
             initializeCommandCenter()
         }
     }
-    let commandCenter = MPRemoteCommandCenter.shared()
     
+    // MARK: - General Variables
+    
+    let commandCenter = MPRemoteCommandCenter.shared()
     var party = Party()
+    
+    // MARK: - Apple Music Functions
     
     func hasCapabilities() {
         serviceController.requestCapabilities{ (capability, error) in
             if capability.contains(.musicCatalogPlayback) || capability.contains(.addToCloudMusicLibrary) {
-                print("Has capabilities")
+                print("Has Apple Music capabilities")
             } else {
-                print("Doesn't have capabilities")
+                print("Doesn't have Apple Music capabilities")
             }
         }
     }
@@ -37,20 +47,30 @@ class MusicPlayer: NSObject {
         SKCloudServiceController.requestAuthorization { (status) in
             switch status {
             case .authorized:
-                print("Authorized")
+                print("Apple Music authorized")
                 self.appleMusicPlayer.beginGeneratingPlaybackNotifications()
                 self.initializeCommandCenter()
             default:
-                print("Not authorized")
+                print("Apple Music failed to authorize")
             }
             
         }
     }
     
+    func safeToPlayNextTrack() -> Bool {
+        return appleMusicPlayer.playbackState == .stopped && appleMusicPlayer.nowPlayingItem == nil
+    }
+    
+    // MARK: - General Functions
+    
     func initializeCommandCenter() {
         commandCenter.pauseCommand.isEnabled = true
         commandCenter.playCommand.isEnabled = true
         
+        setupControlEvents()
+    }
+    
+    func setupControlEvents() {
         UIApplication.shared.beginReceivingRemoteControlEvents()
         
         commandCenter.pauseCommand.addTarget { (commandEvent) -> MPRemoteCommandHandlerStatus in
@@ -64,30 +84,39 @@ class MusicPlayer: NSObject {
         }
     }
     
+    // Improve - hard fails here randomly
+    func isPaused() -> Bool {
+        return party.musicService == .appleMusic ? appleMusicPlayer.playbackState == .paused : spotifyPlayer?.playbackState.isPlaying == false
+    }
+    
+    // MARK: - Playback
+    
     func modifyQueue(withTracks tracks: [Track]) {
-        if party.musicService == .appleMusic {
-            if tracks.count != 0 {
-                let ids = [tracks[0].id]
-                appleMusicPlayer.setQueueWithStoreIDs(ids)
-                playTrack()
-            } else {
-                appleMusicPlayer.setQueueWithStoreIDs([])
-                appleMusicPlayer.stop()
-            }
+        if self.party.musicService == .appleMusic {
+            self.modifyAppleMusicQueue(withTrack: tracks)
         } else {
-            if tracks.count != 0 {
-                try? AVAudioSession.sharedInstance().setActive(true)
-                spotifyPlayer?.playSpotifyURI("spotify:track:" + tracks[0].id, startingWith: 0, startingWithPosition: 0, callback: nil)
-                //spotifyPlayer?.queueSpotifyURI("spotify:track:" + tracks[0].id, callback: nil)
-                //playTrack()
-            } else {
-                spotifyPlayer?.skipNext(nil)
-            }
+            self.modifySpotifyQueue(withTrack: tracks)
         }
     }
     
-    func safeToPlayNextTrack() -> Bool {
-        return appleMusicPlayer.playbackState == .stopped && appleMusicPlayer.nowPlayingItem == nil
+    func modifyAppleMusicQueue(withTrack tracks: [Track]) {
+        if !tracks.isEmpty {
+            let id = [tracks[0].id]
+            appleMusicPlayer.setQueueWithStoreIDs(id)
+            playTrack()
+        } else {
+            appleMusicPlayer.setQueueWithStoreIDs([])
+            appleMusicPlayer.stop()
+        }
+    }
+    
+    func modifySpotifyQueue(withTrack tracks: [Track]) {
+        if !tracks.isEmpty {
+            try? AVAudioSession.sharedInstance().setActive(true)
+            spotifyPlayer?.playSpotifyURI("spotify:track:" + tracks[0].id, startingWith: 0, startingWithPosition: 0, callback: nil)
+        } else {
+            spotifyPlayer?.skipNext(nil)
+        }
     }
     
     @objc func playTrack() {
@@ -106,11 +135,6 @@ class MusicPlayer: NSObject {
         } else {
             spotifyPlayer?.setIsPlaying(false, callback: nil)
         }
-    }
-    
-    // Improve - hard fails here randomly
-    func isPaused() -> Bool {
-        return party.musicService == .appleMusic ? appleMusicPlayer.playbackState == .paused : spotifyPlayer?.playbackState.isPlaying == false
     }
     
 }

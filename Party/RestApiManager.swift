@@ -3,7 +3,7 @@
 //  Party
 //
 //  Created by Ali Siddiqui on 1/19/17.
-//  Copyright © 2017 Ali Siddiqui.MatthewPaletta. All rights reserved.
+//  Copyright © 2017 Ali Siddiqui and Matthew Paletta. All rights reserved.
 //
 
 import Foundation
@@ -12,25 +12,30 @@ import SwiftyJSON
 
 class RestApiManager {
     
+    // Apple Music Variables
     private var appleTracksUrl = "https://itunes.apple.com/search?media=music&term="
     private let genresUrl = "https://itunes.apple.com/WebObjects/MZStoreServices.woa/ws/genres?id=34"
     private let serviceController = SKCloudServiceController()
     private var storefrontIdentifierFound = String()
     
+    // Spotify Variables
     private var spotifyTracksUrl = "https://api.spotify.com/v1/"
     
+    // General Variables
     var tracksList = [Track]()
     var genresList = [String]()
     let dispatchGroup = DispatchGroup()
     let dispatchGroupForStorefrontFetch = DispatchGroup()
     let dispatchGroupForGenreFetch = DispatchGroup()
     
+    // MARK: - Apple Music
     
     func makeHTTPRequestToApple(withString string: String) {
         dispatchGroup.enter()
         
         DispatchQueue.global(qos: .userInitiated).async {
             
+            // Get storefront identifer to ensure tracks returned are playable by the user
             if self.storefrontIdentifierFound.isEmpty {
                 self.dispatchGroupForStorefrontFetch.enter()
                 self.fetchStorefrontIdentifier()
@@ -39,7 +44,7 @@ class RestApiManager {
             
             let requestURL = URL(string: self.appleTracksUrl + string.replacingOccurrences(of: " ", with: "+") + "&s=" + self.storefrontIdentifierFound)
             
-            URLSession.shared.dataTask(with: requestURL!) { (data, response, error) in
+            let task = URLSession.shared.dataTask(with: requestURL!) { (data, response, error) in
                 if let statusCode = (response as? HTTPURLResponse)?.statusCode {
                     if statusCode == 200 {
                         let json = JSON(data: data!)
@@ -48,7 +53,9 @@ class RestApiManager {
                 }
                 
                 self.dispatchGroup.leave()
-            }.resume()
+            }
+            
+            task.resume()
         }
         
     }
@@ -81,6 +88,8 @@ class RestApiManager {
             tracksList.append(newTrack)
         }
     }
+    
+    // MARK: - Apple Music Genres
     
     func requestGenresFromApple() {
         dispatchGroupForGenreFetch.enter()
@@ -120,13 +129,15 @@ class RestApiManager {
         
     }
     
+    // MARK: - Spotify
+    
     func makeHTTPRequestToSpotify(withString string: String) {
         dispatchGroup.enter()
         
         DispatchQueue.global(qos: .userInitiated).async {
             let requestURL = URL(string: self.spotifyTracksUrl + "search?q=" + string.replacingOccurrences(of: " ", with: "+") + "&type=track")
             
-            URLSession.shared.dataTask(with: requestURL!) { (data, response, error) in
+            let task = URLSession.shared.dataTask(with: requestURL!) { (data, response, error) in
                 if let statusCode = (response as? HTTPURLResponse)?.statusCode {
                     if statusCode == 200 {
                         let json = JSON(data: data!)
@@ -134,7 +145,9 @@ class RestApiManager {
                     }
                 }
                 self.dispatchGroup.leave()
-            }.resume()
+            }
+                
+            task.resume()
         }
     }
     
@@ -161,7 +174,6 @@ class RestApiManager {
                             newTrack.lowResArtworkURL = images["url"].stringValue
                             newTrack.artwork = fetchImage(fromURL: newTrack.lowResArtworkURL)
                         }
-                        
                     }
                     
                     tracksList.append(newTrack)
@@ -188,7 +200,7 @@ class RestApiManager {
         DispatchQueue.global(qos: .userInitiated).async {
             let requestURL = URL(string: self.spotifyTracksUrl + "tracks/" + id)
             
-            URLSession.shared.dataTask(with: requestURL!) { (data, response, error) in
+            let task = URLSession.shared.dataTask(with: requestURL!) { (data, response, error) in
                 if let statusCode = (response as? HTTPURLResponse)?.statusCode {
                     if statusCode == 200 {
                         let json = JSON(data: data!)
@@ -196,7 +208,9 @@ class RestApiManager {
                     }
                 }
                 self.dispatchGroup.leave()
-            }.resume()
+            }
+                
+            task.resume()
         }
     }
     
