@@ -25,8 +25,12 @@ class NetworkServiceManager: NSObject {
     // MARK: - Lifecycle
     
     init(_ isHost: Bool) {
+        let UUID = UIDevice.current.identifierForVendor!.uuidString
+        
         // Broadcast as the party name or the device name if not applicable
         myPeerId = MCPeerID(displayName: !partyName.isEmpty ? partyName : UIDevice.current.name)
+        
+        
         
         let infoAboutHost = ["isHost": isHost.description]
         print("Delegate info: \(isHost)")
