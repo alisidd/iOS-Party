@@ -84,28 +84,40 @@ class PartyViewController: UIViewController, UITableViewDataSource, UITableViewD
             self.tracksListManager.sendTracks(tracksIDString)
         }
     }
+    var i = 0
     
     func addTracksFromPeer(withTracks tracks: [String]) {
+        let API = RestApiManager()
+        
         DispatchQueue.global(qos: .userInteractive).async {
-            for trackID in tracks {
-                self.APIManager.makeHTTPRequestToSpotifyForSingleTrack(withID: trackID)
-                self.APIManager.dispatchGroup.wait()
+            
+            
+            for track in tracks {
+                print("Queue Before \(self.i) \(track)")
             }
             
-            if self.isHost {
-                self.party.tracksQueue.append(contentsOf: self.APIManager.tracksList)
+            self.i+=1
+            
+            for trackID in tracks {
                 
-                if self.party.tracksQueue.count == self.APIManager.tracksList.count {
+                API.makeHTTPRequestToSpotifyForSingleTrack(withID: trackID)
+            }
+            API.dispatchGroup.wait()
+            
+            if self.isHost {
+                self.party.tracksQueue.append(contentsOf: API.tracksList)
+                
+                if self.party.tracksQueue.count == API.tracksList.count {
                     self.musicPlayer.modifyQueue(withTracks: self.party.tracksQueue)
                 }
             } else {
-                self.party.tracksQueue = self.APIManager.tracksList
+                self.party.tracksQueue = API.tracksList
             }
             
             for track in self.party.tracksQueue {
-                print("Queue \(track.name)")
+                print("Queue \(self.i) \(track.name)")
             }
-            self.APIManager.tracksList.removeAll()
+            API.tracksList.removeAll()
         }
     }
     
