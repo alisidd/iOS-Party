@@ -77,11 +77,16 @@ class PartyViewController: UIViewController, UITableViewDataSource, UITableViewD
             party.tracksFromPeers.removeAll()
         }
     }
+    var i = 0
     
     func sendTracksToPeers(forTracks tracks: [Track]) {
         let tracksIDString = Track.idOfTracks(tracks)
         if !tracksIDString.isEmpty {
-            self.tracksListManager.sendTracks(tracksIDString)
+            tracksListManager.sendTracks(tracksIDString)
+            for track in self.party.tracksQueue {
+                print("Queue \(i) \(track.name)")
+            }
+            i += 1
         }
     }
     
@@ -279,10 +284,6 @@ class PartyViewController: UIViewController, UITableViewDataSource, UITableViewD
             musicPlayer.modifyQueue(withTracks: party.tracksQueue)
             tracksTableView.reloadData()
         }
-    }
-    
-    func nowPlayingItemChanged() {
-        print(musicPlayer.appleMusicPlayer.nowPlayingItem?.playbackDuration ?? "not found")
     }
     
     func longPressGestureRecognized(gestureRecognizer: UIGestureRecognizer) {
