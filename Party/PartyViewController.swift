@@ -287,8 +287,8 @@ class PartyViewController: UIViewController, UITableViewDataSource, UITableViewD
     }
     
     func removeFromOthersQueue(forTrack track: Track) {
-        party.tracksQueue[0].id += ":/?r"
-        sendTracksToPeers(forTracks: [party.tracksQueue[0]])
+        track.id += ":/?r"
+        sendTracksToPeers(forTracks: [track])
     }
     
     // MARK: - Callbacks
@@ -448,8 +448,7 @@ class PartyViewController: UIViewController, UITableViewDataSource, UITableViewD
         for trackInQueue in party.tracksQueue {
             if trackInQueue.id == track.id {
                 party.tracksQueue.remove(at: party.tracksQueue.index(of: trackInQueue)!)
-                
-                removeFromOthersQueue(forTrack: trackInQueue)
+                removeFromOthersQueue(forTrack: track)
             }
         }
     }
