@@ -90,7 +90,6 @@ class PartyViewController: UIViewController, UITableViewDataSource, UITableViewD
         APIManager.latestRequest = tracks
         
         DispatchQueue.global(qos: .userInteractive).async {
-            
             let API = RestApiManager()
             
             for trackID in tracks {
@@ -100,6 +99,7 @@ class PartyViewController: UIViewController, UITableViewDataSource, UITableViewD
             
             if self.APIManager.latestRequest! == tracks {
                 if self.isHost {
+                    self.party.tracksQueue.append(contentsOf: API.tracksList)
                     if self.party.tracksQueue.count == API.tracksList.count {
                         self.musicPlayer.modifyQueue(withTracks: self.party.tracksQueue)
                     }
@@ -277,6 +277,7 @@ class PartyViewController: UIViewController, UITableViewDataSource, UITableViewD
             if personalQueue.contains(party.tracksQueue[0]) {
                 personalQueue.remove(at: personalQueue.index(of: party.tracksQueue[0])!)
             }
+            removeFromOthersQueue(forTrack: party.tracksQueue[0])
             party.tracksQueue.removeFirst()
             
             DispatchQueue.global(qos: .userInitiated).async {
@@ -285,15 +286,20 @@ class PartyViewController: UIViewController, UITableViewDataSource, UITableViewD
         }
     }
     
+    func removeFromOthersQueue(forTrack track: Track) {
+        party.tracksQueue[0].id += ":/?r"
+        sendTracksToPeers(forTracks: [party.tracksQueue[0]])
+    }
+    
     // MARK: - Callbacks
     
     func playNextTrack() {
-        if party.tracksQueue.count > 1 && musicPlayer.safeToPlayNextTrack() {
+        if musicPlayer.safeToPlayNextTrack() {
             if personalQueue.contains(party.tracksQueue[0]) {
                 personalQueue.remove(at: personalQueue.index(of: party.tracksQueue[0])!)
             }
+            removeFromOthersQueue(forTrack: party.tracksQueue[0])
             print("Removing \(party.tracksQueue.removeFirst().name)")
-            print("Playing \(party.tracksQueue[0].name)")
             musicPlayer.modifyQueue(withTracks: party.tracksQueue)
             tracksTableView.reloadData()
         }
@@ -443,8 +449,7 @@ class PartyViewController: UIViewController, UITableViewDataSource, UITableViewD
             if trackInQueue.id == track.id {
                 party.tracksQueue.remove(at: party.tracksQueue.index(of: trackInQueue)!)
                 
-                trackInQueue.id += ":/?r"
-                sendTracksToPeers(forTracks: [trackInQueue])
+                removeFromOthersQueue(forTrack: trackInQueue)
             }
         }
     }

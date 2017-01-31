@@ -177,12 +177,12 @@ extension NetworkServiceManager : MCSessionDelegate {
     func session(_ session: MCSession, peer peerID: MCPeerID, didChange state: MCSessionState) {
         print("peer \(peerID) didChangeState: \(state.stringValue())")
         delegate?.connectedDevicesChanged(self, connectedDevices: session.connectedPeers.map{$0.displayName})
-        if session.connectedPeers.count > 0 {
-            if state == .connected {
-                print("Calling function to send party info")
-                delegate?.sendPartyInfo(toSession: session)
-            } else if state == .notConnected {
-                sessions.removeValue(forKey: session)
+        if state == .connected {
+            print("Calling function to send party info")
+            delegate?.sendPartyInfo(toSession: session)
+        } else if state == .notConnected {
+            if !delegate!.amHost() {
+               sessions.removeValue(forKey: session)
             }
         }
     }
@@ -204,9 +204,7 @@ extension NetworkServiceManager : MCSessionDelegate {
     }
     
     func session(_ session: MCSession, didReceiveCertificate certificate: [Any]?, fromPeer peerID: MCPeerID, certificateHandler: @escaping (Bool) -> Void) {
-        if certificateHandler != nil {
-            certificateHandler(true)
-        }
+        certificateHandler(true)
     }
     
     func session(_ session: MCSession, didReceive stream: InputStream, withName streamName: String, fromPeer peerID: MCPeerID) {
