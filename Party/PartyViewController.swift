@@ -73,9 +73,6 @@ class PartyViewController: UIViewController, UITableViewDataSource, UITableViewD
             sendTracksToPeers(forTracks: party.tracksQueue)
         } else {
             sendTracksToPeers(forTracks: party.tracksFromPeers)
-            print("Tracks from Peers:")
-            print(party.tracksFromPeers)
-            
             party.tracksFromPeers.removeAll()
         }
     }
@@ -103,9 +100,6 @@ class PartyViewController: UIViewController, UITableViewDataSource, UITableViewD
             
             if self.APIManager.latestRequest! == tracks {
                 if self.isHost {
-                    print("...Appending New Track with number of \(API.tracksList)")
-                    self.party.tracksQueue.append(contentsOf: API.tracksList)
-                    
                     if self.party.tracksQueue.count == API.tracksList.count {
                         self.musicPlayer.modifyQueue(withTracks: self.party.tracksQueue)
                     }
@@ -126,7 +120,6 @@ class PartyViewController: UIViewController, UITableViewDataSource, UITableViewD
     }
     
     func removeTrackFromPeer(withTrack trackID: String) {
-        print("Trying to remove track")
         for trackInQueue in party.tracksQueue {
             if trackInQueue.id == trackID.substring(to: trackID.index(trackID.endIndex, offsetBy: -4)) {
                 party.tracksQueue.remove(at: party.tracksQueue.index(of: trackInQueue)!)
@@ -480,7 +473,7 @@ class PartyViewController: UIViewController, UITableViewDataSource, UITableViewD
     
     func reloadTableIfPlayingTrack() {
         DispatchQueue.main.async {
-            print("Reloading table")
+            print("Reloading table with high res artwork")
             self.tracksTableView.reloadData()
         }
     }

@@ -19,7 +19,7 @@ class NetworkServiceManager: NSObject {
     
     var myPeerId: MCPeerID!
     var partyName = String()
-    var sessions = [MCSession]()
+    var sessions = [MCSession : MCPeerID]()
     weak var delegate : NetworkManagerDelegate?
     
     // MARK: - Lifecycle
@@ -62,7 +62,7 @@ class NetworkServiceManager: NSObject {
             do {
                 let tracksListData = NSKeyedArchiver.archivedData(withRootObject: tracksList)
                 print("Number of active sessions: \(sessions.count)")
-                for session in sessions {
+                for session in sessions.keys {
                     try session.send(tracksListData, toPeers: session.connectedPeers, with: .reliable)
                 }
                 print("Sending Data")
@@ -96,7 +96,7 @@ extension NetworkServiceManager : MCNearbyServiceAdvertiserDelegate {
         
         print("didReceiveInvitationFromPeer \(peerID)")
         
-        for session in sessions {
+        for session in sessions.keys {
             if session.connectedPeers.isEmpty {
                 invitationHandler(true, session)
             }
@@ -116,33 +116,37 @@ extension NetworkServiceManager : MCNearbyServiceBrowserDelegate {
     @available(iOS 7.0, *)
     public func browser(_ browser: MCNearbyServiceBrowser, foundPeer peerID: MCPeerID, withDiscoveryInfo info: [String : String]?) {
         print("foundPeer: \(peerID)")
-        if !(delegate?.amHost() == false && info?["isHost"] == "false") {
+        if !(delegate!.amHost() == false && info?["isHost"] == "false") {
             let newSession = MCSession(peer: myPeerId, securityIdentity: nil, encryptionPreference: MCEncryptionPreference.none)
             newSession.delegate = self
             
             var alreadyFound = false
-            for session in sessions {
+            for session in sessions.keys {
                 // improve: make sure peerid display name is different for very user
                 if session.myPeerID.displayName == peerID.displayName {
                     alreadyFound = true
                 }
             }
             if !alreadyFound {
-                sessions.append(newSession)
+                sessions[newSession] = peerID
             }
-            print("invitePeer: \(peerID)")
-            browser.invitePeer(peerID, to: newSession, withContext: nil, timeout: 10)
+            
+            if delegate!.amHost() {
+                print("invitePeer: \(peerID)")
+                browser.invitePeer(peerID, to: newSession, withContext: nil, timeout: 10)
+            }
+            
         }
         
         
     }
     
     func browser(_ browser: MCNearbyServiceBrowser, lostPeer peerID: MCPeerID) {
-        for session in sessions {
+        for (session, id) in sessions {
             print("Connected Peers: \(session.connectedPeers.count)")
-            if session.connectedPeers.count == 0 {
+            if id == peerID {
                 session.disconnect()
-                sessions.remove(at: sessions.index(of: session)!)
+                sessions.removeValue(forKey: session)
                 print("lostPeer: \(peerID)")
             }
         }
@@ -178,7 +182,7 @@ extension NetworkServiceManager : MCSessionDelegate {
                 print("Calling function to send party info")
                 delegate?.sendPartyInfo(toSession: session)
             } else if state == .notConnected {
-                sessions.remove(at: sessions.index(of: session)!)
+                sessions.removeValue(forKey: session)
             }
         }
     }
@@ -196,6 +200,12 @@ extension NetworkServiceManager : MCSessionDelegate {
                 }
             }
             delegate?.addTracksFromPeer(withTracks: tracksIDList)
+        }
+    }
+    
+    func session(_ session: MCSession, didReceiveCertificate certificate: [Any]?, fromPeer peerID: MCPeerID, certificateHandler: @escaping (Bool) -> Void) {
+        if certificateHandler != nil {
+            certificateHandler(true)
         }
     }
     
