@@ -189,6 +189,12 @@ extension NetworkServiceManager : MCSessionDelegate {
         if let partyName = unarchivedData as? String {
             delegate?.setupParty(withName: partyName)
         } else if let tracksIDList = unarchivedData as? [String] {
+            if !tracksIDList.isEmpty {
+                if tracksIDList[0].hasSuffix(":/?r") {
+                    delegate?.removeTrackFromPeer(withTrack: tracksIDList[0])
+                    return
+                }
+            }
             delegate?.addTracksFromPeer(withTracks: tracksIDList)
         }
     }

@@ -21,7 +21,6 @@ class Track: NSObject {
     var highResArtworkURL = String()
     var highResArtwork: UIImage? {
         didSet {
-            print("Delegate called")
             delegate?.reloadTableIfPlayingTrack()
         }
     }

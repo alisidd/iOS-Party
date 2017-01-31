@@ -16,11 +16,11 @@ protocol NetworkManagerDelegate: class {
     func sendPartyInfo(toSession session: MCSession)
     func setupParty(withName name: String)
     func addTracksFromPeer(withTracks tracks: [String])
+    func removeTrackFromPeer(withTrack track: String)
 }
 
 protocol UpdatePartyDelegate: class {
     func updateEveryonesTableView()
-    //func addTracksFromPeer(withTracks tracks: [String])
 }
 
 protocol UpdateTableDelegate: class {
@@ -73,56 +73,64 @@ class PartyViewController: UIViewController, UITableViewDataSource, UITableViewD
             sendTracksToPeers(forTracks: party.tracksQueue)
         } else {
             sendTracksToPeers(forTracks: party.tracksFromPeers)
+            print("Tracks from Peers:")
             print(party.tracksFromPeers)
+            
             party.tracksFromPeers.removeAll()
         }
     }
-    var i = 0
     
+    // Handles addition and removal of tracks
     func sendTracksToPeers(forTracks tracks: [Track]) {
         let tracksIDString = Track.idOfTracks(tracks)
-        if !tracksIDString.isEmpty {
+        if isHost || (!isHost && !tracks.isEmpty) {
             tracksListManager.sendTracks(tracksIDString)
-            for track in self.party.tracksQueue {
-                print("Queue \(i) \(track.name)")
-            }
-            i += 1
         }
     }
-    var i = 0
     
     func addTracksFromPeer(withTracks tracks: [String]) {
-        let API = RestApiManager()
+        
+        APIManager.latestRequest = tracks
         
         DispatchQueue.global(qos: .userInteractive).async {
             
-            
-            for track in tracks {
-                print("Queue Before \(self.i) \(track)")
-            }
-            
-            self.i+=1
+            let API = RestApiManager()
             
             for trackID in tracks {
-                
                 API.makeHTTPRequestToSpotifyForSingleTrack(withID: trackID)
+                API.dispatchGroup.wait()
             }
-            API.dispatchGroup.wait()
             
-            if self.isHost {
-                self.party.tracksQueue.append(contentsOf: API.tracksList)
-                
-                if self.party.tracksQueue.count == API.tracksList.count {
-                    self.musicPlayer.modifyQueue(withTracks: self.party.tracksQueue)
+            if self.APIManager.latestRequest! == tracks {
+                if self.isHost {
+                    print("...Appending New Track with number of \(API.tracksList)")
+                    self.party.tracksQueue.append(contentsOf: API.tracksList)
+                    
+                    if self.party.tracksQueue.count == API.tracksList.count {
+                        self.musicPlayer.modifyQueue(withTracks: self.party.tracksQueue)
+                    }
+                } else {
+                    self.party.tracksQueue = API.tracksList
+                    for track in self.party.tracksQueue {
+                        if track.highResArtwork == nil {
+                            track.highResArtwork = self.fetchImage(forTrack: track)
+                        }
+                    }
                 }
-            } else {
-                self.party.tracksQueue = API.tracksList
             }
             
-            for track in self.party.tracksQueue {
-                print("Queue \(self.i) \(track.name)")
-            }
+            
+            
             API.tracksList.removeAll()
+        }
+    }
+    
+    func removeTrackFromPeer(withTrack trackID: String) {
+        print("Trying to remove track")
+        for trackInQueue in party.tracksQueue {
+            if trackInQueue.id == trackID.substring(to: trackID.index(trackID.endIndex, offsetBy: -4)) {
+                party.tracksQueue.remove(at: party.tracksQueue.index(of: trackInQueue)!)
+            }
         }
     }
     
@@ -309,10 +317,10 @@ class PartyViewController: UIViewController, UITableViewDataSource, UITableViewD
                 return UIImage(data: data)
             } catch {
                 print("Error trying to get high resolution artwork")
-                return track.artwork
+                return nil
             }
         }
-        return track.artwork
+        return nil
     }
     
     // MARK: - Navigation
@@ -389,6 +397,8 @@ class PartyViewController: UIViewController, UITableViewDataSource, UITableViewD
             let cell = tableView.dequeueReusableCell(withIdentifier: "CurrentlyPlayingTrack") as!CurrentlyPlayingTrackTableViewCell
             if let unwrappedArtwork = party.tracksQueue[indexPath.row].highResArtwork {
                 cell.artwork.image = unwrappedArtwork
+            } else {
+                cell.artwork.image = party.tracksQueue[indexPath.row].artwork
             }
             cell.trackName.text = party.tracksQueue[indexPath.row].name
             cell.artistName.text = party.tracksQueue[indexPath.row].artist
@@ -439,6 +449,9 @@ class PartyViewController: UIViewController, UITableViewDataSource, UITableViewD
         for trackInQueue in party.tracksQueue {
             if trackInQueue.id == track.id {
                 party.tracksQueue.remove(at: party.tracksQueue.index(of: trackInQueue)!)
+                
+                trackInQueue.id += ":/?r"
+                sendTracksToPeers(forTracks: [trackInQueue])
             }
         }
     }

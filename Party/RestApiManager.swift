@@ -24,9 +24,11 @@ class RestApiManager {
     // General Variables
     var tracksList = [Track]()
     var genresList = [String]()
+    
     let dispatchGroup = DispatchGroup()
     let dispatchGroupForStorefrontFetch = DispatchGroup()
     let dispatchGroupForGenreFetch = DispatchGroup()
+    var latestRequest: [String]?
     
     // MARK: - Apple Music
     
@@ -228,7 +230,9 @@ class RestApiManager {
         for images in track["album"]["images"].arrayValue {
             if images["height"].stringValue == "640" {
                 newTrack.highResArtworkURL = images["url"].stringValue
-                newTrack.highResArtwork = fetchImage(fromURL: newTrack.highResArtworkURL)
+                if tracksList.isEmpty {
+                    newTrack.highResArtwork = fetchImage(fromURL: newTrack.highResArtworkURL)
+                }
             }
             if images["height"].stringValue == "64" {
                 newTrack.lowResArtworkURL = images["url"].stringValue
