@@ -96,6 +96,14 @@ extension NetworkServiceManager : MCNearbyServiceAdvertiserDelegate {
         
         print("didReceiveInvitationFromPeer \(peerID)")
         
+        if sessions.isEmpty {
+            let newSession = MCSession(peer: myPeerId, securityIdentity: nil, encryptionPreference: MCEncryptionPreference.none)
+            newSession.delegate = self
+            sessions[newSession] = peerID
+            invitationHandler(true, newSession)
+            return
+        }
+        
         for session in sessions.keys {
             if session.connectedPeers.isEmpty {
                 invitationHandler(true, session)
