@@ -207,7 +207,7 @@ extension NetworkServiceManager : MCSessionDelegate {
                     return
                 }
             }
-            delegate?.addTracksFromPeer(withTracks: tracksIDList)
+            delegate?.addTracks(fromPeer: peerID, withTracks: tracksIDList)
         }
     }
     

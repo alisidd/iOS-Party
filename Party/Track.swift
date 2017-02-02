@@ -9,7 +9,7 @@
 import Foundation
 
 class Track: NSObject {
-    weak var delegate: UpdateTableDelegate?
+    weak var delegate: UpdateCurrentlyPlayingArtworkDelegate?
     var id = String()
     var name = String()
     var artist = String()
@@ -21,7 +21,7 @@ class Track: NSObject {
     var highResArtworkURL = String()
     var highResArtwork: UIImage? {
         didSet {
-            delegate?.reloadTableIfPlayingTrack()
+            delegate?.reloadTableIfPlayingTrack(forTrack: self)
         }
     }
     

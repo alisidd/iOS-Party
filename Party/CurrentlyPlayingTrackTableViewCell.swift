@@ -12,7 +12,7 @@ class CurrentlyPlayingTrackTableViewCell: UITableViewCell {
     
     @IBOutlet weak var artwork: UIImageView! {
         didSet {
-            let blurEffect: UIBlurEffect = UIBlurEffect(style: UIBlurEffectStyle.dark)
+            let blurEffect: UIBlurEffect = UIBlurEffect(style: .dark)
             let blurView = UIVisualEffectView(effect: blurEffect)
             blurView.alpha = 0.6
             blurView.frame = artwork.bounds

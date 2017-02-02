@@ -9,6 +9,7 @@
 import Foundation
 import StoreKit
 import SwiftyJSON
+import MultipeerConnectivity
 
 class RestApiManager {
     
@@ -28,7 +29,7 @@ class RestApiManager {
     let dispatchGroup = DispatchGroup()
     let dispatchGroupForStorefrontFetch = DispatchGroup()
     let dispatchGroupForGenreFetch = DispatchGroup()
-    var latestRequest: [String]?
+    var latestRequest = [MCPeerID: [String]]()
     
     // MARK: - Apple Music
     
@@ -230,9 +231,6 @@ class RestApiManager {
         for images in track["album"]["images"].arrayValue {
             if images["height"].stringValue == "640" {
                 newTrack.highResArtworkURL = images["url"].stringValue
-                if tracksList.isEmpty {
-                    newTrack.highResArtwork = fetchImage(fromURL: newTrack.highResArtworkURL)
-                }
             }
             if images["height"].stringValue == "64" {
                 newTrack.lowResArtworkURL = images["url"].stringValue

@@ -15,7 +15,7 @@ protocol NetworkManagerDelegate: class {
     func amHost() -> Bool
     func sendPartyInfo(toSession session: MCSession)
     func setupParty(withName name: String)
-    func addTracksFromPeer(withTracks tracks: [String])
+    func addTracks(fromPeer peer: MCPeerID, withTracks tracks: [String])
     func removeTrackFromPeer(withTrack track: String)
 }
 
@@ -23,11 +23,11 @@ protocol UpdatePartyDelegate: class {
     func updateEveryonesTableView()
 }
 
-protocol UpdateTableDelegate: class {
-    func reloadTableIfPlayingTrack()
+protocol UpdateCurrentlyPlayingArtworkDelegate: class {
+    func reloadTableIfPlayingTrack(forTrack track: Track)
 }
 
-class PartyViewController: UIViewController, UITableViewDataSource, UITableViewDelegate, SPTAudioStreamingDelegate, SPTAudioStreamingPlaybackDelegate, NetworkManagerDelegate, UpdatePartyDelegate {
+class PartyViewController: UIViewController, UITableViewDataSource, UITableViewDelegate, SPTAudioStreamingDelegate, SPTAudioStreamingPlaybackDelegate, NetworkManagerDelegate, UpdatePartyDelegate, UpdateCurrentlyPlayingArtworkDelegate {
     
     // MARK: - Storyboard Variables
     
@@ -62,11 +62,15 @@ class PartyViewController: UIViewController, UITableViewDataSource, UITableViewD
         initializeMusicPlayer()
     }
     
-    func updateEveryonesTableView() {
+    // MARK: - Modify Queue and Views From Peers
+    
+    internal func updateEveryonesTableView() {
         // Update own table view
         DispatchQueue.main.async {
             self.tracksTableView.reloadData()
         }
+        
+        updateArtworkForCurrentlyPlaying()
         
         // Update peers tableview
         if isHost {
@@ -77,17 +81,32 @@ class PartyViewController: UIViewController, UITableViewDataSource, UITableViewD
         }
     }
     
+    func updateArtworkForCurrentlyPlaying() {
+        if !party.tracksQueue.isEmpty {
+            if party.tracksQueue[0].highResArtwork == nil {
+                let trackToSet = party.tracksQueue[0]
+                DispatchQueue.global(qos: .userInitiated).async {
+                    if !self.party.tracksQueue.isEmpty {
+                        if trackToSet == self.party.tracksQueue[0] {
+                            self.party.tracksQueue[0].highResArtwork = self.fetchImage(forTrack: self.party.tracksQueue[0])
+                        }
+                    }
+                }
+            }
+        }
+    }
+    
     // Handles addition and removal of tracks
-    func sendTracksToPeers(forTracks tracks: [Track]) {
+    private func sendTracksToPeers(forTracks tracks: [Track]) {
         let tracksIDString = Track.idOfTracks(tracks)
         if isHost || (!isHost && !tracks.isEmpty) {
             tracksListManager.sendTracks(tracksIDString)
         }
     }
     
-    func addTracksFromPeer(withTracks tracks: [String]) {
+    internal func addTracks(fromPeer peer: MCPeerID, withTracks tracks: [String]) {
         
-        APIManager.latestRequest = tracks
+        APIManager.latestRequest[peer] = tracks
         
         DispatchQueue.global(qos: .userInteractive).async {
             let API = RestApiManager()
@@ -97,35 +116,49 @@ class PartyViewController: UIViewController, UITableViewDataSource, UITableViewD
                 API.dispatchGroup.wait()
             }
             
-            if self.APIManager.latestRequest! == tracks {
+            if let requestTracks = self.APIManager.latestRequest[peer], requestTracks == tracks { // check if this improvement works
                 if self.isHost {
                     self.party.tracksQueue.append(contentsOf: API.tracksList)
+                    self.setTracksDelegate()
                     if self.party.tracksQueue.count == API.tracksList.count {
                         self.musicPlayer.modifyQueue(withTracks: self.party.tracksQueue)
                     }
                 } else {
-                    self.party.tracksQueue = API.tracksList
-                    for track in self.party.tracksQueue {
-                        if track.highResArtwork == nil {
-                            track.highResArtwork = self.fetchImage(forTrack: track)
+                    // fetch high res artwork for host and nonhost only for currently playing track and then later for all other tracks
+                    var isOrdered = true
+                    for i in 0..<self.party.tracksQueue.count {
+                        if !(self.party.tracksQueue[i].id == API.tracksList[i].id) {
+                           isOrdered = false
                         }
+                    }
+                    
+                    if isOrdered {
+                        self.party.tracksQueue.append(contentsOf: API.tracksList[self.party.tracksQueue.count..<API.tracksList.count])
+                    } else {
+                        self.party.tracksQueue = API.tracksList
                     }
                 }
             }
             
-            
-            
             API.tracksList.removeAll()
+            self.APIManager.latestRequest.removeValue(forKey: peer)
         }
     }
     
-    func removeTrackFromPeer(withTrack trackID: String) {
+    private func removeFromOthersQueue(forTrack track: Track) {
+        track.id += ":/?r"
+        sendTracksToPeers(forTracks: [track])
+    }
+    
+    internal func removeTrackFromPeer(withTrack trackID: String) {
         for trackInQueue in party.tracksQueue {
             if trackInQueue.id == trackID.substring(to: trackID.index(trackID.endIndex, offsetBy: -4)) {
                 party.tracksQueue.remove(at: party.tracksQueue.index(of: trackInQueue)!)
             }
         }
     }
+    
+    // MARK: - General Functions
     
     private func blurBackgroundImageView() {
         let blurEffect: UIBlurEffect = UIBlurEffect(style: UIBlurEffectStyle.dark)
@@ -150,7 +183,13 @@ class PartyViewController: UIViewController, UITableViewDataSource, UITableViewD
         party.delegate = self
     }
     
-    func adjustViews() {
+    private func setTracksDelegate() {
+        for track in party.tracksQueue {
+            track.delegate = self
+        }
+    }
+    
+    private func adjustViews() {
         // Appearance of table view
         tracksTableView.backgroundColor = .clear
         tracksTableView.separatorColor  = UIColor(colorLiteralRed: 15/255, green: 15/255, blue: 15/255, alpha: 1)
@@ -163,7 +202,7 @@ class PartyViewController: UIViewController, UITableViewDataSource, UITableViewD
         tracksTableView.addGestureRecognizer(recognizer)
     }
     
-    func initializeMusicPlayer() {
+    private func initializeMusicPlayer() {
         musicPlayer.party = party
         
         if party.musicService == .appleMusic {
@@ -195,7 +234,7 @@ class PartyViewController: UIViewController, UITableViewDataSource, UITableViewD
     
     // MARK: - Spotify Playback
     
-    func startAuthenticationFlow(_ authentication: SPTAuth) {
+    private func startAuthenticationFlow(_ authentication: SPTAuth) {
         let authURL = authentication.spotifyWebAuthenticationURL()
        
         NotificationCenter.default.addObserver(self, selector: #selector(PartyViewController.spotifyLogin), name: NSNotification.Name(rawValue: "Successful Login"), object: nil)
@@ -205,7 +244,7 @@ class PartyViewController: UIViewController, UITableViewDataSource, UITableViewD
         present(authViewController, animated: true)*/
     }
     
-    func spotifyLogin() {
+    @objc private func spotifyLogin() {
         let userDefaults = UserDefaults.standard
         
         if let sessionDataObj = userDefaults.object(forKey: "SpotifySession") {
@@ -223,26 +262,26 @@ class PartyViewController: UIViewController, UITableViewDataSource, UITableViewD
         }
     }
     
-    func playUsingSession(session: SPTSession) {
+    private func playUsingSession(session: SPTSession) {
         musicPlayer.spotifyPlayer?.login(withAccessToken: session.accessToken)
     }
     
-    func audioStreamingDidLogin(_ audioStreaming: SPTAudioStreamingController!) {
+    internal func audioStreamingDidLogin(_ audioStreaming: SPTAudioStreamingController!) {
         // Make sure it's a premium account
     }
     
-    func audioStreaming(_ audioStreaming: SPTAudioStreamingController!, didChangePlaybackStatus isPlaying: Bool) {
+    internal func audioStreaming(_ audioStreaming: SPTAudioStreamingController!, didChangePlaybackStatus isPlaying: Bool) {
         if isPlaying {
             activateAudioSession()
         }
     }
     
-    func activateAudioSession() {
+    private func activateAudioSession() {
         try? AVAudioSession.sharedInstance().setCategory(AVAudioSessionCategoryPlayback)
         try? AVAudioSession.sharedInstance().setActive(true)
     }
     
-    func audioStreaming(_ audioStreaming: SPTAudioStreamingController!, didStopPlayingTrack trackUri: String!) {
+    internal func audioStreaming(_ audioStreaming: SPTAudioStreamingController!, didStopPlayingTrack trackUri: String!) {
         playNextTrack()
     }
     
@@ -286,14 +325,9 @@ class PartyViewController: UIViewController, UITableViewDataSource, UITableViewD
         }
     }
     
-    func removeFromOthersQueue(forTrack track: Track) {
-        track.id += ":/?r"
-        sendTracksToPeers(forTracks: [track])
-    }
-    
     // MARK: - Callbacks
     
-    func playNextTrack() {
+    @objc private func playNextTrack() {
         if musicPlayer.safeToPlayNextTrack() {
             if personalQueue.contains(party.tracksQueue[0]) {
                 personalQueue.remove(at: personalQueue.index(of: party.tracksQueue[0])!)
@@ -309,7 +343,7 @@ class PartyViewController: UIViewController, UITableViewDataSource, UITableViewD
         let recognizer = gestureRecognizer as! UILongPressGestureRecognizer
     }
     
-    func fetchImage(forTrack track: Track) -> UIImage? {
+    private func fetchImage(forTrack track: Track) -> UIImage? {
         if let url = URL(string: track.highResArtworkURL) {
             do {
                 let data = try Data(contentsOf: url)
@@ -473,34 +507,38 @@ class PartyViewController: UIViewController, UITableViewDataSource, UITableViewD
         return indexPath.row == 0 ? 350 : 80
     }
     
-    // Mark: - UpdateTable
+    // MARK: UpdateTableDelegate
     
-    func reloadTableIfPlayingTrack() {
+    internal func reloadTableIfPlayingTrack(forTrack track: Track) {
         DispatchQueue.main.async {
             print("Reloading table with high res artwork")
-            self.tracksTableView.reloadData()
+            if self.party.tracksQueue.count > 0 {
+                if self.party.tracksQueue[0].id == track.id {
+                    self.tracksTableView.reloadData()
+                }
+            }
         }
     }
     
     // MARK: NetworkManagerDelegate
     
-    func connectedDevicesChanged(_ manager: NetworkServiceManager, connectedDevices: [String]) {
+    internal func connectedDevicesChanged(_ manager: NetworkServiceManager, connectedDevices: [String]) {
         OperationQueue.main.addOperation { () -> Void in
             print("Connections: \(connectedDevices)")
         }
     }
     
-    func amHost() -> Bool {
+    internal func amHost() -> Bool {
         return isHost
     }
     
-    func sendPartyInfo(toSession session: MCSession) {
+    internal func sendPartyInfo(toSession session: MCSession) {
         if isHost {
             tracksListManager.sendPartyInfo(withTracks: party.tracksQueue, withName: party.partyName, toSession: session)
         }
     }
     
-    func setupParty(withName name: String) {
+    internal func setupParty(withName name: String) {
         print("Setting up party using party info received")
         party.partyName = name
         DispatchQueue.main.async {
