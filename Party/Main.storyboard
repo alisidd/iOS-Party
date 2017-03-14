@@ -440,7 +440,7 @@
                             <constraint firstItem="6fV-jh-Izh" firstAttribute="top" secondItem="snT-CL-AJC" secondAttribute="bottom" id="wax-WP-N9G"/>
                         </constraints>
                     </view>
-                    <navigationItem key="navigationItem" id="SMw-9E-B5m">
+                    <navigationItem key="navigationItem" title="Add Tracks" id="SMw-9E-B5m">
                         <barButtonItem key="rightBarButtonItem" systemItem="done" id="j1K-S4-deY">
                             <color key="tintColor" red="1" green="0.4344842136" blue="0.005222451407" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                             <connections>
@@ -614,74 +614,6 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="aZk-rR-iJs" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="2325.5999999999999" y="-349.47526236881561"/>
-        </scene>
-        <!--Genre Picking View Controller-->
-        <scene sceneID="Fkv-Z8-Tuq">
-            <objects>
-                <viewController id="UcH-Nh-NgQ" customClass="GenrePickingViewController" customModule="Party" customModuleProvider="target" sceneMemberID="viewController">
-                    <layoutGuides>
-                        <viewControllerLayoutGuide type="top" id="quP-lY-vtB"/>
-                        <viewControllerLayoutGuide type="bottom" id="YIK-tv-oLN"/>
-                    </layoutGuides>
-                    <view key="view" contentMode="scaleToFill" id="iJP-qS-IFa">
-                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
-                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <subviews>
-                            <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="uKo-UG-cxb">
-                                <rect key="frame" x="0.0" y="0.0" width="375" height="587"/>
-                                <color key="backgroundColor" red="0.10980392156862745" green="0.10980392156862745" blue="0.10980392156862745" alpha="1" colorSpace="calibratedRGB"/>
-                                <color key="sectionIndexBackgroundColor" red="0.1450980392" green="0.1450980392" blue="0.1450980392" alpha="1" colorSpace="calibratedRGB"/>
-                                <prototypes>
-                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="none" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="genre" textLabel="UUu-l6-2HI" style="IBUITableViewCellStyleDefault" id="KFQ-Il-mia">
-                                        <rect key="frame" x="0.0" y="28" width="375" height="44"/>
-                                        <autoresizingMask key="autoresizingMask"/>
-                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="KFQ-Il-mia" id="aRa-4o-k7j">
-                                            <rect key="frame" x="0.0" y="0.0" width="375" height="43"/>
-                                            <autoresizingMask key="autoresizingMask"/>
-                                            <subviews>
-                                                <label opaque="NO" multipleTouchEnabled="YES" contentMode="left" text="Title" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="UUu-l6-2HI">
-                                                    <rect key="frame" x="15" y="0.0" width="345" height="43"/>
-                                                    <autoresizingMask key="autoresizingMask"/>
-                                                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                                    <nil key="textColor"/>
-                                                    <nil key="highlightedColor"/>
-                                                </label>
-                                            </subviews>
-                                        </tableViewCellContentView>
-                                    </tableViewCell>
-                                </prototypes>
-                            </tableView>
-                            <button contentMode="scaleToFill" semanticContentAttribute="forceRightToLeft" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="UYt-nF-T2K" customClass="setupButton" customModule="Party" customModuleProvider="target">
-                                <rect key="frame" x="0.0" y="587" width="375" height="80"/>
-                                <color key="backgroundColor" red="1" green="0.4344842136" blue="0.005222451407" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                <fontDescription key="fontDescription" name="Helvetica-Light" family="Helvetica" pointSize="22"/>
-                                <state key="normal" title="Done">
-                                    <color key="titleColor" red="0.1450980392" green="0.1450980392" blue="0.1450980392" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                </state>
-                                <connections>
-                                    <action selector="goBack:" destination="UcH-Nh-NgQ" eventType="touchUpInside" id="Drf-0n-aWK"/>
-                                </connections>
-                            </button>
-                        </subviews>
-                        <color key="backgroundColor" red="0.1450980392" green="0.1450980392" blue="0.1450980392" alpha="1" colorSpace="calibratedRGB"/>
-                        <constraints>
-                            <constraint firstItem="UYt-nF-T2K" firstAttribute="bottom" secondItem="YIK-tv-oLN" secondAttribute="top" id="2qs-Pq-axN"/>
-                            <constraint firstItem="UYt-nF-T2K" firstAttribute="leading" secondItem="iJP-qS-IFa" secondAttribute="leading" id="4WF-aY-ata"/>
-                            <constraint firstItem="UYt-nF-T2K" firstAttribute="top" secondItem="uKo-UG-cxb" secondAttribute="bottom" id="55c-ss-JUJ"/>
-                            <constraint firstAttribute="trailing" secondItem="UYt-nF-T2K" secondAttribute="trailing" id="Bfl-yY-X76"/>
-                            <constraint firstItem="uKo-UG-cxb" firstAttribute="leading" secondItem="UYt-nF-T2K" secondAttribute="leading" id="OXm-ms-GjZ"/>
-                            <constraint firstItem="UYt-nF-T2K" firstAttribute="top" secondItem="quP-lY-vtB" secondAttribute="bottom" constant="567" id="mUX-Vc-0LE"/>
-                            <constraint firstItem="uKo-UG-cxb" firstAttribute="trailing" secondItem="UYt-nF-T2K" secondAttribute="trailing" id="mmU-9D-JuF"/>
-                            <constraint firstItem="uKo-UG-cxb" firstAttribute="top" secondItem="iJP-qS-IFa" secondAttribute="top" id="vaY-L9-8CW"/>
-                        </constraints>
-                    </view>
-                    <connections>
-                        <outlet property="genresTableView" destination="uKo-UG-cxb" id="JAz-qu-ye5"/>
-                    </connections>
-                </viewController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="rcE-ww-Dsd" userLabel="First Responder" sceneMemberID="firstResponder"/>
-            </objects>
-            <point key="canvasLocation" x="3265" y="-638"/>
         </scene>
         <!--Navigation Controller-->
         <scene sceneID="XwQ-1h-6q4">

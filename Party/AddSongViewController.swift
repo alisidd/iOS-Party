@@ -44,9 +44,10 @@ class AddSongViewController: UIViewController, UITextFieldDelegate, UITableViewD
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        blurBackgroundImageView()
+        backgroundImageView.addBlur(withAlpha: 1)
         setDelegates()
         initializeActivityIndicator()
+        setupNavigationBar()
         adjustView()
     }
     
@@ -59,15 +60,6 @@ class AddSongViewController: UIViewController, UITextFieldDelegate, UITableViewD
     
     // MARK: - Functions
     
-    func blurBackgroundImageView() {
-        let blurEffect: UIBlurEffect = UIBlurEffect(style: UIBlurEffectStyle.dark)
-        
-        let blurView = UIVisualEffectView(effect: blurEffect)
-        blurView.frame = backgroundImageView.bounds
-        blurView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
-        backgroundImageView.addSubview(blurView)
-    }
-    
     func setDelegates() {
         //searchTracksField.delegate = self
         trackTableView.delegate   = self
@@ -79,6 +71,10 @@ class AddSongViewController: UIViewController, UITextFieldDelegate, UITableViewD
         indicator.activityIndicatorViewStyle = UIActivityIndicatorViewStyle.whiteLarge
         indicator.center = self.view.center
         view.addSubview(indicator)
+    }
+    
+    func setupNavigationBar() {
+        navigationController?.navigationBar.titleTextAttributes = [NSFontAttributeName : UIFont(name: "Helvetica Light", size: 20)!, NSForegroundColorAttributeName: UIColor.white]
     }
     
     func adjustView() {

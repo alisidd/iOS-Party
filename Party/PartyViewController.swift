@@ -54,7 +54,7 @@ class PartyViewController: UIViewController, UITableViewDataSource, UITableViewD
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        blurBackgroundImageView()
+        backgroundImageView.addBlur(withAlpha: 1)
         setupNavigationBar()
         setDelegates()
         adjustViews()
@@ -159,15 +159,6 @@ class PartyViewController: UIViewController, UITableViewDataSource, UITableViewD
     }
     
     // MARK: - General Functions
-    
-    private func blurBackgroundImageView() {
-        let blurEffect: UIBlurEffect = UIBlurEffect(style: UIBlurEffectStyle.dark)
-        
-        let blurView = UIVisualEffectView(effect: blurEffect)
-        blurView.frame = backgroundImageView.bounds
-        blurView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
-        backgroundImageView.addSubview(blurView)
-    }
     
     private func setupNavigationBar() {
         self.title = party.partyName

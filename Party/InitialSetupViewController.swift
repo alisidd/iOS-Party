@@ -23,7 +23,7 @@ extension UIView {
         layer.borderWidth = 1
         layer.borderColor = UIColor(red: 1, green: 147/255, blue: 0, alpha: 1).cgColor
         layer.cornerRadius = 10
-        addBlur(withAlpha: 0.6)
+        addBlur(withAlpha: 0.4)
     }
 }
 

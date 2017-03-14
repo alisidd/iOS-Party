@@ -125,7 +125,7 @@ class PartyCreationViewController: UIViewController, UITextFieldDelegate, UIPick
             partyMade.partyName = text
         }
         
-        if partyMade.partyName.isEmpty && identifier == "Create Party" {
+        if partyMade.partyName.isEmpty {
             alertUser()
             return false
         } else {
