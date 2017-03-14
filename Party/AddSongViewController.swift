@@ -18,7 +18,9 @@ class AddSongViewController: UIViewController, UITextFieldDelegate, UITableViewD
     // MARK: - Storyboard Variables
 
     @IBOutlet weak var backgroundImageView: UIImageView!
-    @IBOutlet weak var searchTracksField: UITextField!
+    @IBOutlet weak var searchTracksField: UISearchBar!
+    @IBOutlet weak var searchView: UIView!
+    //@IBOutlet weak var searchTracksField: UITextField!
     @IBOutlet weak var trackTableView: UITableView!
     
     // MARK: - General Variables
@@ -50,7 +52,9 @@ class AddSongViewController: UIViewController, UITextFieldDelegate, UITableViewD
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        customizeTextField()
+        //customizeTextField()
+        customizeSearchField()
+        UINavigationBar.appearance().barTintColor = UIColor(red: 15/255, green: 15/255, blue: 15/255, alpha: 1)
     }
     
     // MARK: - Functions
@@ -65,7 +69,7 @@ class AddSongViewController: UIViewController, UITextFieldDelegate, UITableViewD
     }
     
     func setDelegates() {
-        searchTracksField.delegate = self
+        //searchTracksField.delegate = self
         trackTableView.delegate   = self
         trackTableView.dataSource = self
     }
@@ -79,13 +83,20 @@ class AddSongViewController: UIViewController, UITextFieldDelegate, UITableViewD
     
     func adjustView() {
         trackTableView.backgroundColor = .clear
-        trackTableView.separatorColor  = UIColor(colorLiteralRed: 15/255, green: 15/255, blue: 15/255, alpha: 1)
+        trackTableView.separatorColor  = UIColor(red: 15/255, green: 15/255, blue: 15/255, alpha: 1)
         trackTableView.tableFooterView = UIView()
         trackTableView.allowsSelection = false
         
         navigationItem.hidesBackButton = true
     }
     
+    func customizeSearchField() {
+        if let field = searchTracksField.value(forKey: "searchField") as? UITextField {
+            field.textColor = UIColor.white
+        }
+    }
+    
+    /*
     func customizeTextField() {
         searchTracksField.attributedPlaceholder = NSAttributedString(string: "Search Tracks", attributes: [NSForegroundColorAttributeName: UIColor.lightGray])
         searchTracksField.layer.borderWidth = 1.5
@@ -100,7 +111,7 @@ class AddSongViewController: UIViewController, UITextFieldDelegate, UITableViewD
             fetchResults(forQuery: searchSongsField.text!)
         }
         return true
-    }
+    }*/
     
     func fetchResults(forQuery query: String) {
         indicator.startAnimating()

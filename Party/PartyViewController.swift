@@ -172,7 +172,7 @@ class PartyViewController: UIViewController, UITableViewDataSource, UITableViewD
     private func setupNavigationBar() {
         self.title = party.partyName
         navigationController?.navigationBar.isTranslucent = true
-        navigationController?.navigationBar.titleTextAttributes = [NSFontAttributeName : UIFont(name: "Trajan Pro", size: 23)!, NSForegroundColorAttributeName: UIColor.white]
+        navigationController?.navigationBar.titleTextAttributes = [NSFontAttributeName : UIFont(name: "Helvetica Light", size: 23)!, NSForegroundColorAttributeName: UIColor.white]
     }
     
     private func setDelegates() {

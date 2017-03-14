@@ -14,5 +14,8 @@ class addButton: UIButton {
         self.layer.masksToBounds = true
         self.layer.cornerRadius = self.frame.width / 2
         self.contentEdgeInsets = UIEdgeInsetsMake(0, 0, 5, 0)
+        
+        layer.borderWidth = 1
+        layer.borderColor = UIColor(red: 1, green: 147/255, blue: 0, alpha: 1).cgColor
     }
 }

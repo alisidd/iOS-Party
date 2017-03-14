@@ -8,7 +8,29 @@
 
 import UIKit
 
+extension UIView {
+    func addBlur(withAlpha alpha: CGFloat) {
+        let blurEffect: UIBlurEffect = UIBlurEffect(style: UIBlurEffectStyle.dark)
+        let blurView = UIVisualEffectView(effect: blurEffect)
+        blurView.frame = bounds
+        blurView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
+        blurView.isUserInteractionEnabled = false
+        blurView.alpha = alpha
+        insertSubview(blurView, at: 0)
+    }
+    
+    func makeBorder() {
+        layer.borderWidth = 1
+        layer.borderColor = UIColor(red: 1, green: 147/255, blue: 0, alpha: 1).cgColor
+        layer.cornerRadius = 10
+        addBlur(withAlpha: 0.6)
+    }
+}
+
 class InitialSetupViewController: UIViewController {
+    
+    @IBOutlet weak var createPartyButton: setupButton!
+    @IBOutlet weak var joinPartyButton: setupButton!
     
     @IBOutlet weak var backgroundImageView: UIImageView!
     
@@ -16,7 +38,7 @@ class InitialSetupViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        blurBackgroundImageView()
+        backgroundImageView.addBlur(withAlpha: 1)
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -33,25 +55,12 @@ class InitialSetupViewController: UIViewController {
         }
     }
     
-    // MARK: - Functions
-    
-    func blurBackgroundImageView() {
-        let blurEffect: UIBlurEffect = UIBlurEffect(style: UIBlurEffectStyle.dark)
-        
-        let blurView = UIVisualEffectView(effect: blurEffect)
-        blurView.frame = backgroundImageView.bounds
-        blurView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
-        backgroundImageView.addSubview(blurView)
-    }
-    
     // MARK: - Navigation
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         let backItem = UIBarButtonItem()
         backItem.title = ""
         navigationItem.backBarButtonItem = backItem
-        self.navigationController?.navigationBar.tintColor = UIColor.white;
-        self.navigationController?.navigationBar.titleTextAttributes = [NSForegroundColorAttributeName: UIColor.white, NSFontAttributeName: UIFont(name: "Helvetica", size: 20)!]
     }
 }
 

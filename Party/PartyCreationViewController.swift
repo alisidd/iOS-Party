@@ -8,20 +8,27 @@
 
 import UIKit
 
-protocol ChangeSelectedGenresListDelegate: class {
-    func addToGenresList(withGenre genre: String)
-    func removeFromGenresList(withGenre genre: String)
-}
-
-class PartyCreationViewController: UIViewController, UITextFieldDelegate, UIPickerViewDelegate, ChangeSelectedGenresListDelegate {
+class PartyCreationViewController: UIViewController, UITextFieldDelegate, UIPickerViewDelegate {
     
     // MARK: - Storyboard Variables
     
     @IBOutlet weak var backgroundImageView: UIImageView!
     @IBOutlet weak var appleMusicButton: setupButton!
-    @IBOutlet weak var spotifyButton: setupButton!
-    @IBOutlet weak var partyNameField: UITextField!
-    @IBOutlet weak var selectGenresButton: setupButton!
+    @IBOutlet weak var spotifyButton: setupButton! {
+        didSet {
+            spotifyButton.backgroundColor = UIColor(red: 1, green: 147/255, blue: 0, alpha: 0.5)
+        }
+    }
+    @IBOutlet weak var partyNameField: UITextField! {
+        didSet {
+            partyNameField.delegate = self
+        }
+    }
+    @IBOutlet weak var danceabilityView: UIView! {
+        didSet {
+            danceabilityView.makeBorder()
+        }
+    }
     
     // MARK: - General Variables
     
@@ -31,8 +38,7 @@ class PartyCreationViewController: UIViewController, UITextFieldDelegate, UIPick
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        blurBackgroundImageView()
-        initializeTextField()
+        addBlurToBackground()
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -44,48 +50,61 @@ class PartyCreationViewController: UIViewController, UITextFieldDelegate, UIPick
     
     // MARK: - Functions
     
-    func blurBackgroundImageView() {
-        let blurEffect: UIBlurEffect = UIBlurEffect(style: UIBlurEffectStyle.dark)
-        let blurView = UIVisualEffectView(effect: blurEffect)
-        blurView.frame = backgroundImageView.bounds
-        blurView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
-        backgroundImageView.addSubview(blurView)
+    func addBlurToBackground() {
+        backgroundImageView.addBlur(withAlpha: 1)
+        spotifyButton.subviews[0].removeFromSuperview()
     }
     
     func customizeNavigationBar() {
-        navigationController?.navigationBar.setBackgroundImage(UIImage(), for: UIBarMetrics.default)
+        navigationController?.navigationBar.setBackgroundImage(UIImage(), for: .default)
         navigationController?.navigationBar.shadowImage = UIImage()
         navigationController?.navigationBar.isTranslucent = true
         navigationController?.view.backgroundColor = UIColor.clear
-        
-        navigationController?.navigationBar.titleTextAttributes = [NSFontAttributeName : UIFont.systemFont(ofSize: 20), NSForegroundColorAttributeName: UIColor.white]
+        navigationController?.navigationBar.tintColor = UIColor(red: 1, green: 147/255, blue: 0, alpha: 1)
+        navigationController?.navigationBar.titleTextAttributes = [NSForegroundColorAttributeName: UIColor.white, NSFontAttributeName: UIFont(name: "Helvetica Light", size: 20)!]
     }
     
     @IBAction func changeToAppleMusic(_ sender: setupButton) {
-        UIView.animate(withDuration: 0.25, animations: {
-            sender.backgroundColor = UIColor(colorLiteralRed: 15/255, green: 15/255, blue: 15/255, alpha: 1)
-            self.spotifyButton.backgroundColor = UIColor(colorLiteralRed: 37/255, green: 37/255, blue: 37/255, alpha: 1)
-        })
-        partyMade.musicService = .appleMusic
+        if partyMade.musicService == .spotify {
+            UIView.animate(withDuration: 0.25, animations: {
+                sender.backgroundColor = UIColor(red: 1, green: 147/255, blue: 0, alpha: 0.5)
+                self.spotifyButton.backgroundColor = UIColor.clear
+                self.appleMusicButton.subviews[0].removeFromSuperview()
+                self.spotifyButton.addBlur(withAlpha: 0.6)
+            })
+            partyMade.musicService = .appleMusic
+        }
     }
     
     @IBAction func changeToSpotify(_ sender: setupButton) {
-        UIView.animate(withDuration: 0.25, animations: {
-            sender.backgroundColor = UIColor(colorLiteralRed: 15/255, green: 15/255, blue: 15/255, alpha: 1)
-            self.appleMusicButton.backgroundColor = UIColor(colorLiteralRed: 37/255, green: 37/255, blue: 37/255, alpha: 1)
-        })
-        partyMade.musicService = .spotify
-    }
-    
-    func initializeTextField() {
-        partyNameField.delegate = self
+        if partyMade.musicService == .appleMusic {
+            UIView.animate(withDuration: 0.25, animations: {
+                sender.backgroundColor = UIColor(red: 1, green: 147/255, blue: 0, alpha: 0.5)
+                self.appleMusicButton.backgroundColor = UIColor.clear
+                self.spotifyButton.subviews[0].removeFromSuperview()
+                self.appleMusicButton.addBlur(withAlpha: 0.6)
+            })
+            partyMade.musicService = .spotify
+        }
     }
     
     func customizeTextField() {
-        partyNameField.backgroundColor = UIColor(colorLiteralRed: 37/255, green: 37/255, blue: 37/255, alpha: 37/255)
-        partyNameField.attributedPlaceholder = NSAttributedString(string: "Party Name", attributes: [NSForegroundColorAttributeName: UIColor.lightGray])
+        partyNameField.backgroundColor = UIColor.clear
+        partyNameField.attributedPlaceholder = NSAttributedString(string: "Party Name", attributes: [NSForegroundColorAttributeName: UIColor.white])
+        addBorder()
         partyNameField.autocapitalizationType = UITextAutocapitalizationType.sentences
         partyNameField.returnKeyType = .done
+    }
+    
+    func addBorder() {
+        let border = CALayer()
+        let width = CGFloat(2.0)
+        border.borderColor = UIColor(red: 1, green: 147/255, blue: 0, alpha: 1).cgColor 
+        border.frame = CGRect(x: 0, y: (0.9 * partyNameField.frame.size.height) - width, width: partyNameField.frame.size.width, height: 1)
+        
+        border.borderWidth = 0.5
+        partyNameField.layer.addSublayer(border)
+        partyNameField.layer.masksToBounds = true
     }
     
     func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
@@ -97,14 +116,6 @@ class PartyCreationViewController: UIViewController, UITextFieldDelegate, UIPick
     
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         partyNameField.resignFirstResponder()
-    }
-    
-    func addToGenresList(withGenre genre: String) {
-        partyMade.genres.append(genre)
-    }
-    
-    func removeFromGenresList(withGenre genre: String) {
-        partyMade.genres.remove(at: partyMade.genres.index(of: genre)!)
     }
     
     // MARK: - Navigation
@@ -130,12 +141,7 @@ class PartyCreationViewController: UIViewController, UITextFieldDelegate, UIPick
     }
 
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        if segue.identifier == "Genre Popover" {
-            if let controller = segue.destination as? GenrePickingViewController {
-                controller.delegate = self
-                controller.party = partyMade
-            }
-        } else if segue.identifier == "Create Party" {
+        if segue.identifier == "Create Party" {
             if let controller = segue.destination as? PartyViewController {
                 controller.party = partyMade
                 controller.tracksListManager.partyName = partyMade.partyName
