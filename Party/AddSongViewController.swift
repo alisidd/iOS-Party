@@ -46,20 +46,6 @@ class AddSongViewController: UIViewController, UITextFieldDelegate, UITableViewD
         adjustViews()
     }
     
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-        DispatchQueue.main.async {
-            self.navigationController?.setNavigationBarHidden(true, animated: animated)
-        }
-    }
-    
-    override func viewWillDisappear(_ animated: Bool) {
-        super.viewWillDisappear(animated)
-        DispatchQueue.main.async {
-            self.navigationController?.setNavigationBarHidden(false, animated: animated)
-        }
-    }
-    
     // MARK: - Functions
     
     func setDelegates() {
@@ -92,23 +78,31 @@ class AddSongViewController: UIViewController, UITextFieldDelegate, UITableViewD
     
     func fetchResults(forQuery query: String) {
         indicator.startAnimating()
+        makeRequestForTracks(forQuery: query)
+        
+        DispatchQueue.global(qos: .userInitiated).async {
+            self.APIManager.dispatchGroup.wait()
+            self.populateTracksList()
+        }
+    }
+    
+    func makeRequestForTracks(forQuery query: String) {
         if party.musicService == .appleMusic {
             APIManager.makeHTTPRequestToApple(withString: query)
         } else {
             APIManager.makeHTTPRequestToSpotify(withString: query)
         }
-        
-        DispatchQueue.global(qos: .userInitiated).async {
-            self.APIManager.dispatchGroup.wait()
-            self.tracksList = self.APIManager.tracksList
-            if self.tracksList.count == 0 {
-                DispatchQueue.main.async {
-                    self.displayNoTracksFoundLabel()
-                }
-            } else {
-                DispatchQueue.main.async {
-                    self.removeNoTracksFoundLabel()
-                }
+    }
+    
+    func populateTracksList() {
+        tracksList = APIManager.tracksList
+        if tracksList.isEmpty {
+            DispatchQueue.main.async {
+                self.displayNoTracksFoundLabel()
+            }
+        } else {
+            DispatchQueue.main.async {
+                self.removeNoTracksFoundLabel()
             }
         }
     }

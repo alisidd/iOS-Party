@@ -80,13 +80,6 @@ class PartyViewController: UIViewController, UITableViewDataSource, UITableViewD
         }
     }
     
-    override func viewWillDisappear(_ animated: Bool) {
-        super.viewWillDisappear(animated)
-        DispatchQueue.main.async {
-            self.navigationController?.setNavigationBarHidden(false, animated: animated)
-        }
-    }
-    
     // MARK: - Modify Queue and Views From Peers
     
     internal func updateEveryonesTableView() {
