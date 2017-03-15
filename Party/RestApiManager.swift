@@ -92,36 +92,6 @@ class RestApiManager {
         }
     }
     
-    // MARK: - Apple Music Genres
-    
-    func requestGenresFromApple() {
-        dispatchGroupForGenreFetch.enter()
-        DispatchQueue.global(qos: .userInitiated).async {
-            let requestURL = URL(string: self.genresUrl)
-            URLSession.shared.dataTask(with: requestURL!) { (data, response, error) in
-                if let statusCode = (response as? HTTPURLResponse)?.statusCode {
-                    if statusCode == 200 {
-                        let json = JSON(data: data!)
-                        self.parseGenreJSON(forJSON: json)
-                    }
-                }
-                self.dispatchGroupForGenreFetch.leave()
-            }.resume()
-        }
-    }
-    
-    func parseGenreJSON(forJSON json: JSON) {
-        for (type,subJson):(String, JSON) in json["34"] {
-            if type == "subgenres" {
-                for(genres, allTheGenres):(String, JSON) in subJson {
-                    if genres.characters.count <= 2 {
-                        genresList.append(allTheGenres["name"].stringValue)
-                    }
-                }
-            }
-        }
-    }
-    
     func getAuthentication() -> SPTAuth? {
         let auth = SPTAuth.defaultInstance()
         auth?.clientID = "308657d9662146ecae57855ac2a01045"

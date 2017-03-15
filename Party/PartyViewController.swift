@@ -239,7 +239,7 @@ class PartyViewController: UIViewController, UITableViewDataSource, UITableViewD
                 try musicPlayer.spotifyPlayer?.start(withClientId: auth?.clientID)
                 DispatchQueue.main.async {
                     if self.isHost {
-                        self.startAuthenticationFlow(auth!) //Check unwrap
+                        self.startAuthenticationFlow(auth!) //TODO: Check unwrap
                     }
                 }
             } catch {
@@ -345,7 +345,7 @@ class PartyViewController: UIViewController, UITableViewDataSource, UITableViewD
     // MARK: - Callbacks
     
     @objc private func playNextTrack() {
-        if musicPlayer.safeToPlayNextTrack() {
+        if musicPlayer.safeToPlayNextTrack() && !party.tracksQueue.isEmpty {
             if personalQueue.contains(party.tracksQueue[0]) {
                 personalQueue.remove(at: personalQueue.index(of: party.tracksQueue[0])!)
             }
@@ -457,10 +457,10 @@ class PartyViewController: UIViewController, UITableViewDataSource, UITableViewD
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "Track In Queue") as! TrackInQueueTableViewCell
+        let cell = tableView.dequeueReusableCell(withIdentifier: "Track In Queue") as! TrackTableViewCell
         
         if let unwrappedArtwork = party.tracksQueue[indexPath.section + 1].artwork {
-            cell.artwork.image = unwrappedArtwork
+            cell.artworkImageView.image = unwrappedArtwork
         }
         cell.trackName.text = party.tracksQueue[indexPath.section + 1].name
         cell.artistName.text = party.tracksQueue[indexPath.section + 1].artist

@@ -238,37 +238,37 @@
                                 <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <nil key="highlightedColor"/>
                             </label>
-                            <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="grouped" separatorStyle="default" rowHeight="90" sectionHeaderHeight="20" sectionFooterHeight="1" translatesAutoresizingMaskIntoConstraints="NO" id="pu5-5k-z7Y" userLabel="Tracks Table View">
-                                <rect key="frame" x="15" y="389.5" width="345" height="277.5"/>
+                            <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="grouped" separatorStyle="default" rowHeight="100" sectionHeaderHeight="20" sectionFooterHeight="1" translatesAutoresizingMaskIntoConstraints="NO" id="pu5-5k-z7Y" userLabel="Tracks Table View">
+                                <rect key="frame" x="0.0" y="389.5" width="375" height="277.5"/>
                                 <color key="backgroundColor" cocoaTouchSystemColor="groupTableViewBackgroundColor"/>
                                 <prototypes>
-                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="none" indentationWidth="10" reuseIdentifier="Track In Queue" rowHeight="110" id="pnG-d4-TYq" customClass="TrackInQueueTableViewCell" customModule="Party" customModuleProvider="target">
-                                        <rect key="frame" x="0.0" y="56" width="345" height="110"/>
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="none" indentationWidth="10" reuseIdentifier="Track In Queue" rowHeight="100" id="pnG-d4-TYq" customClass="TrackTableViewCell" customModule="Party" customModuleProvider="target">
+                                        <rect key="frame" x="0.0" y="56" width="375" height="100"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="pnG-d4-TYq" id="5Nl-7J-7LS">
-                                            <rect key="frame" x="0.0" y="0.0" width="345" height="109"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="375" height="99"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="1X4-Ud-g72">
-                                                    <rect key="frame" x="18" y="25" width="60" height="60"/>
+                                                    <rect key="frame" x="18" y="20" width="60" height="60"/>
                                                     <constraints>
                                                         <constraint firstAttribute="width" constant="60" id="Xen-yU-aoZ"/>
                                                         <constraint firstAttribute="height" constant="60" id="eWG-kT-82F"/>
                                                     </constraints>
                                                 </imageView>
                                                 <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" spacing="6" translatesAutoresizingMaskIntoConstraints="NO" id="gMd-NO-JDY">
-                                                    <rect key="frame" x="98" y="34.5" width="91.5" height="42.5"/>
+                                                    <rect key="frame" x="98" y="30" width="86" height="41"/>
                                                     <subviews>
-                                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Track Name" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="WHu-Yj-LoM">
-                                                            <rect key="frame" x="0.0" y="0.0" width="91.5" height="20"/>
-                                                            <fontDescription key="fontDescription" name="Helvetica-Light" family="Helvetica" pointSize="17"/>
-                                                            <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Track Name" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="med-QA-gE8">
+                                                            <rect key="frame" x="0.0" y="0.0" width="86" height="18.5"/>
+                                                            <fontDescription key="fontDescription" name="Helvetica-Light" family="Helvetica" pointSize="16"/>
+                                                            <color key="textColor" red="0.85490196080000003" green="0.85490196080000003" blue="0.85490196080000003" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                             <nil key="highlightedColor"/>
                                                         </label>
                                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Track Artist" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ObR-U7-JjL">
-                                                            <rect key="frame" x="0.0" y="26" width="91.5" height="16.5"/>
+                                                            <rect key="frame" x="0.0" y="24.5" width="86" height="16.5"/>
                                                             <fontDescription key="fontDescription" name="Helvetica-Light" family="Helvetica" pointSize="14"/>
-                                                            <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                                            <color key="textColor" red="0.63529411764705879" green="0.63529411764705879" blue="0.63529411764705879" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                             <nil key="highlightedColor"/>
                                                         </label>
                                                     </subviews>
@@ -282,9 +282,10 @@
                                             </constraints>
                                         </tableViewCellContentView>
                                         <connections>
-                                            <outlet property="artistName" destination="ObR-U7-JjL" id="A9F-DN-vbA"/>
+                                            <outlet property="artistName" destination="ObR-U7-JjL" id="xNq-fl-GcK"/>
                                             <outlet property="artwork" destination="1X4-Ud-g72" id="jeq-VB-LVu"/>
-                                            <outlet property="trackName" destination="WHu-Yj-LoM" id="iiQ-vD-BpH"/>
+                                            <outlet property="artworkImageView" destination="1X4-Ud-g72" id="B5i-Gl-eh9"/>
+                                            <outlet property="trackName" destination="med-QA-gE8" id="UXm-xx-2LU"/>
                                         </connections>
                                     </tableViewCell>
                                 </prototypes>
@@ -308,7 +309,7 @@
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
                             <constraint firstAttribute="trailing" secondItem="3Iu-Is-JTy" secondAttribute="trailing" id="02S-VI-zCB"/>
-                            <constraint firstItem="pu5-5k-z7Y" firstAttribute="leading" secondItem="ZZK-fY-JAX" secondAttribute="leading" constant="15" id="5lN-ZK-Mks"/>
+                            <constraint firstItem="pu5-5k-z7Y" firstAttribute="leading" secondItem="ZZK-fY-JAX" secondAttribute="leading" id="5lN-ZK-Mks"/>
                             <constraint firstItem="GSh-0H-Exu" firstAttribute="leading" secondItem="ZZK-fY-JAX" secondAttribute="leadingMargin" constant="5" id="9xK-GR-tiE"/>
                             <constraint firstItem="pu5-5k-z7Y" firstAttribute="bottom" secondItem="IwS-71-ORn" secondAttribute="top" id="J23-n7-B00"/>
                             <constraint firstItem="npE-d0-S9w" firstAttribute="trailing" secondItem="3Iu-Is-JTy" secondAttribute="trailing" id="Rqg-0v-kXe"/>
@@ -316,7 +317,7 @@
                             <constraint firstItem="3Iu-Is-JTy" firstAttribute="bottom" secondItem="IwS-71-ORn" secondAttribute="top" id="cdk-46-P6z"/>
                             <constraint firstItem="3Iu-Is-JTy" firstAttribute="leading" secondItem="ZZK-fY-JAX" secondAttribute="leading" id="dQr-SD-Oy1"/>
                             <constraint firstItem="npE-d0-S9w" firstAttribute="centerX" secondItem="PzI-h2-MC8" secondAttribute="centerX" id="eGj-Pm-sU9"/>
-                            <constraint firstAttribute="trailing" secondItem="pu5-5k-z7Y" secondAttribute="trailing" constant="15" id="eJL-wN-NO4"/>
+                            <constraint firstAttribute="trailing" secondItem="pu5-5k-z7Y" secondAttribute="trailing" id="eJL-wN-NO4"/>
                             <constraint firstItem="3Iu-Is-JTy" firstAttribute="top" secondItem="ZZK-fY-JAX" secondAttribute="top" id="i9V-vs-3bd"/>
                             <constraint firstItem="npE-d0-S9w" firstAttribute="top" secondItem="3Iu-Is-JTy" secondAttribute="top" id="iad-WW-EM7"/>
                             <constraint firstAttribute="bottom" secondItem="PzI-h2-MC8" secondAttribute="bottom" constant="20" symbolic="YES" id="ojf-8P-eaB"/>

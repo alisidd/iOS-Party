@@ -17,8 +17,6 @@
 		41045F2F1E39AD6D00A29830 /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 41045F2E1E39AD6D00A29830 /* AVFoundation.framework */; };
 		41045F311E39AD7E00A29830 /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 41045F301E39AD7E00A29830 /* SystemConfiguration.framework */; };
 		411EEF401E346E2200216016 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 411EEF3F1E346E2200216016 /* Main.storyboard */; };
-		412FBECD1E32A506007FFB6A /* TrackInQueueTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 412FBECC1E32A506007FFB6A /* TrackInQueueTableViewCell.swift */; };
-		412FBECF1E32CA0E007FFB6A /* CurrentlyPlayingTrackTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 412FBECE1E32CA0E007FFB6A /* CurrentlyPlayingTrackTableViewCell.swift */; };
 		412FBED11E32CFA7007FFB6A /* MusicPlayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 412FBED01E32CFA7007FFB6A /* MusicPlayer.swift */; };
 		4134216B1E3D775400888403 /* newParty.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4134216A1E3D775400888403 /* newParty.swift */; };
 		4160D4011E42EB0A00AF2ED6 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 4160D4001E42EB0A00AF2ED6 /* Assets.xcassets */; };
@@ -49,8 +47,6 @@
 		41045F301E39AD7E00A29830 /* SystemConfiguration.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SystemConfiguration.framework; path = System/Library/Frameworks/SystemConfiguration.framework; sourceTree = SDKROOT; };
 		41045F321E39B80300A29830 /* Party-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Party-Bridging-Header.h"; sourceTree = SOURCE_ROOT; };
 		411EEF3F1E346E2200216016 /* Main.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = Main.storyboard; sourceTree = "<group>"; };
-		412FBECC1E32A506007FFB6A /* TrackInQueueTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TrackInQueueTableViewCell.swift; sourceTree = "<group>"; };
-		412FBECE1E32CA0E007FFB6A /* CurrentlyPlayingTrackTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CurrentlyPlayingTrackTableViewCell.swift; sourceTree = "<group>"; };
 		412FBED01E32CFA7007FFB6A /* MusicPlayer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MusicPlayer.swift; sourceTree = "<group>"; };
 		4134216A1E3D775400888403 /* newParty.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = newParty.swift; sourceTree = "<group>"; };
 		4160D4001E42EB0A00AF2ED6 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -132,7 +128,6 @@
 			isa = PBXGroup;
 			children = (
 				417B9D4E1E318D0D0021F36E /* AddSongViewController.swift */,
-				417B9D561E31CD8D0021F36E /* TrackTableViewCell.swift */,
 			);
 			name = "Add Tracks";
 			sourceTree = "<group>";
@@ -143,8 +138,7 @@
 				417B9D4A1E317C3C0021F36E /* PartyViewController.swift */,
 				4134216A1E3D775400888403 /* newParty.swift */,
 				412FBED01E32CFA7007FFB6A /* MusicPlayer.swift */,
-				412FBECE1E32CA0E007FFB6A /* CurrentlyPlayingTrackTableViewCell.swift */,
-				412FBECC1E32A506007FFB6A /* TrackInQueueTableViewCell.swift */,
+				417B9D561E31CD8D0021F36E /* TrackTableViewCell.swift */,
 			);
 			name = "Play Tracks";
 			sourceTree = "<group>";
@@ -359,7 +353,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				3472FB121DDAC68900A35FCB /* PartyJoinedViewController.swift in Sources */,
-				412FBECF1E32CA0E007FFB6A /* CurrentlyPlayingTrackTableViewCell.swift in Sources */,
 				4134216B1E3D775400888403 /* newParty.swift in Sources */,
 				41C0AEB61E79512D00C797F0 /* searchTextField.swift in Sources */,
 				412FBED11E32CFA7007FFB6A /* MusicPlayer.swift in Sources */,
@@ -376,7 +369,6 @@
 				417B9D4D1E3187570021F36E /* addButton.swift in Sources */,
 				417B9D531E31B3CE0021F36E /* Track.swift in Sources */,
 				417B9D551E31BC120021F36E /* RestApiManager.swift in Sources */,
-				412FBECD1E32A506007FFB6A /* TrackInQueueTableViewCell.swift in Sources */,
 				417B9D4B1E317C3C0021F36E /* PartyViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

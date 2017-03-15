@@ -153,7 +153,7 @@ class AddSongViewController: UIViewController, UITextFieldDelegate, UITableViewD
     }
     
     func tracksQueue(hasTrack track: Track) -> Bool {
-        for trackInQueue in tracksQueue {
+        for trackInQueue in party.tracksQueue {
             if track.id == trackInQueue.id {
                 return true
             }
