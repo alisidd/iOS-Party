@@ -1,21 +1,31 @@
 PODS:
+  - Firebase/Core (3.14.0):
+    - FirebaseAnalytics (= 3.7.0)
+    - FirebaseCore (= 3.5.1)
+  - FirebaseAnalytics (3.7.0):
+    - FirebaseCore (~> 3.5)
+    - FirebaseInstanceID (~> 1.0)
+    - GoogleToolboxForMac/NSData+zlib (~> 2.1)
+  - FirebaseCore (3.5.1):
+    - GoogleToolboxForMac/NSData+zlib (~> 2.1)
+  - FirebaseInstanceID (1.0.9)
+  - GoogleToolboxForMac/Defines (2.1.1)
+  - GoogleToolboxForMac/NSData+zlib (2.1.1):
+    - GoogleToolboxForMac/Defines (= 2.1.1)
   - SwiftyJSON (3.1.4)
 
 DEPENDENCIES:
-  - SwiftyJSON (from `https://github.com/SwiftyJSON/SwiftyJSON.git`)
-
-EXTERNAL SOURCES:
-  SwiftyJSON:
-    :git: https://github.com/SwiftyJSON/SwiftyJSON.git
-
-CHECKOUT OPTIONS:
-  SwiftyJSON:
-    :commit: adf34cfb4c9f2ff4e3c420c6d9fb1e2eaf3b3791
-    :git: https://github.com/SwiftyJSON/SwiftyJSON.git
+  - Firebase/Core
+  - SwiftyJSON
 
 SPEC CHECKSUMS:
-  SwiftyJSON: 05cf0e98a950e2ba343735264f5a96b81e755d00
+  Firebase: 85a581fb04e44f63ae9f4fbc8d6dabf4a4c18653
+  FirebaseAnalytics: 0d1b7d81d5021155be37702a94ba1ec16d45365d
+  FirebaseCore: 225d40532489835a034b8f4e2c9c87fbf4f615a2
+  FirebaseInstanceID: 2d0518b1378fe9d685ef40cbdd63d2fdc1125339
+  GoogleToolboxForMac: 8e329f1b599f2512c6b10676d45736bcc2cbbeb0
+  SwiftyJSON: c2842d878f95482ffceec5709abc3d05680c0220
 
-PODFILE CHECKSUM: 88df9c7559ebc2abbfa94dbfaf1d942b77f886f5
+PODFILE CHECKSUM: 7896bd17c5bf15ec09e7de6fa1b2c4de6e021769
 
-COCOAPODS: 1.1.1
+COCOAPODS: 1.2.0
