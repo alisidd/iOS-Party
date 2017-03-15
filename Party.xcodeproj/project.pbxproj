@@ -34,6 +34,7 @@
 		417C38EE1DDA91B100F59926 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 417C38CC1DDA43FD00F59926 /* AppDelegate.swift */; };
 		417C38EF1DDA91B500F59926 /* Party.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 417C38D31DDA43FD00F59926 /* Party.xcdatamodeld */; };
 		418503F71E307BE900472006 /* setupButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 418503F61E307BE900472006 /* setupButton.swift */; };
+		41C0AEB61E79512D00C797F0 /* searchTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 41C0AEB51E79512D00C797F0 /* searchTextField.swift */; };
 		41EB1B051E3FE1BE00FC326F /* Trajan Pro.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 41EB1B041E3FE1BD00FC326F /* Trajan Pro.ttf */; };
 /* End PBXBuildFile section */
 
@@ -67,6 +68,7 @@
 		417C38E11DDA447600F59926 /* InitialSetupViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = InitialSetupViewController.swift; sourceTree = "<group>"; };
 		417C38E21DDA447600F59926 /* PartyCreationViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PartyCreationViewController.swift; sourceTree = "<group>"; };
 		418503F61E307BE900472006 /* setupButton.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = setupButton.swift; sourceTree = "<group>"; };
+		41C0AEB51E79512D00C797F0 /* searchTextField.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = searchTextField.swift; sourceTree = "<group>"; };
 		41EB1B041E3FE1BD00FC326F /* Trajan Pro.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Trajan Pro.ttf"; sourceTree = "<group>"; };
 		66422AE3EA2F04836109AFE5 /* Pods_Party.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Party.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		6A26B4AEA07B3D4EA48B5C48 /* Pods-Party.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Party.release.xcconfig"; path = "Pods/Target Support Files/Pods-Party/Pods-Party.release.xcconfig"; sourceTree = "<group>"; };
@@ -98,13 +100,14 @@
 			name = Pods;
 			sourceTree = "<group>";
 		};
-		413421631E3D579600888403 /* Buttons */ = {
+		413421631E3D579600888403 /* Custom Appearance */ = {
 			isa = PBXGroup;
 			children = (
+				41C0AEB51E79512D00C797F0 /* searchTextField.swift */,
 				418503F61E307BE900472006 /* setupButton.swift */,
 				417B9D4C1E3187570021F36E /* addButton.swift */,
 			);
-			name = Buttons;
+			name = "Custom Appearance";
 			sourceTree = "<group>";
 		};
 		413421641E3D57A300888403 /* Custom Objects */ = {
@@ -193,7 +196,7 @@
 				413421661E3D57BE00888403 /* Add Tracks */,
 				413421651E3D57B100888403 /* Connection Managers */,
 				413421641E3D57A300888403 /* Custom Objects */,
-				413421631E3D579600888403 /* Buttons */,
+				413421631E3D579600888403 /* Custom Appearance */,
 				417C38D81DDA43FD00F59926 /* LaunchScreen.storyboard */,
 				417C38DB1DDA43FD00F59926 /* Info.plist */,
 				417C38D31DDA43FD00F59926 /* Party.xcdatamodeld */,
@@ -358,6 +361,7 @@
 				3472FB121DDAC68900A35FCB /* PartyJoinedViewController.swift in Sources */,
 				412FBECF1E32CA0E007FFB6A /* CurrentlyPlayingTrackTableViewCell.swift in Sources */,
 				4134216B1E3D775400888403 /* newParty.swift in Sources */,
+				41C0AEB61E79512D00C797F0 /* searchTextField.swift in Sources */,
 				412FBED11E32CFA7007FFB6A /* MusicPlayer.swift in Sources */,
 				417B9D4F1E318D0D0021F36E /* AddSongViewController.swift in Sources */,
 				418503F71E307BE900472006 /* setupButton.swift in Sources */,

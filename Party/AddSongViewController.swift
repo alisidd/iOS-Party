@@ -44,7 +44,6 @@ class AddSongViewController: UIViewController, UITextFieldDelegate, UITableViewD
         setDelegates()
         initializeActivityIndicator()
         adjustViews()
-        customizeTextField()
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -81,25 +80,6 @@ class AddSongViewController: UIViewController, UITextFieldDelegate, UITableViewD
         trackTableView.tableFooterView = UIView()
         
         navigationItem.hidesBackButton = true
-    }
-    
-    func customizeTextField() {
-        searchTracksField.attributedPlaceholder = NSAttributedString(string: "Search", attributes: [NSForegroundColorAttributeName: UIColor.lightGray])
-        
-        searchTracksField.autocapitalizationType = UITextAutocapitalizationType.sentences
-        searchTracksField.returnKeyType = .search
-        addBottomBorder()
-    }
-    
-    func addBottomBorder() {
-        let border = CALayer()
-        let width = CGFloat(1.0)
-        border.borderColor = UIColor(red: 1, green: 166/255, blue: 35/255, alpha: 1).cgColor
-        border.frame = CGRect(x: 0, y: searchTracksField.frame.size.height - width, width: searchTracksField.frame.size.width, height: searchTracksField.frame.size.height)
-        
-        border.borderWidth = width
-        searchTracksField.layer.addSublayer(border)
-        searchTracksField.layer.masksToBounds = true
     }
     
     func textFieldShouldReturn(_ searchSongsField: UITextField) -> Bool {
