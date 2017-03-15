@@ -17,5 +17,6 @@ class addButton: UIButton {
         
         layer.borderWidth = 1
         layer.borderColor = UIColor(red: 1, green: 147/255, blue: 0, alpha: 1).cgColor
+        addBlur(withAlpha: 0.8, withStyle: .dark)
     }
 }

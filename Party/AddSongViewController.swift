@@ -13,14 +13,12 @@ protocol ModifyTracksQueueDelegate: class {
     func removeFromQueue(track: Track)
 }
 
-class AddSongViewController: UIViewController, UITextFieldDelegate, UITableViewDataSource, UITableViewDelegate, ModifyTracksQueueDelegate {
+class AddSongViewController: UIViewController, UISearchBarDelegate, UITableViewDataSource, UITableViewDelegate, ModifyTracksQueueDelegate {
     
     // MARK: - Storyboard Variables
 
     @IBOutlet weak var backgroundImageView: UIImageView!
     @IBOutlet weak var searchTracksField: UISearchBar!
-    @IBOutlet weak var searchView: UIView!
-    //@IBOutlet weak var searchTracksField: UITextField!
     @IBOutlet weak var trackTableView: UITableView!
     
     // MARK: - General Variables
@@ -44,24 +42,22 @@ class AddSongViewController: UIViewController, UITextFieldDelegate, UITableViewD
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        backgroundImageView.addBlur(withAlpha: 1)
+        backgroundImageView.addBlur(withAlpha: 1, withStyle: .dark)
         setDelegates()
         initializeActivityIndicator()
-        setupNavigationBar()
+        setupTopBar()
         adjustView()
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        //customizeTextField()
-        customizeSearchField()
-        UINavigationBar.appearance().barTintColor = UIColor(red: 15/255, green: 15/255, blue: 15/255, alpha: 1)
+        UINavigationBar.appearance().barTintColor = UIColor(red: 18/255, green: 20/255, blue: 65/255, alpha: 1)
     }
     
     // MARK: - Functions
     
     func setDelegates() {
-        //searchTracksField.delegate = self
+        searchTracksField.delegate = self
         trackTableView.delegate   = self
         trackTableView.dataSource = self
     }
@@ -73,23 +69,22 @@ class AddSongViewController: UIViewController, UITextFieldDelegate, UITableViewD
         view.addSubview(indicator)
     }
     
-    func setupNavigationBar() {
+    func setupTopBar() {
         navigationController?.navigationBar.titleTextAttributes = [NSFontAttributeName : UIFont(name: "Helvetica Light", size: 20)!, NSForegroundColorAttributeName: UIColor.white]
+        navigationController?.navigationBar.barTintColor = UIColor(red: 0/255, green: 0/255, blue: 45/255, alpha: 1)
+        
+        searchTracksField.barTintColor = UIColor(red: 18/255, green: 19/255, blue: 65/255, alpha: 1)
+        let textField = searchTracksField.value(forKey: "searchField") as? UITextField
+        textField?.textColor = .white
+        textField?.backgroundColor = UIColor(red: 26/255, green: 9/255, blue: 32/255, alpha: 1)
     }
     
     func adjustView() {
         trackTableView.backgroundColor = .clear
         trackTableView.separatorColor  = UIColor(red: 15/255, green: 15/255, blue: 15/255, alpha: 1)
         trackTableView.tableFooterView = UIView()
-        trackTableView.allowsSelection = false
         
         navigationItem.hidesBackButton = true
-    }
-    
-    func customizeSearchField() {
-        if let field = searchTracksField.value(forKey: "searchField") as? UITextField {
-            field.textColor = UIColor.white
-        }
     }
     
     /*
@@ -108,6 +103,15 @@ class AddSongViewController: UIViewController, UITextFieldDelegate, UITableViewD
         }
         return true
     }*/
+    
+    func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
+        let textEntered = searchBar.text!
+        
+        if !textEntered.isEmpty {
+            fetchResults(forQuery: textEntered)
+            searchBar.resignFirstResponder()
+        }
+    }
     
     func fetchResults(forQuery query: String) {
         indicator.startAnimating()
@@ -167,43 +171,74 @@ class AddSongViewController: UIViewController, UITextFieldDelegate, UITableViewD
     // MARK: - Table
     
     func numberOfSections(in tableView: UITableView) -> Int {
-        return 1
-    }
-    
-    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return tracksList.count
     }
     
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return 1
+    }
+    
     func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
-        cell.preservesSuperviewLayoutMargins = false
-        cell.separatorInset = UIEdgeInsets.zero
-        cell.layoutMargins = UIEdgeInsets.zero
         cell.backgroundColor = .clear
+        if tracksQueue(hasTrack: tracksList[indexPath.section]) {
+            removeBlur(fromCell: cell)
+            cell.backgroundColor = UIColor(red: 1, green: 147/255, blue: 0, alpha: 0.7)
+        } else {
+            addBlur(toCell: cell)
+            cell.backgroundColor = UIColor(red: 1, green: 147/255, blue: 0, alpha: 0.3)
+        }
+    }
+    
+    func addBlur(toCell cell: UITableViewCell) {
+        for everyView in cell.subviews {
+            if let blurredView = everyView as? UIVisualEffectView {
+                blurredView.removeFromSuperview()
+            }
+        }
+        removeBlur(fromCell: cell)
+        cell.makeBorder()
+    }
+    
+    func removeBlur(fromCell cell: UITableViewCell) {
+        for everyView in cell.subviews {
+            if let blurredView = everyView as? UIVisualEffectView {
+                blurredView.removeFromSuperview()
+            }
+        }
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = trackTableView.dequeueReusableCell(withIdentifier: "TrackCell", for: indexPath) as! TrackTableViewCell
-        cell.delegate = self
+        let cell = trackTableView.dequeueReusableCell(withIdentifier: "Track", for: indexPath) as! TrackTableViewCell
         
         // MARK: - Cell Properties
-        
-        cell.track = (tracksList[indexPath.row])
-        cell.trackName.text = tracksList[indexPath.row].name
-        cell.artistName.text = tracksList[indexPath.row].artist
+        cell.trackName.text = tracksList[indexPath.section].name
+        cell.artistName.text = tracksList[indexPath.section].artist
 
-        if let unwrappedArtwork = tracksList[indexPath.row].artwork {
+        if let unwrappedArtwork = tracksList[indexPath.section].artwork {
             cell.artworkImageView.image = unwrappedArtwork
         }
         
-        // MARK: - Cell Selection
-        
-        if (tracksQueue(hasTrack: (tracksList[indexPath.row]))) {
-            cell.addButton.setTitle("✓", for: .normal)
-        } else {
-            cell.addButton.setTitle("+", for: .normal)
-        }
-        
         return cell
+    }
+    
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        let cell = trackTableView.cellForRow(at: indexPath)!
+        addToQueue(track: tracksList[indexPath.section])
+        self.removeBlur(fromCell: cell)
+        
+        UIView.animate(withDuration: 0.35) {
+            cell.backgroundColor = UIColor(red: 1, green: 147/255, blue: 0, alpha: 0.7)
+        }
+    }
+    
+    func tableView(_ tableView: UITableView, didDeselectRowAt indexPath: IndexPath) {
+        let cell = trackTableView.cellForRow(at: indexPath)!
+        removeFromQueue(track: tracksList[indexPath.section])
+        self.addBlur(toCell: cell)
+        
+        UIView.animate(withDuration: 0.35) {
+            cell.backgroundColor = UIColor(red: 1, green: 147/255, blue: 0, alpha: 0.3)
+        }
     }
     
     func tracksQueue(hasTrack track: Track) -> Bool {
@@ -216,6 +251,6 @@ class AddSongViewController: UIViewController, UITextFieldDelegate, UITableViewD
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return 80
+        return 110
     }
 }

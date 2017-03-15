@@ -32,6 +32,17 @@ class PartyViewController: UIViewController, UITableViewDataSource, UITableViewD
     // MARK: - Storyboard Variables
     
     @IBOutlet weak var backgroundImageView: UIImageView!
+    
+    @IBOutlet weak var currentlyPlayingView: UIView!
+    @IBOutlet weak var currentlyPlayingArtwork: UIImageView! {
+        didSet {
+            currentlyPlayingArtwork.addBlur(withAlpha: 0.6, withStyle: .dark)
+        }
+    }
+    @IBOutlet weak var currentlyPlayingTrackName: UILabel!
+    @IBOutlet weak var currentlyPlayingTrackArtist: UILabel!
+    
+    @IBOutlet weak var upNextLabel: UILabel!
     @IBOutlet weak var tracksTableView: UITableView!
     
     // MARK: - General Variables
@@ -54,12 +65,26 @@ class PartyViewController: UIViewController, UITableViewDataSource, UITableViewD
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        backgroundImageView.addBlur(withAlpha: 1)
+        backgroundImageView.addBlur(withAlpha: 1, withStyle: .dark)
         setupNavigationBar()
         setDelegates()
         adjustViews()
         
         initializeMusicPlayer()
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        DispatchQueue.main.async {
+            self.navigationController?.setNavigationBarHidden(true, animated: animated)
+        }
+    }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        DispatchQueue.main.async {
+            self.navigationController?.setNavigationBarHidden(false, animated: animated)
+        }
     }
     
     // MARK: - Modify Queue and Views From Peers
@@ -163,6 +188,7 @@ class PartyViewController: UIViewController, UITableViewDataSource, UITableViewD
     private func setupNavigationBar() {
         self.title = party.partyName
         navigationController?.navigationBar.isTranslucent = true
+        UINavigationBar.appearance().barTintColor = UIColor(red: 0/255, green: 0/255, blue: 45/255, alpha: 1)
         navigationController?.navigationBar.titleTextAttributes = [NSFontAttributeName : UIFont(name: "Helvetica Light", size: 23)!, NSForegroundColorAttributeName: UIColor.white]
     }
     
@@ -367,7 +393,7 @@ class PartyViewController: UIViewController, UITableViewDataSource, UITableViewD
                 self.personalQueue.append(contentsOf: VC.tracksQueue)
                 
                 if self.party.tracksQueue.count == VC.tracksQueue.count && self.party.tracksQueue.count > 0 {
-                    VC.tracksQueue[0].highResArtwork = self.fetchImage(forTrack: VC.tracksQueue[0])
+                    self.currentlyPlayingArtwork.image = self.fetchImage(forTrack: VC.tracksQueue[0])
                 }
                 
                 DispatchQueue.main.async {
@@ -401,11 +427,11 @@ class PartyViewController: UIViewController, UITableViewDataSource, UITableViewD
     // MARK: - Table
     
     func numberOfSections(in tableView: UITableView) -> Int {
-        return 1
+        return party.tracksQueue.count - 1
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return party.tracksQueue.count
+        return 1
     }
     
     func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
@@ -413,44 +439,39 @@ class PartyViewController: UIViewController, UITableViewDataSource, UITableViewD
         cell.separatorInset = UIEdgeInsets.zero
         cell.layoutMargins = UIEdgeInsets.zero
         cell.backgroundColor = .clear
+        cell.backgroundColor = UIColor(red: 1, green: 147/255, blue: 0, alpha: 0.7)
+        addBlur(toCell: cell)
+    }
+    
+    func addBlur(toCell cell: UITableViewCell) {
+        cell.makeBorder()
+        removeBlur(fromCell: cell)
+    }
+    
+    func removeBlur(fromCell cell: UITableViewCell) {
+        for everyView in cell.subviews {
+            if let blurredView = everyView as? UIVisualEffectView {
+                blurredView.removeFromSuperview()
+            }
+        }
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let cell = tableView.dequeueReusableCell(withIdentifier: "Track In Queue") as! TrackInQueueTableViewCell
         
-        if indexPath.row == 0 {
-            let cell = tableView.dequeueReusableCell(withIdentifier: "CurrentlyPlayingTrack") as!CurrentlyPlayingTrackTableViewCell
-            if let unwrappedArtwork = party.tracksQueue[indexPath.row].highResArtwork {
-                cell.artwork.image = unwrappedArtwork
-            } else {
-                cell.artwork.image = party.tracksQueue[indexPath.row].artwork
-            }
-            cell.trackName.text = party.tracksQueue[indexPath.row].name
-            cell.artistName.text = party.tracksQueue[indexPath.row].artist
-            
-            return cell
-            
-        } else {
-            let cell = tableView.dequeueReusableCell(withIdentifier: "Track") as! TrackInQueueTableViewCell
-            
-            if let unwrappedArtwork = party.tracksQueue[indexPath.row].artwork {
-                cell.artwork.image = unwrappedArtwork
-            }
-            cell.trackName.text = party.tracksQueue[indexPath.row].name
-            cell.artistName.text = party.tracksQueue[indexPath.row].artist
-            
-            return cell
+        if let unwrappedArtwork = party.tracksQueue[indexPath.section + 1].artwork {
+            cell.artwork.image = unwrappedArtwork
         }
+        cell.trackName.text = party.tracksQueue[indexPath.section + 1].name
+        cell.artistName.text = party.tracksQueue[indexPath.section + 1].artist
         
+        return cell
     }
     
     func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
-        if indexPath.row == 0 {
-            return false
-        }
-        
         if !isHost {
             for track in personalQueue {
-                if track.id == party.tracksQueue[indexPath.row].id {
+                if track.id == party.tracksQueue[indexPath.section].id {
                     return true
                 }
             }
@@ -463,7 +484,7 @@ class PartyViewController: UIViewController, UITableViewDataSource, UITableViewD
     func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCellEditingStyle, forRowAt indexPath: IndexPath) {
         if editingStyle == .delete {
             tableView.beginUpdates()
-            removeFromQueue(track: party.tracksQueue[indexPath.row])
+            removeFromQueue(track: party.tracksQueue[indexPath.section])
             tableView.deleteRows(at: [indexPath], with: .automatic)
             tableView.endUpdates()
         }
@@ -492,10 +513,6 @@ class PartyViewController: UIViewController, UITableViewDataSource, UITableViewD
         deleteButton.backgroundColor = UIColor(colorLiteralRed: 1, green: 111/255, blue: 1/255, alpha: 1)
         
         return [deleteButton]
-    }
-    
-    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return indexPath.row == 0 ? 350 : 80
     }
     
     // MARK: UpdateTableDelegate

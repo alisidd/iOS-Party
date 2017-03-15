@@ -12,6 +12,14 @@ import UIKit
 class setupButton: UIButton {
     required init(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)!
-        makeBorder()
+    }
+    
+    override func setTitleColor(_ color: UIColor?, for state: UIControlState) {
+        if state == .selected {
+            super.setTitleColor(UIColor(red: 1, green: 166/255, blue: 35/255, alpha: 1)
+, for: state)
+        } else {
+            super.setTitleColor(UIColor.white, for: state)
+        }
     }
 }

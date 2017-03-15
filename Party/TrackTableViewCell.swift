@@ -26,9 +26,10 @@ class TrackTableViewCell: UITableViewCell {
     @IBOutlet weak var artworkImageView: UIImageView!
     @IBOutlet weak var trackName: UILabel!
     @IBOutlet weak var artistName: UILabel!
-    @IBOutlet weak var addButton: UIButton!
     
+    /*
     var track = Track()
+    
     private var isAdded: Bool {
         if addButton.titleLabel!.text == "✓" {
             return true
@@ -50,5 +51,5 @@ class TrackTableViewCell: UITableViewCell {
             track.artwork = artworkImageView.image
             self.delegate?.addToQueue(track: track)
         }
-    }
+    }*/
 }
