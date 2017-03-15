@@ -8,12 +8,7 @@
 
 import UIKit
 
-protocol ModifyTracksQueueDelegate: class {
-    func addToQueue(track: Track)
-    func removeFromQueue(track: Track)
-}
-
-class AddSongViewController: UIViewController, UITextFieldDelegate, UITableViewDataSource, UITableViewDelegate, ModifyTracksQueueDelegate {
+class AddSongViewController: UIViewController, UITextFieldDelegate, UITableViewDataSource, UITableViewDelegate {
     
     // MARK: - Storyboard Variables
 
@@ -96,24 +91,26 @@ class AddSongViewController: UIViewController, UITextFieldDelegate, UITableViewD
     
     func populateTracksList() {
         tracksList = APIManager.tracksList
-        if tracksList.isEmpty {
-            DispatchQueue.main.async {
+        DispatchQueue.main.async {
+            if self.tracksList.isEmpty {
                 self.displayNoTracksFoundLabel()
-            }
-        } else {
-            DispatchQueue.main.async {
+            } else {
                 self.removeNoTracksFoundLabel()
             }
         }
     }
     
     func displayNoTracksFoundLabel() {
+        customizeLabel()
+        view.addSubview(noTracksFoundLabel)
+    }
+    
+    func customizeLabel() {
         noTracksFoundLabel.text = "No Tracks Found"
         noTracksFoundLabel.textColor = .white
         noTracksFoundLabel.textAlignment = .center
         
         noTracksFoundLabel.center = view.center
-        view.addSubview(noTracksFoundLabel)
     }
     
     func removeNoTracksFoundLabel() {
@@ -158,7 +155,7 @@ class AddSongViewController: UIViewController, UITextFieldDelegate, UITableViewD
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = trackTableView.dequeueReusableCell(withIdentifier: "Track", for: indexPath) as! TrackTableViewCell
         
-        // MARK: - Cell Properties
+        // Cell Properties
         cell.trackName.text = tracksList[indexPath.row].name
         cell.artistName.text = tracksList[indexPath.row].artist
 
