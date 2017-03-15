@@ -386,6 +386,7 @@ class PartyViewController: UIViewController, UITableViewDataSource, UITableViewD
                 self.personalQueue.append(contentsOf: VC.tracksQueue)
                 
                 if self.party.tracksQueue.count == VC.tracksQueue.count && self.party.tracksQueue.count > 0 {
+                    print("Track changed: \(VC.tracksQueue[0])")
                     self.currentlyPlayingArtwork.image = self.fetchImage(forTrack: VC.tracksQueue[0])
                 }
                 

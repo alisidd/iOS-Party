@@ -283,7 +283,6 @@
                                         </tableViewCellContentView>
                                         <connections>
                                             <outlet property="artistName" destination="ObR-U7-JjL" id="xNq-fl-GcK"/>
-                                            <outlet property="artwork" destination="1X4-Ud-g72" id="jeq-VB-LVu"/>
                                             <outlet property="artworkImageView" destination="1X4-Ud-g72" id="B5i-Gl-eh9"/>
                                             <outlet property="trackName" destination="med-QA-gE8" id="UXm-xx-2LU"/>
                                         </connections>
