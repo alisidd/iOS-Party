@@ -34,6 +34,9 @@
 		418503F71E307BE900472006 /* setupButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 418503F61E307BE900472006 /* setupButton.swift */; };
 		41C0AEB61E79512D00C797F0 /* searchTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 41C0AEB51E79512D00C797F0 /* searchTextField.swift */; };
 		41C0AEB81E79EDC700C797F0 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 41C0AEB71E79EDC700C797F0 /* GoogleService-Info.plist */; };
+		41C0AEBA1E7A0AC100C797F0 /* LyricsAndQueuePageViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 41C0AEB91E7A0AC100C797F0 /* LyricsAndQueuePageViewController.swift */; };
+		41C0AEBC1E7A12CB00C797F0 /* LyricsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 41C0AEBB1E7A12CB00C797F0 /* LyricsViewController.swift */; };
+		41C0AEBE1E7A12E000C797F0 /* QueueViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 41C0AEBD1E7A12E000C797F0 /* QueueViewController.swift */; };
 		41EB1B051E3FE1BE00FC326F /* Trajan Pro.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 41EB1B041E3FE1BD00FC326F /* Trajan Pro.ttf */; };
 /* End PBXBuildFile section */
 
@@ -67,6 +70,9 @@
 		418503F61E307BE900472006 /* setupButton.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = setupButton.swift; sourceTree = "<group>"; };
 		41C0AEB51E79512D00C797F0 /* searchTextField.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = searchTextField.swift; sourceTree = "<group>"; };
 		41C0AEB71E79EDC700C797F0 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
+		41C0AEB91E7A0AC100C797F0 /* LyricsAndQueuePageViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LyricsAndQueuePageViewController.swift; sourceTree = "<group>"; };
+		41C0AEBB1E7A12CB00C797F0 /* LyricsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LyricsViewController.swift; sourceTree = "<group>"; };
+		41C0AEBD1E7A12E000C797F0 /* QueueViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = QueueViewController.swift; sourceTree = "<group>"; };
 		41EB1B041E3FE1BD00FC326F /* Trajan Pro.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Trajan Pro.ttf"; sourceTree = "<group>"; };
 		66422AE3EA2F04836109AFE5 /* Pods_Party.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Party.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		6A26B4AEA07B3D4EA48B5C48 /* Pods-Party.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Party.release.xcconfig"; path = "Pods/Target Support Files/Pods-Party/Pods-Party.release.xcconfig"; sourceTree = "<group>"; };
@@ -138,6 +144,9 @@
 			isa = PBXGroup;
 			children = (
 				417B9D4A1E317C3C0021F36E /* PartyViewController.swift */,
+				41C0AEB91E7A0AC100C797F0 /* LyricsAndQueuePageViewController.swift */,
+				41C0AEBD1E7A12E000C797F0 /* QueueViewController.swift */,
+				41C0AEBB1E7A12CB00C797F0 /* LyricsViewController.swift */,
 				4134216A1E3D775400888403 /* newParty.swift */,
 				412FBED01E32CFA7007FFB6A /* MusicPlayer.swift */,
 				417B9D561E31CD8D0021F36E /* TrackTableViewCell.swift */,
@@ -358,9 +367,12 @@
 			files = (
 				3472FB121DDAC68900A35FCB /* PartyJoinedViewController.swift in Sources */,
 				4134216B1E3D775400888403 /* newParty.swift in Sources */,
+				41C0AEBE1E7A12E000C797F0 /* QueueViewController.swift in Sources */,
 				41C0AEB61E79512D00C797F0 /* searchTextField.swift in Sources */,
 				412FBED11E32CFA7007FFB6A /* MusicPlayer.swift in Sources */,
+				41C0AEBA1E7A0AC100C797F0 /* LyricsAndQueuePageViewController.swift in Sources */,
 				417B9D4F1E318D0D0021F36E /* AddSongViewController.swift in Sources */,
+				41C0AEBC1E7A12CB00C797F0 /* LyricsViewController.swift in Sources */,
 				418503F71E307BE900472006 /* setupButton.swift in Sources */,
 				3472FB141DDAC6FC00A35FCB /* PartyListCell.swift in Sources */,
 				417C38EF1DDA91B500F59926 /* Party.xcdatamodeld in Sources */,
