@@ -11,6 +11,7 @@ import UIKit
 class LyricsAndQueuePageViewController: UIPageViewController, UIPageViewControllerDelegate, UIPageViewControllerDataSource {
     
     var party = Party()
+    var tableHeightDelegate: TableHeightDelegate?
     var allViewControllers = [UIViewController]()
 
     override func viewDidLoad() {
@@ -36,6 +37,7 @@ class LyricsAndQueuePageViewController: UIPageViewController, UIPageViewControll
         
         let vc = allViewControllers[1] as! QueueViewController
         vc.party = party
+        vc.delegate = tableHeightDelegate!
     }
     
     func updateTable(withTracks tracks: [Track]) {

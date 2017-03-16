@@ -57,7 +57,12 @@ protocol UpdateCurrentlyPlayingArtworkDelegate: class {
     func reloadTableIfPlayingTrack(forTrack track: Track)
 }
 
-class PartyViewController: UIViewController, SPTAudioStreamingDelegate, SPTAudioStreamingPlaybackDelegate, NetworkManagerDelegate, UpdatePartyDelegate {
+protocol TableHeightDelegate: class {
+    func returnTableHeight() -> CGFloat
+    func setTableHeight(withHeight height: CGFloat)
+}
+
+class PartyViewController: UIViewController, SPTAudioStreamingDelegate, SPTAudioStreamingPlaybackDelegate, NetworkManagerDelegate, UpdatePartyDelegate, TableHeightDelegate {
     
     // MARK: - Storyboard Variables
     
@@ -67,11 +72,21 @@ class PartyViewController: UIViewController, SPTAudioStreamingDelegate, SPTAudio
     @IBOutlet weak var progressBar: UIProgressView!
     
     @IBOutlet weak var upNextLabel: UILabel!
+    
+    @IBOutlet weak var tableHeightConstraint: NSLayoutConstraint!
     var lyricsAndQueueVC: LyricsAndQueuePageViewController {
         get {
             let vc = childViewControllers.first{ $0 is LyricsAndQueuePageViewController }
             return vc as! LyricsAndQueuePageViewController
         }
+    }
+    
+    func returnTableHeight() -> CGFloat {
+        return tableHeightConstraint.constant
+    }
+    
+    func setTableHeight(withHeight height: CGFloat) {
+        tableHeightConstraint.constant = height
     }
     
     // MARK: - General Variables
@@ -436,6 +451,7 @@ class PartyViewController: UIViewController, SPTAudioStreamingDelegate, SPTAudio
         if segue.identifier == "Show Lyrics and Queue" {
             if let controller = segue.destination as? LyricsAndQueuePageViewController {
                 controller.party = party
+                controller.tableHeightDelegate = self
             }
         }
     }

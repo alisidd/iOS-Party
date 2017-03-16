@@ -9,8 +9,22 @@
 import UIKit
 
 class QueueViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
+    
+    var delegate: TableHeightDelegate?
 
     @IBOutlet weak var tracksTableView: UITableView!
+    let minHeight: CGFloat = 351
+    let maxHeight: CGFloat = 30
+    var headerHeightConstraint: CGFloat {
+        get {
+            return delegate!.returnTableHeight()
+        }
+        
+        set {
+            delegate?.setTableHeight(withHeight: newValue)
+        }
+    }
+    var previousScrollOffset: CGFloat = 0
     
     var tracksQueue = [Track]()
     var party = Party()
@@ -20,9 +34,49 @@ class QueueViewController: UIViewController, UITableViewDelegate, UITableViewDat
         setDelegates()
     }
     
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        headerHeightConstraint = minHeight
+    }
+    
     func setDelegates() {
         tracksTableView.delegate = self
         tracksTableView.dataSource = self
+    }
+    
+    // Code taken from https://michiganlabs.com/ios/development/2016/05/31/ios-animating-uitableview-header/
+    func scrollViewDidScroll(_ scrollView: UIScrollView) {
+        let scrollDiff = scrollView.contentOffset.y - previousScrollOffset
+
+        let absoluteTop: CGFloat = 0;
+        let absoluteBottom: CGFloat = scrollView.contentSize.height - scrollView.frame.size.height;
+        
+        let isScrollingDown = scrollDiff > 0 && scrollView.contentOffset.y > absoluteTop
+        let isScrollingUp = scrollDiff < 0 && scrollView.contentOffset.y < absoluteBottom
+        
+        var newHeight = headerHeightConstraint
+        
+        if isScrollingDown {
+            newHeight = max(maxHeight, headerHeightConstraint - abs(scrollDiff))
+            if newHeight != headerHeightConstraint {
+                headerHeightConstraint = newHeight
+                setScrollPosition(for: previousScrollOffset)
+            }
+            
+        } else if isScrollingUp {
+            newHeight = min(minHeight, headerHeightConstraint + abs(scrollDiff))
+            if tracksTableView.contentOffset.y <= 0 {
+                headerHeightConstraint = newHeight
+            }
+        }
+        
+        print(tracksTableView.contentOffset)
+        
+        previousScrollOffset = scrollView.contentOffset.y
+    }
+    
+    func setScrollPosition(for offset: CGFloat) {
+        tracksTableView.contentOffset = CGPoint(x: tracksTableView.contentOffset.x, y: offset)
     }
     
     // MARK: - Table

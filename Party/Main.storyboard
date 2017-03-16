@@ -176,7 +176,7 @@
                                 </constraints>
                             </imageView>
                             <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" spacing="4" translatesAutoresizingMaskIntoConstraints="NO" id="hHA-Uv-PtN">
-                                <rect key="frame" x="21" y="310" width="123.5" height="47"/>
+                                <rect key="frame" x="21" y="310.5" width="123.5" height="47"/>
                                 <subviews>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Track Name" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ddX-fC-sB7">
                                         <rect key="frame" x="0.0" y="0.0" width="123.5" height="26.5"/>
@@ -198,7 +198,7 @@
                                 <color key="trackTintColor" red="0.96470588235294119" green="0.65098039215686276" blue="0.13725490196078433" alpha="0.34999999999999998" colorSpace="custom" customColorSpace="sRGB"/>
                             </progressView>
                             <containerView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="uNe-0s-jAa">
-                                <rect key="frame" x="0.0" y="375" width="375" height="292"/>
+                                <rect key="frame" x="0.0" y="415" width="375" height="252"/>
                                 <connections>
                                     <segue destination="E8C-Ne-jys" kind="embed" identifier="Show Lyrics and Queue" id="R0i-j5-9nI"/>
                                 </connections>
@@ -208,15 +208,14 @@
                         <constraints>
                             <constraint firstItem="hHA-Uv-PtN" firstAttribute="leading" secondItem="ZZK-fY-JAX" secondAttribute="leadingMargin" constant="5" id="3dd-p3-2Q6"/>
                             <constraint firstAttribute="trailing" secondItem="uNe-0s-jAa" secondAttribute="trailing" id="7e1-fv-0T1"/>
+                            <constraint firstItem="uNe-0s-jAa" firstAttribute="top" secondItem="aeu-Sl-Wwd" secondAttribute="bottom" constant="351" id="8yz-Se-8fe"/>
                             <constraint firstItem="nye-1U-YIH" firstAttribute="trailing" secondItem="uNe-0s-jAa" secondAttribute="trailing" id="9sm-aB-ywC"/>
                             <constraint firstItem="uNe-0s-jAa" firstAttribute="leading" secondItem="ZZK-fY-JAX" secondAttribute="leading" id="OYZ-X7-SET"/>
                             <constraint firstItem="nye-1U-YIH" firstAttribute="leading" secondItem="ZZK-fY-JAX" secondAttribute="leadingMargin" constant="-14" id="Plq-HP-xx0"/>
-                            <constraint firstItem="uNe-0s-jAa" firstAttribute="top" secondItem="hHA-Uv-PtN" secondAttribute="bottom" constant="18" id="ZXs-rE-i6D"/>
                             <constraint firstItem="HrH-IU-EqN" firstAttribute="leading" secondItem="ZZK-fY-JAX" secondAttribute="leading" id="bh7-eU-zke"/>
                             <constraint firstItem="nye-1U-YIH" firstAttribute="bottom" secondItem="HrH-IU-EqN" secondAttribute="bottom" id="fHf-qK-PWb"/>
                             <constraint firstItem="IwS-71-ORn" firstAttribute="top" secondItem="uNe-0s-jAa" secondAttribute="bottom" id="fHs-bj-2F2"/>
                             <constraint firstItem="HrH-IU-EqN" firstAttribute="top" secondItem="ZZK-fY-JAX" secondAttribute="top" id="j46-mN-qTq"/>
-                            <constraint firstItem="uNe-0s-jAa" firstAttribute="top" secondItem="HrH-IU-EqN" secondAttribute="bottom" id="miY-2r-2EJ"/>
                             <constraint firstItem="hHA-Uv-PtN" firstAttribute="centerY" secondItem="ZZK-fY-JAX" secondAttribute="centerY" id="nKf-pc-u65"/>
                             <constraint firstAttribute="trailing" secondItem="HrH-IU-EqN" secondAttribute="trailing" id="vYf-iK-Cl7"/>
                         </constraints>
@@ -226,6 +225,7 @@
                         <outlet property="currentlyPlayingArtwork" destination="HrH-IU-EqN" id="Dpl-AR-7y4"/>
                         <outlet property="currentlyPlayingTrackName" destination="ddX-fC-sB7" id="Elg-ej-lTp"/>
                         <outlet property="progressBar" destination="nye-1U-YIH" id="Q5p-CY-yWX"/>
+                        <outlet property="tableHeightConstraint" destination="8yz-Se-8fe" id="6eT-3X-V2b"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="f0T-g7-1Cu" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -254,7 +254,7 @@
                         <viewControllerLayoutGuide type="bottom" id="iXs-oT-QQM"/>
                     </layoutGuides>
                     <view key="view" contentMode="scaleToFill" id="gGj-Ly-qJW">
-                        <rect key="frame" x="0.0" y="0.0" width="375" height="292"/>
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="252"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Up Next" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="kYj-8e-FOB">
@@ -267,7 +267,7 @@
                                 <nil key="highlightedColor"/>
                             </label>
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="none" allowsSelection="NO" rowHeight="100" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="phr-p9-Mvw">
-                                <rect key="frame" x="0.0" y="42" width="375" height="250"/>
+                                <rect key="frame" x="0.0" y="42" width="375" height="210"/>
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                 <prototypes>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="Track In Queue" rowHeight="100" id="PfY-7n-9mG" customClass="TrackTableViewCell" customModule="Party" customModuleProvider="target">
@@ -363,7 +363,7 @@
                         <viewControllerLayoutGuide type="bottom" id="Sm3-nd-G0X"/>
                     </layoutGuides>
                     <view key="view" contentMode="scaleToFill" id="ycj-ns-G0n">
-                        <rect key="frame" x="0.0" y="0.0" width="375" height="292"/>
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="252"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Lyrics" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ec4-qM-D4o">
