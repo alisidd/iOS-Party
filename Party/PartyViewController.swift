@@ -129,9 +129,9 @@ class PartyViewController: UIViewController, SPTAudioStreamingDelegate, SPTAudio
     func updateCurrentlyPlayingTrack() {
         DispatchQueue.main.async {
             if !self.party.tracksQueue.isEmpty {
-                    self.currentlyPlayingTrackName.text = self.party.tracksQueue[0].name
-                    self.currentlyPlayingArtistName.text = self.party.tracksQueue[0].artist
-                    self.updateArtworkForCurrentlyPlaying()
+                self.updateArtworkForCurrentlyPlaying()
+                self.currentlyPlayingTrackName.text = self.party.tracksQueue[0].name
+                self.currentlyPlayingArtistName.text = self.party.tracksQueue[0].artist
             }
         }
     }
@@ -157,25 +157,6 @@ class PartyViewController: UIViewController, SPTAudioStreamingDelegate, SPTAudio
         }
     }
     
-    
-    func cache(hasTrack track: Track) -> Bool {
-        for trackInCache in cache {
-            if trackInCache.id == track.id {
-                return true
-            }
-        }
-        return false
-    }
-    
-    func indexInCache(ofTrack track: Track) -> Int? {
-        for i in 0..<cache.count {
-            if cache[i].id == track.id {
-                return i
-            }
-        }
-        return nil
-    }
-    
     internal func addTracks(fromPeer peer: MCPeerID, withTracks tracks: [String]) {
         
         APIManager.latestRequest[peer] = tracks
@@ -198,14 +179,16 @@ class PartyViewController: UIViewController, SPTAudioStreamingDelegate, SPTAudio
                     if self.party.tracksQueue.count == API.tracksList.count {
                         self.musicPlayer.modifyQueue(withTracks: self.party.tracksQueue)
                     }
+                    self.fetchHighResArtwork(forTracks: API.tracksList)
                 } else {
                     self.cache = self.party.tracksQueue
                     self.party.tracksQueue.removeAll()
                     var newTracks = [Track]()
+                
                     for newTrack in API.tracksList {
-                        if self.cache(hasTrack: newTrack) {
-                            self.party.tracksQueue.append(self.cache[self.indexInCache(ofTrack: newTrack)!])
-                        } else {
+                        if let index = self.indexInCache(ofTrack: newTrack) {
+                            self.party.tracksQueue.append(self.cache[index])
+                        } else { 
                             self.party.tracksQueue.append(newTrack)
                             newTracks.append(newTrack)
                         }
@@ -221,11 +204,19 @@ class PartyViewController: UIViewController, SPTAudioStreamingDelegate, SPTAudio
         }
     }
     
+    func indexInCache(ofTrack track: Track) -> Int? {
+        for i in 0..<cache.count {
+            if cache[i].id == track.id {
+                return i
+            }
+        }
+        return nil
+    }
+    
     func fetchHighResArtwork(forTracks tracks: [Track]) {
-        print("Fetching new images")
         for track in tracks {
-            if track.highResArtwork != nil {
-                track.highResArtwork = fetchImage(forTrack: track, setCurrentlyPlaying: false)
+            if let index = party.tracksQueue.index(of: track) {
+                party.tracksQueue[index].highResArtwork = fetchImage(forTrack: track, setCurrentlyPlaying: false)
             }
         }
     }
@@ -411,10 +402,6 @@ class PartyViewController: UIViewController, SPTAudioStreamingDelegate, SPTAudio
         }
     }
     
-    func longPressGestureRecognized(gestureRecognizer: UIGestureRecognizer) {
-        let recognizer = gestureRecognizer as! UILongPressGestureRecognizer
-    }
-    
     private func fetchImage(forTrack track: Track, setCurrentlyPlaying: Bool) -> UIImage? {
         if let url = URL(string: track.highResArtworkURL) {
             do {
@@ -463,28 +450,26 @@ class PartyViewController: UIViewController, SPTAudioStreamingDelegate, SPTAudio
                     let _ = self.fetchImage(forTrack: VC.tracksQueue[0], setCurrentlyPlaying: true)?.addGradient()
                 }
                 
-                DispatchQueue.main.async {
-                    self.lyricsAndQueueVC.updateTable(withTracks: self.party.tracksQueue)
-                    
-                    DispatchQueue.global(qos: .userInitiated).async {
-                        if self.party.tracksQueue.count == VC.tracksQueue.count {
-                            self.musicPlayer.modifyQueue(withTracks: self.party.tracksQueue)
-                        }
-                        
-                        for track in VC.tracksQueue {
-                            if let unwrappedArtwork = self.fetchImage(forTrack: track, setCurrentlyPlaying: false) {
-                                track.highResArtwork = unwrappedArtwork
-                                if self.party.tracksQueue.count > 0 {
-                                    if track == self.party.tracksQueue[0] {
-                                        self.updateCurrentlyPlayingTrack()
-                                    }
-                                }    
-                            }
-                        }
-                        
-                        VC.emptyArrays()
-                    }
+                self.lyricsAndQueueVC.updateTable(withTracks: self.party.tracksQueue)
+                
+                if self.party.tracksQueue.count == VC.tracksQueue.count {
+                    self.musicPlayer.modifyQueue(withTracks: self.party.tracksQueue)
                 }
+
+                self.fetchHighResArtwork(forTracks: VC.tracksQueue)
+                /*
+                for track in VC.tracksQueue {
+                    if let unwrappedArtwork = self.fetchImage(forTrack: track, setCurrentlyPlaying: false) {
+                        track.highResArtwork = unwrappedArtwork
+                        if self.party.tracksQueue.count > 0 {
+                            if track == self.party.tracksQueue[0] {
+                                self.updateCurrentlyPlayingTrack()
+                            }
+                        }    
+                    }
+                }*/
+                
+                VC.emptyArrays()
             }
         }
     }

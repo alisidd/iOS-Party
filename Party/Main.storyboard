@@ -109,10 +109,9 @@
                                             <nil key="highlightedColor"/>
                                         </label>
                                         <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="OGe-Nr-dq3">
-                                            <rect key="frame" x="334" y="8" width="33" height="34"/>
+                                            <rect key="frame" x="333" y="8" width="34" height="34"/>
                                             <constraints>
                                                 <constraint firstAttribute="width" constant="34" id="PGk-zu-pjN"/>
-                                                <constraint firstAttribute="width" secondItem="OGe-Nr-dq3" secondAttribute="height" multiplier="34:35" id="WD6-M0-1VQ"/>
                                                 <constraint firstAttribute="height" constant="34" id="j9d-WC-RFL"/>
                                             </constraints>
                                         </imageView>
@@ -238,8 +237,8 @@
             <objects>
                 <pageViewController autoresizesArchivedViewToFullSize="NO" transitionStyle="scroll" navigationOrientation="horizontal" spineLocation="none" id="E8C-Ne-jys" customClass="LyricsAndQueuePageViewController" customModule="Party" customModuleProvider="target" sceneMemberID="viewController">
                     <connections>
-                        <segue destination="dz5-uv-Blh" kind="show" id="y0M-A2-N4L"/>
-                        <segue destination="bzE-NA-evr" kind="show" id="d9m-bz-nzI"/>
+                        <segue destination="dz5-uv-Blh" kind="show" identifier="Show Queue" id="y0M-A2-N4L"/>
+                        <segue destination="bzE-NA-evr" kind="show" identifier="Show Lyrics" id="d9m-bz-nzI"/>
                     </connections>
                 </pageViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="UzL-Z6-ojL" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -608,6 +607,6 @@
         </scene>
     </scenes>
     <inferredMetricsTieBreakers>
-        <segue reference="51P-jV-0ma"/>
+        <segue reference="tKi-TQ-idt"/>
     </inferredMetricsTieBreakers>
 </document>
