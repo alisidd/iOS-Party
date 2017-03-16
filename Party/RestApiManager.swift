@@ -88,6 +88,8 @@ class RestApiManager {
             newTrack.highResArtworkURL = newTrack.lowResArtworkURL.replacingOccurrences(of: "100x100", with: "600x600")
             newTrack.highResArtwork = fetchImage(fromURL: newTrack.highResArtworkURL)
             
+            newTrack.length = TimeInterval(track["trackTimeMillis"].doubleValue / 1000)
+            
             tracksList.append(newTrack)
         }
     }
@@ -149,6 +151,8 @@ class RestApiManager {
                         }
                     }
                     
+                    newTrack.length = TimeInterval(track["duration_ms"].doubleValue / 1000)
+                    
                     tracksList.append(newTrack)
                 }
             }
@@ -208,6 +212,8 @@ class RestApiManager {
             }
             
         }
+        
+        newTrack.length = TimeInterval(track["duration_ms"].doubleValue / 1000)
         
         tracksList.append(newTrack)
     }

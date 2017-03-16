@@ -13,6 +13,7 @@ class QueueViewController: UIViewController, UITableViewDelegate, UITableViewDat
     @IBOutlet weak var tracksTableView: UITableView!
     
     var tracksQueue = [Track]()
+    var party = Party()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -56,6 +57,14 @@ class QueueViewController: UIViewController, UITableViewDelegate, UITableViewDat
     func updateTable() {
         DispatchQueue.main.async {
             self.tracksTableView.reloadData()
+        }
+    }
+    
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        if segue.identifier == "Add Tracks" {
+            if let vc = segue.destination as? AddSongViewController {
+                vc.party = party
+            }
         }
     }
     /*

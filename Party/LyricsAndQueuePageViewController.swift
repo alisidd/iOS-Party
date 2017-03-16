@@ -33,10 +33,14 @@ class LyricsAndQueuePageViewController: UIPageViewController, UIPageViewControll
         allViewControllers.append(tracksQueueViewController)
         
         setViewControllers([tracksQueueViewController], direction: .reverse, animated: true, completion: nil)
+        
+        let vc = allViewControllers[1] as! QueueViewController
+        vc.party = party
     }
     
     func updateTable(withTracks tracks: [Track]) {
         if let vc = allViewControllers[1] as? QueueViewController {
+            vc.party = party
             vc.tracksQueue = tracks
             vc.updateTable()
         }

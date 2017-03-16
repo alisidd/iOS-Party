@@ -181,7 +181,7 @@ class AddSongViewController: UIViewController, UITextFieldDelegate, UITableViewD
     
     func tableView(_ tableView: UITableView, didDeselectRowAt indexPath: IndexPath) {
         let cell = trackTableView.cellForRow(at: indexPath)!
-        removeFromQueue(track: tracksList[indexPath.section])
+        removeFromQueue(track: tracksList[indexPath.row])
         
         UIView.animate(withDuration: 0.35) {
             cell.accessoryType = .none

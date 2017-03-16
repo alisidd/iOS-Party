@@ -176,6 +176,28 @@
                                     <constraint firstAttribute="width" secondItem="HrH-IU-EqN" secondAttribute="height" multiplier="1:1" id="yLO-cu-6Im"/>
                                 </constraints>
                             </imageView>
+                            <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" spacing="4" translatesAutoresizingMaskIntoConstraints="NO" id="hHA-Uv-PtN">
+                                <rect key="frame" x="21" y="310" width="123.5" height="47"/>
+                                <subviews>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Track Name" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ddX-fC-sB7">
+                                        <rect key="frame" x="0.0" y="0.0" width="123.5" height="26.5"/>
+                                        <fontDescription key="fontDescription" name="Helvetica-Light" family="Helvetica" pointSize="23"/>
+                                        <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Artist Name" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="DVp-9a-h3f">
+                                        <rect key="frame" x="0.0" y="30.5" width="123.5" height="16.5"/>
+                                        <fontDescription key="fontDescription" name="Helvetica-Light" family="Helvetica" pointSize="14"/>
+                                        <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                </subviews>
+                            </stackView>
+                            <progressView opaque="NO" contentMode="scaleToFill" verticalHuggingPriority="750" progress="0.5" translatesAutoresizingMaskIntoConstraints="NO" id="nye-1U-YIH">
+                                <rect key="frame" x="2" y="373" width="373" height="2"/>
+                                <color key="tintColor" red="0.96470588239999999" green="0.65098039220000004" blue="0.13725490200000001" alpha="1" colorSpace="calibratedRGB"/>
+                                <color key="trackTintColor" red="0.96470588235294119" green="0.65098039215686276" blue="0.13725490196078433" alpha="0.34999999999999998" colorSpace="custom" customColorSpace="sRGB"/>
+                            </progressView>
                             <containerView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="uNe-0s-jAa">
                                 <rect key="frame" x="0.0" y="375" width="375" height="292"/>
                                 <connections>
@@ -185,17 +207,26 @@
                         </subviews>
                         <color key="backgroundColor" red="0.10196078431372549" green="0.10196078431372549" blue="0.10196078431372549" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <constraints>
+                            <constraint firstItem="hHA-Uv-PtN" firstAttribute="leading" secondItem="ZZK-fY-JAX" secondAttribute="leadingMargin" constant="5" id="3dd-p3-2Q6"/>
                             <constraint firstAttribute="trailing" secondItem="uNe-0s-jAa" secondAttribute="trailing" id="7e1-fv-0T1"/>
+                            <constraint firstItem="nye-1U-YIH" firstAttribute="trailing" secondItem="uNe-0s-jAa" secondAttribute="trailing" id="9sm-aB-ywC"/>
                             <constraint firstItem="uNe-0s-jAa" firstAttribute="leading" secondItem="ZZK-fY-JAX" secondAttribute="leading" id="OYZ-X7-SET"/>
+                            <constraint firstItem="nye-1U-YIH" firstAttribute="leading" secondItem="ZZK-fY-JAX" secondAttribute="leadingMargin" constant="-14" id="Plq-HP-xx0"/>
+                            <constraint firstItem="uNe-0s-jAa" firstAttribute="top" secondItem="hHA-Uv-PtN" secondAttribute="bottom" constant="18" id="ZXs-rE-i6D"/>
                             <constraint firstItem="HrH-IU-EqN" firstAttribute="leading" secondItem="ZZK-fY-JAX" secondAttribute="leading" id="bh7-eU-zke"/>
+                            <constraint firstItem="nye-1U-YIH" firstAttribute="bottom" secondItem="HrH-IU-EqN" secondAttribute="bottom" id="fHf-qK-PWb"/>
                             <constraint firstItem="IwS-71-ORn" firstAttribute="top" secondItem="uNe-0s-jAa" secondAttribute="bottom" id="fHs-bj-2F2"/>
                             <constraint firstItem="HrH-IU-EqN" firstAttribute="top" secondItem="ZZK-fY-JAX" secondAttribute="top" id="j46-mN-qTq"/>
                             <constraint firstItem="uNe-0s-jAa" firstAttribute="top" secondItem="HrH-IU-EqN" secondAttribute="bottom" id="miY-2r-2EJ"/>
+                            <constraint firstItem="hHA-Uv-PtN" firstAttribute="centerY" secondItem="ZZK-fY-JAX" secondAttribute="centerY" id="nKf-pc-u65"/>
                             <constraint firstAttribute="trailing" secondItem="HrH-IU-EqN" secondAttribute="trailing" id="vYf-iK-Cl7"/>
                         </constraints>
                     </view>
                     <connections>
+                        <outlet property="currentlyPlayingArtistName" destination="DVp-9a-h3f" id="uwu-Ap-DOc"/>
                         <outlet property="currentlyPlayingArtwork" destination="HrH-IU-EqN" id="Dpl-AR-7y4"/>
+                        <outlet property="currentlyPlayingTrackName" destination="ddX-fC-sB7" id="Elg-ej-lTp"/>
+                        <outlet property="progressBar" destination="nye-1U-YIH" id="Q5p-CY-yWX"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="f0T-g7-1Cu" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -228,7 +259,7 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Up Next" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="kYj-8e-FOB">
-                                <rect key="frame" x="21" y="20" width="62" height="22"/>
+                                <rect key="frame" x="31" y="20" width="62" height="22"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="62" id="R7A-xx-MWi"/>
                                 </constraints>
@@ -310,7 +341,7 @@
                             <constraint firstItem="YGx-cb-qhQ" firstAttribute="trailing" secondItem="gGj-Ly-qJW" secondAttribute="trailingMargin" constant="5" id="97t-kr-Mny"/>
                             <constraint firstAttribute="trailing" secondItem="phr-p9-Mvw" secondAttribute="trailing" id="BJ6-to-94e"/>
                             <constraint firstItem="YGx-cb-qhQ" firstAttribute="centerY" secondItem="kYj-8e-FOB" secondAttribute="centerY" id="NRt-4c-jcl"/>
-                            <constraint firstItem="kYj-8e-FOB" firstAttribute="leading" secondItem="gGj-Ly-qJW" secondAttribute="leadingMargin" constant="5" id="Vir-ho-0gP"/>
+                            <constraint firstItem="kYj-8e-FOB" firstAttribute="leading" secondItem="gGj-Ly-qJW" secondAttribute="leadingMargin" constant="15" id="Vir-ho-0gP"/>
                             <constraint firstItem="phr-p9-Mvw" firstAttribute="top" secondItem="kYj-8e-FOB" secondAttribute="bottom" id="e96-Gb-Lhv"/>
                             <constraint firstItem="kYj-8e-FOB" firstAttribute="top" secondItem="d2a-T0-Fb4" secondAttribute="bottom" constant="20" id="edc-LM-N05"/>
                             <constraint firstItem="phr-p9-Mvw" firstAttribute="bottom" secondItem="iXs-oT-QQM" secondAttribute="top" id="jTg-aE-Zmg"/>
@@ -337,7 +368,7 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Lyrics" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ec4-qM-D4o">
-                                <rect key="frame" x="20" y="20" width="42" height="22"/>
+                                <rect key="frame" x="31" y="20" width="42" height="22"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="42" id="ks2-Ze-cuO"/>
                                 </constraints>
@@ -349,7 +380,7 @@
                         <color key="backgroundColor" red="0.10196078431372549" green="0.10196078431372549" blue="0.10196078431372549" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <constraints>
                             <constraint firstItem="ec4-qM-D4o" firstAttribute="top" secondItem="W0L-dm-nq9" secondAttribute="bottom" constant="20" id="4Vm-kF-ue6"/>
-                            <constraint firstItem="ec4-qM-D4o" firstAttribute="leading" secondItem="ycj-ns-G0n" secondAttribute="leadingMargin" constant="4" id="JeF-ez-lCS"/>
+                            <constraint firstItem="ec4-qM-D4o" firstAttribute="leading" secondItem="ycj-ns-G0n" secondAttribute="leadingMargin" constant="15" id="JeF-ez-lCS"/>
                         </constraints>
                     </view>
                 </viewController>

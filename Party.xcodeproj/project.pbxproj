@@ -145,8 +145,8 @@
 			children = (
 				417B9D4A1E317C3C0021F36E /* PartyViewController.swift */,
 				41C0AEB91E7A0AC100C797F0 /* LyricsAndQueuePageViewController.swift */,
-				41C0AEBD1E7A12E000C797F0 /* QueueViewController.swift */,
 				41C0AEBB1E7A12CB00C797F0 /* LyricsViewController.swift */,
+				41C0AEBD1E7A12E000C797F0 /* QueueViewController.swift */,
 				4134216A1E3D775400888403 /* newParty.swift */,
 				412FBED01E32CFA7007FFB6A /* MusicPlayer.swift */,
 				417B9D561E31CD8D0021F36E /* TrackTableViewCell.swift */,

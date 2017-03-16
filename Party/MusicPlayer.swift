@@ -92,6 +92,8 @@ class MusicPlayer: NSObject {
     // MARK: - Playback
     
     func modifyQueue(withTracks tracks: [Track]) {
+        print("Modifying Queue")
+
         if self.party.musicService == .appleMusic {
             self.modifyAppleMusicQueue(withTrack: tracks)
         } else {
@@ -121,7 +123,6 @@ class MusicPlayer: NSObject {
     
     @objc func playTrack() {
         if party.musicService == .appleMusic {
-            appleMusicPlayer.prepareToPlay()
             appleMusicPlayer.play()
         } else {
             spotifyPlayer?.setIsPlaying(true, callback: nil)
@@ -135,6 +136,10 @@ class MusicPlayer: NSObject {
         } else {
             spotifyPlayer?.setIsPlaying(false, callback: nil)
         }
+    }
+    
+    func getCurrentPosition() -> TimeInterval {
+        return appleMusicPlayer.currentPlaybackTime
     }
     
 }
