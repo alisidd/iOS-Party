@@ -127,9 +127,9 @@ class PartyViewController: UIViewController, SPTAudioStreamingDelegate, SPTAudio
     
     func updateCurrentlyPlayingTrack() {
         if !party.tracksQueue.isEmpty {
-            updateArtworkForCurrentlyPlaying()
             currentlyPlayingTrackName.text = party.tracksQueue[0].name
             currentlyPlayingArtistName.text = party.tracksQueue[0].artist
+            updateArtworkForCurrentlyPlaying()
         }
     }
     
@@ -164,7 +164,12 @@ class PartyViewController: UIViewController, SPTAudioStreamingDelegate, SPTAudio
             let API = RestApiManager()
             
             for trackID in tracks {
-                API.makeHTTPRequestToSpotifyForSingleTrack(withID: trackID)
+                if self.party.musicService == .spotify {
+                    API.makeHTTPRequestToSpotifyForSingleTrack(forID: trackID)
+                } else {
+                    API.makeHTTPRequestToAppleForSingleTrack(forID: trackID)
+                }
+                
                 API.dispatchGroup.wait()
             }
             
@@ -172,7 +177,6 @@ class PartyViewController: UIViewController, SPTAudioStreamingDelegate, SPTAudio
                 if self.isHost {
                     self.party.tracksQueue.append(contentsOf: API.tracksList)
                     if self.party.tracksQueue.count == API.tracksList.count {
-                        print("probably second")
                         self.musicPlayer.modifyQueue(withTracks: self.party.tracksQueue)
                     }
                 } else {
@@ -226,8 +230,9 @@ class PartyViewController: UIViewController, SPTAudioStreamingDelegate, SPTAudio
     
     // TODO: improve this functions name
     private func adjustViews() {
-        // Gesture
-        let recognizer = UILongPressGestureRecognizer(target: self, action: #selector(PartyViewController.longPressGestureRecognized(gestureRecognizer:)))
+        if !isHost {
+            progressBar.isHidden = true
+        }
     }
     
     private func initializeMusicPlayer() {
@@ -238,6 +243,7 @@ class PartyViewController: UIViewController, SPTAudioStreamingDelegate, SPTAudio
             musicPlayer.haveAuthorization()
             musicPlayer.appleMusicPlayer.beginGeneratingPlaybackNotifications()
             NotificationCenter.default.addObserver(self, selector: #selector(PartyViewController.playNextTrack), name:NSNotification.Name.MPMusicPlayerControllerPlaybackStateDidChange, object: musicPlayer.appleMusicPlayer)
+            setTimer()
             
         } else {
             let APIManager = RestApiManager()
@@ -348,9 +354,9 @@ class PartyViewController: UIViewController, SPTAudioStreamingDelegate, SPTAudio
     // MARK: - Callbacks
     
     @objc private func playNextTrack() {
-        setTimer()
         if musicPlayer.safeToPlayNextTrack() && !party.tracksQueue.isEmpty {
-            if progressBar.progress == 100 {
+            print(progressBar.progress)
+            if progressBar.progress > 0.98 {
                 if personalQueue.contains(party.tracksQueue[0]) {
                     personalQueue.remove(at: personalQueue.index(of: party.tracksQueue[0])!)
                 }

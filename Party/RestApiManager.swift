@@ -94,6 +94,26 @@ class RestApiManager {
         }
     }
     
+    func makeHTTPRequestToAppleForSingleTrack(forID id: String) {
+        dispatchGroup.enter()
+        
+        DispatchQueue.global(qos: .userInitiated).async {
+            let requestURL = URL(string: self.spotifyTracksUrl + "tracks/" + id)
+            
+            let task = URLSession.shared.dataTask(with: requestURL!) { (data, response, error) in
+                if let statusCode = (response as? HTTPURLResponse)?.statusCode {
+                    if statusCode == 200 {
+                        let json = JSON(data: data!)
+                        self.parseSingleSpotifyTrackJSON(forTrack: json)
+                    }
+                }
+                self.dispatchGroup.leave()
+            }
+            
+            task.resume()
+        }
+    }
+    
     func getAuthentication() -> SPTAuth? {
         let auth = SPTAuth.defaultInstance()
         auth?.clientID = "308657d9662146ecae57855ac2a01045"
@@ -171,7 +191,7 @@ class RestApiManager {
         return nil
     }
     
-    func makeHTTPRequestToSpotifyForSingleTrack(withID id: String) {
+    func makeHTTPRequestToSpotifyForSingleTrack(forID id: String) {
         dispatchGroup.enter()
         
         DispatchQueue.global(qos: .userInitiated).async {
