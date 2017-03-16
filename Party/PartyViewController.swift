@@ -44,7 +44,7 @@ protocol NetworkManagerDelegate: class {
     func connectedDevicesChanged(_ manager : NetworkServiceManager, connectedDevices: [String])
     func amHost() -> Bool
     func sendPartyInfo(toSession session: MCSession)
-    func setupParty(withName name: String)
+    func setupParty(withService service: String)
     func addTracks(fromPeer peer: MCPeerID, withTracks tracks: [String])
     func removeTrackFromPeer(withTrack track: String)
 }
@@ -95,7 +95,6 @@ class PartyViewController: UIViewController, SPTAudioStreamingDelegate, SPTAudio
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        setupNavigationBar()
         setDelegates()
         adjustViews()
         
@@ -151,10 +150,23 @@ class PartyViewController: UIViewController, SPTAudioStreamingDelegate, SPTAudio
     
     // Handles addition and removal of tracks
     private func sendTracksToPeers(forTracks tracks: [Track]) {
-        let tracksIDString = Track.idOfTracks(tracks)
+        let tracksIDString = id(ofTracks: tracks)
         if isHost || (!isHost && !tracks.isEmpty) {
             tracksListManager.sendTracks(tracksIDString)
         }
+    }
+    
+    func id(ofTracks tracks: [Track]) -> [String] {
+        var result = [String]()
+        for track in tracks {
+            print("Service being used: \(party.musicService)")
+            if party.musicService == .spotify {
+                result.append(track.id)
+            } else {
+                result.append(track.id + "-" + track.artist)
+            }
+        }
+        return result
     }
     
     internal func addTracks(fromPeer peer: MCPeerID, withTracks tracks: [String]) {
@@ -236,13 +248,6 @@ class PartyViewController: UIViewController, SPTAudioStreamingDelegate, SPTAudio
     
     // MARK: - General Functions
     
-    private func setupNavigationBar() {
-        self.title = party.partyName
-        navigationController?.navigationBar.isTranslucent = true
-        UINavigationBar.appearance().barTintColor = UIColor(red: 0/255, green: 0/255, blue: 45/255, alpha: 1)
-        navigationController?.navigationBar.titleTextAttributes = [NSFontAttributeName : UIFont(name: "Helvetica Light", size: 23)!, NSForegroundColorAttributeName: UIColor.white]
-    }
-    
     private func setDelegates() {
         tracksListManager.delegate = self
         party.delegate = self
@@ -250,9 +255,7 @@ class PartyViewController: UIViewController, SPTAudioStreamingDelegate, SPTAudio
     
     // TODO: improve this functions name
     private func adjustViews() {
-        if !isHost {
-            progressBar.isHidden = true
-        }
+        progressBar.isHidden = true
     }
     
     private func initializeMusicPlayer() {
@@ -488,15 +491,18 @@ class PartyViewController: UIViewController, SPTAudioStreamingDelegate, SPTAudio
     
     internal func sendPartyInfo(toSession session: MCSession) {
         if isHost {
-            tracksListManager.sendPartyInfo(withTracks: party.tracksQueue, withName: party.partyName, toSession: session)
+            tracksListManager.sendPartyInfo(withTracks: party.tracksQueue, forService: party.musicService, toSession: session)
         }
     }
     
-    internal func setupParty(withName name: String) {
+    internal func setupParty(withService service: String) {
         print("Setting up party using party info received")
-        party.partyName = name
-        DispatchQueue.main.async {
-            self.title = name.uppercased()
+        if service == "s" {
+            print("Setting service to spotify")
+            party.musicService = .spotify
+        } else {
+            print("Setting service to Apple")
+            party.musicService = .appleMusic
         }
     }
 }

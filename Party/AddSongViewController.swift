@@ -83,7 +83,7 @@ class AddSongViewController: UIViewController, UITextFieldDelegate, UITableViewD
     
     func makeRequestForTracks(forQuery query: String) {
         if party.musicService == .appleMusic {
-            APIManager.makeHTTPRequestToApple(withString: query)
+            APIManager.makeHTTPRequestToApple(withString: query, withPossibleTrackID: nil)
         } else {
             APIManager.makeHTTPRequestToSpotify(withString: query)
         }

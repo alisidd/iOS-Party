@@ -33,11 +33,10 @@ class RestApiManager {
     
     // MARK: - Apple Music
     
-    func makeHTTPRequestToApple(withString string: String) {
+    func makeHTTPRequestToApple(withString string: String, withPossibleTrackID trackID: String?) {
         dispatchGroup.enter()
         
         DispatchQueue.global(qos: .userInitiated).async {
-            
             // Get storefront identifer to ensure tracks returned are playable by the user
             if self.storefrontIdentifierFound.isEmpty {
                 self.dispatchGroupForStorefrontFetch.enter()
@@ -51,7 +50,7 @@ class RestApiManager {
                 if let statusCode = (response as? HTTPURLResponse)?.statusCode {
                     if statusCode == 200 {
                         let json = JSON(data: data!)
-                        self.parseAppleTrackJSON(forJSON: json)
+                        self.parseAppleTrackJSON(forJSON: json, possibleTrackID: trackID)
                     }
                 }
                 
@@ -74,7 +73,7 @@ class RestApiManager {
         }
     }
     
-    func parseAppleTrackJSON(forJSON json: JSON) {
+    func parseAppleTrackJSON(forJSON json: JSON, possibleTrackID: String?) {
         tracksList.removeAll()
         for track in json["results"].arrayValue {
             let newTrack = Track()
@@ -83,35 +82,25 @@ class RestApiManager {
             newTrack.artist = track["artistName"].stringValue
             newTrack.album = track["collectionName"].stringValue
             
-            newTrack.lowResArtworkURL = track["artworkUrl100"].stringValue
+            newTrack.lowResArtworkURL = track["artworkUrl60"].stringValue
             newTrack.artwork = fetchImage(fromURL: newTrack.lowResArtworkURL)
-            newTrack.highResArtworkURL = newTrack.lowResArtworkURL.replacingOccurrences(of: "100x100", with: "600x600")
-            newTrack.highResArtwork = fetchImage(fromURL: newTrack.highResArtworkURL)
+            newTrack.highResArtworkURL = newTrack.lowResArtworkURL.replacingOccurrences(of: "60x60", with: "400x400")
             
             newTrack.length = TimeInterval(track["trackTimeMillis"].doubleValue / 1000)
             
-            tracksList.append(newTrack)
+            if let trackID = possibleTrackID, trackID == newTrack.id {
+                tracksList.append(newTrack)
+            } else if possibleTrackID == nil {
+                tracksList.append(newTrack)
+            }
         }
     }
     
     func makeHTTPRequestToAppleForSingleTrack(forID id: String) {
-        dispatchGroup.enter()
-        
-        DispatchQueue.global(qos: .userInitiated).async {
-            let requestURL = URL(string: self.spotifyTracksUrl + "tracks/" + id)
-            
-            let task = URLSession.shared.dataTask(with: requestURL!) { (data, response, error) in
-                if let statusCode = (response as? HTTPURLResponse)?.statusCode {
-                    if statusCode == 200 {
-                        let json = JSON(data: data!)
-                        self.parseSingleSpotifyTrackJSON(forTrack: json)
-                    }
-                }
-                self.dispatchGroup.leave()
-            }
-            
-            task.resume()
-        }
+        let ids = id.components(separatedBy: "-")
+        let trackID = ids[0]
+        let artistName = ids[1]
+        makeHTTPRequestToApple(withString: artistName, withPossibleTrackID: trackID)
     }
     
     func getAuthentication() -> SPTAuth? {

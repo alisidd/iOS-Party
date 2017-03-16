@@ -72,19 +72,32 @@ class NetworkServiceManager: NSObject {
         }
     }
     
-    func sendPartyInfo(withTracks tracks: [Track], withName name: String, toSession session: MCSession) {
+    func sendPartyInfo(withTracks tracks: [Track], forService service: MusicService, toSession session: MCSession) {
         if sessions.count > 0 {
             do {
-                let tracksData = NSKeyedArchiver.archivedData(withRootObject: Track.idOfTracks(tracks))
-                let partyNameData = NSKeyedArchiver.archivedData(withRootObject: name)
+                let tracksData = NSKeyedArchiver.archivedData(withRootObject: id(ofTracks: tracks, forService: service))
+                let serviceToSend = service == .spotify ? "s" : "a"
+                let musicServiceData = NSKeyedArchiver.archivedData(withRootObject: serviceToSend)
                 print("Number of active sessions: \(sessions.count)")
                 try session.send(tracksData, toPeers: session.connectedPeers, with: .reliable)
-                try session.send(partyNameData, toPeers: session.connectedPeers, with: .reliable)
+                try session.send(musicServiceData, toPeers: session.connectedPeers, with: .reliable)
                 print("Sending Party info to other device")
             } catch let error as NSError {
                 print(error.localizedDescription)
             }
         }
+    }
+    
+    func id(ofTracks tracks: [Track], forService service: MusicService) -> [String] {
+        var result = [String]()
+        for track in tracks {
+            if service == .spotify {
+                result.append(track.id)
+            } else {
+                result.append(track.id + "-" + track.artist)
+            }
+        }
+        return result
     }
 }
 
@@ -198,9 +211,9 @@ extension NetworkServiceManager : MCSessionDelegate {
     func session(_ session: MCSession, didReceive data: Data, fromPeer peerID: MCPeerID) {
         print("didReceiveData: \(data.count) bytes")
         let unarchivedData = NSKeyedUnarchiver.unarchiveObject(with: data)
-        if let partyName = unarchivedData as? String {
-            delegate?.setupParty(withName: partyName)
-        } else if let tracksIDList = unarchivedData as? [String] {
+        if let musicService = unarchivedData as? String {
+            delegate?.setupParty(withService: musicService)
+        } else if var tracksIDList = unarchivedData as? [String] {
             if !tracksIDList.isEmpty {
                 if tracksIDList[0].hasSuffix(":/?r") {
                     delegate?.removeTrackFromPeer(withTrack: tracksIDList[0])

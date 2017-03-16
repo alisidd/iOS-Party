@@ -80,7 +80,6 @@ class PartyJoinedViewController: UITableViewController {
         
 
         // Configure the cell...
-        cell.partyNameLabel.text = party.partyName
         if let _ = party.password {
             cell.isLockedImage.image = #imageLiteral(resourceName: "locked")
         } else {

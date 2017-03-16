@@ -15,7 +15,6 @@ enum MusicService: String {
 
 class Party: NSObject {
     weak var delegate: UpdatePartyDelegate?
-    var partyName = String()
     var genres = [String]()
     var musicService = MusicService.spotify
     

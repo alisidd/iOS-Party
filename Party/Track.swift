@@ -22,12 +22,4 @@ class Track: NSObject {
     
     var length: TimeInterval?
     var danceability: Int?
-    
-    static func idOfTracks(_ tracks: [Track]) -> [String] {
-        var result = [String]()
-        for track in tracks {
-            result.append(track.id)
-        }
-        return result
-    }
 }
