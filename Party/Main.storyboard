@@ -333,20 +333,34 @@
                                     </segue>
                                 </connections>
                             </button>
+                            <button hidden="YES" opaque="NO" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="vDq-NB-ESS">
+                                <rect key="frame" x="326" y="16" width="46" height="30"/>
+                                <fontDescription key="fontDescription" name="AvenirNext-DemiBold" family="Avenir Next" pointSize="16"/>
+                                <state key="normal" title="Edit">
+                                    <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                </state>
+                                <connections>
+                                    <action selector="editCells:" destination="dz5-uv-Blh" eventType="touchUpInside" id="Qy9-b4-VrY"/>
+                                </connections>
+                            </button>
                         </subviews>
                         <color key="backgroundColor" red="0.10196078431372549" green="0.10196078431372549" blue="0.10196078431372549" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <constraints>
                             <constraint firstItem="phr-p9-Mvw" firstAttribute="leading" secondItem="gGj-Ly-qJW" secondAttribute="leading" id="3Ad-PD-lA6"/>
                             <constraint firstItem="YGx-cb-qhQ" firstAttribute="trailing" secondItem="gGj-Ly-qJW" secondAttribute="trailingMargin" constant="5" id="97t-kr-Mny"/>
+                            <constraint firstItem="vDq-NB-ESS" firstAttribute="top" secondItem="kYj-8e-FOB" secondAttribute="bottom" constant="-26" id="98U-Ix-v3K"/>
                             <constraint firstAttribute="trailing" secondItem="phr-p9-Mvw" secondAttribute="trailing" id="BJ6-to-94e"/>
                             <constraint firstItem="YGx-cb-qhQ" firstAttribute="centerY" secondItem="kYj-8e-FOB" secondAttribute="centerY" id="NRt-4c-jcl"/>
                             <constraint firstItem="kYj-8e-FOB" firstAttribute="leading" secondItem="gGj-Ly-qJW" secondAttribute="leadingMargin" constant="15" id="Vir-ho-0gP"/>
                             <constraint firstItem="phr-p9-Mvw" firstAttribute="top" secondItem="kYj-8e-FOB" secondAttribute="bottom" id="e96-Gb-Lhv"/>
                             <constraint firstItem="kYj-8e-FOB" firstAttribute="top" secondItem="d2a-T0-Fb4" secondAttribute="bottom" constant="20" id="edc-LM-N05"/>
                             <constraint firstItem="phr-p9-Mvw" firstAttribute="bottom" secondItem="iXs-oT-QQM" secondAttribute="top" id="jTg-aE-Zmg"/>
+                            <constraint firstAttribute="trailing" secondItem="vDq-NB-ESS" secondAttribute="trailing" constant="12" id="wDB-3n-Nvd"/>
                         </constraints>
                     </view>
                     <connections>
+                        <outlet property="addButton" destination="YGx-cb-qhQ" id="Xwo-4a-evn"/>
+                        <outlet property="editButton" destination="vDq-NB-ESS" id="wQV-h1-aZv"/>
                         <outlet property="tracksTableView" destination="phr-p9-Mvw" id="PpQ-Pv-Nw0"/>
                     </connections>
                 </viewController>
@@ -464,6 +478,7 @@
                             <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Search" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="R8f-VN-KDZ" customClass="searchTextField" customModule="Party" customModuleProvider="target">
                                 <rect key="frame" x="16" y="32" width="275" height="44"/>
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                                <color key="tintColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="275" id="5PN-fc-4pZ"/>
                                 </constraints>

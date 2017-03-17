@@ -57,12 +57,15 @@ protocol UpdateCurrentlyPlayingArtworkDelegate: class {
     func reloadTableIfPlayingTrack(forTrack track: Track)
 }
 
-protocol TableHeightDelegate: class {
+protocol PartyViewControllerInfoDelegate: class {
     func returnTableHeight() -> CGFloat
     func setTableHeight(withHeight height: CGFloat)
+    func layout()
+    func amHost() -> Bool
+    func removeFromOthersQueue(forTrack track: Track)
 }
 
-class PartyViewController: UIViewController, SPTAudioStreamingDelegate, SPTAudioStreamingPlaybackDelegate, NetworkManagerDelegate, UpdatePartyDelegate, TableHeightDelegate {
+class PartyViewController: UIViewController, SPTAudioStreamingDelegate, SPTAudioStreamingPlaybackDelegate, NetworkManagerDelegate, UpdatePartyDelegate, PartyViewControllerInfoDelegate {
     
     // MARK: - Storyboard Variables
     
@@ -87,6 +90,10 @@ class PartyViewController: UIViewController, SPTAudioStreamingDelegate, SPTAudio
     
     func setTableHeight(withHeight height: CGFloat) {
         tableHeightConstraint.constant = height
+    }
+    
+    func layout() {
+        view.layoutIfNeeded()
     }
     
     // MARK: - General Variables
@@ -248,7 +255,7 @@ class PartyViewController: UIViewController, SPTAudioStreamingDelegate, SPTAudio
         }
     }
     
-    private func removeFromOthersQueue(forTrack track: Track) {
+    internal func removeFromOthersQueue(forTrack track: Track) {
         track.id += ":/?r"
         sendTracksToPeers(forTracks: [track])
     }
@@ -451,7 +458,7 @@ class PartyViewController: UIViewController, SPTAudioStreamingDelegate, SPTAudio
         if segue.identifier == "Show Lyrics and Queue" {
             if let controller = segue.destination as? LyricsAndQueuePageViewController {
                 controller.party = party
-                controller.tableHeightDelegate = self
+                controller.partyDelegate = self
             }
         }
     }
