@@ -78,6 +78,7 @@ class RestApiManager {
             tracksList.removeAll()
         }
         
+        var count = 0
         for track in json["results"].arrayValue {
             let newTrack = Track()
             newTrack.id = track["trackId"].stringValue
@@ -90,13 +91,18 @@ class RestApiManager {
             }
             
             newTrack.lowResArtworkURL = track["artworkUrl60"].stringValue
-            newTrack.artwork = fetchImage(fromURL: newTrack.lowResArtworkURL)
+            
+            if count < 10 {
+                newTrack.artwork = fetchImage(fromURL: newTrack.lowResArtworkURL)
+            }
+            
             newTrack.highResArtworkURL = newTrack.lowResArtworkURL.replacingOccurrences(of: "60x60", with: "400x400")
             
             newTrack.length = TimeInterval(track["trackTimeMillis"].doubleValue / 1000)
             
             tracksList.append(newTrack)
-
+            
+            count += 1
         }
     }
     

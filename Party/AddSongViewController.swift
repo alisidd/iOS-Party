@@ -96,6 +96,17 @@ class AddSongViewController: UIViewController, UITextFieldDelegate, UITableViewD
                 self.displayNoTracksFoundLabel()
             } else {
                 self.removeNoTracksFoundLabel()
+                DispatchQueue.global(qos: .userInitiated).async {
+                    for i in 10..<self.tracksList.count {
+                        let artworkFetched = self.APIManager.fetchImage(fromURL: self.tracksList[i].lowResArtworkURL)
+                        if let artworkFetchedUnwrapped = artworkFetched {
+                            DispatchQueue.main.async {
+                                print("Adding image for \(self.tracksList[i].name)")
+                                self.tracksList[i].artwork = artworkFetchedUnwrapped
+                            }
+                        }
+                    }
+                }
             }
         }
     }
