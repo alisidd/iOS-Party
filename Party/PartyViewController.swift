@@ -66,6 +66,7 @@ protocol PartyViewControllerInfoDelegate: class {
     func layout()
     func amHost() -> Bool
     func removeFromOthersQueue(forTrack track: Track)
+    func personalQueue(hasTrack track: Track) -> Bool
 }
 
 class PartyViewController: UIViewController, SPTAudioStreamingDelegate, SPTAudioStreamingPlaybackDelegate, NetworkManagerDelegate, UpdatePartyDelegate, PartyViewControllerInfoDelegate {
@@ -473,7 +474,7 @@ class PartyViewController: UIViewController, SPTAudioStreamingDelegate, SPTAudio
             UIView.animate(withDuration: 0.1, animations: {
                 sender.alpha = 0.0
             }, completion:{ (finished) in
-                sender.setImage(#imageLiteral(resourceName: "play"), for: .normal)
+                sender.setImage(#imageLiteral(resourceName: "pause"), for: .normal)
                 UIView.animate(withDuration: 0.25, animations: {
                     sender.alpha = 1
                 }, completion:nil)
@@ -483,7 +484,7 @@ class PartyViewController: UIViewController, SPTAudioStreamingDelegate, SPTAudio
             UIView.animate(withDuration: 0.1, animations: {
                 sender.alpha = 0.0
             }, completion:{ (finished) in
-                sender.setImage(#imageLiteral(resourceName: "pause"), for: .normal)
+                sender.setImage(#imageLiteral(resourceName: "play"), for: .normal)
                 UIView.animate(withDuration: 0.25, animations: {
                     sender.alpha = 1
                 }, completion:nil)
@@ -562,7 +563,7 @@ class PartyViewController: UIViewController, SPTAudioStreamingDelegate, SPTAudio
     @IBAction func unwindToPartyViewController(_ sender: UIStoryboardSegue) {
         if let VC = sender.source as? AddSongViewController {
             DispatchQueue.global(qos: .userInitiated).async {
-                
+                self.lyricsAndQueueVC.moveTableTracksQueueDown()
                 self.party.tracksFromPeers.append(contentsOf: VC.tracksQueue)
                 self.party.tracksQueue.append(contentsOf: VC.tracksQueue)
                 self.personalQueue.append(contentsOf: VC.tracksQueue)
@@ -641,5 +642,14 @@ class PartyViewController: UIViewController, SPTAudioStreamingDelegate, SPTAudio
     
     func layout() {
         view.layoutIfNeeded()
+    }
+    
+    func personalQueue(hasTrack track: Track) -> Bool {
+        for trackinQueue in personalQueue {
+            if track.id == trackinQueue.id {
+                return true
+            }
+        }
+        return false
     }
 }

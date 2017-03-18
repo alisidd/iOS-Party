@@ -138,6 +138,7 @@ class AddSongViewController: UIViewController, UITextFieldDelegate, UITableViewD
         cell.backgroundColor = .clear
         if tracksQueue(hasTrack: tracksList[indexPath.row]) {
             cell.accessoryType = .checkmark
+            tableView.selectRow(at: indexPath, animated: true, scrollPosition: .none)
         } else {
             cell.accessoryType = .none
         }
@@ -183,8 +184,10 @@ class AddSongViewController: UIViewController, UITextFieldDelegate, UITableViewD
         let cell = trackTableView.cellForRow(at: indexPath)!
         removeFromQueue(track: tracksList[indexPath.row])
         
-        UIView.animate(withDuration: 0.35) {
-            cell.accessoryType = .none
+        if !tracksQueue(hasTrack: tracksList[indexPath.row]) {
+            UIView.animate(withDuration: 0.35) {
+                cell.accessoryType = .none
+            }
         }
     }
     

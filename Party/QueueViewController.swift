@@ -38,22 +38,27 @@ class QueueViewController: UIViewController, UITableViewDelegate, UITableViewDat
     }
     
     func makeTracksTableTaller() {
-        delegate?.layout()
-        UIView.animate(withDuration: 0.4) {
-            self.headerHeightConstraint = self.maxHeight
-            self.changeFontSizeForUpNext()
+        DispatchQueue.main.async {
             self.delegate?.layout()
+            UIView.animate(withDuration: 0.4) {
+                self.headerHeightConstraint = self.maxHeight
+                self.changeFontSizeForUpNext()
+                self.delegate?.layout()
+            }
         }
+        
     }
     
     func makeTracksTableShorter() {
-        delegate?.layout()
-        UIView.animate(withDuration: 0.4) {
-            self.headerHeightConstraint = self.minHeight
-            self.changeFontSizeForUpNext()
+        DispatchQueue.main.async {
             self.delegate?.layout()
+            UIView.animate(withDuration: 0.4) {
+                self.headerHeightConstraint = self.minHeight
+                self.changeFontSizeForUpNext()
+                self.delegate?.layout()
+            }
+            self.tracksTableView.setEditing(false, animated: true)
         }
-        tracksTableView.setEditing(false, animated: true)
     }
     
     func setDelegates() {
@@ -126,7 +131,7 @@ class QueueViewController: UIViewController, UITableViewDelegate, UITableViewDat
                 self.comeOutOfEditingMode()
                 
                 self.tracksTableView.setEditing(false, animated: true)
-                
+                self.comeOutOfEditingMode()
             })
         } else {
             UIView.animate(withDuration: 0.2, animations: {
@@ -140,17 +145,24 @@ class QueueViewController: UIViewController, UITableViewDelegate, UITableViewDat
     }
     
     func comeOutOfEditingMode() {
-        if delegate!.amHost() {
-            self.editButton.isHidden = true
-            self.addButton.isHidden = false
-        }
+        self.editButton.isHidden = true
+        self.addButton.isHidden = false
     }
     
     func goIntoEditingMode() {
-        if delegate!.amHost() && party.tracksQueue.count > 1 {
+        if (delegate!.amHost() && party.tracksQueue.count > 1) || tracksQueueHasEditableTracks() {
             self.editButton.isHidden = false
             self.addButton.isHidden = true
         }
+    }
+    
+    func tracksQueueHasEditableTracks() -> Bool {
+        for track in party.tracksQueue {
+            if delegate!.personalQueue(hasTrack: track) {
+                return true
+            }
+        }
+        return false
     }
     
     // MARK: - Table
@@ -198,7 +210,6 @@ class QueueViewController: UIViewController, UITableViewDelegate, UITableViewDat
 
     @IBAction func editCells(_ sender: UIButton) {
         if sender.titleLabel?.text == "Edit" {
-            print("Set editing to on")
             tracksTableView.setEditing(true, animated: true)
             sender.setTitle("Done", for: .normal)
         } else {
@@ -209,12 +220,7 @@ class QueueViewController: UIViewController, UITableViewDelegate, UITableViewDat
     }
     
     func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
-        if !delegate!.amHost() {
-           /* for track in personalQueue {
-                if track.id == party.tracksQueue[indexPath.section].id {
-                    return true
-                }
-            }*/
+        if !delegate!.amHost() && !delegate!.personalQueue(hasTrack: party.tracksQueue[indexPath.row + 1]){
             return false
         } else {
             return true
@@ -222,7 +228,10 @@ class QueueViewController: UIViewController, UITableViewDelegate, UITableViewDat
     }
     
     func tableView(_ tableView: UITableView, canMoveRowAt indexPath: IndexPath) -> Bool {
-        return true
+        if delegate!.amHost() {
+            return true
+        }
+        return false
     }
     
     
