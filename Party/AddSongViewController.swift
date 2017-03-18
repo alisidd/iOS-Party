@@ -96,17 +96,7 @@ class AddSongViewController: UIViewController, UITextFieldDelegate, UITableViewD
                 self.displayNoTracksFoundLabel()
             } else {
                 self.removeNoTracksFoundLabel()
-                DispatchQueue.global(qos: .userInitiated).async {
-                    for i in 10..<self.tracksList.count {
-                        let artworkFetched = self.APIManager.fetchImage(fromURL: self.tracksList[i].lowResArtworkURL)
-                        if let artworkFetchedUnwrapped = artworkFetched {
-                            DispatchQueue.main.async {
-                                print("Adding image for \(self.tracksList[i].name)")
-                                self.tracksList[i].artwork = artworkFetchedUnwrapped
-                            }
-                        }
-                    }
-                }
+                self.fetchRestOfTracks()
             }
         }
     }
@@ -128,6 +118,27 @@ class AddSongViewController: UIViewController, UITextFieldDelegate, UITableViewD
         noTracksFoundLabel.removeFromSuperview()
     }
     
+    func fetchRestOfTracks() {
+        let tracksCaptured = tracksList
+        DispatchQueue.global(qos: .userInitiated).async {
+            if self.tracksList.count >= 10 {
+                for i in 10..<self.tracksList.count {
+                    let artworkFetched = self.APIManager.fetchImage(fromURL: self.tracksList[i].lowResArtworkURL)
+                    if tracksCaptured == self.tracksList {
+                        if let artworkFetchedUnwrapped = artworkFetched {
+                            DispatchQueue.main.async {
+                                self.tracksList[i].artwork = artworkFetchedUnwrapped
+                                self.trackTableView.reloadData()
+                            }
+                        }
+                    } else {
+                        break
+                    }
+                }
+            }
+        }
+    }
+    
     // MARK: - Navigation
 
     func emptyArrays() {
@@ -147,7 +158,7 @@ class AddSongViewController: UIViewController, UITextFieldDelegate, UITableViewD
     
     func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
         cell.backgroundColor = .clear
-        if tracksQueue(hasTrack: tracksList[indexPath.row]) {
+        if tracksQueue(hasTrack: tracksList[indexPath.row]) || tracksQueue.contains(tracksList[indexPath.row]) {
             cell.accessoryType = .checkmark
             tableView.selectRow(at: indexPath, animated: true, scrollPosition: .none)
         } else {
@@ -173,6 +184,8 @@ class AddSongViewController: UIViewController, UITextFieldDelegate, UITableViewD
 
         if let unwrappedArtwork = tracksList[indexPath.row].artwork {
             cell.artworkImageView.image = unwrappedArtwork
+        } else {
+            cell.artworkImageView.image = nil
         }
         
         return cell

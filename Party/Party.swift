@@ -22,9 +22,7 @@ class Party: NSObject {
     var tracksQueue = [Track]() {
         didSet {
             delegate?.updateEveryonesTableView()
-            if tracksQueue.count == 0 {
-                delegate?.hideCurrentlyPlayingArtwork()
-            } else {
+            if tracksQueue.count > 0 {
                 delegate?.showCurrentlyPlayingArtwork()
             }
         }

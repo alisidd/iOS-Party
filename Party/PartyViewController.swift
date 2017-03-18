@@ -288,7 +288,6 @@ class PartyViewController: UIViewController, SPTAudioStreamingDelegate, SPTAudio
                     if self.isASpotifyTrack(forTrackID: trackID) {
                         API.makeHTTPRequestToSpotifyForSingleTrack(forID: trackID)
                     } else {
-                        print(trackID)
                         API.makeHTTPRequestToAppleForSingleTrack(forID: trackID)
                     }
                     
@@ -569,7 +568,6 @@ class PartyViewController: UIViewController, SPTAudioStreamingDelegate, SPTAudio
                 self.personalQueue.append(contentsOf: VC.tracksQueue)
                 
                 if self.party.tracksQueue.count == VC.tracksQueue.count && self.party.tracksQueue.count > 0 {
-                    print("Track changed: \(VC.tracksQueue[0])")
                     let _ = self.fetchImage(forTrack: VC.tracksQueue[0], setCurrentlyPlaying: true)?.addGradient()
                 }
                 

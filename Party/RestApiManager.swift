@@ -44,22 +44,27 @@ class RestApiManager {
                 self.dispatchGroupForStorefrontFetch.wait()
             }
             
-            let requestURL = URL(string: self.appleTracksUrl + string.replacingOccurrences(of: " ", with: "+") + "&s=" + self.storefrontIdentifierFound)
+            let term = string.addingPercentEncoding(withAllowedCharacters:NSCharacterSet.urlQueryAllowed)!
             
-            let task = URLSession.shared.dataTask(with: requestURL!) { (data, response, error) in
-                if let statusCode = (response as? HTTPURLResponse)?.statusCode {
-                    if statusCode == 200 {
-                        let json = JSON(data: data!)
-                        self.parseAppleTrackJSON(forJSON: json, possibleTrackID: trackID)
+            let requestURL = URL(string: self.appleTracksUrl + term.replacingOccurrences(of: " ", with: "+") + "&s=" + self.storefrontIdentifierFound)
+            
+            if let unwrappedURL = requestURL {
+                let task = URLSession.shared.dataTask(with: unwrappedURL) { (data, response, error) in
+                    if let statusCode = (response as? HTTPURLResponse)?.statusCode {
+                        if statusCode == 200 {
+                            let json = JSON(data: data!)
+                            self.parseAppleTrackJSON(forJSON: json, possibleTrackID: trackID)
+                        }
                     }
+                    
+                    self.dispatchGroup.leave()
                 }
                 
+                task.resume()
+            } else {
                 self.dispatchGroup.leave()
             }
-            
-            task.resume()
         }
-        
     }
     
     func fetchStorefrontIdentifier() {
@@ -129,7 +134,10 @@ class RestApiManager {
         dispatchGroup.enter()
         
         DispatchQueue.global(qos: .userInitiated).async {
-            let requestURL = URL(string: self.spotifyTracksUrl + "search?q=" + string.replacingOccurrences(of: " ", with: "+") + "&type=track")
+            
+            let term = string.addingPercentEncoding(withAllowedCharacters:NSCharacterSet.urlQueryAllowed)!
+            
+            let requestURL = URL(string: self.spotifyTracksUrl + "search?q=" + term.replacingOccurrences(of: " ", with: "+") + "&type=track")
             
             let task = URLSession.shared.dataTask(with: requestURL!) { (data, response, error) in
                 if let statusCode = (response as? HTTPURLResponse)?.statusCode {
