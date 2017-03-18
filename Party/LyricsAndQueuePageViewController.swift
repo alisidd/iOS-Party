@@ -47,6 +47,18 @@ class LyricsAndQueuePageViewController: UIPageViewController, UIPageViewControll
         }
     }
     
+    func moveTableTracksQueueUp() {
+        if let vc = allViewControllers[1] as? QueueViewController {
+            vc.makeTracksTableTaller()
+        }
+    }
+    
+    func moveTableTracksQueueDown() {
+        if let vc = allViewControllers[1] as? QueueViewController {
+            vc.makeTracksTableShorter()
+        }
+    }
+    
     func pageViewController(_ pageViewController: UIPageViewController, viewControllerBefore viewController: UIViewController) -> UIViewController? {
         let index = allViewControllers.index(of: viewController)
         if index == 0 {

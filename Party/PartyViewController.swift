@@ -42,6 +42,7 @@ extension UIImage {
 
 protocol NetworkManagerDelegate: class {
     func connectedDevicesChanged(_ manager : NetworkServiceManager, connectedDevices: [String])
+    func updateStatus(with state: MCSessionState)
     func amHost() -> Bool
     func sendPartyInfo(toSession session: MCSession)
     func setupParty(withService service: String)
@@ -51,6 +52,8 @@ protocol NetworkManagerDelegate: class {
 
 protocol UpdatePartyDelegate: class {
     func updateEveryonesTableView()
+    func showCurrentlyPlayingArtwork()
+    func hideCurrentlyPlayingArtwork()
 }
 
 protocol UpdateCurrentlyPlayingArtworkDelegate: class {
@@ -69,11 +72,14 @@ class PartyViewController: UIViewController, SPTAudioStreamingDelegate, SPTAudio
     
     // MARK: - Storyboard Variables
     
+    // Currently Playing
     @IBOutlet weak var currentlyPlayingArtwork: UIImageView!
     @IBOutlet weak var currentlyPlayingTrackName: UILabel!
     @IBOutlet weak var currentlyPlayingArtistName: UILabel!
+    @IBOutlet weak var playPauseButton: UIButton!
     @IBOutlet weak var progressBar: UIProgressView!
     
+    // Tracks Queue
     @IBOutlet weak var upNextLabel: UILabel!
     
     @IBOutlet weak var tableHeightConstraint: NSLayoutConstraint!
@@ -84,21 +90,75 @@ class PartyViewController: UIViewController, SPTAudioStreamingDelegate, SPTAudio
         }
     }
     
-    func returnTableHeight() -> CGFloat {
-        return tableHeightConstraint.constant
+    // Connection Status
+    @IBOutlet weak var connectionStatusLabel: UILabel!
+    var connectionStatus: MCSessionState {
+        get {
+            return self.connectionStatus
+        }
+        set {
+            DispatchQueue.main.async {
+                self.displayStatusSymbol()
+                self.connectionStatusLabel.text = newValue.stringValue()
+                
+                if newValue == .connected {
+                    self.removeReconnectButton()
+                    self.removeStatusLabel()
+                } else if newValue == .connecting {
+                    self.removeReconnectButton()
+                    self.lyricsAndQueueVC.moveTableTracksQueueUp()
+                } else {
+                    self.displayReconnectButton()
+                    self.lyricsAndQueueVC.moveTableTracksQueueUp()
+                }
+            }
+        }
+    }
+    @IBOutlet weak var reconnectButton: UIButton!
+    @IBOutlet weak var reconnectButtonConstraint: NSLayoutConstraint!
+    
+    func displayStatusSymbol() {
+        UIView.animate(withDuration: 0.5) {
+            self.connectionStatusLabel.isHidden = false
+            self.connectionStatusLabel.alpha = 1
+        }
     }
     
-    func setTableHeight(withHeight height: CGFloat) {
-        tableHeightConstraint.constant = height
+    func removeStatusLabel() {
+        UIView.animate(withDuration: 1, animations: {
+            self.connectionStatusLabel.alpha = 0
+        }, completion: { (finished) in
+            self.connectionStatusLabel.isHidden = true
+        })
     }
     
-    func layout() {
+    func displayReconnectButton() {
         view.layoutIfNeeded()
+        reconnectButton.isHidden = false
+        UIView.animate(withDuration: 0.4) {
+            self.reconnectButtonConstraint.constant = 50
+            self.view.layoutIfNeeded()
+        }
+    }
+    
+    func removeReconnectButton() {
+        view.layoutIfNeeded()
+        reconnectButton.isHidden = true
+        UIView.animate(withDuration: 0.4) {
+            self.reconnectButtonConstraint.constant = -50
+            self.view.layoutIfNeeded()
+        }
+    }
+    
+    @IBAction func reconnectToParty(_ sender: UIButton) {
+        tracksListManager = nil
+        tracksListManager = NetworkServiceManager(self.isHost)
+        tracksListManager.delegate = self
     }
     
     // MARK: - General Variables
     
-    lazy var tracksListManager: NetworkServiceManager = {
+    lazy var tracksListManager: NetworkServiceManager! = {
         return NetworkServiceManager(self.isHost)
     }()
     private let APIManager = RestApiManager()
@@ -150,6 +210,9 @@ class PartyViewController: UIViewController, SPTAudioStreamingDelegate, SPTAudio
     func updateCurrentlyPlayingTrack() {
         DispatchQueue.main.async {
             if !self.party.tracksQueue.isEmpty {
+                if self.party.tracksQueue.count == 1 {
+                    self.lyricsAndQueueVC.moveTableTracksQueueDown()
+                }
                 self.updateArtworkForCurrentlyPlaying()
                 self.currentlyPlayingTrackName.text = self.party.tracksQueue[0].name
                 self.currentlyPlayingArtistName.text = self.party.tracksQueue[0].artist
@@ -169,6 +232,27 @@ class PartyViewController: UIViewController, SPTAudioStreamingDelegate, SPTAudio
             }
         }
     }
+        
+    func showCurrentlyPlayingArtwork() {
+        DispatchQueue.main.async {
+            self.currentlyPlayingArtwork.isHidden = false
+            self.currentlyPlayingTrackName.isHidden = false
+            self.currentlyPlayingArtistName.isHidden = false
+            if self.isHost {
+                self.playPauseButton.isHidden = false
+            }
+        }
+    }
+    
+    func hideCurrentlyPlayingArtwork() {
+        DispatchQueue.main.async {
+            self.currentlyPlayingArtwork.isHidden = true
+            self.currentlyPlayingTrackName.isHidden = true
+            self.currentlyPlayingArtistName.isHidden = true
+            self.playPauseButton.isHidden = true
+            self.lyricsAndQueueVC.moveTableTracksQueueUp()
+        }
+    }
     
     // Handles addition and removal of tracks
     private func sendTracksToPeers(forTracks tracks: [Track]) {
@@ -181,7 +265,6 @@ class PartyViewController: UIViewController, SPTAudioStreamingDelegate, SPTAudio
     func id(ofTracks tracks: [Track]) -> [String] {
         var result = [String]()
         for track in tracks {
-            print("Service being used: \(party.musicService)")
             if party.musicService == .spotify {
                 result.append(track.id)
             } else {
@@ -198,17 +281,20 @@ class PartyViewController: UIViewController, SPTAudioStreamingDelegate, SPTAudio
         DispatchQueue.global(qos: .userInteractive).async {
             let API = RestApiManager()
             
-            for trackID in tracks {
-                if self.party.musicService == .spotify {
-                    API.makeHTTPRequestToSpotifyForSingleTrack(forID: trackID)
-                } else {
-                    API.makeHTTPRequestToAppleForSingleTrack(forID: trackID)
+            if let requestTracks = self.APIManager.latestRequest[peer], requestTracks == tracks {
+                
+                for trackID in tracks {
+                    if self.isASpotifyTrack(forTrackID: trackID) {
+                        API.makeHTTPRequestToSpotifyForSingleTrack(forID: trackID)
+                    } else {
+                        print(trackID)
+                        API.makeHTTPRequestToAppleForSingleTrack(forID: trackID)
+                    }
+                    
+                    API.dispatchGroup.wait()
                 }
                 
-                API.dispatchGroup.wait()
-            }
-            
-            if let requestTracks = self.APIManager.latestRequest[peer], requestTracks == tracks {                 if self.isHost {
+                if self.isHost {
                     self.party.tracksQueue.append(contentsOf: API.tracksList)
                     if self.party.tracksQueue.count == API.tracksList.count {
                         self.musicPlayer.modifyQueue(withTracks: self.party.tracksQueue)
@@ -218,7 +304,7 @@ class PartyViewController: UIViewController, SPTAudioStreamingDelegate, SPTAudio
                     self.cache = self.party.tracksQueue
                     self.party.tracksQueue.removeAll()
                     var newTracks = [Track]()
-                
+                    
                     for newTrack in API.tracksList {
                         if let index = self.indexInCache(ofTrack: newTrack) {
                             self.party.tracksQueue.append(self.cache[index])
@@ -227,6 +313,7 @@ class PartyViewController: UIViewController, SPTAudioStreamingDelegate, SPTAudio
                             newTracks.append(newTrack)
                         }
                     }
+                    
                 
                     self.fetchHighResArtwork(forTracks: newTracks)
                 
@@ -236,6 +323,11 @@ class PartyViewController: UIViewController, SPTAudioStreamingDelegate, SPTAudio
             
             self.APIManager.latestRequest.removeValue(forKey: peer)
         }
+    }
+    
+    func isASpotifyTrack(forTrackID id: String) -> Bool {
+        let ids = id.components(separatedBy: "-")
+        return ids.count == 1
     }
     
     func indexInCache(ofTrack track: Track) -> Int? {
@@ -275,9 +367,13 @@ class PartyViewController: UIViewController, SPTAudioStreamingDelegate, SPTAudio
         party.delegate = self
     }
     
-    // TODO: improve this functions name
     private func adjustViews() {
         progressBar.isHidden = true
+        hideCurrentlyPlayingArtwork()
+        lyricsAndQueueVC.moveTableTracksQueueUp()
+        if !isHost {
+            playPauseButton.isHidden = true
+        }
     }
     
     private func initializeMusicPlayer() {
@@ -377,9 +473,9 @@ class PartyViewController: UIViewController, SPTAudioStreamingDelegate, SPTAudio
             UIView.animate(withDuration: 0.1, animations: {
                 sender.alpha = 0.0
             }, completion:{ (finished) in
-                sender.setImage(#imageLiteral(resourceName: "pause"), for: .normal)
+                sender.setImage(#imageLiteral(resourceName: "play"), for: .normal)
                 UIView.animate(withDuration: 0.25, animations: {
-                    sender.alpha = 0.6
+                    sender.alpha = 1
                 }, completion:nil)
             })
             musicPlayer.playTrack()
@@ -387,9 +483,9 @@ class PartyViewController: UIViewController, SPTAudioStreamingDelegate, SPTAudio
             UIView.animate(withDuration: 0.1, animations: {
                 sender.alpha = 0.0
             }, completion:{ (finished) in
-                sender.setImage(#imageLiteral(resourceName: "play"), for: .normal)
+                sender.setImage(#imageLiteral(resourceName: "pause"), for: .normal)
                 UIView.animate(withDuration: 0.25, animations: {
-                    sender.alpha = 0.6
+                    sender.alpha = 1
                 }, completion:nil)
             })
             musicPlayer.pauseTrack()
@@ -508,6 +604,10 @@ class PartyViewController: UIViewController, SPTAudioStreamingDelegate, SPTAudio
         }
     }
     
+    func updateStatus(with state: MCSessionState) {
+        connectionStatus = state
+    }
+    
     internal func amHost() -> Bool {
         return isHost
     }
@@ -527,5 +627,19 @@ class PartyViewController: UIViewController, SPTAudioStreamingDelegate, SPTAudio
             print("Setting service to Apple")
             party.musicService = .appleMusic
         }
+    }
+    
+    // MARK: PartyViewControllerInfoDelegate
+    
+    func returnTableHeight() -> CGFloat {
+        return tableHeightConstraint.constant
+    }
+    
+    func setTableHeight(withHeight height: CGFloat) {
+        tableHeightConstraint.constant = height
+    }
+    
+    func layout() {
+        view.layoutIfNeeded()
     }
 }

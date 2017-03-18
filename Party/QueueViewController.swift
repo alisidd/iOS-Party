@@ -12,12 +12,13 @@ class QueueViewController: UIViewController, UITableViewDelegate, UITableViewDat
     
     var delegate: PartyViewControllerInfoDelegate?
 
+    @IBOutlet weak var upNextLabel: UILabel!
     @IBOutlet weak var addButton: UIButton!
     @IBOutlet weak var editButton: UIButton!
     
     @IBOutlet weak var tracksTableView: UITableView!
     let minHeight: CGFloat = 351
-    let maxHeight: CGFloat = 10
+    let maxHeight: CGFloat = -UIApplication.shared.statusBarFrame.height
     var headerHeightConstraint: CGFloat {
         get {
             return delegate!.returnTableHeight()
@@ -36,6 +37,25 @@ class QueueViewController: UIViewController, UITableViewDelegate, UITableViewDat
         setDelegates()
     }
     
+    func makeTracksTableTaller() {
+        delegate?.layout()
+        UIView.animate(withDuration: 0.4) {
+            self.headerHeightConstraint = self.maxHeight
+            self.changeFontSizeForUpNext()
+            self.delegate?.layout()
+        }
+    }
+    
+    func makeTracksTableShorter() {
+        delegate?.layout()
+        UIView.animate(withDuration: 0.4) {
+            self.headerHeightConstraint = self.minHeight
+            self.changeFontSizeForUpNext()
+            self.delegate?.layout()
+        }
+        tracksTableView.setEditing(false, animated: true)
+    }
+    
     func setDelegates() {
         tracksTableView.delegate = self
         tracksTableView.dataSource = self
@@ -45,10 +65,10 @@ class QueueViewController: UIViewController, UITableViewDelegate, UITableViewDat
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
         let scrollDiff = scrollView.contentOffset.y - previousScrollOffset
 
-        let absoluteTop: CGFloat = 0;
+        let absoluteTop: CGFloat = 0
         
         let isScrollingDown = scrollDiff > 0 && scrollView.contentOffset.y > absoluteTop
-        let isScrollingUp = scrollDiff < 0 && scrollView.contentOffset.y < absoluteTop
+        let isScrollingUp = scrollDiff < 0 && scrollView.contentOffset.y < absoluteTop && party.tracksQueue.count > 0
         
         var newHeight = headerHeightConstraint
         
@@ -56,20 +76,27 @@ class QueueViewController: UIViewController, UITableViewDelegate, UITableViewDat
             newHeight = max(maxHeight, headerHeightConstraint - abs(scrollDiff))
             if newHeight != headerHeightConstraint {
                 headerHeightConstraint = newHeight
+                changeFontSizeForUpNext()
                 setScrollPosition(for: previousScrollOffset)
             }
             
         } else if isScrollingUp {
             newHeight = min(minHeight, headerHeightConstraint + abs(scrollDiff))
-            print(tracksTableView.contentOffset)
             if newHeight != headerHeightConstraint && tracksTableView.contentOffset.y < 2 {
                 headerHeightConstraint = newHeight
+                changeFontSizeForUpNext()
                 setScrollPosition(for: previousScrollOffset)
             }
         }
         
         
         previousScrollOffset = scrollView.contentOffset.y
+    }
+    
+    func changeFontSizeForUpNext() {
+        UIView.animate(withDuration: 0.3) {
+            self.upNextLabel.font = self.upNextLabel.font.withSize(22 - 6 * (self.headerHeightConstraint / self.minHeight))
+        }
     }
     
     func setScrollPosition(for offset: CGFloat) {
@@ -94,13 +121,35 @@ class QueueViewController: UIViewController, UITableViewDelegate, UITableViewDat
         if headerHeightConstraint > midPoint {
             UIView.animate(withDuration: 0.2, animations: {
                 self.headerHeightConstraint = self.minHeight
+                self.changeFontSizeForUpNext()
                 self.delegate?.layout()
+                self.comeOutOfEditingMode()
+                
+                self.tracksTableView.setEditing(false, animated: true)
+                
             })
         } else {
             UIView.animate(withDuration: 0.2, animations: {
                 self.headerHeightConstraint = self.maxHeight
+                self.changeFontSizeForUpNext()
                 self.delegate?.layout()
+                self.goIntoEditingMode()
+                
             })
+        }
+    }
+    
+    func comeOutOfEditingMode() {
+        if delegate!.amHost() {
+            self.editButton.isHidden = true
+            self.addButton.isHidden = false
+        }
+    }
+    
+    func goIntoEditingMode() {
+        if delegate!.amHost() && party.tracksQueue.count > 1 {
+            self.editButton.isHidden = false
+            self.addButton.isHidden = true
         }
     }
     
@@ -146,24 +195,21 @@ class QueueViewController: UIViewController, UITableViewDelegate, UITableViewDat
             }
         }
     }
-    
-    /*
 
     @IBAction func editCells(_ sender: UIButton) {
         if sender.titleLabel?.text == "Edit" {
             print("Set editing to on")
-            setEditing(true, animated: true)
-            sender.titleLabel?.text = "Done"
+            tracksTableView.setEditing(true, animated: true)
+            sender.setTitle("Done", for: .normal)
         } else {
-            setEditing(false, animated: true)
-            sender.titleLabel?.text = "Edit"
+            tracksTableView.setEditing(false, animated: true)
+            sender.setTitle("Edit", for: .normal)
         }
         
     }
     
     func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
         if !delegate!.amHost() {
-            print("Can't edit :(")
            /* for track in personalQueue {
                 if track.id == party.tracksQueue[indexPath.section].id {
                     return true
@@ -171,17 +217,25 @@ class QueueViewController: UIViewController, UITableViewDelegate, UITableViewDat
             }*/
             return false
         } else {
-            print("Can edit")
             return true
         }
     }
     
+    func tableView(_ tableView: UITableView, canMoveRowAt indexPath: IndexPath) -> Bool {
+        return true
+    }
     
+    
+    func tableView(_ tableView: UITableView, moveRowAt sourceIndexPath: IndexPath, to destinationIndexPath: IndexPath) {
+        let itemMoved = party.tracksQueue[sourceIndexPath.row + 1]
+        party.tracksQueue.remove(at: sourceIndexPath.row + 1)
+        party.tracksQueue.insert(itemMoved, at: destinationIndexPath.row + 1)
+    }
     
     func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCellEditingStyle, forRowAt indexPath: IndexPath) {
         if editingStyle == .delete {
             tableView.beginUpdates()
-            removeFromQueue(track: party.tracksQueue[indexPath.section])
+            removeFromQueue(track: party.tracksQueue[indexPath.row + 1])
             tableView.deleteRows(at: [indexPath], with: .automatic)
             tableView.endUpdates()
         }
@@ -210,6 +264,6 @@ class QueueViewController: UIViewController, UITableViewDelegate, UITableViewDat
         deleteButton.backgroundColor = UIColor(colorLiteralRed: 1, green: 111/255, blue: 1/255, alpha: 1)
         
         return [deleteButton]
-    }*/
+    }
     
 }

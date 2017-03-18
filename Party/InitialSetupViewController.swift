@@ -54,9 +54,20 @@ class InitialSetupViewController: UIViewController {
     // MARK: - Navigation
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        
         let backItem = UIBarButtonItem()
         backItem.title = ""
         navigationItem.backBarButtonItem = backItem
+        
+        if segue.identifier == "Join Party" {
+            if let destinationVC = segue.destination as? PartyViewController {
+                print("Setting isHost to false")
+                destinationVC.isHost = false
+                destinationVC.tracksListManager.delegate = destinationVC
+                navigationItem.backBarButtonItem = UIBarButtonItem(title: "", style: .plain, target: nil, action: nil)
+            }
+        }
+        
     }
 }
 

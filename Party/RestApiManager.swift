@@ -74,7 +74,10 @@ class RestApiManager {
     }
     
     func parseAppleTrackJSON(forJSON json: JSON, possibleTrackID: String?) {
-        tracksList.removeAll()
+        if possibleTrackID == nil {
+            tracksList.removeAll()
+        }
+        
         for track in json["results"].arrayValue {
             let newTrack = Track()
             newTrack.id = track["trackId"].stringValue
@@ -82,17 +85,18 @@ class RestApiManager {
             newTrack.artist = track["artistName"].stringValue
             newTrack.album = track["collectionName"].stringValue
             
+            if possibleTrackID != nil && possibleTrackID! != newTrack.id {
+                continue
+            }
+            
             newTrack.lowResArtworkURL = track["artworkUrl60"].stringValue
             newTrack.artwork = fetchImage(fromURL: newTrack.lowResArtworkURL)
             newTrack.highResArtworkURL = newTrack.lowResArtworkURL.replacingOccurrences(of: "60x60", with: "400x400")
             
             newTrack.length = TimeInterval(track["trackTimeMillis"].doubleValue / 1000)
             
-            if let trackID = possibleTrackID, trackID == newTrack.id {
-                tracksList.append(newTrack)
-            } else if possibleTrackID == nil {
-                tracksList.append(newTrack)
-            }
+            tracksList.append(newTrack)
+
         }
     }
     

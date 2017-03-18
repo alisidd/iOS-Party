@@ -183,7 +183,7 @@ extension MCSessionState {
     
     func stringValue() -> String {
         switch self {
-        case .notConnected: return "NotConnected"
+        case .notConnected: return "Not Connected"
         case .connecting: return "Connecting"
         case .connected: return "Connected"
         }
@@ -198,6 +198,9 @@ extension NetworkServiceManager : MCSessionDelegate {
     func session(_ session: MCSession, peer peerID: MCPeerID, didChange state: MCSessionState) {
         print("peer \(peerID) didChangeState: \(state.stringValue())")
         delegate?.connectedDevicesChanged(self, connectedDevices: session.connectedPeers.map{$0.displayName})
+        if !delegate!.amHost() {
+            delegate?.updateStatus(with: state)
+        }
         if state == .connected {
             print("Calling function to send party info")
             delegate?.sendPartyInfo(toSession: session)

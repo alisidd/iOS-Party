@@ -22,6 +22,11 @@ class Party: NSObject {
     var tracksQueue = [Track]() {
         didSet {
             delegate?.updateEveryonesTableView()
+            if tracksQueue.count == 0 {
+                delegate?.hideCurrentlyPlayingArtwork()
+            } else {
+                delegate?.showCurrentlyPlayingArtwork()
+            }
         }
     }
     var tracksFromPeers = [Track]()
