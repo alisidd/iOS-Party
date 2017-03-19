@@ -9,16 +9,6 @@
 import UIKit
 
 extension UIView {
-    func addBlur(withAlpha alpha: CGFloat, withStyle style: UIBlurEffectStyle) {
-        let blurEffect: UIBlurEffect = UIBlurEffect(style: style)
-        let blurView = UIVisualEffectView(effect: blurEffect)
-        blurView.frame = bounds
-        blurView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
-        blurView.isUserInteractionEnabled = false
-        blurView.alpha = alpha
-        insertSubview(blurView, at: 0)
-    }
-    
     func makeBorder() {
         layer.borderWidth = 1
         layer.borderColor = UIColor(red: 1, green: 166/255, blue: 35/255, alpha: 1).cgColor

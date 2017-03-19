@@ -54,6 +54,7 @@ protocol UpdatePartyDelegate: class {
     func updateEveryonesTableView()
     func showCurrentlyPlayingArtwork()
     func hideCurrentlyPlayingArtwork()
+    func minimizeTracksTableView()
 }
 
 protocol UpdateCurrentlyPlayingArtworkDelegate: class {
@@ -79,6 +80,10 @@ class PartyViewController: UIViewController, SPTAudioStreamingDelegate, SPTAudio
     @IBOutlet weak var currentlyPlayingArtistName: UILabel!
     @IBOutlet weak var playPauseButton: UIButton!
     @IBOutlet weak var progressBar: UIProgressView!
+    
+    func minimizeTracksTableView() {
+        lyricsAndQueueVC.moveTableTracksQueueUp()
+    }
     
     // Tracks Queue
     @IBOutlet weak var upNextLabel: UILabel!
@@ -165,11 +170,8 @@ class PartyViewController: UIViewController, SPTAudioStreamingDelegate, SPTAudio
     private let APIManager = RestApiManager()
     
     var party = Party()
-    private var musicPlayer = MusicPlayer() {
-        didSet {
-            initializeMusicPlayer()
-        }
-    }
+    var musicPlayer = MusicPlayer()
+    var spotifySession: SPTSession?
     var isHost = true
     var personalQueue = [Track]()
     var cache = [Track]()
@@ -188,6 +190,33 @@ class PartyViewController: UIViewController, SPTAudioStreamingDelegate, SPTAudio
         super.viewWillAppear(animated)
         DispatchQueue.main.async {
             self.navigationController?.setNavigationBarHidden(true, animated: animated)
+        }
+    }
+    
+    // MARK: - General Functions
+    
+    private func setDelegates() {
+        tracksListManager.delegate = self
+        party.delegate = self
+        musicPlayer.spotifyPlayer?.delegate = self
+        musicPlayer.spotifyPlayer?.playbackDelegate = self
+    }
+    
+    private func adjustViews() {
+        progressBar.isHidden = true
+        hideCurrentlyPlayingArtwork()
+        lyricsAndQueueVC.moveTableTracksQueueUp()
+        if !isHost {
+            playPauseButton.isHidden = true
+        }
+    }
+    
+    func initializeMusicPlayer() {
+        if party.musicService == .spotify {
+            playUsingSession()
+        } else {
+            musicPlayer.appleMusicPlayer.beginGeneratingPlaybackNotifications()
+            NotificationCenter.default.addObserver(self, selector: #selector(PartyViewController.playNextTrack), name:NSNotification.Name.MPMusicPlayerControllerPlaybackStateDidChange, object: musicPlayer.appleMusicPlayer)
         }
     }
     
@@ -360,85 +389,12 @@ class PartyViewController: UIViewController, SPTAudioStreamingDelegate, SPTAudio
         }
     }
     
-    // MARK: - General Functions
+    // MARK: - Playback
     
-    private func setDelegates() {
-        tracksListManager.delegate = self
-        party.delegate = self
-    }
-    
-    private func adjustViews() {
-        progressBar.isHidden = true
-        hideCurrentlyPlayingArtwork()
-        lyricsAndQueueVC.moveTableTracksQueueUp()
-        if !isHost {
-            playPauseButton.isHidden = true
+    private func playUsingSession() {
+        if let session = spotifySession {
+            musicPlayer.spotifyPlayer?.login(withAccessToken: session.accessToken)
         }
-    }
-    
-    private func initializeMusicPlayer() {
-        musicPlayer.party = party
-        
-        if party.musicService == .appleMusic {
-            musicPlayer.hasCapabilities()
-            musicPlayer.haveAuthorization()
-            musicPlayer.appleMusicPlayer.beginGeneratingPlaybackNotifications()
-            NotificationCenter.default.addObserver(self, selector: #selector(PartyViewController.playNextTrack), name:NSNotification.Name.MPMusicPlayerControllerPlaybackStateDidChange, object: musicPlayer.appleMusicPlayer)
-            setTimer()
-            
-        } else {
-            let APIManager = RestApiManager()
-            
-            let auth = APIManager.getAuthentication()
-            musicPlayer.spotifyPlayer?.delegate = self
-            musicPlayer.spotifyPlayer?.playbackDelegate = self
-            
-            do {
-                try musicPlayer.spotifyPlayer?.start(withClientId: auth?.clientID)
-                DispatchQueue.main.async {
-                    if self.isHost {
-                        self.startAuthenticationFlow(auth!) //TODO: Check unwrap
-                    }
-                }
-            } catch {
-                print("Error starting player")
-            }
-            
-        }
-    }
-    
-    // MARK: - Spotify Playback
-    
-    private func startAuthenticationFlow(_ authentication: SPTAuth) {
-        let authURL = authentication.spotifyWebAuthenticationURL()
-       
-        NotificationCenter.default.addObserver(self, selector: #selector(PartyViewController.spotifyLogin), name: NSNotification.Name(rawValue: "Successful Login"), object: nil)
-        
-        UIApplication.shared.open(authURL!, options: [:])
-        /*let authViewController = SFSafariViewController(url: authURL!)
-        present(authViewController, animated: true)*/
-    }
-    
-    @objc private func spotifyLogin() {
-        let userDefaults = UserDefaults.standard
-        
-        if let sessionDataObj = userDefaults.object(forKey: "SpotifySession") {
-            let sessionData = sessionDataObj as! Data
-            
-            let session = NSKeyedUnarchiver.unarchiveObject(with: sessionData) as! SPTSession
-            
-            if session.isValid() {
-                playUsingSession(session: session)
-            } else {
-                /*SPTAuth.defaultInstance().renewSession(session) { (error, session) in
-                    
-                }*/
-            }
-        }
-    }
-    
-    private func playUsingSession(session: SPTSession) {
-        musicPlayer.spotifyPlayer?.login(withAccessToken: session.accessToken)
     }
     
     internal func audioStreamingDidLogin(_ audioStreaming: SPTAudioStreamingController!) {
@@ -494,7 +450,7 @@ class PartyViewController: UIViewController, SPTAudioStreamingDelegate, SPTAudio
     
     // MARK: - Callbacks
     
-    @objc private func playNextTrack() {
+    @objc func playNextTrack() {
         if musicPlayer.safeToPlayNextTrack() && !party.tracksQueue.isEmpty {
             print(progressBar.progress)
             if progressBar.progress > 0.98 {

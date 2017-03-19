@@ -50,8 +50,8 @@
                                     </button>
                                 </subviews>
                             </stackView>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Version 0.6" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="pci-f0-aMt">
-                                <rect key="frame" x="291.5" y="628.5" width="68.5" height="19.5"/>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Version 0.7" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="pci-f0-aMt">
+                                <rect key="frame" x="292" y="629" width="68.5" height="19.5"/>
                                 <fontDescription key="fontDescription" name="AvenirNext-UltraLight" family="Avenir Next" pointSize="14"/>
                                 <color key="textColor" red="0.79607843137254897" green="0.7803921568627451" blue="0.7803921568627451" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <nil key="highlightedColor"/>
@@ -195,6 +195,7 @@
                                     <constraint firstAttribute="height" constant="20" id="4f3-M9-GGy"/>
                                     <constraint firstAttribute="width" constant="15" id="xod-8o-Pds"/>
                                 </constraints>
+                                <inset key="contentEdgeInsets" minX="15" minY="20" maxX="15" maxY="20"/>
                                 <state key="normal" title="Button" image="pause"/>
                                 <connections>
                                     <action selector="playPauseChange:" destination="IhU-0X-egj" eventType="touchUpInside" id="hxD-WC-TlW"/>
@@ -613,7 +614,7 @@
                                     <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 </state>
                                 <connections>
-                                    <segue destination="IhU-0X-egj" kind="show" identifier="Create Party" id="51P-jV-0ma"/>
+                                    <action selector="initializeMusicPlayer:" destination="9wA-Gp-aQL" eventType="touchUpInside" id="euW-Xh-Uui"/>
                                 </connections>
                             </button>
                         </subviews>
@@ -634,6 +635,7 @@
                         <outlet property="appleMusicButton" destination="NXk-fz-9f9" id="XPA-n0-Scx"/>
                         <outlet property="danceabilitySlider" destination="6bl-l1-4XO" id="rVH-2m-vY3"/>
                         <outlet property="spotifyButton" destination="rLG-hj-JGO" id="SB4-GJ-mIQ"/>
+                        <segue destination="IhU-0X-egj" kind="show" identifier="Create Party" id="myb-f1-PXz"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="aZk-rR-iJs" userLabel="First Responder" sceneMemberID="firstResponder"/>

@@ -46,7 +46,6 @@ class QueueViewController: UIViewController, UITableViewDelegate, UITableViewDat
                 self.delegate?.layout()
             }
         }
-        
     }
     
     func makeTracksTableShorter() {

@@ -28,7 +28,7 @@ class NetworkServiceManager: NSObject {
         let UUID = UIDevice.current.identifierForVendor!.uuidString
         
         // Broadcast as the party name or the device name if not applicable
-        myPeerId = MCPeerID(displayName: !partyName.isEmpty ? partyName : UIDevice.current.name)
+        myPeerId = MCPeerID(displayName: UUID)
         
         
         

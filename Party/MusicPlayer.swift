@@ -16,6 +16,14 @@ class MusicPlayer: NSObject {
     
     private let serviceController = SKCloudServiceController()
     let appleMusicPlayer = MPMusicPlayerController.applicationMusicPlayer()
+    let authorizationDispatchGroup = DispatchGroup()
+    var isAuthorized = false {
+        didSet {
+            authorizationDispatchGroup.leave()
+        }
+    }
+    
+    var delegate: AppleMusicAuthorizationAlertDelegate?
     
     // MARK: - Spotify Variables
     
@@ -37,23 +45,26 @@ class MusicPlayer: NSObject {
             if capability.contains(.musicCatalogPlayback) || capability.contains(.addToCloudMusicLibrary) {
                 print("Has Apple Music capabilities")
             } else {
-                print("Doesn't have Apple Music capabilities")
+                self.delegate?.postAlertForNoAppleMusic()
             }
         }
     }
     
     func haveAuthorization() {
         // If user has pressed Don't allow, move them to the settings
+        authorizationDispatchGroup.enter()
         SKCloudServiceController.requestAuthorization { (status) in
             switch status {
             case .authorized:
-                print("Apple Music authorized")
                 self.appleMusicPlayer.beginGeneratingPlaybackNotifications()
                 self.initializeCommandCenter()
+                self.isAuthorized = true
+            case .denied:
+                self.delegate?.postAlertForSettings()
+                fallthrough
             default:
-                print("Apple Music failed to authorize")
+                self.isAuthorized = false
             }
-            
         }
     }
     

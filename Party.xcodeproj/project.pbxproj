@@ -21,7 +21,6 @@
 		4134216B1E3D775400888403 /* newParty.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4134216A1E3D775400888403 /* newParty.swift */; };
 		4160D4011E42EB0A00AF2ED6 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 4160D4001E42EB0A00AF2ED6 /* Assets.xcassets */; };
 		417B9D4B1E317C3C0021F36E /* PartyViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 417B9D4A1E317C3C0021F36E /* PartyViewController.swift */; };
-		417B9D4D1E3187570021F36E /* addButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 417B9D4C1E3187570021F36E /* addButton.swift */; };
 		417B9D4F1E318D0D0021F36E /* AddSongViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 417B9D4E1E318D0D0021F36E /* AddSongViewController.swift */; };
 		417B9D531E31B3CE0021F36E /* Track.swift in Sources */ = {isa = PBXBuildFile; fileRef = 417B9D521E31B3CE0021F36E /* Track.swift */; };
 		417B9D551E31BC120021F36E /* RestApiManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 417B9D541E31BC120021F36E /* RestApiManager.swift */; };
@@ -55,7 +54,6 @@
 		4134216A1E3D775400888403 /* newParty.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = newParty.swift; sourceTree = "<group>"; };
 		4160D4001E42EB0A00AF2ED6 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		417B9D4A1E317C3C0021F36E /* PartyViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PartyViewController.swift; sourceTree = "<group>"; };
-		417B9D4C1E3187570021F36E /* addButton.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = addButton.swift; sourceTree = "<group>"; };
 		417B9D4E1E318D0D0021F36E /* AddSongViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AddSongViewController.swift; sourceTree = "<group>"; };
 		417B9D521E31B3CE0021F36E /* Track.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Track.swift; sourceTree = "<group>"; };
 		417B9D541E31BC120021F36E /* RestApiManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RestApiManager.swift; sourceTree = "<group>"; };
@@ -109,7 +107,6 @@
 			children = (
 				41C0AEB51E79512D00C797F0 /* searchTextField.swift */,
 				418503F61E307BE900472006 /* setupButton.swift */,
-				417B9D4C1E3187570021F36E /* addButton.swift */,
 			);
 			name = "Custom Appearance";
 			sourceTree = "<group>";
@@ -382,7 +379,6 @@
 				417C38EA1DDA91A100F59926 /* PartyCreationViewController.swift in Sources */,
 				34D750E01E32E9C5009AFD63 /* NetworkServiceManager.swift in Sources */,
 				417B9D571E31CD8D0021F36E /* TrackTableViewCell.swift in Sources */,
-				417B9D4D1E3187570021F36E /* addButton.swift in Sources */,
 				417B9D531E31B3CE0021F36E /* Track.swift in Sources */,
 				417B9D551E31BC120021F36E /* RestApiManager.swift in Sources */,
 				417B9D4B1E317C3C0021F36E /* PartyViewController.swift in Sources */,

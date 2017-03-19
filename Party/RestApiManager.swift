@@ -118,17 +118,17 @@ class RestApiManager {
         makeHTTPRequestToApple(withString: artistName, withPossibleTrackID: trackID)
     }
     
+    // MARK: - Spotify
+    
     func getAuthentication() -> SPTAuth? {
         let auth = SPTAuth.defaultInstance()
         auth?.clientID = "308657d9662146ecae57855ac2a01045"
         auth?.redirectURL = URL(string: "partyapp://returnafterlogin")
         auth?.requestedScopes = [SPTAuthStreamingScope]
+        auth?.sessionUserDefaultsKey = "current session"
         
         return auth
-        
     }
-    
-    // MARK: - Spotify
     
     func makeHTTPRequestToSpotify(withString string: String) {
         dispatchGroup.enter()
