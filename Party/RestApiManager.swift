@@ -91,6 +91,8 @@ class RestApiManager {
             newTrack.artist = track["artistName"].stringValue
             newTrack.album = track["collectionName"].stringValue
             
+            //print("Fetched \(newTrack.name)")
+            
             if possibleTrackID != nil && possibleTrackID! != newTrack.id {
                 continue
             }

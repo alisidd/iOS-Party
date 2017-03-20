@@ -268,9 +268,6 @@ class QueueViewController: UIViewController, UITableViewDelegate, UITableViewDat
             return
         })
         
-        
-        deleteButton.backgroundColor = UIColor(colorLiteralRed: 1, green: 111/255, blue: 1/255, alpha: 1)
-        
         return [deleteButton]
     }
     

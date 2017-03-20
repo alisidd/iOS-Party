@@ -123,12 +123,14 @@ class AddSongViewController: UIViewController, UITextFieldDelegate, UITableViewD
         DispatchQueue.global(qos: .userInitiated).async {
             if self.tracksList.count >= 10 {
                 for i in 10..<self.tracksList.count {
-                    let artworkFetched = self.APIManager.fetchImage(fromURL: self.tracksList[i].lowResArtworkURL)
                     if tracksCaptured == self.tracksList {
-                        if let artworkFetchedUnwrapped = artworkFetched {
-                            DispatchQueue.main.async {
-                                self.tracksList[i].artwork = artworkFetchedUnwrapped
-                                self.trackTableView.reloadData()
+                        let artworkFetched = self.APIManager.fetchImage(fromURL: self.tracksList[i].lowResArtworkURL)
+                        DispatchQueue.main.async {
+                            if tracksCaptured == self.tracksList {
+                                if let artworkFetchedUnwrapped = artworkFetched {
+                                    self.tracksList[i].artwork = artworkFetchedUnwrapped
+                                    self.trackTableView.reloadData()
+                                }
                             }
                         }
                     } else {

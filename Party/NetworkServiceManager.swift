@@ -218,7 +218,7 @@ extension NetworkServiceManager : MCSessionDelegate {
             delegate?.setupParty(withService: musicService)
         } else if var tracksIDList = unarchivedData as? [String] {
             if !tracksIDList.isEmpty {
-                if tracksIDList[0].hasSuffix(":/?r") {
+                if tracksIDList[0].contains(":/?r") {
                     delegate?.removeTrackFromPeer(withTrack: tracksIDList[0])
                     return
                 }
