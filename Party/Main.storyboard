@@ -173,16 +173,16 @@
                                 </constraints>
                             </imageView>
                             <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" spacing="4" translatesAutoresizingMaskIntoConstraints="NO" id="hHA-Uv-PtN">
-                                <rect key="frame" x="21" y="310" width="123.5" height="47"/>
+                                <rect key="frame" x="21" y="310" width="299" height="47"/>
                                 <subviews>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Track Name" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ddX-fC-sB7">
-                                        <rect key="frame" x="0.0" y="0.0" width="123.5" height="26.5"/>
+                                        <rect key="frame" x="0.0" y="0.0" width="299" height="26.5"/>
                                         <fontDescription key="fontDescription" name="Helvetica-Light" family="Helvetica" pointSize="23"/>
                                         <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                         <nil key="highlightedColor"/>
                                     </label>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Artist Name" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="DVp-9a-h3f">
-                                        <rect key="frame" x="0.0" y="30.5" width="123.5" height="16.5"/>
+                                        <rect key="frame" x="0.0" y="30.5" width="299" height="16.5"/>
                                         <fontDescription key="fontDescription" name="Helvetica-Light" family="Helvetica" pointSize="14"/>
                                         <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                         <nil key="highlightedColor"/>
@@ -234,6 +234,7 @@
                         </subviews>
                         <color key="backgroundColor" red="0.10196078431372549" green="0.10196078431372549" blue="0.10196078431372549" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <constraints>
+                            <constraint firstItem="rcd-f2-VTo" firstAttribute="leading" secondItem="hHA-Uv-PtN" secondAttribute="trailing" constant="20" id="3Px-Db-oc9"/>
                             <constraint firstItem="hHA-Uv-PtN" firstAttribute="leading" secondItem="ZZK-fY-JAX" secondAttribute="leadingMargin" constant="5" id="3dd-p3-2Q6"/>
                             <constraint firstAttribute="trailing" secondItem="uNe-0s-jAa" secondAttribute="trailing" id="7e1-fv-0T1"/>
                             <constraint firstItem="uNe-0s-jAa" firstAttribute="top" secondItem="aeu-Sl-Wwd" secondAttribute="bottom" constant="351" id="8yz-Se-8fe"/>
@@ -323,16 +324,16 @@
                                                     </constraints>
                                                 </imageView>
                                                 <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" spacing="2" translatesAutoresizingMaskIntoConstraints="NO" id="I6x-hr-uyF">
-                                                    <rect key="frame" x="109" y="31.5" width="86" height="37"/>
+                                                    <rect key="frame" x="109" y="31.5" width="218" height="37"/>
                                                     <subviews>
                                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Track Name" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="XDv-FN-wcj">
-                                                            <rect key="frame" x="0.0" y="0.0" width="86" height="18.5"/>
+                                                            <rect key="frame" x="0.0" y="0.0" width="218" height="18.5"/>
                                                             <fontDescription key="fontDescription" name="Helvetica-Light" family="Helvetica" pointSize="16"/>
                                                             <color key="textColor" red="0.85490196078431369" green="0.85490196078431369" blue="0.85490196078431369" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                             <nil key="highlightedColor"/>
                                                         </label>
                                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Artist Name" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="VWX-q8-f6f">
-                                                            <rect key="frame" x="0.0" y="20.5" width="86" height="16.5"/>
+                                                            <rect key="frame" x="0.0" y="20.5" width="218" height="16.5"/>
                                                             <fontDescription key="fontDescription" name="Helvetica-Light" family="Helvetica" pointSize="14"/>
                                                             <color key="textColor" red="0.63529411764705879" green="0.63529411764705879" blue="0.63529411764705879" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                             <nil key="highlightedColor"/>
@@ -344,6 +345,7 @@
                                                 <constraint firstItem="h4M-EV-ULS" firstAttribute="leading" secondItem="xSF-l6-kz4" secondAttribute="leadingMargin" constant="25" id="Mjh-RW-XAP"/>
                                                 <constraint firstItem="I6x-hr-uyF" firstAttribute="leading" secondItem="h4M-EV-ULS" secondAttribute="trailing" constant="16" id="WbK-xp-eYe"/>
                                                 <constraint firstItem="I6x-hr-uyF" firstAttribute="centerY" secondItem="h4M-EV-ULS" secondAttribute="centerY" id="Xmp-bk-j15"/>
+                                                <constraint firstAttribute="trailingMargin" secondItem="I6x-hr-uyF" secondAttribute="trailing" constant="40" id="rrI-se-6sI"/>
                                                 <constraint firstItem="h4M-EV-ULS" firstAttribute="centerY" secondItem="xSF-l6-kz4" secondAttribute="centerY" id="yMm-Ne-Kmz"/>
                                             </constraints>
                                         </tableViewCellContentView>
@@ -481,16 +483,16 @@
                                                     </constraints>
                                                 </imageView>
                                                 <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" spacing="2" translatesAutoresizingMaskIntoConstraints="NO" id="lI4-Nn-4hJ">
-                                                    <rect key="frame" x="109" y="32" width="86" height="37"/>
+                                                    <rect key="frame" x="109" y="32" width="218" height="37"/>
                                                     <subviews>
                                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Track Name" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="zSS-IO-3b8">
-                                                            <rect key="frame" x="0.0" y="0.0" width="86" height="18.5"/>
+                                                            <rect key="frame" x="0.0" y="0.0" width="218" height="18.5"/>
                                                             <fontDescription key="fontDescription" name="Helvetica-Light" family="Helvetica" pointSize="16"/>
                                                             <color key="textColor" red="0.85490196078431369" green="0.85490196078431369" blue="0.85490196078431369" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                             <nil key="highlightedColor"/>
                                                         </label>
                                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Artist Name" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="7tc-T2-cjq">
-                                                            <rect key="frame" x="0.0" y="20.5" width="86" height="16.5"/>
+                                                            <rect key="frame" x="0.0" y="20.5" width="218" height="16.5"/>
                                                             <fontDescription key="fontDescription" name="Helvetica-Light" family="Helvetica" pointSize="14"/>
                                                             <color key="textColor" red="0.63529411764705879" green="0.63529411764705879" blue="0.63529411764705879" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                             <nil key="highlightedColor"/>
@@ -503,6 +505,7 @@
                                                 <constraint firstItem="lI4-Nn-4hJ" firstAttribute="leading" secondItem="Ytf-ZA-Qay" secondAttribute="trailing" constant="16" id="F9l-uc-azJ"/>
                                                 <constraint firstItem="Ytf-ZA-Qay" firstAttribute="centerY" secondItem="Ek1-em-Ce7" secondAttribute="centerY" id="Ssv-GR-hzr"/>
                                                 <constraint firstItem="Ytf-ZA-Qay" firstAttribute="leading" secondItem="Ek1-em-Ce7" secondAttribute="leadingMargin" constant="25" id="uzw-dg-eW3"/>
+                                                <constraint firstAttribute="trailingMargin" secondItem="lI4-Nn-4hJ" secondAttribute="trailing" constant="40" id="wPd-ql-W9K"/>
                                             </constraints>
                                         </tableViewCellContentView>
                                         <color key="tintColor" white="1" alpha="1" colorSpace="calibratedWhite"/>

@@ -45,6 +45,9 @@ class QueueViewController: UIViewController, UITableViewDelegate, UITableViewDat
                 self.changeFontSizeForUpNext()
                 self.delegate?.layout()
             }
+            if self.party.tracksQueue.isEmpty {
+                self.comeOutOfEditingMode()
+            }
         }
     }
     
@@ -56,7 +59,7 @@ class QueueViewController: UIViewController, UITableViewDelegate, UITableViewDat
                 self.changeFontSizeForUpNext()
                 self.delegate?.layout()
             }
-            self.tracksTableView.setEditing(false, animated: true)
+            self.comeOutOfEditingMode()
         }
     }
     
@@ -144,14 +147,15 @@ class QueueViewController: UIViewController, UITableViewDelegate, UITableViewDat
     }
     
     func comeOutOfEditingMode() {
-        self.editButton.isHidden = true
-        self.addButton.isHidden = false
+        editButton.isHidden = true
+        addButton.isHidden = false
+        editButton.setTitle("Edit", for: .normal)
     }
     
     func goIntoEditingMode() {
         if (delegate!.amHost() && party.tracksQueue.count > 1) || tracksQueueHasEditableTracks() {
-            self.editButton.isHidden = false
-            self.addButton.isHidden = true
+            editButton.isHidden = false
+            addButton.isHidden = true
         }
     }
     

@@ -53,12 +53,6 @@ protocol NetworkManagerDelegate: class {
 protocol UpdatePartyDelegate: class {
     func updateEveryonesTableView()
     func showCurrentlyPlayingArtwork()
-    func hideCurrentlyPlayingArtwork()
-    func minimizeTracksTableView()
-}
-
-protocol UpdateCurrentlyPlayingArtworkDelegate: class {
-    func reloadTableIfPlayingTrack(forTrack track: Track)
 }
 
 protocol PartyViewControllerInfoDelegate: class {
@@ -80,10 +74,6 @@ class PartyViewController: UIViewController, SPTAudioStreamingDelegate, SPTAudio
     @IBOutlet weak var currentlyPlayingArtistName: UILabel!
     @IBOutlet weak var playPauseButton: UIButton!
     @IBOutlet weak var progressBar: UIProgressView!
-    
-    func minimizeTracksTableView() {
-        lyricsAndQueueVC.moveTableTracksQueueUp()
-    }
     
     // Tracks Queue
     @IBOutlet weak var upNextLabel: UILabel!
@@ -111,11 +101,11 @@ class PartyViewController: UIViewController, SPTAudioStreamingDelegate, SPTAudio
                     self.removeReconnectButton()
                     self.removeStatusLabel()
                 } else if newValue == .connecting {
-                    self.removeReconnectButton()
-                    self.lyricsAndQueueVC.moveTableTracksQueueUp()
+                    self.displayReconnectButton()
+                    self.lyricsAndQueueVC.expandTracksTable()
                 } else {
                     self.displayReconnectButton()
-                    self.lyricsAndQueueVC.moveTableTracksQueueUp()
+                    self.lyricsAndQueueVC.expandTracksTable()
                 }
             }
         }
@@ -206,19 +196,22 @@ class PartyViewController: UIViewController, SPTAudioStreamingDelegate, SPTAudio
     private func adjustViews() {
         progressBar.isHidden = true
         hideCurrentlyPlayingArtwork()
-        lyricsAndQueueVC.moveTableTracksQueueUp()
+        lyricsAndQueueVC.expandTracksTable()
         if !isHost {
             playPauseButton.isHidden = true
         }
     }
     
     func initializeMusicPlayer() {
+        if isHost {
+            setTimer()
+        }
+
         if party.musicService == .spotify {
             playUsingSession()
         } else {
             musicPlayer.appleMusicPlayer.beginGeneratingPlaybackNotifications()
             NotificationCenter.default.addObserver(self, selector: #selector(PartyViewController.playNextTrack), name:NSNotification.Name.MPMusicPlayerControllerPlaybackStateDidChange, object: musicPlayer.appleMusicPlayer)
-            setTimer()
         }
     }
     
@@ -226,7 +219,7 @@ class PartyViewController: UIViewController, SPTAudioStreamingDelegate, SPTAudio
     
     internal func updateEveryonesTableView() {
         // Update own table view
-        lyricsAndQueueVC.updateTable(withTracks: party.tracksQueue)
+        lyricsAndQueueVC.updateTable()
         
         updateCurrentlyPlayingTrack()
         
@@ -243,7 +236,7 @@ class PartyViewController: UIViewController, SPTAudioStreamingDelegate, SPTAudio
         DispatchQueue.main.async {
             if !self.party.tracksQueue.isEmpty {
                 if self.party.tracksQueue.count == 1 {
-                    self.lyricsAndQueueVC.moveTableTracksQueueDown()
+                    self.lyricsAndQueueVC.minimizeTracksTable()
                 }
                 self.updateArtworkForCurrentlyPlaying()
                 self.currentlyPlayingTrackName.text = self.party.tracksQueue[0].name
@@ -282,7 +275,7 @@ class PartyViewController: UIViewController, SPTAudioStreamingDelegate, SPTAudio
             self.currentlyPlayingTrackName.isHidden = true
             self.currentlyPlayingArtistName.isHidden = true
             self.playPauseButton.isHidden = true
-            self.lyricsAndQueueVC.moveTableTracksQueueUp()
+            self.lyricsAndQueueVC.expandTracksTable()
         }
     }
     
@@ -313,15 +306,12 @@ class PartyViewController: UIViewController, SPTAudioStreamingDelegate, SPTAudio
         DispatchQueue.global(qos: .userInteractive).async {
             let API = RestApiManager()
             
-            print("Adding tracks 0")
             if let requestTracks = self.APIManager.latestRequest[peer], requestTracks == tracks {
-                print("Adding tracks 1")
                 
                 for trackID in tracks {
                     if self.isASpotifyTrack(forTrackID: trackID) {
                         API.makeHTTPRequestToSpotifyForSingleTrack(forID: trackID)
                     } else {
-                        print("Fetching from Apple for \(trackID)")
                         API.makeHTTPRequestToAppleForSingleTrack(forID: trackID)
                     }
                     
@@ -337,8 +327,7 @@ class PartyViewController: UIViewController, SPTAudioStreamingDelegate, SPTAudio
                 } else {
                     if self.party.tracksQueue.isEmpty {
                         if !API.tracksList.isEmpty {
-                            print("Pulling down")
-                            self.lyricsAndQueueVC.moveTableTracksQueueDown()
+                            self.lyricsAndQueueVC.minimizeTracksTable()
                         }
                     }
                     
@@ -348,7 +337,6 @@ class PartyViewController: UIViewController, SPTAudioStreamingDelegate, SPTAudio
                         var newTracks = [Track]()
                         
                         for newTrack in API.tracksList {
-                            print("Adding \(newTrack.name)")
                             if let index = self.indexInCache(ofTrack: newTrack) {
                                 wholeNewQueue.append(self.cache[index])
                             } else {
@@ -359,8 +347,7 @@ class PartyViewController: UIViewController, SPTAudioStreamingDelegate, SPTAudio
                         
                         self.party.tracksQueue = wholeNewQueue
                         self.updateCurrentlyPlayingTrack()
-                        self.lyricsAndQueueVC.updateTable(withTracks: self.party.tracksQueue)
-                        
+                        self.lyricsAndQueueVC.updateTable()
                         
                         self.fetchHighResArtwork(forTracks: newTracks)
                         
@@ -405,15 +392,14 @@ class PartyViewController: UIViewController, SPTAudioStreamingDelegate, SPTAudio
         let id = trackID.components(separatedBy: ":")[0]
 
         for trackInQueue in party.tracksQueue {
-            /*
-            if trackInQueue.id == trackID.substring(to: trackID.index(trackID.endIndex, offsetBy: -4)) {
-                print("Found removal of \((party.tracksQueue.remove(at: party.tracksQueue.index(of: trackInQueue)!)).name)")
-            }*/
-            
             if id == trackInQueue.id {
                 party.tracksQueue.remove(at: party.tracksQueue.index(of: trackInQueue)!)
-                lyricsAndQueueVC.updateTable(withTracks: party.tracksQueue)
+                lyricsAndQueueVC.updateTable()
             }
+        }
+        
+        if party.tracksQueue.isEmpty {
+            lyricsAndQueueVC.expandTracksTable()
         }
     }
     
@@ -456,21 +442,21 @@ class PartyViewController: UIViewController, SPTAudioStreamingDelegate, SPTAudio
         if musicPlayer.isPaused() {
             UIView.animate(withDuration: 0.1, animations: {
                 sender.alpha = 0.0
-            }, completion:{ (finished) in
+            }, completion: { (finished) in
                 sender.setImage(#imageLiteral(resourceName: "pause"), for: .normal)
-                UIView.animate(withDuration: 0.25, animations: {
+                UIView.animate(withDuration: 0.25) {
                     sender.alpha = 1
-                }, completion:nil)
+                }
             })
             musicPlayer.playTrack()
         } else {
             UIView.animate(withDuration: 0.1, animations: {
                 sender.alpha = 0.0
-            }, completion:{ (finished) in
+            }, completion: { (finished) in
                 sender.setImage(#imageLiteral(resourceName: "play"), for: .normal)
-                UIView.animate(withDuration: 0.25, animations: {
+                UIView.animate(withDuration: 0.25) {
                     sender.alpha = 1
-                }, completion:nil)
+                }
             })
             musicPlayer.pauseTrack()
         }
@@ -479,6 +465,7 @@ class PartyViewController: UIViewController, SPTAudioStreamingDelegate, SPTAudio
     // MARK: - Callbacks
     
     @objc func playNextTrack() {
+        print(progressBar.progress)
         if musicPlayer.safeToPlayNextTrack() && !party.tracksQueue.isEmpty && progressBar.progress > 0.96 {
             if personalQueue.contains(party.tracksQueue[0]) {
                 personalQueue.remove(at: personalQueue.index(of: party.tracksQueue[0])!)
@@ -487,18 +474,16 @@ class PartyViewController: UIViewController, SPTAudioStreamingDelegate, SPTAudio
             print("Removing \(party.tracksQueue.removeFirst().name)")
             musicPlayer.modifyQueue(withTracks: party.tracksQueue)
             
-            updateCurrentlyPlayingTrack()
             updateEveryonesTableView()
-            lyricsAndQueueVC.updateTable(withTracks: party.tracksQueue)
             
             if self.party.tracksQueue.isEmpty {
-                self.lyricsAndQueueVC.moveTableTracksQueueUp()
+                self.lyricsAndQueueVC.expandTracksTable()
             }
         }
     }
     
     func setTimer() {
-        let _ = Timer.scheduledTimer(timeInterval: 1, target: self, selector: #selector(PartyViewController.updateProgress), userInfo: nil, repeats: true)
+        let _ = Timer.scheduledTimer(timeInterval: 3, target: self, selector: #selector(PartyViewController.updateProgress), userInfo: nil, repeats: true)
     }
     
     func updateProgress() {
@@ -507,6 +492,7 @@ class PartyViewController: UIViewController, SPTAudioStreamingDelegate, SPTAudio
                 progressBar.setProgress(Float(musicPlayer.getCurrentPosition())/Float(wholeLength), animated: true)
             }
         }
+        tracksListManager.advertise()
     }
     
     private func fetchImage(forTrack track: Track, setCurrentlyPlaying: Bool) -> UIImage? {
@@ -553,14 +539,8 @@ class PartyViewController: UIViewController, SPTAudioStreamingDelegate, SPTAudio
                 self.personalQueue.append(contentsOf: VC.tracksQueue)
                 
                 if self.party.tracksQueue.count > 0 {
-                    self.lyricsAndQueueVC.moveTableTracksQueueDown()
+                    self.lyricsAndQueueVC.minimizeTracksTable()
                 }
-                
-                if self.party.tracksQueue.count == VC.tracksQueue.count && self.party.tracksQueue.count > 0 {
-                    let _ = self.fetchImage(forTrack: VC.tracksQueue[0], setCurrentlyPlaying: true)?.addGradient()
-                }
-                
-                self.lyricsAndQueueVC.updateTable(withTracks: self.party.tracksQueue)
                 
                 if self.party.tracksQueue.count == VC.tracksQueue.count {
                     self.musicPlayer.modifyQueue(withTracks: self.party.tracksQueue)
@@ -598,10 +578,8 @@ class PartyViewController: UIViewController, SPTAudioStreamingDelegate, SPTAudio
     internal func setupParty(withService service: String) {
         print("Setting up party using party info received")
         if service == "s" {
-            print("Setting service to spotify")
             party.musicService = .spotify
         } else {
-            print("Setting service to Apple")
             party.musicService = .appleMusic
         }
     }

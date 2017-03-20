@@ -30,8 +30,6 @@ class NetworkServiceManager: NSObject {
         // Broadcast as the party name or the device name if not applicable
         myPeerId = MCPeerID(displayName: UUID)
         
-        
-        
         let infoAboutHost = ["isHost": isHost.description]
         print("Delegate info: \(isHost)")
         
@@ -53,6 +51,13 @@ class NetworkServiceManager: NSObject {
         serviceAdvertiser.stopAdvertisingPeer()
         serviceBrowser.stopBrowsingForPeers()
         print("Destroying Network Manager")
+    }
+    
+    func advertise() {
+        DispatchQueue.global(qos: .background).async {
+            self.serviceAdvertiser.startAdvertisingPeer()
+            self.serviceBrowser.startBrowsingForPeers()
+        }
     }
     
     // MARK: - Functions
@@ -142,24 +147,24 @@ extension NetworkServiceManager : MCNearbyServiceBrowserDelegate {
             newSession.delegate = self
             
             var alreadyFound = false
-            for session in sessions.keys {
-                // improve: make sure peerid display name is different for very user
-                if session.myPeerID.displayName == peerID.displayName {
-                    alreadyFound = true
+            for peerInSession in sessions.keys {
+                if !peerInSession.connectedPeers.isEmpty {
+                    if peerInSession.connectedPeers[0].displayName == peerID.displayName {
+                        alreadyFound = true
+                    }
+                } else {
+                    sessions.removeValue(forKey: peerInSession)
                 }
             }
+            
             if !alreadyFound {
                 sessions[newSession] = peerID
+                if delegate!.amHost() {
+                    print("invitePeer: \(peerID)")
+                    browser.invitePeer(peerID, to: newSession, withContext: nil, timeout: 10)
+                }
             }
-            
-            if delegate!.amHost() {
-                print("invitePeer: \(peerID)")
-                browser.invitePeer(peerID, to: newSession, withContext: nil, timeout: 10)
-            }
-            
         }
-        
-        
     }
     
     func browser(_ browser: MCNearbyServiceBrowser, lostPeer peerID: MCPeerID) {

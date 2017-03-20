@@ -40,20 +40,20 @@ class LyricsAndQueuePageViewController: UIPageViewController, UIPageViewControll
         vc.delegate = partyDelegate!
     }
     
-    func updateTable(withTracks tracks: [Track]) {
+    func updateTable() {
         if let vc = allViewControllers[1] as? QueueViewController {
             vc.party = party
             vc.updateTable()
         }
     }
     
-    func moveTableTracksQueueUp() {
+    func expandTracksTable() {
         if let vc = allViewControllers[1] as? QueueViewController {
             vc.makeTracksTableTaller()
         }
     }
     
-    func moveTableTracksQueueDown() {
+    func minimizeTracksTable() {
         if let vc = allViewControllers[1] as? QueueViewController {
             vc.makeTracksTableShorter()
         }
