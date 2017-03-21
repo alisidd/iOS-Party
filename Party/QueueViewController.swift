@@ -10,13 +10,14 @@ import UIKit
 
 class QueueViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
     
-    var delegate: PartyViewControllerInfoDelegate?
+    weak var delegate: PartyViewControllerInfoDelegate?
 
     @IBOutlet weak var upNextLabel: UILabel!
     @IBOutlet weak var addButton: UIButton!
     @IBOutlet weak var editButton: UIButton!
     
     @IBOutlet weak var tracksTableView: UITableView!
+
     let minHeight: CGFloat = 351
     let maxHeight: CGFloat = -UIApplication.shared.statusBarFrame.height
     var headerHeightConstraint: CGFloat {
@@ -35,6 +36,10 @@ class QueueViewController: UIViewController, UITableViewDelegate, UITableViewDat
     override func viewDidLoad() {
         super.viewDidLoad()
         setDelegates()
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        changeFontSizeForUpNext()
     }
     
     func makeTracksTableTaller() {
@@ -141,7 +146,6 @@ class QueueViewController: UIViewController, UITableViewDelegate, UITableViewDat
                 self.changeFontSizeForUpNext()
                 self.delegate?.layout()
                 self.goIntoEditingMode()
-                
             })
         }
     }

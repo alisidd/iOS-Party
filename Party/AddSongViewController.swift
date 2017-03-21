@@ -52,7 +52,7 @@ class AddSongViewController: UIViewController, UITextFieldDelegate, UITableViewD
     func initializeActivityIndicator() {
         indicator = UIActivityIndicatorView(frame: CGRect(x: 0, y: 0, width: 80, height: 80))
         indicator.activityIndicatorViewStyle = UIActivityIndicatorViewStyle.whiteLarge
-        indicator.center = self.view.center
+        indicator.center = view.center
         view.addSubview(indicator)
     }
     

@@ -193,10 +193,9 @@ class PartyCreationViewController: UIViewController, UITextFieldDelegate, UIPick
                     controller.spotifySession = spotifySession
                 }
                 
-                controller.tracksListManager.partyName = "Placeholder Party Name"
-                controller.tracksListManager.delegate = controller
+                controller.tracksListManager?.partyName = "Placeholder Party Name"
+                controller.tracksListManager?.delegate = controller
             }
         }
     }
-
 }

@@ -33,8 +33,8 @@
 		418503F71E307BE900472006 /* setupButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 418503F61E307BE900472006 /* setupButton.swift */; };
 		41C0AEB61E79512D00C797F0 /* searchTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 41C0AEB51E79512D00C797F0 /* searchTextField.swift */; };
 		41C0AEB81E79EDC700C797F0 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 41C0AEB71E79EDC700C797F0 /* GoogleService-Info.plist */; };
-		41C0AEBA1E7A0AC100C797F0 /* LyricsAndQueuePageViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 41C0AEB91E7A0AC100C797F0 /* LyricsAndQueuePageViewController.swift */; };
-		41C0AEBC1E7A12CB00C797F0 /* LyricsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 41C0AEBB1E7A12CB00C797F0 /* LyricsViewController.swift */; };
+		41C0AEBA1E7A0AC100C797F0 /* HubAndQueuePageViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 41C0AEB91E7A0AC100C797F0 /* HubAndQueuePageViewController.swift */; };
+		41C0AEBC1E7A12CB00C797F0 /* HubViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 41C0AEBB1E7A12CB00C797F0 /* HubViewController.swift */; };
 		41C0AEBE1E7A12E000C797F0 /* QueueViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 41C0AEBD1E7A12E000C797F0 /* QueueViewController.swift */; };
 		41EB1B051E3FE1BE00FC326F /* Trajan Pro.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 41EB1B041E3FE1BD00FC326F /* Trajan Pro.ttf */; };
 /* End PBXBuildFile section */
@@ -58,7 +58,7 @@
 		417B9D521E31B3CE0021F36E /* Track.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Track.swift; sourceTree = "<group>"; };
 		417B9D541E31BC120021F36E /* RestApiManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RestApiManager.swift; sourceTree = "<group>"; };
 		417B9D561E31CD8D0021F36E /* TrackTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TrackTableViewCell.swift; sourceTree = "<group>"; };
-		417C38C91DDA43FD00F59926 /* Party.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Party.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		417C38C91DDA43FD00F59926 /* WeJ.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = WeJ.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		417C38CC1DDA43FD00F59926 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		417C38D41DDA43FD00F59926 /* Party.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = Party.xcdatamodel; sourceTree = "<group>"; };
 		417C38D91DDA43FD00F59926 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
@@ -68,8 +68,8 @@
 		418503F61E307BE900472006 /* setupButton.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = setupButton.swift; sourceTree = "<group>"; };
 		41C0AEB51E79512D00C797F0 /* searchTextField.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = searchTextField.swift; sourceTree = "<group>"; };
 		41C0AEB71E79EDC700C797F0 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
-		41C0AEB91E7A0AC100C797F0 /* LyricsAndQueuePageViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LyricsAndQueuePageViewController.swift; sourceTree = "<group>"; };
-		41C0AEBB1E7A12CB00C797F0 /* LyricsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LyricsViewController.swift; sourceTree = "<group>"; };
+		41C0AEB91E7A0AC100C797F0 /* HubAndQueuePageViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HubAndQueuePageViewController.swift; sourceTree = "<group>"; };
+		41C0AEBB1E7A12CB00C797F0 /* HubViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HubViewController.swift; sourceTree = "<group>"; };
 		41C0AEBD1E7A12E000C797F0 /* QueueViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = QueueViewController.swift; sourceTree = "<group>"; };
 		41EB1B041E3FE1BD00FC326F /* Trajan Pro.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Trajan Pro.ttf"; sourceTree = "<group>"; };
 		66422AE3EA2F04836109AFE5 /* Pods_Party.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Party.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -141,12 +141,12 @@
 			isa = PBXGroup;
 			children = (
 				417B9D4A1E317C3C0021F36E /* PartyViewController.swift */,
-				41C0AEB91E7A0AC100C797F0 /* LyricsAndQueuePageViewController.swift */,
-				41C0AEBB1E7A12CB00C797F0 /* LyricsViewController.swift */,
-				41C0AEBD1E7A12E000C797F0 /* QueueViewController.swift */,
-				4134216A1E3D775400888403 /* newParty.swift */,
 				412FBED01E32CFA7007FFB6A /* MusicPlayer.swift */,
+				41C0AEB91E7A0AC100C797F0 /* HubAndQueuePageViewController.swift */,
+				41C0AEBB1E7A12CB00C797F0 /* HubViewController.swift */,
+				41C0AEBD1E7A12E000C797F0 /* QueueViewController.swift */,
 				417B9D561E31CD8D0021F36E /* TrackTableViewCell.swift */,
+				4134216A1E3D775400888403 /* newParty.swift */,
 			);
 			name = "Play Tracks";
 			sourceTree = "<group>";
@@ -171,7 +171,7 @@
 		417C38C01DDA43FD00F59926 = {
 			isa = PBXGroup;
 			children = (
-				417C38CB1DDA43FD00F59926 /* Party */,
+				417C38CB1DDA43FD00F59926 /* WeJ */,
 				417C38CA1DDA43FD00F59926 /* Products */,
 				0EC59A47A2A686C3B2C8F22B /* Pods */,
 				B2F645F37144B3727E5025EE /* Frameworks */,
@@ -181,12 +181,12 @@
 		417C38CA1DDA43FD00F59926 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				417C38C91DDA43FD00F59926 /* Party.app */,
+				417C38C91DDA43FD00F59926 /* WeJ.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
 		};
-		417C38CB1DDA43FD00F59926 /* Party */ = {
+		417C38CB1DDA43FD00F59926 /* WeJ */ = {
 			isa = PBXGroup;
 			children = (
 				411EEF3F1E346E2200216016 /* Main.storyboard */,
@@ -205,6 +205,7 @@
 				41045F321E39B80300A29830 /* Party-Bridging-Header.h */,
 				419448001E3FFFDD00B9370C /* Resources */,
 			);
+			name = WeJ;
 			path = Party;
 			sourceTree = "<group>";
 		};
@@ -233,9 +234,9 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		417C38C81DDA43FD00F59926 /* Party */ = {
+		417C38C81DDA43FD00F59926 /* WeJ */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 417C38DE1DDA43FD00F59926 /* Build configuration list for PBXNativeTarget "Party" */;
+			buildConfigurationList = 417C38DE1DDA43FD00F59926 /* Build configuration list for PBXNativeTarget "WeJ" */;
 			buildPhases = (
 				12CAB152D2D629BAE5F90047 /* [CP] Check Pods Manifest.lock */,
 				417C38C51DDA43FD00F59926 /* Sources */,
@@ -248,9 +249,9 @@
 			);
 			dependencies = (
 			);
-			name = Party;
+			name = WeJ;
 			productName = Party;
-			productReference = 417C38C91DDA43FD00F59926 /* Party.app */;
+			productReference = 417C38C91DDA43FD00F59926 /* WeJ.app */;
 			productType = "com.apple.product-type.application";
 		};
 /* End PBXNativeTarget section */
@@ -276,7 +277,7 @@
 					};
 				};
 			};
-			buildConfigurationList = 417C38C41DDA43FD00F59926 /* Build configuration list for PBXProject "Party" */;
+			buildConfigurationList = 417C38C41DDA43FD00F59926 /* Build configuration list for PBXProject "WeJ" */;
 			compatibilityVersion = "Xcode 3.2";
 			developmentRegion = English;
 			hasScannedForEncodings = 0;
@@ -289,7 +290,7 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				417C38C81DDA43FD00F59926 /* Party */,
+				417C38C81DDA43FD00F59926 /* WeJ */,
 			);
 		};
 /* End PBXProject section */
@@ -367,9 +368,9 @@
 				41C0AEBE1E7A12E000C797F0 /* QueueViewController.swift in Sources */,
 				41C0AEB61E79512D00C797F0 /* searchTextField.swift in Sources */,
 				412FBED11E32CFA7007FFB6A /* MusicPlayer.swift in Sources */,
-				41C0AEBA1E7A0AC100C797F0 /* LyricsAndQueuePageViewController.swift in Sources */,
+				41C0AEBA1E7A0AC100C797F0 /* HubAndQueuePageViewController.swift in Sources */,
 				417B9D4F1E318D0D0021F36E /* AddSongViewController.swift in Sources */,
-				41C0AEBC1E7A12CB00C797F0 /* LyricsViewController.swift in Sources */,
+				41C0AEBC1E7A12CB00C797F0 /* HubViewController.swift in Sources */,
 				418503F71E307BE900472006 /* setupButton.swift in Sources */,
 				3472FB141DDAC6FC00A35FCB /* PartyListCell.swift in Sources */,
 				417C38EF1DDA91B500F59926 /* Party.xcdatamodeld in Sources */,
@@ -514,7 +515,7 @@
 					"\"SwiftyJSON\"",
 					"-ObjC",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.example.AliSiddiqui.MatthewPaletta.Party;
+				PRODUCT_BUNDLE_IDENTIFIER = com.example.AliSiddiqui.WeJ;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_OBJC_BRIDGING_HEADER = "Party-Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
@@ -545,7 +546,7 @@
 					"\"SwiftyJSON\"",
 					"-ObjC",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.example.AliSiddiqui.MatthewPaletta.Party;
+				PRODUCT_BUNDLE_IDENTIFIER = com.example.AliSiddiqui.WeJ;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_OBJC_BRIDGING_HEADER = "Party-Bridging-Header.h";
 				SWIFT_VERSION = 3.0.1;
@@ -556,7 +557,7 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		417C38C41DDA43FD00F59926 /* Build configuration list for PBXProject "Party" */ = {
+		417C38C41DDA43FD00F59926 /* Build configuration list for PBXProject "WeJ" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				417C38DC1DDA43FD00F59926 /* Debug */,
@@ -565,7 +566,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		417C38DE1DDA43FD00F59926 /* Build configuration list for PBXNativeTarget "Party" */ = {
+		417C38DE1DDA43FD00F59926 /* Build configuration list for PBXNativeTarget "WeJ" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				417C38DF1DDA43FD00F59926 /* Debug */,

@@ -8,10 +8,10 @@
 
 import UIKit
 
-class LyricsAndQueuePageViewController: UIPageViewController, UIPageViewControllerDelegate, UIPageViewControllerDataSource {
+class HubAndQueuePageViewController: UIPageViewController, UIPageViewControllerDelegate, UIPageViewControllerDataSource {
     
     var party = Party()
-    var partyDelegate: PartyViewControllerInfoDelegate?
+    weak var partyDelegate: PartyViewControllerInfoDelegate?
     var allViewControllers = [UIViewController]()
 
     override func viewDidLoad() {
@@ -27,17 +27,20 @@ class LyricsAndQueuePageViewController: UIPageViewController, UIPageViewControll
     }
     
     func populateListOfViewControllers() {
-        let lyricsViewController = storyboard!.instantiateViewController(withIdentifier: "Lyrics")
+        let hubViewController = storyboard!.instantiateViewController(withIdentifier: "Hub")
         let tracksQueueViewController = storyboard!.instantiateViewController(withIdentifier: "Queue")
         
-        allViewControllers.append(lyricsViewController)
+        allViewControllers.append(hubViewController)
         allViewControllers.append(tracksQueueViewController)
         
-        setViewControllers([tracksQueueViewController], direction: .reverse, animated: true, completion: nil)
+        let vc1 = allViewControllers[0] as! HubViewController
+        vc1.delegate = partyDelegate!
         
-        let vc = allViewControllers[1] as! QueueViewController
-        vc.party = party
-        vc.delegate = partyDelegate!
+        let vc2 = allViewControllers[1] as! QueueViewController
+        vc2.party = party
+        vc2.delegate = partyDelegate!
+        
+        setViewControllers([tracksQueueViewController], direction: .reverse, animated: true, completion: nil)
     }
     
     func updateTable() {

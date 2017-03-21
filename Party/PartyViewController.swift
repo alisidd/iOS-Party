@@ -79,10 +79,10 @@ class PartyViewController: UIViewController, SPTAudioStreamingDelegate, SPTAudio
     @IBOutlet weak var upNextLabel: UILabel!
     
     @IBOutlet weak var tableHeightConstraint: NSLayoutConstraint!
-    var lyricsAndQueueVC: LyricsAndQueuePageViewController {
+    var lyricsAndQueueVC: HubAndQueuePageViewController {
         get {
-            let vc = childViewControllers.first{ $0 is LyricsAndQueuePageViewController }
-            return vc as! LyricsAndQueuePageViewController
+            let vc = childViewControllers.first{ $0 is HubAndQueuePageViewController }
+            return vc as! HubAndQueuePageViewController
         }
     }
     
@@ -101,7 +101,7 @@ class PartyViewController: UIViewController, SPTAudioStreamingDelegate, SPTAudio
                     self.removeReconnectButton()
                     self.removeStatusLabel()
                 } else if newValue == .connecting {
-                    self.displayReconnectButton()
+                    self.removeReconnectButton()
                     self.lyricsAndQueueVC.expandTracksTable()
                 } else {
                     self.displayReconnectButton()
@@ -111,7 +111,6 @@ class PartyViewController: UIViewController, SPTAudioStreamingDelegate, SPTAudio
         }
     }
     @IBOutlet weak var reconnectButton: UIButton!
-    @IBOutlet weak var reconnectButtonConstraint: NSLayoutConstraint!
     
     func displayStatusSymbol() {
         UIView.animate(withDuration: 0.5) {
@@ -132,7 +131,7 @@ class PartyViewController: UIViewController, SPTAudioStreamingDelegate, SPTAudio
         view.layoutIfNeeded()
         reconnectButton.isHidden = false
         UIView.animate(withDuration: 0.4) {
-            self.reconnectButtonConstraint.constant = 50
+            self.reconnectButton.alpha = 1
             self.view.layoutIfNeeded()
         }
     }
@@ -141,7 +140,7 @@ class PartyViewController: UIViewController, SPTAudioStreamingDelegate, SPTAudio
         view.layoutIfNeeded()
         reconnectButton.isHidden = true
         UIView.animate(withDuration: 0.4) {
-            self.reconnectButtonConstraint.constant = -50
+            self.reconnectButton.alpha = 0
             self.view.layoutIfNeeded()
         }
     }
@@ -149,15 +148,13 @@ class PartyViewController: UIViewController, SPTAudioStreamingDelegate, SPTAudio
     @IBAction func reconnectToParty(_ sender: UIButton) {
         tracksListManager = nil
         tracksListManager = NetworkServiceManager(self.isHost)
-        tracksListManager.delegate = self
+        tracksListManager!.delegate = self
         connectionStatus = .connecting
     }
     
     // MARK: - General Variables
     
-    lazy var tracksListManager: NetworkServiceManager! = {
-        return NetworkServiceManager(self.isHost)
-    }()
+    weak var tracksListManager: NetworkServiceManager!
     private let APIManager = RestApiManager()
     
     var party = Party()
@@ -171,6 +168,7 @@ class PartyViewController: UIViewController, SPTAudioStreamingDelegate, SPTAudio
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        tracksListManager = NetworkServiceManager(self.isHost)
         setDelegates()
         adjustViews()
         
@@ -187,7 +185,7 @@ class PartyViewController: UIViewController, SPTAudioStreamingDelegate, SPTAudio
     // MARK: - General Functions
     
     private func setDelegates() {
-        tracksListManager.delegate = self
+        tracksListManager?.delegate = self
         party.delegate = self
         musicPlayer.spotifyPlayer?.delegate = self
         musicPlayer.spotifyPlayer?.playbackDelegate = self
@@ -199,6 +197,7 @@ class PartyViewController: UIViewController, SPTAudioStreamingDelegate, SPTAudio
         lyricsAndQueueVC.expandTracksTable()
         if !isHost {
             playPauseButton.isHidden = true
+            connectionStatus = .notConnected
         }
     }
     
@@ -283,7 +282,7 @@ class PartyViewController: UIViewController, SPTAudioStreamingDelegate, SPTAudio
     private func sendTracksToPeers(forTracks tracks: [Track]) {
         let tracksIDString = id(ofTracks: tracks)
         if isHost || (!isHost && !tracks.isEmpty) {
-            tracksListManager.sendTracks(tracksIDString)
+            tracksListManager?.sendTracks(tracksIDString)
         }
     }
     
@@ -483,7 +482,9 @@ class PartyViewController: UIViewController, SPTAudioStreamingDelegate, SPTAudio
     }
     
     func setTimer() {
-        let _ = Timer.scheduledTimer(timeInterval: 3, target: self, selector: #selector(PartyViewController.updateProgress), userInfo: nil, repeats: true)
+        let _ = Timer.scheduledTimer(withTimeInterval: 3, repeats: true) { [weak self] (timer) in
+            self?.updateProgress()
+        }
     }
     
     func updateProgress() {
@@ -492,7 +493,8 @@ class PartyViewController: UIViewController, SPTAudioStreamingDelegate, SPTAudio
                 progressBar.setProgress(Float(musicPlayer.getCurrentPosition())/Float(wholeLength), animated: true)
             }
         }
-        tracksListManager.advertise()
+        tracksListManager?.advertise()
+
     }
     
     private func fetchImage(forTrack track: Track, setCurrentlyPlaying: Bool) -> UIImage? {
@@ -524,7 +526,7 @@ class PartyViewController: UIViewController, SPTAudioStreamingDelegate, SPTAudio
 
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if segue.identifier == "Show Lyrics and Queue" {
-            if let controller = segue.destination as? LyricsAndQueuePageViewController {
+            if let controller = segue.destination as? HubAndQueuePageViewController {
                 controller.party = party
                 controller.partyDelegate = self
             }
@@ -571,7 +573,7 @@ class PartyViewController: UIViewController, SPTAudioStreamingDelegate, SPTAudio
     
     internal func sendPartyInfo(toSession session: MCSession) {
         if isHost {
-            tracksListManager.sendPartyInfo(withTracks: party.tracksQueue, forService: party.musicService, toSession: session)
+            tracksListManager?.sendPartyInfo(withTracks: party.tracksQueue, forService: party.musicService, toSession: session)
         }
     }
     

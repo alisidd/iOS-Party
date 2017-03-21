@@ -23,7 +23,7 @@ class MusicPlayer: NSObject {
         }
     }
     
-    var delegate: AppleMusicAuthorizationAlertDelegate?
+    weak var delegate: AppleMusicAuthorizationAlertDelegate?
     
     // MARK: - Spotify Variables
     

@@ -6,8 +6,6 @@
 //  Copyright © 2017 Ali Siddiqui and Matthew Paletta. All rights reserved.
 //
 
-import UIKit
-
 class TrackTableViewCell: UITableViewCell {
     @IBOutlet weak var artworkImageView: UIImageView!
     @IBOutlet weak var trackName: UILabel!
