@@ -20,18 +20,22 @@ class NetworkServiceManager: NSObject {
     var myPeerId: MCPeerID!
     var partyName = String()
     var sessions = [MCSession : MCPeerID]()
+    var foundOtherHosts = false
     weak var delegate : NetworkManagerDelegate?
     
     // MARK: - Lifecycle
     
     init(_ isHost: Bool) {
         let UUID = UIDevice.current.identifierForVendor!.uuidString
+        let deviceName = UIDevice.current.name
         
-        // Broadcast as the party name or the device name if not applicable
-        myPeerId = MCPeerID(displayName: UUID)
+        if isHost {
+            myPeerId = MCPeerID(displayName: deviceName)
+        } else {
+            myPeerId = MCPeerID(displayName: UUID)
+        }
         
         let infoAboutHost = ["isHost": isHost.description]
-        print("Delegate info: \(isHost)")
         
         serviceAdvertiser = MCNearbyServiceAdvertiser(peer: myPeerId, discoveryInfo: infoAboutHost, serviceType: MessageServiceType)
         serviceBrowser = MCNearbyServiceBrowser(peer: myPeerId, serviceType: MessageServiceType)
@@ -142,6 +146,10 @@ extension NetworkServiceManager : MCNearbyServiceBrowserDelegate {
     @available(iOS 7.0, *)
     public func browser(_ browser: MCNearbyServiceBrowser, foundPeer peerID: MCPeerID, withDiscoveryInfo info: [String : String]?) {
         print("foundPeer: \(peerID)")
+        if info?["isHost"] == "true" {
+            foundOtherHosts = true
+        }
+        
         if !(delegate!.amHost() == false && info?["isHost"] == "false") {
             let newSession = MCSession(peer: myPeerId, securityIdentity: nil, encryptionPreference: MCEncryptionPreference.none)
             newSession.delegate = self

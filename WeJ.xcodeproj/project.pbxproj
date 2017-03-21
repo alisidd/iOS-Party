@@ -18,7 +18,6 @@
 		41045F311E39AD7E00A29830 /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 41045F301E39AD7E00A29830 /* SystemConfiguration.framework */; };
 		411EEF401E346E2200216016 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 411EEF3F1E346E2200216016 /* Main.storyboard */; };
 		412FBED11E32CFA7007FFB6A /* MusicPlayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 412FBED01E32CFA7007FFB6A /* MusicPlayer.swift */; };
-		4134216B1E3D775400888403 /* newParty.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4134216A1E3D775400888403 /* newParty.swift */; };
 		4160D4011E42EB0A00AF2ED6 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 4160D4001E42EB0A00AF2ED6 /* Assets.xcassets */; };
 		417B9D4B1E317C3C0021F36E /* PartyViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 417B9D4A1E317C3C0021F36E /* PartyViewController.swift */; };
 		417B9D4F1E318D0D0021F36E /* AddSongViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 417B9D4E1E318D0D0021F36E /* AddSongViewController.swift */; };
@@ -30,6 +29,7 @@
 		417C38EC1DDA91A800F59926 /* InitialSetupViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 417C38E11DDA447600F59926 /* InitialSetupViewController.swift */; };
 		417C38EE1DDA91B100F59926 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 417C38CC1DDA43FD00F59926 /* AppDelegate.swift */; };
 		417C38EF1DDA91B500F59926 /* Party.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 417C38D31DDA43FD00F59926 /* Party.xcdatamodeld */; };
+		41835F901E81EE740082BA16 /* HubTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 41835F8F1E81EE740082BA16 /* HubTableViewCell.swift */; };
 		418503F71E307BE900472006 /* setupButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 418503F61E307BE900472006 /* setupButton.swift */; };
 		41C0AEB61E79512D00C797F0 /* searchTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 41C0AEB51E79512D00C797F0 /* searchTextField.swift */; };
 		41C0AEB81E79EDC700C797F0 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 41C0AEB71E79EDC700C797F0 /* GoogleService-Info.plist */; };
@@ -51,7 +51,6 @@
 		41045F321E39B80300A29830 /* Party-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Party-Bridging-Header.h"; sourceTree = SOURCE_ROOT; };
 		411EEF3F1E346E2200216016 /* Main.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = Main.storyboard; sourceTree = "<group>"; };
 		412FBED01E32CFA7007FFB6A /* MusicPlayer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MusicPlayer.swift; sourceTree = "<group>"; };
-		4134216A1E3D775400888403 /* newParty.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = newParty.swift; sourceTree = "<group>"; };
 		4160D4001E42EB0A00AF2ED6 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		417B9D4A1E317C3C0021F36E /* PartyViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PartyViewController.swift; sourceTree = "<group>"; };
 		417B9D4E1E318D0D0021F36E /* AddSongViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AddSongViewController.swift; sourceTree = "<group>"; };
@@ -65,6 +64,7 @@
 		417C38DB1DDA43FD00F59926 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		417C38E11DDA447600F59926 /* InitialSetupViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = InitialSetupViewController.swift; sourceTree = "<group>"; };
 		417C38E21DDA447600F59926 /* PartyCreationViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PartyCreationViewController.swift; sourceTree = "<group>"; };
+		41835F8F1E81EE740082BA16 /* HubTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HubTableViewCell.swift; sourceTree = "<group>"; };
 		418503F61E307BE900472006 /* setupButton.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = setupButton.swift; sourceTree = "<group>"; };
 		41C0AEB51E79512D00C797F0 /* searchTextField.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = searchTextField.swift; sourceTree = "<group>"; };
 		41C0AEB71E79EDC700C797F0 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
@@ -144,9 +144,9 @@
 				412FBED01E32CFA7007FFB6A /* MusicPlayer.swift */,
 				41C0AEB91E7A0AC100C797F0 /* HubAndQueuePageViewController.swift */,
 				41C0AEBB1E7A12CB00C797F0 /* HubViewController.swift */,
+				41835F8F1E81EE740082BA16 /* HubTableViewCell.swift */,
 				41C0AEBD1E7A12E000C797F0 /* QueueViewController.swift */,
 				417B9D561E31CD8D0021F36E /* TrackTableViewCell.swift */,
-				4134216A1E3D775400888403 /* newParty.swift */,
 			);
 			name = "Play Tracks";
 			sourceTree = "<group>";
@@ -364,7 +364,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				3472FB121DDAC68900A35FCB /* PartyJoinedViewController.swift in Sources */,
-				4134216B1E3D775400888403 /* newParty.swift in Sources */,
 				41C0AEBE1E7A12E000C797F0 /* QueueViewController.swift in Sources */,
 				41C0AEB61E79512D00C797F0 /* searchTextField.swift in Sources */,
 				412FBED11E32CFA7007FFB6A /* MusicPlayer.swift in Sources */,
@@ -383,6 +382,7 @@
 				417B9D531E31B3CE0021F36E /* Track.swift in Sources */,
 				417B9D551E31BC120021F36E /* RestApiManager.swift in Sources */,
 				417B9D4B1E317C3C0021F36E /* PartyViewController.swift in Sources */,
+				41835F901E81EE740082BA16 /* HubTableViewCell.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
