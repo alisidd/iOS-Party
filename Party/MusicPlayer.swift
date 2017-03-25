@@ -15,7 +15,7 @@ class MusicPlayer: NSObject {
     // MARK: - Apple Music Variables
     
     private let serviceController = SKCloudServiceController()
-    let appleMusicPlayer = MPMusicPlayerController.applicationMusicPlayer()
+    let appleMusicPlayer = MPMusicPlayerController.systemMusicPlayer()
     let authorizationDispatchGroup = DispatchGroup()
     var isAuthorized = false {
         didSet {
@@ -56,7 +56,6 @@ class MusicPlayer: NSObject {
         SKCloudServiceController.requestAuthorization { (status) in
             switch status {
             case .authorized:
-                self.appleMusicPlayer.beginGeneratingPlaybackNotifications()
                 self.initializeCommandCenter()
                 self.isAuthorized = true
             case .denied:
@@ -104,11 +103,13 @@ class MusicPlayer: NSObject {
     
     func modifyQueue(withTracks tracks: [Track]) {
         print("Modifying Queue")
-
-        if self.party.musicService == .appleMusic {
-            self.modifyAppleMusicQueue(withTrack: tracks)
-        } else {
-            self.modifySpotifyQueue(withTrack: tracks)
+        
+        DispatchQueue.main.async {
+            if self.party.musicService == .appleMusic {
+                self.modifyAppleMusicQueue(withTrack: tracks)
+            } else {
+                self.modifySpotifyQueue(withTrack: tracks)
+            }
         }
     }
     

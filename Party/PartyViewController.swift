@@ -148,13 +148,15 @@ class PartyViewController: UIViewController, SPTAudioStreamingDelegate, SPTAudio
     @IBAction func reconnectToParty(_ sender: UIButton) {
         tracksListManager = nil
         tracksListManager = NetworkServiceManager(self.isHost)
-        tracksListManager!.delegate = self
+        tracksListManager.delegate = self
         connectionStatus = .connecting
     }
     
     // MARK: - General Variables
     
-    weak var tracksListManager: NetworkServiceManager!
+    lazy var tracksListManager: NetworkServiceManager! = {
+        return NetworkServiceManager(self.isHost)
+    }()
     private let APIManager = RestApiManager()
     
     var party = Party()
@@ -165,10 +167,9 @@ class PartyViewController: UIViewController, SPTAudioStreamingDelegate, SPTAudio
     var cache = [Track]()
     
     // MARK: - Lifecycle
-
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-        tracksListManager = NetworkServiceManager(self.isHost)
         setDelegates()
         adjustViews()
         
@@ -185,7 +186,7 @@ class PartyViewController: UIViewController, SPTAudioStreamingDelegate, SPTAudio
     // MARK: - General Functions
     
     private func setDelegates() {
-        tracksListManager?.delegate = self
+        tracksListManager.delegate = self
         party.delegate = self
         musicPlayer.spotifyPlayer?.delegate = self
         musicPlayer.spotifyPlayer?.playbackDelegate = self
@@ -205,7 +206,7 @@ class PartyViewController: UIViewController, SPTAudioStreamingDelegate, SPTAudio
         if isHost {
             setTimer()
         }
-
+        
         if party.musicService == .spotify {
             playUsingSession()
         } else {
@@ -256,7 +257,7 @@ class PartyViewController: UIViewController, SPTAudioStreamingDelegate, SPTAudio
             }
         }
     }
-        
+    
     func showCurrentlyPlayingArtwork() {
         DispatchQueue.main.async {
             self.currentlyPlayingArtwork.isHidden = false
@@ -282,7 +283,7 @@ class PartyViewController: UIViewController, SPTAudioStreamingDelegate, SPTAudio
     private func sendTracksToPeers(forTracks tracks: [Track]) {
         let tracksIDString = id(ofTracks: tracks)
         if isHost || (!isHost && !tracks.isEmpty) {
-            tracksListManager?.sendTracks(tracksIDString)
+            tracksListManager.sendTracks(tracksIDString)
         }
     }
     
@@ -389,7 +390,7 @@ class PartyViewController: UIViewController, SPTAudioStreamingDelegate, SPTAudio
     
     internal func removeTrackFromPeer(withTrack trackID: String) {
         let id = trackID.components(separatedBy: ":")[0]
-
+        
         for trackInQueue in party.tracksQueue {
             if id == trackInQueue.id {
                 party.tracksQueue.remove(at: party.tracksQueue.index(of: trackInQueue)!)
@@ -493,8 +494,8 @@ class PartyViewController: UIViewController, SPTAudioStreamingDelegate, SPTAudio
                 progressBar.setProgress(Float(musicPlayer.getCurrentPosition())/Float(wholeLength), animated: true)
             }
         }
-        tracksListManager?.advertise()
-
+        tracksListManager.advertise()
+        
     }
     
     private func fetchImage(forTrack track: Track, setCurrentlyPlaying: Bool) -> UIImage? {
@@ -523,7 +524,7 @@ class PartyViewController: UIViewController, SPTAudioStreamingDelegate, SPTAudio
     }
     
     // MARK: - Navigation
-
+    
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if segue.identifier == "Show Lyrics and Queue" {
             if let controller = segue.destination as? HubAndQueuePageViewController {
@@ -547,7 +548,7 @@ class PartyViewController: UIViewController, SPTAudioStreamingDelegate, SPTAudio
                 if self.party.tracksQueue.count == VC.tracksQueue.count {
                     self.musicPlayer.modifyQueue(withTracks: self.party.tracksQueue)
                 }
-
+                
                 self.fetchHighResArtwork(forTracks: VC.tracksQueue)
                 
                 VC.emptyArrays()
@@ -573,7 +574,7 @@ class PartyViewController: UIViewController, SPTAudioStreamingDelegate, SPTAudio
     
     internal func sendPartyInfo(toSession session: MCSession) {
         if isHost {
-            tracksListManager?.sendPartyInfo(withTracks: party.tracksQueue, forService: party.musicService, toSession: session)
+            tracksListManager.sendPartyInfo(withTracks: party.tracksQueue, forService: party.musicService, toSession: session)
         }
     }
     

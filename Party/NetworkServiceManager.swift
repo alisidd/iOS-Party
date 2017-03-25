@@ -136,7 +136,7 @@ extension NetworkServiceManager : MCNearbyServiceAdvertiserDelegate {
     func advertiser(_ advertiser: MCNearbyServiceAdvertiser, didNotStartAdvertisingPeer error: Error) {
         print("didNotStartAdvertisingPeer: \(error)")
     }
-      
+    
 }
 
 // MARK: - Peer Discovery Callbacks
@@ -219,7 +219,7 @@ extension NetworkServiceManager : MCSessionDelegate {
             delegate?.sendPartyInfo(toSession: session)
         } else if state == .notConnected {
             if !delegate!.amHost() {
-               sessions.removeValue(forKey: session)
+                sessions.removeValue(forKey: session)
             }
         }
     }
