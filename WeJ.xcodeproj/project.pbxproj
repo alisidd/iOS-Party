@@ -268,7 +268,7 @@
 				TargetAttributes = {
 					417C38C81DDA43FD00F59926 = {
 						CreatedOnToolsVersion = 8.1;
-						DevelopmentTeam = 4626H9HMFC;
+						DevelopmentTeam = GH7595L99J;
 						LastSwiftMigration = 0810;
 						ProvisioningStyle = Automatic;
 						SystemCapabilities = {
@@ -502,7 +502,7 @@
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
-				DEVELOPMENT_TEAM = 4626H9HMFC;
+				DEVELOPMENT_TEAM = GH7595L99J;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)",
@@ -533,7 +533,7 @@
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
-				DEVELOPMENT_TEAM = 4626H9HMFC;
+				DEVELOPMENT_TEAM = GH7595L99J;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)",

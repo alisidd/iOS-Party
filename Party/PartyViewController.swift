@@ -101,7 +101,8 @@ class PartyViewController: UIViewController, SPTAudioStreamingDelegate, SPTAudio
                     self.removeReconnectButton()
                     self.removeStatusLabel()
                 } else if newValue == .connecting {
-                    self.removeReconnectButton()
+                    self.displayReconnectButton()
+                    //self.setReconnectTimer()
                     self.lyricsAndQueueVC.expandTracksTable()
                 } else {
                     self.displayReconnectButton()
@@ -272,6 +273,7 @@ class PartyViewController: UIViewController, SPTAudioStreamingDelegate, SPTAudio
     func hideCurrentlyPlayingArtwork() {
         DispatchQueue.main.async {
             self.currentlyPlayingArtwork.isHidden = true
+            self.currentlyPlayingArtwork.image = nil
             self.currentlyPlayingTrackName.isHidden = true
             self.currentlyPlayingArtistName.isHidden = true
             self.playPauseButton.isHidden = true
@@ -545,7 +547,7 @@ class PartyViewController: UIViewController, SPTAudioStreamingDelegate, SPTAudio
                     self.lyricsAndQueueVC.minimizeTracksTable()
                 }
                 
-                if self.party.tracksQueue.count == VC.tracksQueue.count {
+                if self.party.tracksQueue.count == VC.tracksQueue.count && self.isHost {
                     self.musicPlayer.modifyQueue(withTracks: self.party.tracksQueue)
                 }
                 
