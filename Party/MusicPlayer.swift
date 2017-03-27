@@ -15,7 +15,7 @@ class MusicPlayer: NSObject {
     // MARK: - Apple Music Variables
     
     private let serviceController = SKCloudServiceController()
-    let appleMusicPlayer = MPMusicPlayerController.systemMusicPlayer()
+    let appleMusicPlayer = MPMusicPlayerController.applicationMusicPlayer()
     let authorizationDispatchGroup = DispatchGroup()
     var isAuthorized = false {
         didSet {
