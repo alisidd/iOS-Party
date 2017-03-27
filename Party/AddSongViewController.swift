@@ -78,6 +78,7 @@ class AddSongViewController: UIViewController, UITextFieldDelegate, UITableViewD
         DispatchQueue.global(qos: .userInitiated).async {
             self.APIManager.dispatchGroup.wait()
             self.populateTracksList()
+            self.scrollBackUp()
         }
     }
     
@@ -86,6 +87,14 @@ class AddSongViewController: UIViewController, UITextFieldDelegate, UITableViewD
             APIManager.makeHTTPRequestToApple(withString: query, withPossibleTrackID: nil)
         } else {
             APIManager.makeHTTPRequestToSpotify(withString: query)
+        }
+    }
+    
+    func scrollBackUp() {
+        DispatchQueue.main.async {
+            if !self.tracksList.isEmpty {
+                self.trackTableView.scrollToRow(at: IndexPath(row: 0, section: 0), at: .top, animated: false)
+            }
         }
     }
     

@@ -174,7 +174,9 @@ class PartyViewController: UIViewController, SPTAudioStreamingDelegate, SPTAudio
         setDelegates()
         adjustViews()
         
-        initializeMusicPlayer()
+        if isHost {
+            initializeMusicPlayer()
+        }
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -204,11 +206,10 @@ class PartyViewController: UIViewController, SPTAudioStreamingDelegate, SPTAudio
     }
     
     func initializeMusicPlayer() {
-        if isHost {
-            setTimer()
-        }
+        setTimer()
         
         if party.musicService == .spotify {
+            musicPlayer.spotifyPlayer?.setTargetBitrate(.low, callback: nil)
             playUsingSession()
         } else {
             musicPlayer.appleMusicPlayer.beginGeneratingPlaybackNotifications()

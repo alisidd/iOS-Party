@@ -103,6 +103,7 @@ class MusicPlayer: NSObject {
     
     func modifyQueue(withTracks tracks: [Track]) {
         print("Modifying Queue")
+        print("Playing at a bitrate of \(spotifyPlayer?.targetBitrate.rawValue)")
         
         DispatchQueue.main.async {
             if self.party.musicService == .appleMusic {

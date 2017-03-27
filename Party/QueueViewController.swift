@@ -192,11 +192,15 @@ class QueueViewController: UIViewController, UITableViewDelegate, UITableViewDat
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "Track In Queue") as! TrackTableViewCell
         
-        if let unwrappedArtwork = party.tracksQueue[indexPath.row + 1].artwork {
-            cell.artworkImageView.image = unwrappedArtwork
+        if party.tracksQueue.count > indexPath.row {
+            if let unwrappedArtwork = party.tracksQueue[indexPath.row + 1].artwork {
+                cell.artworkImageView.image = unwrappedArtwork
+            } else {
+                cell.artworkImageView.image = nil
+            }
+            cell.trackName.text = party.tracksQueue[indexPath.row + 1].name
+            cell.artistName.text = party.tracksQueue[indexPath.row + 1].artist
         }
-        cell.trackName.text = party.tracksQueue[indexPath.row + 1].name
-        cell.artistName.text = party.tracksQueue[indexPath.row + 1].artist
         
         return cell
     }
