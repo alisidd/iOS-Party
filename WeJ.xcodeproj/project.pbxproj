@@ -7,7 +7,6 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		2AA82ED84F98BC48894C00E1 /* Pods_Party.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 66422AE3EA2F04836109AFE5 /* Pods_Party.framework */; };
 		3472FB121DDAC68900A35FCB /* PartyJoinedViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3472FB111DDAC68900A35FCB /* PartyJoinedViewController.swift */; };
 		3472FB141DDAC6FC00A35FCB /* PartyListCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3472FB131DDAC6FC00A35FCB /* PartyListCell.swift */; };
 		3472FB161DDAC81E00A35FCB /* Party.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3472FB151DDAC81E00A35FCB /* Party.swift */; };
@@ -75,8 +74,6 @@
 		41C0AEBD1E7A12E000C797F0 /* QueueViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = QueueViewController.swift; sourceTree = "<group>"; };
 		41EB1B041E3FE1BD00FC326F /* Trajan Pro.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Trajan Pro.ttf"; sourceTree = "<group>"; };
 		66422AE3EA2F04836109AFE5 /* Pods_Party.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Party.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		6A26B4AEA07B3D4EA48B5C48 /* Pods-Party.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Party.release.xcconfig"; path = "Pods/Target Support Files/Pods-Party/Pods-Party.release.xcconfig"; sourceTree = "<group>"; };
-		BC65DBE49C35011FA75364E2 /* Pods-Party.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Party.debug.xcconfig"; path = "Pods/Target Support Files/Pods-Party/Pods-Party.debug.xcconfig"; sourceTree = "<group>"; };
 		C5C879BBE8EA1545F9347D67 /* Pods_WeJ.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_WeJ.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		CB810334E004CAA30F9C84CE /* Pods-WeJ.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-WeJ.release.xcconfig"; path = "Pods/Target Support Files/Pods-WeJ/Pods-WeJ.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -86,7 +83,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				2AA82ED84F98BC48894C00E1 /* Pods_Party.framework in Frameworks */,
 				41045F2D1E39ACBE00A29830 /* SpotifyAuthentication.framework in Frameworks */,
 				41045F2C1E39ACBE00A29830 /* SpotifyAudioPlayback.framework in Frameworks */,
 				41045F2F1E39AD6D00A29830 /* AVFoundation.framework in Frameworks */,
@@ -101,8 +97,6 @@
 		0EC59A47A2A686C3B2C8F22B /* Pods */ = {
 			isa = PBXGroup;
 			children = (
-				BC65DBE49C35011FA75364E2 /* Pods-Party.debug.xcconfig */,
-				6A26B4AEA07B3D4EA48B5C48 /* Pods-Party.release.xcconfig */,
 				3EB77C24F7978848084888F9 /* Pods-WeJ.debug.xcconfig */,
 				CB810334E004CAA30F9C84CE /* Pods-WeJ.release.xcconfig */,
 			);
@@ -274,7 +268,7 @@
 				TargetAttributes = {
 					417C38C81DDA43FD00F59926 = {
 						CreatedOnToolsVersion = 8.1;
-						DevelopmentTeam = GH7595L99J;
+						DevelopmentTeam = 4626H9HMFC;
 						LastSwiftMigration = 0810;
 						ProvisioningStyle = Automatic;
 						SystemCapabilities = {
@@ -508,7 +502,7 @@
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
-				DEVELOPMENT_TEAM = GH7595L99J;
+				DEVELOPMENT_TEAM = 4626H9HMFC;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)",
@@ -539,7 +533,7 @@
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
-				DEVELOPMENT_TEAM = GH7595L99J;
+				DEVELOPMENT_TEAM = 4626H9HMFC;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)",
