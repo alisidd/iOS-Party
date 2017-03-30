@@ -37,6 +37,7 @@ class PartyCreationViewController: UIViewController, UITextFieldDelegate, UIPick
     let APIManager = RestApiManager()
     var authViewController: SFSafariViewController?
     var spotifySession: SPTSession?
+    var buttonPressed = false
 
     let primaryColor = UIColor.white.withAlphaComponent(1)
     let secondaryColor = UIColor(red: 203/255, green: 199/255, blue: 199/255, alpha: 0.5)
@@ -104,14 +105,19 @@ class PartyCreationViewController: UIViewController, UITextFieldDelegate, UIPick
     @IBAction func initializeMusicPlayer(_ sender: UIButton) {
         musicPlayer.party = partyMade
         
-        if partyMade.musicService == .appleMusic {
-            authorizeAppleMusic()
-            musicPlayer.authorizationDispatchGroup.wait()
-            if musicPlayer.isAuthorized {
-                performSegue(withIdentifier: "Create Party", sender: nil)
+        if !buttonPressed {
+            buttonPressed = true
+
+            if partyMade.musicService == .appleMusic {
+                authorizeAppleMusic()
+                musicPlayer.authorizationDispatchGroup.wait()
+                if musicPlayer.isAuthorized {
+                    performSegue(withIdentifier: "Create Party", sender: nil)
+                    buttonPressed = false
+                }
+            } else {
+                authorizeSpotify()
             }
-        } else {
-            authorizeSpotify()
         }
     }
     
@@ -152,6 +158,7 @@ class PartyCreationViewController: UIViewController, UITextFieldDelegate, UIPick
         } catch {
             if musicPlayer.spotifyPlayer!.initialized {
                 self.performSegue(withIdentifier: "Create Party", sender: nil)
+                self.buttonPressed = false
             } else {
                 print("Error starting Spotify Player")
             }
@@ -181,6 +188,7 @@ class PartyCreationViewController: UIViewController, UITextFieldDelegate, UIPick
                 userDefaults.set(sessionData, forKey: "SpotifySession")
                 userDefaults.synchronize()
                 self.performSegue(withIdentifier: "Create Party", sender: nil)
+                self.buttonPressed = false
             })
         }
     }
