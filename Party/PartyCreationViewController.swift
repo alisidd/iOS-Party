@@ -150,7 +150,7 @@ class PartyCreationViewController: UIViewController, UITextFieldDelegate, UIPick
                 self.startAuthenticationFlow(auth!)
             }
         } catch {
-            if musicPlayer.spotifyPlayer.initialized {
+            if musicPlayer.spotifyPlayer!.initialized {
                 self.performSegue(withIdentifier: "Create Party", sender: nil)
             } else {
                 print("Error starting Spotify Player")
