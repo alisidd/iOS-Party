@@ -150,7 +150,11 @@ class PartyCreationViewController: UIViewController, UITextFieldDelegate, UIPick
                 self.startAuthenticationFlow(auth!)
             }
         } catch {
-            print("Error starting Spotify Player")
+            if musicPlayer.spotifyPlayer.initialized {
+                self.performSegue(withIdentifier: "Create Party", sender: nil)
+            } else {
+                print("Error starting Spotify Player")
+            }
         }
     }
     
@@ -179,6 +183,10 @@ class PartyCreationViewController: UIViewController, UITextFieldDelegate, UIPick
                 self.performSegue(withIdentifier: "Create Party", sender: nil)
             })
         }
+    }
+    
+    @IBAction func sliderValueChanged(_ sender: UISlider) {
+        partyMade.danceability = sender.value
     }
     
     // MARK: - Navigation

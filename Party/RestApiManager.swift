@@ -21,14 +21,15 @@ class RestApiManager {
     
     // Spotify Variables
     private var spotifyTracksUrl = "https://api.spotify.com/v1/"
+    private static var spotifyAccessToken: String?
+    private var spotifyRecommendationsUrl = "https://api.spotify.com/v1/recommendations?"
     
     // General Variables
     var tracksList = [Track]()
-    var genresList = [String]()
-    
+
+    // Asynchronous Variables
     let dispatchGroup = DispatchGroup()
     let dispatchGroupForStorefrontFetch = DispatchGroup()
-    let dispatchGroupForGenreFetch = DispatchGroup()
     var latestRequest = [MCPeerID: [String]]()
     
     // MARK: - Apple Music
@@ -184,6 +185,9 @@ class RestApiManager {
                     
                     tracksList.append(newTrack)
                 }
+            } else if subJson["type"] == "track" {
+                // Dealing with recommendations' json
+                makeHTTPRequestToSpotifyForSingleTrack(forID: subJson["id"].stringValue, shouldFetchLowRes: false)
             }
         }
     }
@@ -200,7 +204,7 @@ class RestApiManager {
         return nil
     }
     
-    func makeHTTPRequestToSpotifyForSingleTrack(forID id: String) {
+    func makeHTTPRequestToSpotifyForSingleTrack(forID id: String, shouldFetchLowRes fetchLowRes: Bool = true) {
         dispatchGroup.enter()
         
         DispatchQueue.global(qos: .userInitiated).async {
@@ -210,7 +214,7 @@ class RestApiManager {
                 if let statusCode = (response as? HTTPURLResponse)?.statusCode {
                     if statusCode == 200 {
                         let json = JSON(data: data!)
-                        self.parseSingleSpotifyTrackJSON(forTrack: json)
+                        self.parseSingleSpotifyTrackJSON(forTrack: json, shouldFetchLowRes: fetchLowRes)
                     }
                 }
                 self.dispatchGroup.leave()
@@ -220,11 +224,13 @@ class RestApiManager {
         }
     }
     
-    func parseSingleSpotifyTrackJSON(forTrack track: JSON) {
+    func parseSingleSpotifyTrackJSON(forTrack track: JSON, shouldFetchLowRes fetchLowRes: Bool = true) {
         let newTrack = Track()
         
         newTrack.id = track["id"].stringValue
+        print(newTrack.id)
         newTrack.name = track["name"].stringValue
+        print(newTrack.name)
         
         for artists in track["artists"].arrayValue { //get other artists too
             newTrack.artist = artists["name"].stringValue
@@ -232,18 +238,106 @@ class RestApiManager {
         }
         
         for images in track["album"]["images"].arrayValue {
+            if images["height"].stringValue == "64" {
+                newTrack.lowResArtworkURL = images["url"].stringValue
+                if fetchLowRes {
+                    newTrack.artwork = fetchImage(fromURL: newTrack.lowResArtworkURL)
+                }
+            }
+           
+            if images["height"].stringValue == "300" {
+                newTrack.mediumResArtworkURL = images["url"].stringValue
+            } else {
+                if !fetchLowRes {
+                    newTrack.artwork = fetchImage(fromURL: newTrack.lowResArtworkURL)
+                }
+            }
+            
             if images["height"].stringValue == "640" {
                 newTrack.highResArtworkURL = images["url"].stringValue
             }
-            if images["height"].stringValue == "64" {
-                newTrack.lowResArtworkURL = images["url"].stringValue
-                newTrack.artwork = fetchImage(fromURL: newTrack.lowResArtworkURL)
-            }
-            
         }
         
         newTrack.length = TimeInterval(track["duration_ms"].doubleValue / 1000)
         
         tracksList.append(newTrack)
+    }
+    
+    func makeHTTPRequestToSpotifyForRecommendations(withTracks tracks: [Track], forDanceability danceability: Float) {
+        let tracksId = idOfTracks(forTracks: tracks)
+        if RestApiManager.spotifyAccessToken == nil {
+            print("Authorizing")
+            authorizeSpotifyAccess()
+            dispatchGroup.wait()
+        }
+        getRecommendedTracks(withTracksId: tracksId, forDanceability: danceability)
+    }
+    
+    func idOfTracks(forTracks tracks: [Track]) -> [String] {
+        var tracksId = [String]()
+        
+        for track in tracks {
+            tracksId.append(track.id)
+        }
+        
+        return tracksId
+    }
+    
+    func authorizeSpotifyAccess() {
+        dispatchGroup.enter()
+        let request = getRequestForAccessToken()
+        
+        DispatchQueue.global(qos: .userInitiated).async {
+            let task = URLSession.shared.dataTask(with: request) { (data, response, error) in
+                if let statusCode = (response as? HTTPURLResponse)?.statusCode {
+                    if statusCode == 200 {
+                        let json = JSON(data: data!)
+                        RestApiManager.spotifyAccessToken = json["access_token"].stringValue
+                    }
+                }
+                self.dispatchGroup.leave()
+            }
+            
+            task.resume()
+        }
+    }
+    
+    func getRequestForAccessToken() -> URLRequest {
+        var request = URLRequest(url: URL(string: "https://accounts.spotify.com/api/token")!)
+        request.httpMethod = "POST"
+        request.addValue("Basic MzA4NjU3ZDk2NjIxNDZlY2FlNTc4NTVhYzJhMDEwNDU6MWE1Y2I4MzlkYTg4NGFmMGJjNjZkMDVlOGFmMmIwYTA=", forHTTPHeaderField: "Authorization")
+        request.addValue("application/x-www-form-urlencoded", forHTTPHeaderField: "Content-Type")
+        request.httpBody = "grant_type=client_credentials".data(using: String.Encoding.utf8)
+        
+        return request
+    }
+    
+    func getRecommendedTracks(withTracksId tracksId: [String], forDanceability danceability: Float) {
+        let request = getRequestForRecommendations(withTracksId: tracksId, forDanceability: danceability)
+        
+        dispatchGroup.enter()
+        
+        DispatchQueue.global(qos: .userInitiated).async {
+            let task = URLSession.shared.dataTask(with: request) { (data, response, error) in
+                if let statusCode = (response as? HTTPURLResponse)?.statusCode {
+                    if statusCode == 200 {
+                        let json = JSON(data: data!)
+                        self.parseMultipleSpotifyTracksJSON(forJSON: json)
+                    }
+                }
+                self.dispatchGroup.leave()
+            }
+            
+            task.resume()
+        }
+        
+    }
+    
+    func getRequestForRecommendations(withTracksId tracksId: [String], forDanceability danceability: Float) -> URLRequest {
+        var request = URLRequest(url: URL(string: spotifyRecommendationsUrl + "seed_tracks=" + tracksId.joined(separator: ",") + "&target_danceability=" + String(format: "%.2f", danceability) + "&min_popularity=50&market=US")!)
+        request.addValue("Bearer \(RestApiManager.spotifyAccessToken!)", forHTTPHeaderField: "Authorization")
+        request.addValue("application/x-www-form-urlencoded", forHTTPHeaderField: "Content-Type")
+        
+        return request
     }
 }

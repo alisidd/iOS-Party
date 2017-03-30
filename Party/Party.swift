@@ -28,9 +28,5 @@ class Party: NSObject {
         }
     }
     var tracksFromPeers = [Track]()
-    var isSorted = false
-    
-    var numPeople = 0
-    var password: String?
-    var isLocked = false
+    var danceability: Float = 0.5
 }

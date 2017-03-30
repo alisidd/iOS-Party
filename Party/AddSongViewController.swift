@@ -8,16 +8,35 @@
 
 import UIKit
 
-class AddSongViewController: UIViewController, UITextFieldDelegate, UITableViewDataSource, UITableViewDelegate {
+extension Collection where Indices.Iterator.Element == Index {
+    subscript (safe index: Index) -> Generator.Element? {
+        return indices.contains(index) ? self[index] : nil
+    }
+}
+
+class AddSongViewController: UIViewController, UICollectionViewDelegate, UICollectionViewDataSource, UITextFieldDelegate, UITableViewDataSource, UITableViewDelegate {
     
     // MARK: - Storyboard Variables
 
+    @IBOutlet weak var recommendationsLabel: UILabel!
+    @IBOutlet weak var recommendationsCollectionView: UICollectionView!
+    
     @IBOutlet weak var searchTracksField: UITextField!
     @IBOutlet weak var trackTableView: UITableView!
     
     // MARK: - General Variables
     
     var party = Party()
+    private var recommendedTracksList = [Track]() {
+        didSet {
+            DispatchQueue.main.async {
+                self.recommendationsCollectionView.reloadData()
+                self.indicator.stopAnimating()
+                self.indicator.hidesWhenStopped = true
+            }
+        }
+    }
+    
     private var tracksList = [Track]() {
         didSet {
             DispatchQueue.main.async {
@@ -30,7 +49,7 @@ class AddSongViewController: UIViewController, UITextFieldDelegate, UITableViewD
     var tracksQueue = [Track]()
     private let APIManager = RestApiManager()
     private var indicator = UIActivityIndicatorView()
-    private let noTracksFoundLabel = UILabel(frame: CGRect(x: 0, y: 0, width: 350, height: 30))
+    private let noTracksFoundLabel = UILabel(frame: CGRect(x: 0, y: 0, width: 320, height: 70))
     
     // MARK: - Lifecycle
     
@@ -39,11 +58,15 @@ class AddSongViewController: UIViewController, UITextFieldDelegate, UITableViewD
         setDelegates()
         initializeActivityIndicator()
         adjustViews()
+        populateRecommendations()
     }
     
     // MARK: - Functions
     
     func setDelegates() {
+        recommendationsCollectionView.delegate = self
+        recommendationsCollectionView.dataSource = self
+        
         searchTracksField.delegate = self
         trackTableView.delegate    = self
         trackTableView.dataSource  = self
@@ -57,10 +80,41 @@ class AddSongViewController: UIViewController, UITextFieldDelegate, UITableViewD
     }
     
     func adjustViews() {
+        recommendationsCollectionView.showsHorizontalScrollIndicator = false
+        recommendationsCollectionView.allowsMultipleSelection = true
+        
         trackTableView.backgroundColor = .clear
         trackTableView.tableFooterView = UIView()
         
         navigationItem.hidesBackButton = true
+    }
+    
+    func populateRecommendations() {
+        if party.tracksQueue.isEmpty {
+            recommendationsLabel.isHidden = true
+        } else {
+            recommendationsLabel.isHidden = false
+            indicator.startAnimating()
+            DispatchQueue.global(qos: .userInitiated).async {
+                self.APIManager.makeHTTPRequestToSpotifyForRecommendations(withTracks: self.party.tracksQueue, forDanceability: self.party.danceability)
+                self.APIManager.dispatchGroup.wait()
+                print("Got all tracks")
+                self.fetchImagesForFirstThree()
+                print("Got all pics")
+                self.recommendedTracksList = self.APIManager.tracksList
+            }
+        }
+    }
+    
+    func fetchImagesForFirstThree() {
+        for index in 0..<3 {
+            if let track = self.APIManager.tracksList[safe: index] {
+                if let url = track.mediumResArtworkURL {
+                    track.mediumResArtwork = self.APIManager.fetchImage(fromURL: url)
+                    print("Quick fetched artwork for \(track.name)")
+                }
+            }
+        }
     }
     
     func textFieldShouldReturn(_ searchSongsField: UITextField) -> Bool {
@@ -73,6 +127,8 @@ class AddSongViewController: UIViewController, UITextFieldDelegate, UITableViewD
     
     func fetchResults(forQuery query: String) {
         indicator.startAnimating()
+        hideCollectionsViews()
+        showTableView()
         makeRequestForTracks(forQuery: query)
         
         DispatchQueue.global(qos: .userInitiated).async {
@@ -80,6 +136,20 @@ class AddSongViewController: UIViewController, UITextFieldDelegate, UITableViewD
             self.populateTracksList()
             self.scrollBackUp()
         }
+    }
+    
+    func hideCollectionsViews() {
+        UIView.animate(withDuration: 0.5, animations: {
+            self.recommendationsLabel.alpha = 0
+            self.recommendationsCollectionView.alpha = 0
+        }) { (finished) in
+            self.recommendationsLabel.isHidden = true
+            self.recommendationsCollectionView.isHidden = true
+        }
+    }
+    
+    func showTableView() {
+        trackTableView.isHidden = false
     }
     
     func makeRequestForTracks(forQuery query: String) {
@@ -102,7 +172,7 @@ class AddSongViewController: UIViewController, UITextFieldDelegate, UITableViewD
         tracksList = APIManager.tracksList
         DispatchQueue.main.async {
             if self.tracksList.isEmpty {
-                self.displayNoTracksFoundLabel()
+                self.displayNoTracksLabel(with: "No Tracks Found")
             } else {
                 self.removeNoTracksFoundLabel()
                 self.fetchRestOfTracks()
@@ -110,17 +180,19 @@ class AddSongViewController: UIViewController, UITextFieldDelegate, UITableViewD
         }
     }
     
-    func displayNoTracksFoundLabel() {
-        customizeLabel()
+    func displayNoTracksLabel(with labelText: String) {
+        customizeLabel(with: labelText)
         view.addSubview(noTracksFoundLabel)
     }
     
-    func customizeLabel() {
-        noTracksFoundLabel.text = "No Tracks Found"
+    func customizeLabel(with labelText: String) {
+        noTracksFoundLabel.text = labelText
         noTracksFoundLabel.textColor = .white
         noTracksFoundLabel.textAlignment = .center
         
         noTracksFoundLabel.center = view.center
+        noTracksFoundLabel.lineBreakMode = .byWordWrapping
+        noTracksFoundLabel.numberOfLines = 0
     }
     
     func removeNoTracksFoundLabel() {
@@ -157,6 +229,84 @@ class AddSongViewController: UIViewController, UITextFieldDelegate, UITableViewD
         tracksQueue.removeAll()
     }
     
+    // MARK: - Recommendation Table View
+    
+    func numberOfSections(in collectionView: UICollectionView) -> Int {
+        return 1
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+        return recommendedTracksList.count
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "Recommendation Cell", for: indexPath) as! RecommendedCollectionViewCell
+        
+        let trackToAdd = recommendedTracksList[indexPath.row]
+        
+        if let url = trackToAdd.mediumResArtworkURL {
+            if let image = trackToAdd.mediumResArtwork {
+                cell.artworkImageView.image = image
+            } else {
+                cell.artworkImageView.image = nil
+                DispatchQueue.global(qos: .userInitiated).async {
+                    trackToAdd.mediumResArtwork = self.APIManager.fetchImage(fromURL: url)
+                    DispatchQueue.main.async {
+                        cell.artworkImageView.image = trackToAdd.mediumResArtwork
+                        self.recommendationsCollectionView.reloadData()
+                    }
+                }
+            }
+        } else {
+            cell.artworkImageView.image = trackToAdd.artwork ?? nil
+        }
+        
+        cell.trackName.text = trackToAdd.name
+        cell.artistName.text = trackToAdd.artist
+        
+        if partyTracksQueue(hasTrack: recommendedTracksList[indexPath.row]) || tracksQueue.contains(recommendedTracksList[indexPath.row]) {
+            collectionView.selectItem(at: indexPath, animated: false, scrollPosition: .init(rawValue: 0))
+            setCheckmark(for: cell, at: indexPath)
+        } else {
+            removeCheckmark(for: cell)
+        }
+        
+        return cell
+    }
+    
+    func setCheckmark(for cell: RecommendedCollectionViewCell, at indexPath: IndexPath) {
+        print("Setting checkmark")
+        DispatchQueue.main.async {
+            cell.checkmarkLabel.text = "✓"
+        }
+    }
+    
+    func removeCheckmark(for cell: RecommendedCollectionViewCell) {
+        print("Removing checkmark")
+        cell.checkmarkLabel.text = ""
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        let cell = collectionView.cellForItem(at: indexPath) as! RecommendedCollectionViewCell
+        setCheckmark(for: cell, at: indexPath)
+        
+        DispatchQueue.global(qos: .userInitiated).async {
+            let trackToAdd = self.recommendedTracksList[indexPath.row]
+            trackToAdd.artwork = self.APIManager.fetchImage(fromURL: trackToAdd.lowResArtworkURL)
+            self.addToQueue(track: trackToAdd)
+        }
+        
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, didDeselectItemAt indexPath: IndexPath) {
+        let cell = collectionView.cellForItem(at: indexPath) as! RecommendedCollectionViewCell
+        
+        if !partyTracksQueue(hasTrack: recommendedTracksList[indexPath.row]) {
+            removeCheckmark(for: cell)
+            removeFromQueue(track: recommendedTracksList[indexPath.row])
+        }
+    }
+    
     // MARK: - Table
     
     func numberOfSections(in tableView: UITableView) -> Int {
@@ -169,7 +319,7 @@ class AddSongViewController: UIViewController, UITextFieldDelegate, UITableViewD
     
     func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
         cell.backgroundColor = .clear
-        if tracksQueue(hasTrack: tracksList[indexPath.row]) || tracksQueue.contains(tracksList[indexPath.row]) {
+        if partyTracksQueue(hasTrack: tracksList[indexPath.row]) || tracksQueue.contains(tracksList[indexPath.row]) {
             cell.accessoryType = .checkmark
             tableView.selectRow(at: indexPath, animated: true, scrollPosition: .none)
         } else {
@@ -177,12 +327,13 @@ class AddSongViewController: UIViewController, UITextFieldDelegate, UITableViewD
         }
     }
     
-    func tracksQueue(hasTrack track: Track) -> Bool {
+    func partyTracksQueue(hasTrack track: Track) -> Bool {
         for trackInQueue in party.tracksQueue {
             if track.id == trackInQueue.id {
                 return true
             }
         }
+        
         return false
     }
     
@@ -219,7 +370,7 @@ class AddSongViewController: UIViewController, UITextFieldDelegate, UITableViewD
         let cell = trackTableView.cellForRow(at: indexPath)!
         removeFromQueue(track: tracksList[indexPath.row])
         
-        if !tracksQueue(hasTrack: tracksList[indexPath.row]) {
+        if !partyTracksQueue(hasTrack: recommendedTracksList[indexPath.row]) {
             UIView.animate(withDuration: 0.35) {
                 cell.accessoryType = .none
             }

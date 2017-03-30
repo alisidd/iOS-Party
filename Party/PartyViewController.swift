@@ -207,6 +207,7 @@ class PartyViewController: UIViewController, SPTAudioStreamingDelegate, SPTAudio
     
     func initializeMusicPlayer() {
         setTimer()
+        APIManager.authorizeSpotifyAccess()
         
         if party.musicService == .spotify {
             musicPlayer.spotifyPlayer?.setTargetBitrate(.low, callback: nil)
@@ -231,6 +232,7 @@ class PartyViewController: UIViewController, SPTAudioStreamingDelegate, SPTAudio
         } else {
             sendTracksToPeers(forTracks: party.tracksFromPeers)
             party.tracksFromPeers.removeAll()
+            updatePersonalQueue()
         }
     }
     
@@ -300,6 +302,14 @@ class PartyViewController: UIViewController, SPTAudioStreamingDelegate, SPTAudio
             }
         }
         return result
+    }
+    
+    func updatePersonalQueue() {
+        for track in personalQueue {
+            if !party.tracksQueue.contains(track) {
+                personalQueue.remove(at: personalQueue.index(of: track)!)
+            }
+        }
     }
     
     internal func addTracks(fromPeer peer: MCPeerID, withTracks tracks: [String]) {
@@ -425,8 +435,10 @@ class PartyViewController: UIViewController, SPTAudioStreamingDelegate, SPTAudio
     }
     
     func audioStreaming(_ audioStreaming: SPTAudioStreamingController!, didChangePosition position: TimeInterval) {
-        if let wholeLength = party.tracksQueue[0].length {
-            progressBar.setProgress(Float(position)/Float(wholeLength), animated: true)
+        if !party.tracksQueue.isEmpty {
+            if let wholeLength = party.tracksQueue[0].length {
+                progressBar.setProgress(Float(position)/Float(wholeLength), animated: true)
+            }
         }
     }
     
@@ -470,9 +482,6 @@ class PartyViewController: UIViewController, SPTAudioStreamingDelegate, SPTAudio
     @objc func playNextTrack() {
         print(progressBar.progress)
         if musicPlayer.safeToPlayNextTrack() && !party.tracksQueue.isEmpty && progressBar.progress > 0.96 {
-            if personalQueue.contains(party.tracksQueue[0]) {
-                personalQueue.remove(at: personalQueue.index(of: party.tracksQueue[0])!)
-            }
             removeFromOthersQueue(forTrack: party.tracksQueue[0])
             print("Removing \(party.tracksQueue.removeFirst().name)")
             musicPlayer.modifyQueue(withTracks: party.tracksQueue)

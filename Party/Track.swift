@@ -17,6 +17,9 @@ class Track: NSObject {
     var lowResArtworkURL = String()
     var artwork: UIImage?
     
+    var mediumResArtworkURL: String?
+    var mediumResArtwork: UIImage?
+    
     var highResArtworkURL = String()
     var highResArtwork: UIImage?
     

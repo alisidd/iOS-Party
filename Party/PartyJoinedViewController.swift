@@ -7,7 +7,7 @@
 //
 
 import UIKit
-
+/*
 class PartyJoinedViewController: UITableViewController {
     
     // MARK: - General Variables
@@ -149,4 +149,4 @@ extension PartyJoinedViewController: NetworkManagerDelegate {
     }
     
 }*/
-
+*/

@@ -165,7 +165,7 @@ class QueueViewController: UIViewController, UITableViewDelegate, UITableViewDat
     
     func tracksQueueHasEditableTracks() -> Bool {
         for track in party.tracksQueue {
-            if delegate!.personalQueue(hasTrack: track) {
+            if delegate!.personalQueue(hasTrack: track) && track != party.tracksQueue[0] {
                 return true
             }
         }
