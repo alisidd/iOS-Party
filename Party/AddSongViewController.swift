@@ -373,7 +373,7 @@ class AddSongViewController: UIViewController, UICollectionViewDelegate, UIColle
         let cell = trackTableView.cellForRow(at: indexPath)!
         removeFromQueue(track: tracksList[indexPath.row])
         
-        if !partyTracksQueue(hasTrack: recommendedTracksList[indexPath.row]) {
+        if !partyTracksQueue(hasTrack: tracksList[indexPath.row]) {
             UIView.animate(withDuration: 0.35) {
                 cell.accessoryType = .none
             }
