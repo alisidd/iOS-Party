@@ -618,7 +618,7 @@
                                                         <constraint firstAttribute="height" constant="170" id="dfF-cO-1q3"/>
                                                     </constraints>
                                                 </imageView>
-                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" ambiguous="YES" text="I" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="hSS-T7-hLa">
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="I" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="hSS-T7-hLa">
                                                     <rect key="frame" x="162.5" y="180" width="4.5" height="20.5"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                                     <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
@@ -645,6 +645,7 @@
                                         </view>
                                         <constraints>
                                             <constraint firstItem="rU9-H9-C2t" firstAttribute="leading" secondItem="A62-RD-AdA" secondAttribute="leading" id="JnF-XO-gAb"/>
+                                            <constraint firstItem="hSS-T7-hLa" firstAttribute="centerY" secondItem="rcv-Oh-AbO" secondAttribute="centerY" id="PdC-XX-2PU"/>
                                             <constraint firstItem="hSS-T7-hLa" firstAttribute="leading" secondItem="rcv-Oh-AbO" secondAttribute="trailing" constant="25" id="dB0-8z-hDk"/>
                                             <constraint firstItem="rU9-H9-C2t" firstAttribute="top" secondItem="A62-RD-AdA" secondAttribute="top" id="f59-29-r3O"/>
                                             <constraint firstAttribute="trailing" secondItem="rU9-H9-C2t" secondAttribute="trailing" id="gDF-Sb-2Yg"/>
@@ -803,7 +804,7 @@
         <scene sceneID="XwQ-1h-6q4">
             <objects>
                 <navigationController id="lXt-Y2-qAY" sceneMemberID="viewController">
-                    <navigationBar key="navigationBar" contentMode="scaleToFill" misplaced="YES" id="Mvi-ay-qDE">
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="Mvi-ay-qDE">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
