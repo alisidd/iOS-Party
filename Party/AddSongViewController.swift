@@ -290,10 +290,11 @@ class AddSongViewController: UIViewController, UICollectionViewDelegate, UIColle
         let cell = collectionView.cellForItem(at: indexPath) as! RecommendedCollectionViewCell
         setCheckmark(for: cell, at: indexPath)
         
+        let trackToAdd = self.recommendedTracksList[indexPath.row]
+        addToQueue(track: trackToAdd)
+        
         DispatchQueue.global(qos: .userInitiated).async {
-            let trackToAdd = self.recommendedTracksList[indexPath.row]
             trackToAdd.artwork = self.APIManager.fetchImage(fromURL: trackToAdd.lowResArtworkURL)
-            self.addToQueue(track: trackToAdd)
         }
         
     }
@@ -363,7 +364,9 @@ class AddSongViewController: UIViewController, UICollectionViewDelegate, UIColle
     }
     
     func addToQueue(track: Track) {
-        tracksQueue.append(track)
+        if !partyTracksQueue(hasTrack: track) && !tracksQueue.contains(track) {
+            tracksQueue.append(track)
+        }
     }
     
     func tableView(_ tableView: UITableView, didDeselectRowAt indexPath: IndexPath) {

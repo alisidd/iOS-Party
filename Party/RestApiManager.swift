@@ -276,8 +276,10 @@ class RestApiManager {
     func idOfTracks(forTracks tracks: [Track]) -> [String] {
         var tracksId = [String]()
         
-        for track in tracks {
-            tracksId.append(track.id)
+        for index in 0...4 {
+            if let track = tracks[safe: index] {
+                tracksId.append(track.id)
+            }
         }
         
         return tracksId
