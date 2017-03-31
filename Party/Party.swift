@@ -13,9 +13,9 @@ enum MusicService: String {
     case spotify
 }
 
-class Party: NSObject {
+@objc(Party)
+class Party: NSObject, NSCoding {
     weak var delegate: UpdatePartyDelegate?
-    var genres = [String]()
     var musicService = MusicService.spotify
     
     
@@ -29,4 +29,21 @@ class Party: NSObject {
     }
     var tracksFromPeers = [Track]()
     var danceability: Float = 0.5
+    
+    // MARK: - NSCoding
+    
+    func encode(with aCoder: NSCoder) {
+        aCoder.encode(self.musicService.rawValue, forKey: "musicService")
+        aCoder.encode(self.danceability, forKey: "danceability")
+    }
+    
+    convenience required init?(coder aDecoder: NSCoder) {
+        let musicService = aDecoder.decodeObject(forKey: "musicService") as! String
+        let danceability = aDecoder.decodeFloat(forKey: "danceability")
+        
+        self.init()
+
+        self.musicService = MusicService(rawValue: musicService)!
+        self.danceability = danceability
+    }
 }

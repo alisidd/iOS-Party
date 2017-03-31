@@ -81,17 +81,16 @@ class NetworkServiceManager: NSObject {
         }
     }
     
-    func sendPartyInfo(withTracks tracks: [Track], forService service: MusicService, toSession session: MCSession) {
+    func sendPartyInfo(forParty party: Party, toSession session: MCSession) {
         if sessions.count > 0 {
             do {
-                let tracksData = NSKeyedArchiver.archivedData(withRootObject: id(ofTracks: tracks, forService: service))
-                let serviceToSend = service == .spotify ? "s" : "a"
-                let musicServiceData = NSKeyedArchiver.archivedData(withRootObject: serviceToSend)
+                let tracksData = NSKeyedArchiver.archivedData(withRootObject: id(ofTracks: party.tracksQueue, forService: party.musicService))
+                let partyData = NSKeyedArchiver.archivedData(withRootObject: party)
                 print("Number of active sessions: \(sessions.count)")
+                try session.send(partyData, toPeers: session.connectedPeers, with: .reliable)
                 try session.send(tracksData, toPeers: session.connectedPeers, with: .reliable)
-                try session.send(musicServiceData, toPeers: session.connectedPeers, with: .reliable)
                 print("Sending Party info to other device")
-            } catch let error as NSError {
+            } catch {
                 print(error.localizedDescription)
             }
         }
@@ -227,8 +226,8 @@ extension NetworkServiceManager : MCSessionDelegate {
     func session(_ session: MCSession, didReceive data: Data, fromPeer peerID: MCPeerID) {
         print("didReceiveData: \(data.count) bytes")
         let unarchivedData = NSKeyedUnarchiver.unarchiveObject(with: data)
-        if let musicService = unarchivedData as? String {
-            delegate?.setupParty(withService: musicService)
+        if let party = unarchivedData as? Party {
+            delegate?.setupParty(withParty: party)
         } else if var tracksIDList = unarchivedData as? [String] {
             if !tracksIDList.isEmpty {
                 if tracksIDList[0].contains(":/?r") {

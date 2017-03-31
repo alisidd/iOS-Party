@@ -45,7 +45,7 @@ protocol NetworkManagerDelegate: class {
     func updateStatus(with state: MCSessionState)
     func amHost() -> Bool
     func sendPartyInfo(toSession session: MCSession)
-    func setupParty(withService service: String)
+    func setupParty(withParty party: Party)
     func addTracks(fromPeer peer: MCPeerID, withTracks tracks: [String])
     func removeTrackFromPeer(withTrack track: String)
 }
@@ -244,6 +244,7 @@ class PartyViewController: UIViewController, SPTAudioStreamingDelegate, SPTAudio
                 }
                 self.updateArtworkForCurrentlyPlaying()
                 self.currentlyPlayingTrackName.text = self.party.tracksQueue[0].name
+                print(self.party.tracksQueue.count)
                 self.currentlyPlayingArtistName.text = self.party.tracksQueue[0].artist
             }
         }
@@ -586,17 +587,14 @@ class PartyViewController: UIViewController, SPTAudioStreamingDelegate, SPTAudio
     
     internal func sendPartyInfo(toSession session: MCSession) {
         if isHost {
-            tracksListManager.sendPartyInfo(withTracks: party.tracksQueue, forService: party.musicService, toSession: session)
+            tracksListManager.sendPartyInfo(forParty: party, toSession: session)
         }
     }
     
-    internal func setupParty(withService service: String) {
+    internal func setupParty(withParty party: Party) {
         print("Setting up party using party info received")
-        if service == "s" {
-            party.musicService = .spotify
-        } else {
-            party.musicService = .appleMusic
-        }
+        self.party.musicService = party.musicService
+        self.party.danceability = party.danceability
     }
     
     // MARK: PartyViewControllerInfoDelegate
