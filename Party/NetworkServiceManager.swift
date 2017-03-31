@@ -18,14 +18,15 @@ class NetworkServiceManager: NSObject {
     private let serviceBrowser : MCNearbyServiceBrowser
     
     var myPeerId: MCPeerID!
-    var partyName = String()
     var sessions = [MCSession : MCPeerID]()
-    var foundOtherHosts = false
+    var otherHosts = [MCPeerID]()
     weak var delegate : NetworkManagerDelegate?
+    var isHost: Bool
     
     // MARK: - Lifecycle
     
     init(_ isHost: Bool) {
+        self.isHost = isHost
         let UUID = UIDevice.current.identifierForVendor!.uuidString
         let deviceName = UIDevice.current.name
         
@@ -146,10 +147,12 @@ extension NetworkServiceManager : MCNearbyServiceBrowserDelegate {
     public func browser(_ browser: MCNearbyServiceBrowser, foundPeer peerID: MCPeerID, withDiscoveryInfo info: [String : String]?) {
         print("foundPeer: \(peerID)")
         if info?["isHost"] == "true" {
-            foundOtherHosts = true
+            if !otherHosts.contains(peerID) {
+                otherHosts.append(peerID)
+            }
         }
         
-        if !(delegate!.amHost() == false && info?["isHost"] == "false") {
+        if !(isHost == false && info?["isHost"] == "false") {
             let newSession = MCSession(peer: myPeerId, securityIdentity: nil, encryptionPreference: MCEncryptionPreference.none)
             newSession.delegate = self
             
@@ -166,7 +169,7 @@ extension NetworkServiceManager : MCNearbyServiceBrowserDelegate {
             
             if !alreadyFound {
                 sessions[newSession] = peerID
-                if delegate!.amHost() {
+                if isHost {
                     print("invitePeer: \(peerID)")
                     browser.invitePeer(peerID, to: newSession, withContext: nil, timeout: 10)
                 }
@@ -175,6 +178,9 @@ extension NetworkServiceManager : MCNearbyServiceBrowserDelegate {
     }
     
     func browser(_ browser: MCNearbyServiceBrowser, lostPeer peerID: MCPeerID) {
+        if otherHosts.contains(peerID) {
+            otherHosts.remove(at: otherHosts.index(of: peerID)!)
+        }
         for (session, id) in sessions {
             print("Connected Peers: \(session.connectedPeers.count)")
             if id == peerID {
@@ -210,14 +216,17 @@ extension NetworkServiceManager : MCSessionDelegate {
     func session(_ session: MCSession, peer peerID: MCPeerID, didChange state: MCSessionState) {
         print("peer \(peerID) didChangeState: \(state.stringValue())")
         delegate?.connectedDevicesChanged(self, connectedDevices: session.connectedPeers.map{$0.displayName})
-        if !delegate!.amHost() {
+        if !isHost {
             delegate?.updateStatus(with: state)
         }
         if state == .connected {
             print("Calling function to send party info")
             delegate?.sendPartyInfo(toSession: session)
         } else if state == .notConnected {
-            if !delegate!.amHost() {
+            if otherHosts.contains(peerID) {
+                otherHosts.remove(at: otherHosts.index(of: peerID)!)
+            }
+            if !isHost {
                 sessions.removeValue(forKey: session)
             }
         }

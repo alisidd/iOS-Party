@@ -43,7 +43,6 @@ extension UIImage {
 protocol NetworkManagerDelegate: class {
     func connectedDevicesChanged(_ manager : NetworkServiceManager, connectedDevices: [String])
     func updateStatus(with state: MCSessionState)
-    func amHost() -> Bool
     func sendPartyInfo(toSession session: MCSession)
     func setupParty(withParty party: Party)
     func addTracks(fromPeer peer: MCPeerID, withTracks tracks: [String])
@@ -148,15 +147,15 @@ class PartyViewController: UIViewController, SPTAudioStreamingDelegate, SPTAudio
     }
     
     @IBAction func reconnectToParty(_ sender: UIButton) {
-        tracksListManager = nil
-        tracksListManager = NetworkServiceManager(self.isHost)
-        tracksListManager.delegate = self
+        networkManager = nil
+        networkManager = NetworkServiceManager(self.isHost)
+        networkManager.delegate = self
         connectionStatus = .connecting
     }
     
     // MARK: - General Variables
     
-    lazy var tracksListManager: NetworkServiceManager! = {
+    lazy var networkManager: NetworkServiceManager! = {
         var manager = NetworkServiceManager(self.isHost)
         manager.delegate = self
         return manager
@@ -295,7 +294,7 @@ class PartyViewController: UIViewController, SPTAudioStreamingDelegate, SPTAudio
     private func sendTracksToPeers(forTracks tracks: [Track]) {
         let tracksIDString = id(ofTracks: tracks)
         if isHost || (!isHost && !tracks.isEmpty) {
-            tracksListManager.sendTracks(tracksIDString)
+            networkManager.sendTracks(tracksIDString)
         }
     }
     
@@ -529,7 +528,7 @@ class PartyViewController: UIViewController, SPTAudioStreamingDelegate, SPTAudio
                 progressBar.setProgress(Float(musicPlayer.getCurrentPosition())/Float(wholeLength), animated: true)
             }
         }
-        tracksListManager.advertise()
+        networkManager.advertise()
         
     }
     
@@ -612,7 +611,7 @@ class PartyViewController: UIViewController, SPTAudioStreamingDelegate, SPTAudio
     
     internal func sendPartyInfo(toSession session: MCSession) {
         if isHost {
-            tracksListManager.sendPartyInfo(forParty: party, toSession: session)
+            networkManager.sendPartyInfo(forParty: party, toSession: session)
         }
     }
     

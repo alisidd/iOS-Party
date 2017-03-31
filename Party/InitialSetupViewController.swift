@@ -52,7 +52,7 @@ class InitialSetupViewController: UIViewController {
             if let destinationVC = segue.destination as? PartyViewController {
                 print("Setting isHost to false")
                 destinationVC.isHost = false
-                destinationVC.tracksListManager?.delegate = destinationVC
+                destinationVC.networkManager?.delegate = destinationVC
                 navigationItem.backBarButtonItem = UIBarButtonItem(title: "", style: .plain, target: nil, action: nil)
             }
         }

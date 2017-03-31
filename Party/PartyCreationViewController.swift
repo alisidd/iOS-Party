@@ -38,6 +38,7 @@ class PartyCreationViewController: UIViewController, UITextFieldDelegate, UIPick
     var authViewController: SFSafariViewController?
     var spotifySession: SPTSession?
     var buttonPressed = false
+    var networkManager: NetworkServiceManager? = NetworkServiceManager(false)
 
     let primaryColor = UIColor.white.withAlphaComponent(1)
     let secondaryColor = UIColor(red: 203/255, green: 199/255, blue: 199/255, alpha: 0.5)
@@ -48,6 +49,15 @@ class PartyCreationViewController: UIViewController, UITextFieldDelegate, UIPick
         super.viewDidLoad()
         makeNavigationBarTransparent()
         setDelegates()
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        networkManager = NetworkServiceManager(false)
+    }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        networkManager = nil
     }
     
     func customizeSliderImage() {
@@ -103,20 +113,24 @@ class PartyCreationViewController: UIViewController, UITextFieldDelegate, UIPick
     }
     
     @IBAction func initializeMusicPlayer(_ sender: UIButton) {
-        musicPlayer.party = partyMade
-        
-        if !buttonPressed {
-            buttonPressed = true
-
-            if partyMade.musicService == .appleMusic {
-                authorizeAppleMusic()
-                musicPlayer.authorizationDispatchGroup.wait()
-                if musicPlayer.isAuthorized {
-                    performSegue(withIdentifier: "Create Party", sender: nil)
-                    buttonPressed = false
+        if networkManager!.otherHosts.count > 0 {
+            postAlertForOtherHosts()
+        } else {
+            musicPlayer.party = partyMade
+            
+            if !buttonPressed {
+                buttonPressed = true
+                
+                if partyMade.musicService == .appleMusic {
+                    authorizeAppleMusic()
+                    musicPlayer.authorizationDispatchGroup.wait()
+                    if musicPlayer.isAuthorized {
+                        performSegue(withIdentifier: "Create Party", sender: nil)
+                        buttonPressed = false
+                    }
+                } else {
+                    authorizeSpotify()
                 }
-            } else {
-                authorizeSpotify()
             }
         }
     }
@@ -140,6 +154,13 @@ class PartyCreationViewController: UIViewController, UITextFieldDelegate, UIPick
     
     func postAlertForNoAppleMusic() {
         let alert = UIAlertController(title: "No Apple Music Subscription", message: "You need to have an Apple Music subscription for this option", preferredStyle: .alert)
+        alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
+        
+        present(alert, animated: true)
+    }
+    
+    func postAlertForOtherHosts() {
+        let alert = UIAlertController(title: "Another Party in Progress", message: nil, preferredStyle: .alert)
         alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
         
         present(alert, animated: true)
@@ -209,8 +230,7 @@ class PartyCreationViewController: UIViewController, UITextFieldDelegate, UIPick
                     controller.spotifySession = spotifySession
                 }
                 
-                controller.tracksListManager?.partyName = "Placeholder Party Name"
-                controller.tracksListManager?.delegate = controller
+                controller.networkManager?.delegate = controller
             }
         }
     }

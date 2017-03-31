@@ -7,8 +7,6 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		3472FB121DDAC68900A35FCB /* PartyJoinedViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3472FB111DDAC68900A35FCB /* PartyJoinedViewController.swift */; };
-		3472FB141DDAC6FC00A35FCB /* PartyListCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3472FB131DDAC6FC00A35FCB /* PartyListCell.swift */; };
 		3472FB161DDAC81E00A35FCB /* Party.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3472FB151DDAC81E00A35FCB /* Party.swift */; };
 		34D750E01E32E9C5009AFD63 /* NetworkServiceManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 34D750DF1E32E9C5009AFD63 /* NetworkServiceManager.swift */; };
 		41045F2C1E39ACBE00A29830 /* SpotifyAudioPlayback.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 41045F2A1E39ACBE00A29830 /* SpotifyAudioPlayback.framework */; };
@@ -42,8 +40,6 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		3472FB111DDAC68900A35FCB /* PartyJoinedViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PartyJoinedViewController.swift; sourceTree = "<group>"; };
-		3472FB131DDAC6FC00A35FCB /* PartyListCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PartyListCell.swift; sourceTree = "<group>"; };
 		3472FB151DDAC81E00A35FCB /* Party.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Party.swift; sourceTree = "<group>"; };
 		34D750DF1E32E9C5009AFD63 /* NetworkServiceManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NetworkServiceManager.swift; sourceTree = "<group>"; };
 		3EB77C24F7978848084888F9 /* Pods-WeJ.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-WeJ.debug.xcconfig"; path = "Pods/Target Support Files/Pods-WeJ/Pods-WeJ.debug.xcconfig"; sourceTree = "<group>"; };
@@ -166,15 +162,6 @@
 			name = "Create Party";
 			sourceTree = "<group>";
 		};
-		413421691E3D57EB00888403 /* Join Party */ = {
-			isa = PBXGroup;
-			children = (
-				3472FB111DDAC68900A35FCB /* PartyJoinedViewController.swift */,
-				3472FB131DDAC6FC00A35FCB /* PartyListCell.swift */,
-			);
-			name = "Join Party";
-			sourceTree = "<group>";
-		};
 		417C38C01DDA43FD00F59926 = {
 			isa = PBXGroup;
 			children = (
@@ -200,7 +187,6 @@
 				417C38CC1DDA43FD00F59926 /* AppDelegate.swift */,
 				417C38E11DDA447600F59926 /* InitialSetupViewController.swift */,
 				413421681E3D57E400888403 /* Create Party */,
-				413421691E3D57EB00888403 /* Join Party */,
 				413421671E3D57D100888403 /* Play Tracks */,
 				413421661E3D57BE00888403 /* Add Tracks */,
 				413421651E3D57B100888403 /* Connection Managers */,
@@ -371,7 +357,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				3472FB121DDAC68900A35FCB /* PartyJoinedViewController.swift in Sources */,
 				41C0AEBE1E7A12E000C797F0 /* QueueViewController.swift in Sources */,
 				41C0AEB61E79512D00C797F0 /* searchTextField.swift in Sources */,
 				413533291E8DE4C600BE5B0F /* MusicService.swift in Sources */,
@@ -380,7 +365,6 @@
 				417B9D4F1E318D0D0021F36E /* AddSongViewController.swift in Sources */,
 				41C0AEBC1E7A12CB00C797F0 /* HubViewController.swift in Sources */,
 				418503F71E307BE900472006 /* setupButton.swift in Sources */,
-				3472FB141DDAC6FC00A35FCB /* PartyListCell.swift in Sources */,
 				416AB6B51E8CA6D200836680 /* RecommendedCollectionViewCell.swift in Sources */,
 				417C38EF1DDA91B500F59926 /* Party.xcdatamodeld in Sources */,
 				417C38EE1DDA91B100F59926 /* AppDelegate.swift in Sources */,
