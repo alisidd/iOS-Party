@@ -34,7 +34,7 @@
                                             <color key="titleColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                         </state>
                                         <state key="highlighted">
-                                            <color key="titleColor" red="0.96470588239999999" green="0.65098039220000004" blue="0.13725490200000001" alpha="1" colorSpace="calibratedRGB"/>
+                                            <color key="titleColor" red="1" green="0.65098039215686276" blue="0.13725490196078433" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                         </state>
                                         <connections>
                                             <segue destination="9wA-Gp-aQL" kind="show" id="Nim-nT-XHE"/>
@@ -48,7 +48,7 @@
                                             <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                         </state>
                                         <state key="highlighted">
-                                            <color key="titleColor" red="0.96470588235294119" green="0.65098039215686276" blue="0.13725490196078433" alpha="1" colorSpace="calibratedRGB"/>
+                                            <color key="titleColor" red="1" green="0.65098039215686276" blue="0.13725490196078433" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                         </state>
                                         <connections>
                                             <segue destination="IhU-0X-egj" kind="show" identifier="Join Party" id="j2I-Sz-fAw"/>
@@ -209,7 +209,7 @@
                                     </button>
                                     <progressView opaque="NO" contentMode="scaleToFill" verticalHuggingPriority="750" progress="0.5" translatesAutoresizingMaskIntoConstraints="NO" id="nye-1U-YIH">
                                         <rect key="frame" x="0.0" y="373" width="375" height="2"/>
-                                        <color key="tintColor" red="0.96470588239999999" green="0.65098039220000004" blue="0.13725490200000001" alpha="1" colorSpace="calibratedRGB"/>
+                                        <color key="tintColor" red="1" green="0.65098039215686276" blue="0.13725490196078433" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                         <color key="trackTintColor" red="0.96470588235294119" green="0.65098039215686276" blue="0.13725490196078433" alpha="0.34999999999999998" colorSpace="custom" customColorSpace="sRGB"/>
                                     </progressView>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="C8i-W2-rUz">
@@ -400,7 +400,7 @@
                                     <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 </state>
                                 <state key="highlighted">
-                                    <color key="titleColor" red="0.96470588235294119" green="0.65098039215686276" blue="0.13725490196078433" alpha="1" colorSpace="calibratedRGB"/>
+                                    <color key="titleColor" red="1" green="0.65098039215686276" blue="0.13725490196078433" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 </state>
                                 <connections>
                                     <segue destination="wZL-ui-Jhx" kind="popoverPresentation" identifier="Add Tracks" popoverAnchorView="YGx-cb-qhQ" id="ol4-Ya-lmk">
@@ -415,7 +415,7 @@
                                     <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 </state>
                                 <state key="highlighted">
-                                    <color key="titleColor" red="0.96470588235294119" green="0.65098039215686276" blue="0.13725490196078433" alpha="1" colorSpace="calibratedRGB"/>
+                                    <color key="titleColor" red="1" green="0.65098039215686276" blue="0.13725490196078433" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 </state>
                                 <connections>
                                     <action selector="editCells:" destination="dz5-uv-Blh" eventType="touchUpInside" id="Qy9-b4-VrY"/>
@@ -677,15 +677,32 @@
                                     </collectionViewCell>
                                 </cells>
                             </collectionView>
+                            <label hidden="YES" opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="1" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" preferredMaxLayoutWidth="8" translatesAutoresizingMaskIntoConstraints="NO" id="gv6-p5-7rO" customClass="BadgeSwift" customModule="BadgeSwift">
+                                <rect key="frame" x="350" y="37" width="18" height="18"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="18" id="3JP-es-cbW"/>
+                                    <constraint firstAttribute="height" constant="18" id="IFe-2v-kHd"/>
+                                </constraints>
+                                <fontDescription key="fontDescription" name="Helvetica-Light" family="Helvetica" pointSize="12"/>
+                                <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                <nil key="highlightedColor"/>
+                                <userDefinedRuntimeAttributes>
+                                    <userDefinedRuntimeAttribute type="color" keyPath="badgeColor">
+                                        <color key="value" red="1" green="0.65098039215686276" blue="0.13725490196078433" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                    </userDefinedRuntimeAttribute>
+                                </userDefinedRuntimeAttributes>
+                            </label>
                         </subviews>
                         <color key="backgroundColor" red="0.10196078431372549" green="0.10196078431372549" blue="0.10196078431372549" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <constraints>
+                            <constraint firstItem="gv6-p5-7rO" firstAttribute="leading" secondItem="R8f-VN-KDZ" secondAttribute="trailing" constant="59" id="1VF-hx-jiX"/>
                             <constraint firstItem="vZu-k9-sNd" firstAttribute="top" secondItem="BNn-DH-03H" secondAttribute="bottom" constant="72" id="1xC-x0-168"/>
                             <constraint firstItem="7Y1-CB-vTb" firstAttribute="leading" secondItem="3MP-aG-3y5" secondAttribute="leading" id="3b2-1y-rUj"/>
                             <constraint firstItem="BNn-DH-03H" firstAttribute="top" secondItem="R8f-VN-KDZ" secondAttribute="bottom" constant="72" id="Cu7-oE-vDL"/>
                             <constraint firstItem="7Sa-vs-5oy" firstAttribute="leading" secondItem="R8f-VN-KDZ" secondAttribute="trailing" constant="17" id="FnT-ya-zca"/>
                             <constraint firstItem="7Y1-CB-vTb" firstAttribute="top" secondItem="R8f-VN-KDZ" secondAttribute="bottom" constant="8" symbolic="YES" id="GRF-Dp-q53"/>
                             <constraint firstItem="7Y1-CB-vTb" firstAttribute="bottom" secondItem="6fV-jh-Izh" secondAttribute="top" id="JP8-Tc-Rew"/>
+                            <constraint firstItem="7Y1-CB-vTb" firstAttribute="top" secondItem="gv6-p5-7rO" secondAttribute="bottom" constant="29" id="RUw-wc-ykA"/>
                             <constraint firstItem="vZu-k9-sNd" firstAttribute="leading" secondItem="3MP-aG-3y5" secondAttribute="leading" id="VXw-MS-gz4"/>
                             <constraint firstItem="R8f-VN-KDZ" firstAttribute="top" secondItem="lR3-G2-sY7" secondAttribute="bottom" constant="12" id="Ydi-2I-419"/>
                             <constraint firstItem="7Sa-vs-5oy" firstAttribute="trailing" secondItem="3MP-aG-3y5" secondAttribute="trailingMargin" id="b2l-5v-66H"/>
@@ -702,6 +719,7 @@
                         <outlet property="recommendationsLabel" destination="BNn-DH-03H" id="zR9-nb-T2z"/>
                         <outlet property="searchTracksField" destination="R8f-VN-KDZ" id="mSO-7n-fgT"/>
                         <outlet property="trackTableView" destination="7Y1-CB-vTb" id="Qa4-bA-Ran"/>
+                        <outlet property="tracksCounter" destination="gv6-p5-7rO" id="agZ-W3-bY0"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="SjL-Yh-saS" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -735,7 +753,7 @@
                                             <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                         </state>
                                         <state key="highlighted">
-                                            <color key="titleColor" red="0.96470588235294119" green="0.65098039215686276" blue="0.13725490196078433" alpha="1" colorSpace="calibratedRGB"/>
+                                            <color key="titleColor" red="1" green="0.65098039215686276" blue="0.13725490196078433" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                         </state>
                                         <connections>
                                             <action selector="changeToSpotify:" destination="9wA-Gp-aQL" eventType="touchUpInside" id="Ayq-m4-eeg"/>
@@ -752,7 +770,7 @@
                                             <color key="titleColor" red="0.79607843137254897" green="0.7803921568627451" blue="0.7803921568627451" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                         </state>
                                         <state key="highlighted">
-                                            <color key="titleColor" red="0.96470588235294119" green="0.65098039215686276" blue="0.13725490196078433" alpha="1" colorSpace="calibratedRGB"/>
+                                            <color key="titleColor" red="1" green="0.65098039215686276" blue="0.13725490196078433" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                         </state>
                                         <connections>
                                             <action selector="changeToAppleMusic:" destination="9wA-Gp-aQL" eventType="touchUpInside" id="87M-cb-Ca5"/>
@@ -768,9 +786,9 @@
                             </label>
                             <slider opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" value="0.5" minValue="0.0" maxValue="1" translatesAutoresizingMaskIntoConstraints="NO" id="6bl-l1-4XO">
                                 <rect key="frame" x="46" y="362" width="284" height="31"/>
-                                <color key="minimumTrackTintColor" red="0.96470588235294119" green="0.65098039215686276" blue="0.13725490196078433" alpha="1" colorSpace="calibratedRGB"/>
+                                <color key="minimumTrackTintColor" red="1" green="0.65098039215686276" blue="0.13725490196078433" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <color key="maximumTrackTintColor" red="0.96470588235294119" green="0.65098039215686276" blue="0.13725490196078433" alpha="0.34999999999999998" colorSpace="custom" customColorSpace="sRGB"/>
-                                <color key="thumbTintColor" red="0.96470588235294119" green="0.65098039215686276" blue="0.13725490196078433" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <color key="thumbTintColor" red="1" green="0.65098039215686276" blue="0.13725490196078433" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <connections>
                                     <action selector="sliderValueChanged:" destination="9wA-Gp-aQL" eventType="valueChanged" id="qFf-fE-mgB"/>
                                 </connections>
@@ -783,7 +801,7 @@
                                     <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 </state>
                                 <state key="highlighted">
-                                    <color key="titleColor" red="0.96470588235294119" green="0.65098039215686276" blue="0.13725490196078433" alpha="1" colorSpace="calibratedRGB"/>
+                                    <color key="titleColor" red="1" green="0.65098039215686276" blue="0.13725490196078433" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 </state>
                                 <connections>
                                     <action selector="initializeMusicPlayer:" destination="9wA-Gp-aQL" eventType="touchUpInside" id="euW-Xh-Uui"/>

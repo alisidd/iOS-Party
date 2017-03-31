@@ -12,7 +12,7 @@ class HubTableViewCell: UITableViewCell {
     override func setHighlighted(_ highlighted: Bool, animated: Bool) {
         DispatchQueue.main.async {
             if highlighted {
-                self.textLabel?.textColor = UIColor(red: 246/255, green: 166/255, blue: 35/255, alpha: 1)
+                self.textLabel?.textColor = UIColor(red: 1, green: 166/255, blue: 35/255, alpha: 1)
             } else {
                 self.textLabel?.textColor = .white
             }

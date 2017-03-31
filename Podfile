@@ -8,6 +8,6 @@ target ‘WeJ’ do
   # Pods for Party
   pod 'Firebase/Core'
   pod ‘SwiftyJSON’
-
+  pod 'BadgeSwift', '~> 4.0'
 
 end

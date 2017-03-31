@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import BadgeSwift
 
 extension Collection where Indices.Iterator.Element == Index {
     subscript (safe index: Index) -> Generator.Element? {
@@ -22,6 +23,8 @@ class AddSongViewController: UIViewController, UICollectionViewDelegate, UIColle
     @IBOutlet weak var recommendationsCollectionView: UICollectionView!
     
     @IBOutlet weak var searchTracksField: UITextField!
+    @IBOutlet weak var tracksCounter: BadgeSwift!
+    
     @IBOutlet weak var trackTableView: UITableView!
     
     // MARK: - General Variables
@@ -46,7 +49,14 @@ class AddSongViewController: UIViewController, UICollectionViewDelegate, UIColle
             }
         }
     }
-    var tracksQueue = [Track]()
+    var tracksQueue = [Track]() {
+        didSet {
+            DispatchQueue.main.async {
+                self.tracksCounter.isHidden = !(self.tracksQueue.count > 0)
+                self.tracksCounter.text = String(self.tracksQueue.count)
+            }
+        }
+    }
     private let APIManager = RestApiManager()
     private var indicator = UIActivityIndicatorView()
     private let noTracksFoundLabel = UILabel(frame: CGRect(x: 0, y: 0, width: 320, height: 70))

@@ -4,29 +4,25 @@
 <dict>
 	<key>SchemeUserState</key>
 	<dict>
+		<key>BadgeSwift.xcscheme</key>
+		<dict>
+			<key>isShown</key>
+			<false/>
+		</dict>
 		<key>GoogleToolboxForMac.xcscheme</key>
 		<dict>
 			<key>isShown</key>
 			<false/>
 		</dict>
-		<key>Pods-Party.xcscheme</key>
+		<key>Pods-WeJ.xcscheme</key>
 		<dict>
 			<key>isShown</key>
 			<false/>
-			<key>orderHint</key>
-			<integer>1</integer>
-		</dict>
-		<key>Pods-WeJ.xcscheme</key>
-		<dict>
-			<key>orderHint</key>
-			<integer>3</integer>
 		</dict>
 		<key>SwiftyJSON.xcscheme</key>
 		<dict>
 			<key>isShown</key>
 			<false/>
-			<key>orderHint</key>
-			<integer>2</integer>
 		</dict>
 	</dict>
 	<key>SuppressBuildableAutocreation</key>
@@ -36,22 +32,17 @@
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>48B9C2333BB26E6FF608C06F77104AEB</key>
+		<key>2262A9EBE7425D90CBF4E0B7BA40343A</key>
 		<dict>
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>68D67499CFBBA497CAEB22C1A60023F7</key>
+		<key>2BB3C7A0D901BA50C22490631DD34A01</key>
 		<dict>
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>E4705A3AEAF857C150787F3D5609D309</key>
-		<dict>
-			<key>primary</key>
-			<true/>
-		</dict>
-		<key>E4784D78150ABF3EFC549330FD26EB74</key>
+		<key>8082BC975138F98AD5FCDE9050FD77A3</key>
 		<dict>
 			<key>primary</key>
 			<true/>

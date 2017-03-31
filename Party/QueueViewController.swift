@@ -22,7 +22,7 @@ class QueueViewController: UIViewController, UITableViewDelegate, UITableViewDat
     let maxHeight: CGFloat = -UIApplication.shared.statusBarFrame.height
     var headerHeightConstraint: CGFloat {
         get {
-            return delegate!.returnTableHeight()
+            return delegate?.returnTableHeight() ?? maxHeight
         }
         
         set {
