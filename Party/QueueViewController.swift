@@ -18,7 +18,7 @@ class QueueViewController: UIViewController, UITableViewDelegate, UITableViewDat
     
     @IBOutlet weak var tracksTableView: UITableView!
 
-    let minHeight: CGFloat = 351
+    let minHeight: CGFloat = 0.53 * UIScreen.main.bounds.height
     let maxHeight: CGFloat = -UIApplication.shared.statusBarFrame.height
     var headerHeightConstraint: CGFloat {
         get {

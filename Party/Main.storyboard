@@ -523,7 +523,10 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="7Sa-vs-5oy">
-                                <rect key="frame" x="308" y="34" width="51" height="40"/>
+                                <rect key="frame" x="304" y="34" width="51" height="40"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="51" id="REH-rP-mkg"/>
+                                </constraints>
                                 <fontDescription key="fontDescription" name="AvenirNext-DemiBold" family="Avenir Next" pointSize="20"/>
                                 <state key="normal" title="Done">
                                     <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
@@ -589,12 +592,9 @@
                                 </prototypes>
                             </tableView>
                             <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Search" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="R8f-VN-KDZ" customClass="searchTextField" customModule="WeJ" customModuleProvider="target">
-                                <rect key="frame" x="16" y="32" width="275" height="44"/>
+                                <rect key="frame" x="16" y="32" width="278" height="44"/>
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                 <color key="tintColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                                <constraints>
-                                    <constraint firstAttribute="width" constant="275" id="5PN-fc-4pZ"/>
-                                </constraints>
                                 <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <fontDescription key="fontDescription" name="Helvetica" family="Helvetica" pointSize="20"/>
                                 <textInputTraits key="textInputTraits"/>
@@ -678,7 +678,7 @@
                                 </cells>
                             </collectionView>
                             <label hidden="YES" opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="1" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" preferredMaxLayoutWidth="8" translatesAutoresizingMaskIntoConstraints="NO" id="gv6-p5-7rO" customClass="BadgeSwift" customModule="BadgeSwift">
-                                <rect key="frame" x="350" y="37" width="18" height="18"/>
+                                <rect key="frame" x="349" y="37" width="18" height="18"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="18" id="3JP-es-cbW"/>
                                     <constraint firstAttribute="height" constant="18" id="IFe-2v-kHd"/>
@@ -695,22 +695,22 @@
                         </subviews>
                         <color key="backgroundColor" red="0.10196078431372549" green="0.10196078431372549" blue="0.10196078431372549" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <constraints>
-                            <constraint firstItem="gv6-p5-7rO" firstAttribute="leading" secondItem="R8f-VN-KDZ" secondAttribute="trailing" constant="59" id="1VF-hx-jiX"/>
                             <constraint firstItem="vZu-k9-sNd" firstAttribute="top" secondItem="BNn-DH-03H" secondAttribute="bottom" constant="72" id="1xC-x0-168"/>
                             <constraint firstItem="7Y1-CB-vTb" firstAttribute="leading" secondItem="3MP-aG-3y5" secondAttribute="leading" id="3b2-1y-rUj"/>
                             <constraint firstItem="BNn-DH-03H" firstAttribute="top" secondItem="R8f-VN-KDZ" secondAttribute="bottom" constant="72" id="Cu7-oE-vDL"/>
-                            <constraint firstItem="7Sa-vs-5oy" firstAttribute="leading" secondItem="R8f-VN-KDZ" secondAttribute="trailing" constant="17" id="FnT-ya-zca"/>
                             <constraint firstItem="7Y1-CB-vTb" firstAttribute="top" secondItem="R8f-VN-KDZ" secondAttribute="bottom" constant="8" symbolic="YES" id="GRF-Dp-q53"/>
                             <constraint firstItem="7Y1-CB-vTb" firstAttribute="bottom" secondItem="6fV-jh-Izh" secondAttribute="top" id="JP8-Tc-Rew"/>
                             <constraint firstItem="7Y1-CB-vTb" firstAttribute="top" secondItem="gv6-p5-7rO" secondAttribute="bottom" constant="29" id="RUw-wc-ykA"/>
+                            <constraint firstAttribute="trailing" secondItem="gv6-p5-7rO" secondAttribute="trailing" constant="8" id="SF2-WG-EX2"/>
                             <constraint firstItem="vZu-k9-sNd" firstAttribute="leading" secondItem="3MP-aG-3y5" secondAttribute="leading" id="VXw-MS-gz4"/>
                             <constraint firstItem="R8f-VN-KDZ" firstAttribute="top" secondItem="lR3-G2-sY7" secondAttribute="bottom" constant="12" id="Ydi-2I-419"/>
-                            <constraint firstItem="7Sa-vs-5oy" firstAttribute="trailing" secondItem="3MP-aG-3y5" secondAttribute="trailingMargin" id="b2l-5v-66H"/>
+                            <constraint firstItem="7Sa-vs-5oy" firstAttribute="leading" secondItem="R8f-VN-KDZ" secondAttribute="trailing" constant="10" id="a98-9k-wOY"/>
                             <constraint firstItem="BNn-DH-03H" firstAttribute="leading" secondItem="3MP-aG-3y5" secondAttribute="leading" constant="35" id="bCn-a2-clG"/>
                             <constraint firstItem="7Y1-CB-vTb" firstAttribute="top" secondItem="7Sa-vs-5oy" secondAttribute="bottom" constant="10" id="c4X-D6-xsS"/>
                             <constraint firstItem="R8f-VN-KDZ" firstAttribute="centerY" secondItem="7Sa-vs-5oy" secondAttribute="centerY" id="hVB-5c-1Ii"/>
                             <constraint firstItem="R8f-VN-KDZ" firstAttribute="leading" secondItem="3MP-aG-3y5" secondAttribute="leadingMargin" id="nuE-lK-RHA"/>
                             <constraint firstAttribute="trailing" secondItem="vZu-k9-sNd" secondAttribute="trailing" id="upE-zd-9Np"/>
+                            <constraint firstAttribute="trailing" secondItem="7Sa-vs-5oy" secondAttribute="trailing" constant="20" id="why-To-ZmM"/>
                             <constraint firstAttribute="trailing" secondItem="7Y1-CB-vTb" secondAttribute="trailing" id="xNM-7D-eZk"/>
                         </constraints>
                     </view>
