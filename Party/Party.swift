@@ -2,22 +2,16 @@
 //  Party.swift
 //  Party
 //
-//  Created by Matthew on 2016-11-14.
-//  Copyright © 2016 Ali Siddiqui and Matthew Paletta. All rights reserved.
+//  Created by Matthew Paletta on 2016-11-14.
+//  Copyright © 2017 Mohammad Ali Siddiqui. All rights reserved.
 //
 
 import Foundation
-
-enum MusicService: String {
-    case appleMusic
-    case spotify
-}
 
 @objc(Party)
 class Party: NSObject, NSCoding {
     weak var delegate: UpdatePartyDelegate?
     var musicService = MusicService.spotify
-    
     
     var tracksQueue = [Track]() {
         didSet {

@@ -2,8 +2,8 @@
 //  NetworkServiceManager.swift
 //  Party
 //
-//  Created by Matthew on 2017-01-20.
-//  Copyright © 2017 Ali Siddiqui and Matthew Paletta. All rights reserved.
+//  Created by Matthew Paletta on 2017-01-20.
+//  Copyright © 2017 Mohammad Ali Siddiqui. All rights reserved.
 //
 
 import Foundation

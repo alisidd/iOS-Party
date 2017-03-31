@@ -3,7 +3,7 @@
 //  WeJ
 //
 //  Created by Ali Siddiqui on 3/29/17.
-//  Copyright © 2017 Ali Siddiqui.MatthewPaletta. All rights reserved.
+//  Copyright © 2017 Mohammad Ali Siddiqui. All rights reserved.
 //
 
 import UIKit

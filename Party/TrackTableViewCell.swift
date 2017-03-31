@@ -3,7 +3,7 @@
 //  Party
 //
 //  Created by Ali Siddiqui on 1/19/17.
-//  Copyright © 2017 Ali Siddiqui and Matthew Paletta. All rights reserved.
+//  Copyright © 2017 Mohammad Ali Siddiqui. All rights reserved.
 //
 
 class TrackTableViewCell: UITableViewCell {

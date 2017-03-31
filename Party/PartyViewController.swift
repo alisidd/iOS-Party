@@ -3,7 +3,7 @@
 //  Party
 //
 //  Created by Ali Siddiqui on 1/19/17.
-//  Copyright © 2017 Ali Siddiqui.MatthewPaletta. All rights reserved.
+//  Copyright © 2017 Mohammad Ali Siddiqui. All rights reserved.
 //
 
 import UIKit
@@ -73,6 +73,7 @@ class PartyViewController: UIViewController, SPTAudioStreamingDelegate, SPTAudio
     @IBOutlet weak var currentlyPlayingTrackName: UILabel!
     @IBOutlet weak var currentlyPlayingArtistName: UILabel!
     @IBOutlet weak var playPauseButton: UIButton!
+    @IBOutlet weak var skipTrackButton: UIButton!
     @IBOutlet weak var progressBar: UIProgressView!
     
     // Tracks Queue
@@ -156,7 +157,9 @@ class PartyViewController: UIViewController, SPTAudioStreamingDelegate, SPTAudio
     // MARK: - General Variables
     
     lazy var tracksListManager: NetworkServiceManager! = {
-        return NetworkServiceManager(self.isHost)
+        var manager = NetworkServiceManager(self.isHost)
+        manager.delegate = self
+        return manager
     }()
     private let APIManager = RestApiManager()
     
@@ -189,7 +192,6 @@ class PartyViewController: UIViewController, SPTAudioStreamingDelegate, SPTAudio
     // MARK: - General Functions
     
     private func setDelegates() {
-        tracksListManager.delegate = self
         party.delegate = self
         musicPlayer.spotifyPlayer?.delegate = self
         musicPlayer.spotifyPlayer?.playbackDelegate = self
@@ -201,6 +203,7 @@ class PartyViewController: UIViewController, SPTAudioStreamingDelegate, SPTAudio
         lyricsAndQueueVC.expandTracksTable()
         if !isHost {
             playPauseButton.isHidden = true
+            skipTrackButton.isHidden = true
             connectionStatus = .notConnected
         }
     }
@@ -228,7 +231,9 @@ class PartyViewController: UIViewController, SPTAudioStreamingDelegate, SPTAudio
         
         // Update peers tableview
         if isHost {
-            sendTracksToPeers(forTracks: party.tracksQueue)
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
+                self.sendTracksToPeers(forTracks: self.party.tracksQueue)
+            }
         } else {
             sendTracksToPeers(forTracks: party.tracksFromPeers)
             party.tracksFromPeers.removeAll()
@@ -242,10 +247,9 @@ class PartyViewController: UIViewController, SPTAudioStreamingDelegate, SPTAudio
                 if self.party.tracksQueue.count == 1 {
                     self.lyricsAndQueueVC.minimizeTracksTable()
                 }
-                self.updateArtworkForCurrentlyPlaying()
                 self.currentlyPlayingTrackName.text = self.party.tracksQueue[0].name
-                print(self.party.tracksQueue.count)
                 self.currentlyPlayingArtistName.text = self.party.tracksQueue[0].artist
+                self.updateArtworkForCurrentlyPlaying()
             }
         }
     }
@@ -270,6 +274,7 @@ class PartyViewController: UIViewController, SPTAudioStreamingDelegate, SPTAudio
             self.currentlyPlayingArtistName.isHidden = false
             if self.isHost {
                 self.playPauseButton.isHidden = false
+                self.skipTrackButton.isHidden = false
             }
         }
     }
@@ -281,6 +286,7 @@ class PartyViewController: UIViewController, SPTAudioStreamingDelegate, SPTAudio
             self.currentlyPlayingTrackName.isHidden = true
             self.currentlyPlayingArtistName.isHidden = true
             self.playPauseButton.isHidden = true
+            self.skipTrackButton.isHidden = true
             self.lyricsAndQueueVC.expandTracksTable()
         }
     }
@@ -314,7 +320,7 @@ class PartyViewController: UIViewController, SPTAudioStreamingDelegate, SPTAudio
     }
     
     internal func addTracks(fromPeer peer: MCPeerID, withTracks tracks: [String]) {
-        
+        print("HERE")
         APIManager.latestRequest[peer] = tracks
         
         DispatchQueue.global(qos: .userInteractive).async {
@@ -332,40 +338,43 @@ class PartyViewController: UIViewController, SPTAudioStreamingDelegate, SPTAudio
                     API.dispatchGroup.wait()
                 }
                 
-                if self.isHost {
-                    self.party.tracksQueue.append(contentsOf: API.tracksList)
-                    if self.party.tracksQueue.count == API.tracksList.count {
-                        self.musicPlayer.modifyQueue(withTracks: self.party.tracksQueue)
-                    }
-                    self.fetchHighResArtwork(forTracks: API.tracksList)
-                } else {
-                    if self.party.tracksQueue.isEmpty {
-                        if !API.tracksList.isEmpty {
-                            self.lyricsAndQueueVC.minimizeTracksTable()
+                if let requestTracksCheck = self.APIManager.latestRequest[peer], requestTracksCheck == tracks {
+                
+                    if self.isHost {
+                        self.party.tracksQueue.append(contentsOf: API.tracksList)
+                        if self.party.tracksQueue.count == API.tracksList.count {
+                            self.musicPlayer.modifyQueue(withTracks: self.party.tracksQueue)
                         }
-                    }
-                    
-                    if API.tracksList != self.party.tracksQueue {
-                        self.cache = self.party.tracksQueue
-                        var wholeNewQueue = [Track]()
-                        var newTracks = [Track]()
-                        
-                        for newTrack in API.tracksList {
-                            if let index = self.indexInCache(ofTrack: newTrack) {
-                                wholeNewQueue.append(self.cache[index])
-                            } else {
-                                wholeNewQueue.append(newTrack)
-                                newTracks.append(newTrack)
+                        self.fetchHighResArtwork(forTracks: API.tracksList)
+                    } else {
+                        if self.party.tracksQueue.isEmpty {
+                            if !API.tracksList.isEmpty {
+                                self.lyricsAndQueueVC.minimizeTracksTable()
                             }
                         }
                         
-                        self.party.tracksQueue = wholeNewQueue
-                        self.updateCurrentlyPlayingTrack()
-                        self.lyricsAndQueueVC.updateTable()
-                        
-                        self.fetchHighResArtwork(forTracks: newTracks)
-                        
-                        self.cache.removeAll()
+                        if API.tracksList != self.party.tracksQueue {
+                            self.cache = self.party.tracksQueue
+                            var wholeNewQueue = [Track]()
+                            var newTracks = [Track]()
+                            
+                            for newTrack in API.tracksList {
+                                if let index = self.indexInCache(ofTrack: newTrack) {
+                                    wholeNewQueue.append(self.cache[index])
+                                } else {
+                                    wholeNewQueue.append(newTrack)
+                                    newTracks.append(newTrack)
+                                }
+                            }
+                            
+                            self.party.tracksQueue = wholeNewQueue
+                            self.updateCurrentlyPlayingTrack()
+                            self.lyricsAndQueueVC.updateTable()
+                            
+                            self.fetchHighResArtwork(forTracks: newTracks)
+                            
+                            self.cache.removeAll()
+                        }
                     }
                 }
             }
@@ -490,11 +499,24 @@ class PartyViewController: UIViewController, SPTAudioStreamingDelegate, SPTAudio
             updateEveryonesTableView()
             
             if self.party.tracksQueue.isEmpty {
-                self.lyricsAndQueueVC.expandTracksTable()
+                self.hideCurrentlyPlayingArtwork()
             }
         }
     }
     
+    @IBAction func skipTrack(_ sender: UIButton) {
+        if !party.tracksQueue.isEmpty {
+            removeFromOthersQueue(forTrack: party.tracksQueue[0])
+            print("Removing \(party.tracksQueue.removeFirst().name)")
+            musicPlayer.modifyQueue(withTracks: party.tracksQueue)
+            
+            updateEveryonesTableView()
+            
+            if self.party.tracksQueue.isEmpty {
+                self.hideCurrentlyPlayingArtwork()
+            }
+        }
+    }
     func setTimer() {
         let _ = Timer.scheduledTimer(withTimeInterval: 3, repeats: true) { [weak self] (timer) in
             self?.updateProgress()
@@ -514,12 +536,15 @@ class PartyViewController: UIViewController, SPTAudioStreamingDelegate, SPTAudio
     private func fetchImage(forTrack track: Track, setCurrentlyPlaying: Bool) -> UIImage? {
         if let url = URL(string: track.highResArtworkURL) {
             do {
-                let data = try Data(contentsOf: url)
-                if setCurrentlyPlaying {
+                if setCurrentlyPlaying && !party.tracksQueue.isEmpty && track == party.tracksQueue[0] {
+                    let data = try Data(contentsOf: url)
+                    print("Setting high res image for \(party.tracksQueue[0].name)")
                     setCurrentlyPlayingImage(withImage: UIImage(data: data))
+                } else if !setCurrentlyPlaying {
+                    let data = try Data(contentsOf: url)
+                    return UIImage(data: data)
                 }
                 
-                return UIImage(data: data)
             } catch {
                 print("Error trying to get high resolution artwork")
                 return nil

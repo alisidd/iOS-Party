@@ -3,7 +3,7 @@
 //  Party
 //
 //  Created by Ali Siddiqui and Matthew Paletta on 11/9/16.
-//  Copyright © 2016 Ali Siddiqui and Matthew Paletta. All rights reserved.
+//  Copyright © 2017 Mohammad Ali Siddiqui. All rights reserved.
 //
 
 import Foundation

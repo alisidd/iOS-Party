@@ -3,7 +3,7 @@
 //  Party
 //
 //  Created by Ali Siddiqui on 1/19/17.
-//  Copyright © 2017 Ali Siddiqui and Matthew Paletta. All rights reserved.
+//  Copyright © 2017 Mohammad Ali Siddiqui. All rights reserved.
 //
 
 import Foundation
@@ -15,7 +15,6 @@ class RestApiManager {
     
     // Apple Music Variables
     private var appleTracksUrl = "https://itunes.apple.com/search?media=music&term="
-    private let genresUrl = "https://itunes.apple.com/WebObjects/MZStoreServices.woa/ws/genres?id=34"
     private let serviceController = SKCloudServiceController()
     private var storefrontIdentifierFound = String()
     
@@ -90,7 +89,6 @@ class RestApiManager {
             newTrack.id = track["trackId"].stringValue
             newTrack.name = track["trackName"].stringValue
             newTrack.artist = track["artistName"].stringValue
-            newTrack.album = track["collectionName"].stringValue
             
             //print("Fetched \(newTrack.name)")
             
@@ -228,9 +226,7 @@ class RestApiManager {
         let newTrack = Track()
         
         newTrack.id = track["id"].stringValue
-        print(newTrack.id)
         newTrack.name = track["name"].stringValue
-        print(newTrack.name)
         
         for artists in track["artists"].arrayValue { //get other artists too
             newTrack.artist = artists["name"].stringValue

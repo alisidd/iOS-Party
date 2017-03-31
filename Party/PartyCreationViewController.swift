@@ -2,8 +2,8 @@
 //  PartyCreationViewController.swift
 //  Party
 //
-//  Created by Ali Siddiqui and Matthew Paletta on 11/10/16.
-//  Copyright © 2016 Ali Siddiqui and Matthew Paletta. All rights reserved.
+//  Created by Ali Siddiqui on 11/10/16.
+//  Copyright © 2016 Mohammad Ali Siddiqui. All rights reserved.
 //
 
 import UIKit

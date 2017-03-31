@@ -179,16 +179,16 @@
                                         <rect key="frame" x="0.0" y="0.0" width="375" height="375"/>
                                     </imageView>
                                     <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" spacing="4" translatesAutoresizingMaskIntoConstraints="NO" id="hHA-Uv-PtN">
-                                        <rect key="frame" x="20" y="313" width="300" height="47"/>
+                                        <rect key="frame" x="20" y="313" width="240" height="47"/>
                                         <subviews>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Track Name" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ddX-fC-sB7">
-                                                <rect key="frame" x="0.0" y="0.0" width="300" height="26.5"/>
+                                                <rect key="frame" x="0.0" y="0.0" width="240" height="26.5"/>
                                                 <fontDescription key="fontDescription" name="Helvetica-Light" family="Helvetica" pointSize="23"/>
                                                 <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                                 <nil key="highlightedColor"/>
                                             </label>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Artist Name" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="DVp-9a-h3f">
-                                                <rect key="frame" x="0.0" y="30.5" width="300" height="16.5"/>
+                                                <rect key="frame" x="0.0" y="30.5" width="240" height="16.5"/>
                                                 <fontDescription key="fontDescription" name="Helvetica-Light" family="Helvetica" pointSize="14"/>
                                                 <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                                 <nil key="highlightedColor"/>
@@ -196,7 +196,7 @@
                                         </subviews>
                                     </stackView>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="rcd-f2-VTo">
-                                        <rect key="frame" x="340" y="326.5" width="15" height="20"/>
+                                        <rect key="frame" x="280" y="326.5" width="15" height="20"/>
                                         <constraints>
                                             <constraint firstAttribute="height" constant="20" id="KkT-xC-hrA"/>
                                             <constraint firstAttribute="width" constant="15" id="YRE-kt-lBg"/>
@@ -212,10 +212,21 @@
                                         <color key="tintColor" red="0.96470588239999999" green="0.65098039220000004" blue="0.13725490200000001" alpha="1" colorSpace="calibratedRGB"/>
                                         <color key="trackTintColor" red="0.96470588235294119" green="0.65098039215686276" blue="0.13725490196078433" alpha="0.34999999999999998" colorSpace="custom" customColorSpace="sRGB"/>
                                     </progressView>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="C8i-W2-rUz">
+                                        <rect key="frame" x="335" y="326" width="20" height="20"/>
+                                        <constraints>
+                                            <constraint firstAttribute="height" constant="20" id="4zQ-9P-VHh"/>
+                                            <constraint firstAttribute="width" constant="20" id="Lnp-r6-nog"/>
+                                        </constraints>
+                                        <state key="normal" title="Button" image="next"/>
+                                        <connections>
+                                            <action selector="skipTrack:" destination="IhU-0X-egj" eventType="touchUpInside" id="fbP-Lr-988"/>
+                                        </connections>
+                                    </button>
                                 </subviews>
                                 <color key="backgroundColor" red="0.10196078431372549" green="0.10196078431372549" blue="0.10196078431372549" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <constraints>
-                                    <constraint firstAttribute="trailing" secondItem="rcd-f2-VTo" secondAttribute="trailing" constant="20" id="0dB-cm-MNc"/>
+                                    <constraint firstAttribute="trailing" secondItem="C8i-W2-rUz" secondAttribute="trailing" constant="20" id="5U6-ms-SaO"/>
                                     <constraint firstItem="hHA-Uv-PtN" firstAttribute="centerY" secondItem="rcd-f2-VTo" secondAttribute="centerY" id="7HV-qe-bmF"/>
                                     <constraint firstItem="rcd-f2-VTo" firstAttribute="leading" secondItem="hHA-Uv-PtN" secondAttribute="trailing" constant="20" id="86F-xe-7jo"/>
                                     <constraint firstAttribute="bottom" secondItem="hHA-Uv-PtN" secondAttribute="bottom" constant="15" id="Dwn-Pq-mKH"/>
@@ -223,11 +234,13 @@
                                     <constraint firstItem="HrH-IU-EqN" firstAttribute="top" secondItem="7Lx-lg-uJ4" secondAttribute="top" id="QQL-iS-IhJ"/>
                                     <constraint firstItem="HrH-IU-EqN" firstAttribute="leading" secondItem="7Lx-lg-uJ4" secondAttribute="leading" id="WAk-Fu-AZb"/>
                                     <constraint firstAttribute="width" secondItem="7Lx-lg-uJ4" secondAttribute="height" multiplier="1:1" id="clt-xl-pMG"/>
+                                    <constraint firstItem="C8i-W2-rUz" firstAttribute="leading" secondItem="rcd-f2-VTo" secondAttribute="trailing" constant="40" id="ehX-6a-Xfz"/>
                                     <constraint firstAttribute="bottom" secondItem="nye-1U-YIH" secondAttribute="bottom" id="kvf-un-bER"/>
                                     <constraint firstAttribute="bottom" secondItem="HrH-IU-EqN" secondAttribute="bottom" id="n9t-PY-ynf"/>
                                     <constraint firstAttribute="trailing" secondItem="HrH-IU-EqN" secondAttribute="trailing" id="nCd-nH-qTk"/>
                                     <constraint firstItem="hHA-Uv-PtN" firstAttribute="leading" secondItem="7Lx-lg-uJ4" secondAttribute="leading" constant="20" id="sNv-GL-oaw"/>
                                     <constraint firstAttribute="trailing" secondItem="nye-1U-YIH" secondAttribute="trailing" id="tfi-66-R3E"/>
+                                    <constraint firstItem="C8i-W2-rUz" firstAttribute="centerY" secondItem="hHA-Uv-PtN" secondAttribute="centerY" id="ufZ-yn-9ZP"/>
                                 </constraints>
                             </view>
                             <containerView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="uNe-0s-jAa">
@@ -282,6 +295,7 @@
                         <outlet property="playPauseButton" destination="rcd-f2-VTo" id="8Xc-C1-cr0"/>
                         <outlet property="progressBar" destination="nye-1U-YIH" id="Q5p-CY-yWX"/>
                         <outlet property="reconnectButton" destination="9lr-B6-Z3d" id="uTD-eN-KSW"/>
+                        <outlet property="skipTrackButton" destination="C8i-W2-rUz" id="VZo-x7-Lwy"/>
                         <outlet property="tableHeightConstraint" destination="eBV-bE-wFh" id="65Q-z8-2Oj"/>
                     </connections>
                 </viewController>
@@ -820,6 +834,7 @@
         </scene>
     </scenes>
     <resources>
+        <image name="next" width="1119" height="952"/>
         <image name="pause" width="585" height="967"/>
     </resources>
     <inferredMetricsTieBreakers>
