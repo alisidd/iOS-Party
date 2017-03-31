@@ -768,7 +768,7 @@
         <scene sceneID="XwQ-1h-6q4">
             <objects>
                 <navigationController id="lXt-Y2-qAY" sceneMemberID="viewController">
-                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="Mvi-ay-qDE">
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" misplaced="YES" id="Mvi-ay-qDE">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
@@ -780,7 +780,7 @@
                 </navigationController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="fk0-hd-84P" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="639" y="80"/>
+            <point key="canvasLocation" x="534" y="80"/>
         </scene>
     </scenes>
     <resources>
@@ -788,6 +788,6 @@
         <image name="pause" width="585" height="967"/>
     </resources>
     <inferredMetricsTieBreakers>
-        <segue reference="j2I-Sz-fAw"/>
+        <segue reference="myb-f1-PXz"/>
     </inferredMetricsTieBreakers>
 </document>

@@ -114,7 +114,7 @@ class PartyCreationViewController: UIViewController, UITextFieldDelegate, UIPick
     
     @IBAction func initializeMusicPlayer(_ sender: UIButton) {
         if networkManager!.otherHosts.count > 0 {
-            postAlertForOtherHosts()
+            postAlertForOtherHosts(withButton: sender)
         } else {
             musicPlayer.party = partyMade
             
@@ -145,7 +145,7 @@ class PartyCreationViewController: UIViewController, UITextFieldDelegate, UIPick
     func postAlertForSettings() {
         let alert = UIAlertController(title: "Apple Music Access Denied", message: "Go to settings to enable Apple Music for this app", preferredStyle: .alert)
         alert.addAction(UIAlertAction(title: "Cancel", style: .default, handler: nil))
-        alert.addAction(UIAlertAction(title: "Settings", style: .default) { (alert: UIAlertAction!) in
+        alert.addAction(UIAlertAction(title: "Settings", style: .default) { (_) in
             UIApplication.shared.open(URL(string: UIApplicationOpenSettingsURLString)!, options: [:], completionHandler: nil)
         })
         
@@ -159,8 +159,11 @@ class PartyCreationViewController: UIViewController, UITextFieldDelegate, UIPick
         present(alert, animated: true)
     }
     
-    func postAlertForOtherHosts() {
+    func postAlertForOtherHosts(withButton button: UIButton) {
         let alert = UIAlertController(title: "Another Party in Progress", message: nil, preferredStyle: .alert)
+        alert.addAction(UIAlertAction(title: "Try Again", style: .default) { (_) in
+            self.initializeMusicPlayer(button)
+        })
         alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
         
         present(alert, animated: true)
