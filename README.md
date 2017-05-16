@@ -1,3 +1,6 @@
-# iOS-Party
+# iOS-WeJ
 
-An iOS app that allows users to connect and queue tracks up to a host that will play them back. The app requires the host to have either Spotify, or Apple Music.
+An iOS app that allows users to share a queue, and add Apple Music or Spotify tracks to it. The host can play the tracks as long as they have a valid subscription to either Apple Music or Spotify, and edit the queue as they wish.
+
+
+
