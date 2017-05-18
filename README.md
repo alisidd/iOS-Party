@@ -4,4 +4,4 @@ An iOS app that allows users to share a queue, and add Apple Music or Spotify tr
 
 WeJ Party Creation         |  WeJ Party Queue
 :-------------------------:|:-------------------------:
-![](https://github.com/alisidd/iOS-WeJ/blob/master/Sketch%20Prototype/image%202.jpg "WeJ Party Creation")  |  ![](https://github.com/alisidd/iOS-WeJ/blob/master/Sketch%20Prototype/image.jpg "WeJ Queue")
+![](https://github.com/alisidd/iOS-WeJ/blob/master/Sketch%20Prototype/image%202.jpg "WeJ Party Creation")  |  ![](https://github.com/alisidd/iOS-WeJ/blob/master/Sketch%20Prototype/image.jpg "WeJ Party Queue")
