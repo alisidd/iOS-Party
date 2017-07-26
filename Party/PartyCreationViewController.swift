@@ -24,30 +24,27 @@ class PartyCreationViewController: UIViewController, UITextFieldDelegate, UIPick
             spotifyButton.makeBorder()
         }
     }
-    @IBOutlet weak var danceabilitySlider: UISlider! {
-        didSet {
-            customizeSliderImage()
-        }
-    }
+    @IBOutlet weak var danceabilitySlider: UISlider!
     
     // MARK: - General Variables
     
     private var partyMade = Party()
-    var musicPlayer = MusicPlayer()
-    let APIManager = RestApiManager()
-    var authViewController: SFSafariViewController?
-    var spotifySession: SPTSession?
-    var buttonPressed = false
-    var networkManager: NetworkServiceManager? = NetworkServiceManager(false)
+    private var musicPlayer = MusicPlayer()
+    private let APIManager = RestApiManager()
+    private var authViewController: SFSafariViewController?
+    private var spotifySession: SPTSession?
+    private var buttonPressed = false
+    private var networkManager: NetworkServiceManager? = NetworkServiceManager(false)
 
-    let primaryColor = UIColor.white.withAlphaComponent(1)
-    let secondaryColor = UIColor(red: 203/255, green: 199/255, blue: 199/255, alpha: 0.5)
+    private let primaryColor = UIColor.white.withAlphaComponent(1)
+    private let secondaryColor = UIColor(red: 203/255, green: 199/255, blue: 199/255, alpha: 0.5)
     
     // MARK: - Lifecycle
     
     override func viewDidLoad() {
         super.viewDidLoad()
         makeNavigationBarTransparent()
+        customizeSliderImage()
         setDelegates()
     }
     
@@ -60,19 +57,19 @@ class PartyCreationViewController: UIViewController, UITextFieldDelegate, UIPick
         networkManager = nil
     }
     
-    func customizeSliderImage() {
-        danceabilitySlider.setThumbImage(#imageLiteral(resourceName: "thumbSlider"), for: .normal)
-        danceabilitySlider.setThumbImage(#imageLiteral(resourceName: "thumbSlider"), for: .highlighted)
-    }
-    
-    func makeNavigationBarTransparent() {
+    private func makeNavigationBarTransparent() {
         navigationController?.navigationBar.setBackgroundImage(UIImage(), for: UIBarMetrics.default)
         navigationController?.navigationBar.shadowImage = UIImage()
         navigationController?.navigationBar.isTranslucent = true
         navigationController?.view.backgroundColor = UIColor.clear
     }
     
-    func setDelegates() {
+    private func customizeSliderImage() {
+        danceabilitySlider.setThumbImage(#imageLiteral(resourceName: "thumbSlider"), for: .normal)
+        danceabilitySlider.setThumbImage(#imageLiteral(resourceName: "thumbSlider"), for: .highlighted)
+    }
+    
+    private func setDelegates() {
         musicPlayer.delegate = self
     }
     
@@ -144,7 +141,7 @@ class PartyCreationViewController: UIViewController, UITextFieldDelegate, UIPick
     
     func postAlertForSettings() {
         let alert = UIAlertController(title: "Apple Music Access Denied", message: "Go to settings to enable Apple Music for this app", preferredStyle: .alert)
-        alert.addAction(UIAlertAction(title: "Cancel", style: .default, handler: nil))
+        alert.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil))
         alert.addAction(UIAlertAction(title: "Settings", style: .default) { (_) in
             UIApplication.shared.open(URL(string: UIApplicationOpenSettingsURLString)!, options: [:], completionHandler: nil)
         })

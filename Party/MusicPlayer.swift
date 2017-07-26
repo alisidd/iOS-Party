@@ -10,42 +10,54 @@ import Foundation
 import StoreKit
 import MediaPlayer
 
-class MusicPlayer: NSObject {
-    
-    // MARK: - Apple Music Variables
-    private let serviceController = SKCloudServiceController()
-    var appleMusicPlayer = MPMusicPlayerController.applicationMusicPlayer() {
-        didSet {
-            initializeCommandCenter()
-        }
-    }
-    let authorizationDispatchGroup = DispatchGroup()
-    var isAuthorized = false {
-        didSet {
-            authorizationDispatchGroup.leave()
-        }
-    }
+class MusicPlayer {
     
     weak var delegate: AppleMusicAuthorizationAlertDelegate?
     
+    // MARK: - Apple Music Variables
+    var appleMusicPlayer = MPMusicPlayerController.applicationMusicPlayer()
+    let authorizationDispatchGroup = DispatchGroup()
+    var isAuthorized = false
+    
     // MARK: - Spotify Variables
     
-    var spotifyPlayer = SPTAudioStreamingController.sharedInstance() {
-        didSet {
-            initializeCommandCenter()
-        }
-    }
+    var spotifyPlayer = SPTAudioStreamingController.sharedInstance()
     
     // MARK: - General Variables
     
-    let commandCenter = MPRemoteCommandCenter.shared()
     var party = Party()
     var currentPosition: TimeInterval?
+    
+    // MARK: - General Functions
+    
+    init() {
+        initializeCommandCenter()
+        setupControlEvents()
+    }
+    
+    private func initializeCommandCenter() {
+        MPRemoteCommandCenter.shared().pauseCommand.isEnabled = true
+        MPRemoteCommandCenter.shared().playCommand.isEnabled = true
+    }
+    
+    private func setupControlEvents() {
+        UIApplication.shared.beginReceivingRemoteControlEvents()
+        
+        MPRemoteCommandCenter.shared().pauseCommand.addTarget { _ -> MPRemoteCommandHandlerStatus in
+            self.pauseTrack()
+            return .success
+        }
+        
+        MPRemoteCommandCenter.shared().playCommand.addTarget { _ -> MPRemoteCommandHandlerStatus in
+            self.playTrack()
+            return .success
+        }
+    }
     
     // MARK: - Apple Music Functions
     
     func hasCapabilities() {
-        serviceController.requestCapabilities{ (capability, error) in
+        SKCloudServiceController().requestCapabilities { (capability, error) in
             if capability.contains(.musicCatalogPlayback) || capability.contains(.addToCloudMusicLibrary) {
                 print("Has Apple Music capabilities")
             } else {
@@ -60,7 +72,6 @@ class MusicPlayer: NSObject {
         SKCloudServiceController.requestAuthorization { (status) in
             switch status {
             case .authorized:
-                self.initializeCommandCenter()
                 self.isAuthorized = true
             case .denied:
                 self.delegate?.postAlertForSettings()
@@ -68,6 +79,7 @@ class MusicPlayer: NSObject {
             default:
                 self.isAuthorized = false
             }
+            self.authorizationDispatchGroup.leave()
         }
     }
     
@@ -76,32 +88,7 @@ class MusicPlayer: NSObject {
         return appleMusicPlayer.playbackState == .stopped
     }
     
-    // MARK: - General Functions
-    
-    func initializeCommandCenter() {
-        commandCenter.pauseCommand.isEnabled = true
-        commandCenter.playCommand.isEnabled = true
-        
-        DispatchQueue.main.async {
-            self.setupControlEvents()
-        }
-    }
-    
-    func setupControlEvents() {
-        UIApplication.shared.beginReceivingRemoteControlEvents()
-        
-        commandCenter.pauseCommand.addTarget { (commandEvent) -> MPRemoteCommandHandlerStatus in
-            self.pauseTrack()
-            return .success
-        }
-        
-        commandCenter.playCommand.addTarget { (commandEvent) -> MPRemoteCommandHandlerStatus in
-            self.playTrack()
-            return .success
-        }
-    }
-    
-    // Improve - hard fails here randomly
+    // TODO: - hard fails here randomly
     func isPaused() -> Bool {
         return party.musicService == .appleMusic ? appleMusicPlayer.playbackState == .paused : spotifyPlayer?.playbackState.isPlaying == false
     }
@@ -139,7 +126,7 @@ class MusicPlayer: NSObject {
         }
     }
     
-    @objc func playTrack() {
+    func playTrack() {
         BackgroundTask.startBackgroundTask()
         if party.musicService == .appleMusic {
             appleMusicPlayer.play()
@@ -149,7 +136,7 @@ class MusicPlayer: NSObject {
         
     }
     
-    @objc func pauseTrack() {
+    func pauseTrack() {
         BackgroundTask.stopBackgroundTask()
         if party.musicService == .appleMusic {
             appleMusicPlayer.pause()

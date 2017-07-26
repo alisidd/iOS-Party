@@ -38,6 +38,7 @@
 		41A279E71F28DE1700C218A2 /* nanopb.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 41A279E21F28DE1700C218A2 /* nanopb.framework */; };
 		41A279E81F28DE1700C218A2 /* Pods_WeJ.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 41A279E31F28DE1700C218A2 /* Pods_WeJ.framework */; };
 		41A279E91F28DE1700C218A2 /* SwiftyJSON.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 41A279E41F28DE1700C218A2 /* SwiftyJSON.framework */; };
+		41A279EB1F28E54300C218A2 /* Appearance.swift in Sources */ = {isa = PBXBuildFile; fileRef = 41A279EA1F28E54300C218A2 /* Appearance.swift */; };
 		41C0AEB61E79512D00C797F0 /* searchTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 41C0AEB51E79512D00C797F0 /* searchTextField.swift */; };
 		41C0AEB81E79EDC700C797F0 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 41C0AEB71E79EDC700C797F0 /* GoogleService-Info.plist */; };
 		41C0AEBA1E7A0AC100C797F0 /* HubAndQueuePageViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 41C0AEB91E7A0AC100C797F0 /* HubAndQueuePageViewController.swift */; };
@@ -82,6 +83,7 @@
 		41A279E21F28DE1700C218A2 /* nanopb.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = nanopb.framework; path = "../../../Library/Developer/Xcode/DerivedData/WeJ-cvuxapiwahhdbhcxsozsrbwpxwln/Build/Products/Debug-iphonesimulator/nanopb/nanopb.framework"; sourceTree = "<group>"; };
 		41A279E31F28DE1700C218A2 /* Pods_WeJ.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Pods_WeJ.framework; path = "../../../Library/Developer/Xcode/DerivedData/WeJ-cvuxapiwahhdbhcxsozsrbwpxwln/Build/Products/Debug-iphonesimulator/Pods_WeJ.framework"; sourceTree = "<group>"; };
 		41A279E41F28DE1700C218A2 /* SwiftyJSON.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SwiftyJSON.framework; path = "../../../Library/Developer/Xcode/DerivedData/WeJ-cvuxapiwahhdbhcxsozsrbwpxwln/Build/Products/Debug-iphonesimulator/SwiftyJSON/SwiftyJSON.framework"; sourceTree = "<group>"; };
+		41A279EA1F28E54300C218A2 /* Appearance.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Appearance.swift; sourceTree = "<group>"; };
 		41C0AEB51E79512D00C797F0 /* searchTextField.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = searchTextField.swift; sourceTree = "<group>"; };
 		41C0AEB71E79EDC700C797F0 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		41C0AEB91E7A0AC100C797F0 /* HubAndQueuePageViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HubAndQueuePageViewController.swift; sourceTree = "<group>"; };
@@ -232,6 +234,7 @@
 				413421651E3D57B100888403 /* Connection Managers */,
 				413421641E3D57A300888403 /* Custom Objects */,
 				413421631E3D579600888403 /* Custom Appearance */,
+				41A279EC1F28E54700C218A2 /* Extensions */,
 				417C38D81DDA43FD00F59926 /* LaunchScreen.storyboard */,
 				417C38DB1DDA43FD00F59926 /* Info.plist */,
 				417C38D31DDA43FD00F59926 /* Party.xcdatamodeld */,
@@ -250,6 +253,14 @@
 				4160D4001E42EB0A00AF2ED6 /* Assets.xcassets */,
 			);
 			name = Resources;
+			sourceTree = "<group>";
+		};
+		41A279EC1F28E54700C218A2 /* Extensions */ = {
+			isa = PBXGroup;
+			children = (
+				41A279EA1F28E54300C218A2 /* Appearance.swift */,
+			);
+			name = Extensions;
 			sourceTree = "<group>";
 		};
 		B2F645F37144B3727E5025EE /* Frameworks */ = {
@@ -425,6 +436,7 @@
 				417B9D571E31CD8D0021F36E /* TrackTableViewCell.swift in Sources */,
 				417B9D531E31B3CE0021F36E /* Track.swift in Sources */,
 				417B9D551E31BC120021F36E /* RestApiManager.swift in Sources */,
+				41A279EB1F28E54300C218A2 /* Appearance.swift in Sources */,
 				417B9D4B1E317C3C0021F36E /* PartyViewController.swift in Sources */,
 				41835F901E81EE740082BA16 /* HubTableViewCell.swift in Sources */,
 			);

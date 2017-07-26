@@ -8,18 +8,6 @@
 
 import UIKit
 
-extension UIView {
-    func makeBorder() {
-        layer.borderWidth = 1
-        layer.borderColor = UIColor(red: 1, green: 166/255, blue: 35/255, alpha: 1).cgColor
-        layer.cornerRadius = 30
-    }
-    
-    func removeBorder() {
-        layer.borderWidth = 0
-    }
-}
-
 class InitialSetupViewController: UIViewController {
     
     @IBOutlet weak var createPartyButton: setupButton!
@@ -48,13 +36,11 @@ class InitialSetupViewController: UIViewController {
         backItem.title = ""
         navigationItem.backBarButtonItem = backItem
         
-        if segue.identifier == "Join Party" {
-            if let destinationVC = segue.destination as? PartyViewController {
-                print("Setting isHost to false")
-                destinationVC.isHost = false
-                destinationVC.networkManager?.delegate = destinationVC
-                navigationItem.backBarButtonItem = UIBarButtonItem(title: "", style: .plain, target: nil, action: nil)
-            }
+        if let destinationVC = segue.destination as? PartyViewController, segue.identifier == "Join Party" {
+            print("Setting isHost to false")
+            destinationVC.isHost = false
+            destinationVC.networkManager?.delegate = destinationVC
+            navigationItem.backBarButtonItem = UIBarButtonItem(title: "", style: .plain, target: nil, action: nil)
         }
     }
 }
