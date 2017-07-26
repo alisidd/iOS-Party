@@ -34,6 +34,7 @@ class HubAndQueuePageViewController: UIPageViewController, UIPageViewControllerD
         allViewControllers.append(tracksQueueViewController)
         
         let vc1 = allViewControllers[0] as! HubViewController
+        vc1.party = party
         vc1.delegate = partyDelegate!
         
         let vc2 = allViewControllers[1] as! QueueViewController

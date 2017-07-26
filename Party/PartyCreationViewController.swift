@@ -80,7 +80,7 @@ class PartyCreationViewController: UIViewController, UITextFieldDelegate, UIPick
     
     @IBAction func changeToAppleMusic(_ sender: setupButton) {
         if partyMade.musicService == .spotify {
-            UIView.animate(withDuration: 0.5) {
+            UIView.animate(withDuration: 0.2) {
                 self.selectButton(for: .appleMusic)
             }
             partyMade.musicService = .appleMusic
@@ -89,7 +89,7 @@ class PartyCreationViewController: UIViewController, UITextFieldDelegate, UIPick
     
     @IBAction func changeToSpotify(_ sender: setupButton) {
         if partyMade.musicService == .appleMusic {
-            UIView.animate(withDuration: 0.5) {
+            UIView.animate(withDuration: 0.2) {
                 self.selectButton(for: .spotify)
             }
             partyMade.musicService = .spotify
@@ -101,14 +101,14 @@ class PartyCreationViewController: UIViewController, UITextFieldDelegate, UIPick
             spotifyButton.makeBorder()
             appleMusicButton.removeBorder()
             
-            spotifyButton.titleLabel?.textColor = primaryColor
-            appleMusicButton.titleLabel?.textColor = secondaryColor
+            spotifyButton.alpha = 1
+            appleMusicButton.alpha = 0.6
         } else {
             appleMusicButton.makeBorder()
             spotifyButton.removeBorder()
             
-            appleMusicButton.titleLabel?.textColor = primaryColor
-            spotifyButton.titleLabel?.textColor = secondaryColor
+            appleMusicButton.alpha = 1
+            spotifyButton.alpha = 0.6
         }
     }
     

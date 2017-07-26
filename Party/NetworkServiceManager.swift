@@ -67,6 +67,20 @@ class NetworkServiceManager: NSObject {
     
     // MARK: - Functions
     
+    func advertise(forPosition position: TimeInterval) {
+        if sessions.count > 0 {
+            do {
+                let positionData = NSKeyedArchiver.archivedData(withRootObject: position)
+                for session in sessions.keys {
+                    try session.send(positionData, toPeers: session.connectedPeers, with: .reliable)
+                }
+                print("Sending Position")
+            } catch let error as NSError {
+                print(error.localizedDescription)
+            }
+        }
+    }
+    
     func sendTracks(_ tracksList: [String]) {
         if sessions.count > 0 {
             do {
@@ -245,6 +259,8 @@ extension NetworkServiceManager : MCSessionDelegate {
                 }
             }
             delegate?.addTracks(fromPeer: peerID, withTracks: tracksIDList)
+        } else if let position = unarchivedData as? TimeInterval {
+            delegate?.updatePosition(position: position)
         }
     }
     

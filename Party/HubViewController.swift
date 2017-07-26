@@ -27,6 +27,7 @@ class HubViewController: UIViewController, UITableViewDelegate, UITableViewDataS
             delegate?.setTableHeight(withHeight: newValue)
         }
     }
+    var party = Party()
     var previousScrollOffset: CGFloat = 0
 
     
@@ -51,7 +52,7 @@ class HubViewController: UIViewController, UITableViewDelegate, UITableViewDataS
         let absoluteTop: CGFloat = 0
         
         let isScrollingDown = scrollDiff > 0 && scrollView.contentOffset.y > absoluteTop
-        let isScrollingUp = scrollDiff < 0 && scrollView.contentOffset.y < absoluteTop
+        let isScrollingUp = scrollDiff < 0 && scrollView.contentOffset.y < absoluteTop && !party.tracksQueue.isEmpty
         var newHeight = headerHeightConstraint
         
         if isScrollingDown {
@@ -143,6 +144,17 @@ class HubViewController: UIViewController, UITableViewDelegate, UITableViewDataS
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         if hubTitles[indexPath.row] == "Leave Party" {
             leaveParty()
+        } else if !party.tracksQueue.isEmpty && delegate!.getCurrentProgress() != nil {
+            MXMLyricsAction.sharedExtension().findLyricsForSong(
+                withTitle: party.tracksQueue[0].name,
+                artist: party.tracksQueue[0].artist,
+                album: party.tracksQueue[0].album,
+                artWork: party.tracksQueue[0].highResArtwork,
+                currentProgress: delegate!.getCurrentProgress()!,
+                trackDuration: party.tracksQueue[0].length!,
+                for: self,
+                sender: tableView.dequeueReusableCell(withIdentifier: "Hub Cell")!,
+                competionHandler: nil)
         }
     }
     

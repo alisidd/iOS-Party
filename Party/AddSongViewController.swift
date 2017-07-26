@@ -10,7 +10,7 @@ import UIKit
 import BadgeSwift
 
 extension Collection where Indices.Iterator.Element == Index {
-    subscript (safe index: Index) -> Generator.Element? {
+    subscript (safe index: Index) -> Iterator.Element? {
         return indices.contains(index) ? self[index] : nil
     }
 }
@@ -212,8 +212,8 @@ class AddSongViewController: UIViewController, UICollectionViewDelegate, UIColle
     func fetchRestOfTracks() {
         let tracksCaptured = tracksList
         DispatchQueue.global(qos: .userInitiated).async {
-            if self.tracksList.count >= 10 {
-                for i in 10..<self.tracksList.count {
+            if self.tracksList.count > 5 {
+                for i in 5..<self.tracksList.count {
                     if tracksCaptured == self.tracksList {
                         let artworkFetched = self.APIManager.fetchImage(fromURL: self.tracksList[i].lowResArtworkURL)
                         DispatchQueue.main.async {

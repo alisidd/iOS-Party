@@ -33,11 +33,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     }
 
     func applicationDidEnterBackground(_ application: UIApplication) {
-        var bgTask: UIBackgroundTaskIdentifier = 0
-        let app = UIApplication.shared
-        bgTask = app.beginBackgroundTask(expirationHandler: {() -> Void in
-            app.endBackgroundTask(bgTask)
-        })
     }
 
     func applicationWillEnterForeground(_ application: UIApplication) {

@@ -47,6 +47,7 @@ protocol NetworkManagerDelegate: class {
     func setupParty(withParty party: Party)
     func addTracks(fromPeer peer: MCPeerID, withTracks tracks: [String])
     func removeTrackFromPeer(withTrack track: String)
+    func updatePosition(position: TimeInterval)
 }
 
 protocol UpdatePartyDelegate: class {
@@ -61,6 +62,7 @@ protocol PartyViewControllerInfoDelegate: class {
     func amHost() -> Bool
     func removeFromOthersQueue(forTrack track: Track)
     func personalQueue(hasTrack track: Track) -> Bool
+    func getCurrentProgress() -> TimeInterval?
 }
 
 class PartyViewController: UIViewController, SPTAudioStreamingDelegate, SPTAudioStreamingPlaybackDelegate, NetworkManagerDelegate, UpdatePartyDelegate, PartyViewControllerInfoDelegate {
@@ -216,7 +218,7 @@ class PartyViewController: UIViewController, SPTAudioStreamingDelegate, SPTAudio
             playUsingSession()
         } else {
             musicPlayer.appleMusicPlayer.beginGeneratingPlaybackNotifications()
-            NotificationCenter.default.addObserver(self, selector: #selector(PartyViewController.playNextTrack), name:NSNotification.Name.MPMusicPlayerControllerPlaybackStateDidChange, object: musicPlayer.appleMusicPlayer)
+            NotificationCenter.default.addObserver(self, selector: #selector(playNextTrack), name:.MPMusicPlayerControllerPlaybackStateDidChange, object: musicPlayer.appleMusicPlayer)
         }
     }
     
@@ -445,9 +447,7 @@ class PartyViewController: UIViewController, SPTAudioStreamingDelegate, SPTAudio
     
     func audioStreaming(_ audioStreaming: SPTAudioStreamingController!, didChangePosition position: TimeInterval) {
         if !party.tracksQueue.isEmpty {
-            if let wholeLength = party.tracksQueue[0].length {
-                progressBar.setProgress(Float(position)/Float(wholeLength), animated: true)
-            }
+            musicPlayer.currentPosition = position
         }
     }
     
@@ -490,7 +490,7 @@ class PartyViewController: UIViewController, SPTAudioStreamingDelegate, SPTAudio
     
     @objc func playNextTrack() {
         print(progressBar.progress)
-        if musicPlayer.safeToPlayNextTrack() && !party.tracksQueue.isEmpty && progressBar.progress > 0.96 {
+        if musicPlayer.safeToPlayNextTrack() && !party.tracksQueue.isEmpty {
             removeFromOthersQueue(forTrack: party.tracksQueue[0])
             print("Removing \(party.tracksQueue.removeFirst().name)")
             musicPlayer.modifyQueue(withTracks: party.tracksQueue)
@@ -516,6 +516,7 @@ class PartyViewController: UIViewController, SPTAudioStreamingDelegate, SPTAudio
             }
         }
     }
+    
     func setTimer() {
         let _ = Timer.scheduledTimer(withTimeInterval: 3, repeats: true) { [weak self] (timer) in
             self?.updateProgress()
@@ -524,12 +525,12 @@ class PartyViewController: UIViewController, SPTAudioStreamingDelegate, SPTAudio
     
     func updateProgress() {
         if !party.tracksQueue.isEmpty {
-            if let wholeLength = party.tracksQueue[0].length {
-                progressBar.setProgress(Float(musicPlayer.getCurrentPosition())/Float(wholeLength), animated: true)
+            if party.musicService == .appleMusic {
+                musicPlayer.currentPosition = musicPlayer.appleMusicPlayer.currentPlaybackTime
+                networkManager.advertise(forPosition: musicPlayer.currentPosition!)
             }
         }
-        networkManager.advertise()
-        
+        print("Running")
     }
     
     private func fetchImage(forTrack track: Track, setCurrentlyPlaying: Bool) -> UIImage? {
@@ -621,6 +622,10 @@ class PartyViewController: UIViewController, SPTAudioStreamingDelegate, SPTAudio
         self.party.danceability = party.danceability
     }
     
+    internal func updatePosition(position: TimeInterval) {
+        musicPlayer.currentPosition = position
+    }
+    
     // MARK: PartyViewControllerInfoDelegate
     
     func returnTableHeight() -> CGFloat {
@@ -642,5 +647,9 @@ class PartyViewController: UIViewController, SPTAudioStreamingDelegate, SPTAudio
             }
         }
         return false
+    }
+    
+    func getCurrentProgress() -> TimeInterval? {
+        return musicPlayer.currentPosition
     }
 }

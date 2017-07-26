@@ -12,6 +12,7 @@ class Track: NSObject {
     var id = String()
     var name = String()
     var artist = String()
+    var album = String()
     
     var lowResArtworkURL = String()
     var artwork: UIImage?

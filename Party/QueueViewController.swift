@@ -80,7 +80,7 @@ class QueueViewController: UIViewController, UITableViewDelegate, UITableViewDat
         let absoluteTop: CGFloat = 0
         
         let isScrollingDown = scrollDiff > 0 && scrollView.contentOffset.y > absoluteTop
-        let isScrollingUp = scrollDiff < 0 && scrollView.contentOffset.y < absoluteTop && party.tracksQueue.count > 0
+        let isScrollingUp = scrollDiff < 0 && scrollView.contentOffset.y < absoluteTop && !party.tracksQueue.isEmpty
         
         var newHeight = headerHeightConstraint
         

@@ -13,9 +13,12 @@ import MediaPlayer
 class MusicPlayer: NSObject {
     
     // MARK: - Apple Music Variables
-    
     private let serviceController = SKCloudServiceController()
-    let appleMusicPlayer = MPMusicPlayerController.applicationMusicPlayer()
+    var appleMusicPlayer = MPMusicPlayerController.applicationMusicPlayer() {
+        didSet {
+            initializeCommandCenter()
+        }
+    }
     let authorizationDispatchGroup = DispatchGroup()
     var isAuthorized = false {
         didSet {
@@ -37,6 +40,7 @@ class MusicPlayer: NSObject {
     
     let commandCenter = MPRemoteCommandCenter.shared()
     var party = Party()
+    var currentPosition: TimeInterval?
     
     // MARK: - Apple Music Functions
     
@@ -68,7 +72,8 @@ class MusicPlayer: NSObject {
     }
     
     func safeToPlayNextTrack() -> Bool {
-        return appleMusicPlayer.playbackState == .stopped && appleMusicPlayer.nowPlayingItem == nil
+        print(appleMusicPlayer.playbackState == .stopped)
+        return appleMusicPlayer.playbackState == .stopped
     }
     
     // MARK: - General Functions
@@ -77,7 +82,9 @@ class MusicPlayer: NSObject {
         commandCenter.pauseCommand.isEnabled = true
         commandCenter.playCommand.isEnabled = true
         
-        setupControlEvents()
+        DispatchQueue.main.async {
+            self.setupControlEvents()
+        }
     }
     
     func setupControlEvents() {
@@ -103,6 +110,7 @@ class MusicPlayer: NSObject {
     
     func modifyQueue(withTracks tracks: [Track]) {
         DispatchQueue.main.async {
+            BackgroundTask.startBackgroundTask()
             if self.party.musicService == .appleMusic {
                 self.modifyAppleMusicQueue(withTrack: tracks)
             } else {
@@ -132,6 +140,7 @@ class MusicPlayer: NSObject {
     }
     
     @objc func playTrack() {
+        BackgroundTask.startBackgroundTask()
         if party.musicService == .appleMusic {
             appleMusicPlayer.play()
         } else {
@@ -141,15 +150,11 @@ class MusicPlayer: NSObject {
     }
     
     @objc func pauseTrack() {
+        BackgroundTask.stopBackgroundTask()
         if party.musicService == .appleMusic {
             appleMusicPlayer.pause()
         } else {
             spotifyPlayer?.setIsPlaying(false, callback: nil)
         }
     }
-    
-    func getCurrentPosition() -> TimeInterval {
-        return appleMusicPlayer.currentPlaybackTime
-    }
-    
 }

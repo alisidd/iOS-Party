@@ -16,7 +16,7 @@ class RestApiManager {
     // Apple Music Variables
     private var appleTracksUrl = "https://itunes.apple.com/search?media=music&term="
     private let serviceController = SKCloudServiceController()
-    private var storefrontIdentifierFound = String()
+    private static var storefrontIdentifierFound = String()
     
     // Spotify Variables
     private var spotifyTracksUrl = "https://api.spotify.com/v1/"
@@ -38,15 +38,14 @@ class RestApiManager {
         
         DispatchQueue.global(qos: .userInitiated).async {
             // Get storefront identifer to ensure tracks returned are playable by the user
-            if self.storefrontIdentifierFound.isEmpty {
-                self.dispatchGroupForStorefrontFetch.enter()
+            if RestApiManager.storefrontIdentifierFound.isEmpty {
                 self.fetchStorefrontIdentifier()
                 self.dispatchGroupForStorefrontFetch.wait()
             }
             
             let term = string.addingPercentEncoding(withAllowedCharacters:NSCharacterSet.urlQueryAllowed)!
             
-            let requestURL = URL(string: self.appleTracksUrl + term.replacingOccurrences(of: " ", with: "+") + "&s=" + self.storefrontIdentifierFound)
+            let requestURL = URL(string: self.appleTracksUrl + term.replacingOccurrences(of: " ", with: "+") + "&s=" + RestApiManager.storefrontIdentifierFound)
             
             if let unwrappedURL = requestURL {
                 let task = URLSession.shared.dataTask(with: unwrappedURL) { (data, response, error) in
@@ -68,10 +67,14 @@ class RestApiManager {
     }
     
     func fetchStorefrontIdentifier() {
+        self.dispatchGroupForStorefrontFetch.enter()
         serviceController.requestStorefrontIdentifier { (storefrontIdentifier, error) in
+            
+            
             if let storefrontId = storefrontIdentifier, storefrontId.characters.count >= 6 {
                 let range = storefrontId.startIndex...storefrontId.index(storefrontId.startIndex, offsetBy: 5)
-                self.storefrontIdentifierFound = storefrontId[range]
+                RestApiManager.storefrontIdentifierFound = String(storefrontId[range])
+                print(RestApiManager.storefrontIdentifierFound)
             }
             
             self.dispatchGroupForStorefrontFetch.leave()
@@ -83,12 +86,12 @@ class RestApiManager {
             tracksList.removeAll()
         }
         
-        var count = 0
         for track in json["results"].arrayValue {
             let newTrack = Track()
             newTrack.id = track["trackId"].stringValue
             newTrack.name = track["trackName"].stringValue
             newTrack.artist = track["artistName"].stringValue
+            newTrack.album = track["collectionName"].stringValue
             
             //print("Fetched \(newTrack.name)")
             
@@ -98,7 +101,7 @@ class RestApiManager {
             
             newTrack.lowResArtworkURL = track["artworkUrl60"].stringValue
             
-            if count < 10 {
+            if tracksList.count < 5 {
                 newTrack.artwork = fetchImage(fromURL: newTrack.lowResArtworkURL)
             }
             
@@ -107,8 +110,6 @@ class RestApiManager {
             newTrack.length = TimeInterval(track["trackTimeMillis"].doubleValue / 1000)
             
             tracksList.append(newTrack)
-            
-            count += 1
         }
     }
     
@@ -132,15 +133,23 @@ class RestApiManager {
     }
     
     func makeHTTPRequestToSpotify(withString string: String) {
+        if RestApiManager.spotifyAccessToken == nil {
+            print("Authorizing")
+            authorizeSpotifyAccess()
+            dispatchGroup.wait()
+        }
         dispatchGroup.enter()
         
         DispatchQueue.global(qos: .userInitiated).async {
             
             let term = string.addingPercentEncoding(withAllowedCharacters:NSCharacterSet.urlQueryAllowed)!
             
-            let requestURL = URL(string: self.spotifyTracksUrl + "search?q=" + term.replacingOccurrences(of: " ", with: "+") + "&type=track")
+            var request = URLRequest(url: URL(string: self.spotifyTracksUrl + "search?q=" + term.replacingOccurrences(of: " ", with: "+") + "&type=track")!)
+            request.addValue("Bearer \(RestApiManager.spotifyAccessToken!)", forHTTPHeaderField: "Authorization")
+            request.addValue("application/x-www-form-urlencoded", forHTTPHeaderField: "Content-Type")
             
-            let task = URLSession.shared.dataTask(with: requestURL!) { (data, response, error) in
+            
+            let task = URLSession.shared.dataTask(with: request) { (data, response, error) in
                 if let statusCode = (response as? HTTPURLResponse)?.statusCode {
                     if statusCode == 200 {
                         let json = JSON(data: data!)
@@ -163,8 +172,9 @@ class RestApiManager {
                     
                     newTrack.id = track["id"].stringValue
                     newTrack.name = track["name"].stringValue
+                    newTrack.album = track["album"]["name"].stringValue
                     
-                    for artists in track["artists"].arrayValue { //get other artists too
+                    for artists in track["artists"].arrayValue {
                         newTrack.artist = artists["name"].stringValue
                         break
                     }
@@ -227,6 +237,7 @@ class RestApiManager {
         
         newTrack.id = track["id"].stringValue
         newTrack.name = track["name"].stringValue
+        newTrack.album = track["album"]["name"].stringValue
         
         for artists in track["artists"].arrayValue { //get other artists too
             newTrack.artist = artists["name"].stringValue
@@ -303,7 +314,7 @@ class RestApiManager {
     func getRequestForAccessToken() -> URLRequest {
         var request = URLRequest(url: URL(string: "https://accounts.spotify.com/api/token")!)
         request.httpMethod = "POST"
-        request.addValue("Basic MzA4NjU3ZDk2NjIxNDZlY2FlNTc4NTVhYzJhMDEwNDU6MWE1Y2I4MzlkYTg4NGFmMGJjNjZkMDVlOGFmMmIwYTA=", forHTTPHeaderField: "Authorization")
+        request.addValue("Basic MzA4NjU3ZDk2NjIxNDZlY2FlNTc4NTVhYzJhMDEwNDU6YWM5NmVlOTBjMTQ3NDE1ZWEzY2EzOGViNTU2M2MwZWE=", forHTTPHeaderField: "Authorization")
         request.addValue("application/x-www-form-urlencoded", forHTTPHeaderField: "Content-Type")
         request.httpBody = "grant_type=client_credentials".data(using: String.Encoding.utf8)
         
