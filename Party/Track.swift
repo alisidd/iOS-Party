@@ -30,8 +30,10 @@ class Track: NSObject {
             return .service(ofType: .spotify)
         } else if track.hasPrefix("A:") {
             return .service(ofType: .appleMusic)
-        } else {
+        } else if track.hasPrefix("R:") {
             return .removal
+        } else {
+            return .none
         }
     }
 }

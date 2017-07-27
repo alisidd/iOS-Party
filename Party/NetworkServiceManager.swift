@@ -246,13 +246,11 @@ extension NetworkServiceManager : MCSessionDelegate {
         if let party = unarchivedData as? Party {
             delegate?.setupParty(withParty: party)
         } else if var tracksIDList = unarchivedData as? [String] {
-            if !tracksIDList.isEmpty {
-                if tracksIDList[0].contains(":/?r") {
-                    delegate?.removeTrackFromPeer(withTrack: tracksIDList[0])
-                    return
-                }
+            if !tracksIDList.isEmpty, case .removal = Track.typeOf(track: tracksIDList[0]) {
+                delegate?.removeTrackFromPeer(withTrack: tracksIDList[0])
+            } else {
+                delegate?.addTracks(fromPeer: peerID, withTracks: tracksIDList)
             }
-            delegate?.addTracks(fromPeer: peerID, withTracks: tracksIDList)
         } else if let position = unarchivedData as? TimeInterval {
             delegate?.updatePosition(position: position)
         }

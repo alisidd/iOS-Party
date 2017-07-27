@@ -11,4 +11,5 @@ import Foundation
 enum TrackType {
     case removal
     case service(ofType: MusicService)
+    case none
 }

@@ -255,19 +255,16 @@ class QueueViewController: UIViewController, UITableViewDelegate, UITableViewDat
     func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCellEditingStyle, forRowAt indexPath: IndexPath) {
         if editingStyle == .delete {
             tableView.beginUpdates()
-            removeFromQueue(track: party.tracksQueue[indexPath.row + 1])
+            removeTrack(atIndex: indexPath.row + 1)
             tableView.deleteRows(at: [indexPath], with: .automatic)
             tableView.endUpdates()
         }
     }
     
-    func removeFromQueue(track: Track) {
-        for trackInQueue in party.tracksQueue {
-            if trackInQueue.id == track.id {
-                party.tracksQueue.remove(at: party.tracksQueue.index(of: trackInQueue)!)
-                delegate?.removeFromOthersQueue(forTrack: track)
-            }
-        }
+    func removeTrack(atIndex index: Int) {
+        let track = party.tracksQueue[index]
+        party.tracksQueue.remove(at: index)
+        delegate?.removeFromOthersQueue(forTrack: track)
     }
     
     func tableView(_ tableView: UITableView, editActionsForRowAt indexPath: IndexPath) -> [UITableViewRowAction]? {

@@ -362,22 +362,18 @@ class PartyViewController: UIViewController, SPTAudioStreamingDelegate, SPTAudio
     }
     
     func removeFromOthersQueue(forTrack track: Track) {
-        track.id += ":/?r"
+        track.id = "R:" + track.id
         sendTracksToPeers(forTracks: [track])
     }
     
     func removeTrackFromPeer(withTrack trackID: String) {
-        let id = trackID.components(separatedBy: ":")[0]
+        let id = trackID.components(separatedBy: ":")[1]
         
-        for trackInQueue in party.tracksQueue {
-            if id == trackInQueue.id {
-                party.tracksQueue.remove(at: party.tracksQueue.index(of: trackInQueue)!)
-                lyricsAndQueueVC.updateTable()
+        for i in 0..<party.tracksQueue.count {
+            if id == party.tracksQueue[i].id {
+                party.tracksQueue.remove(at: i)
+                break
             }
-        }
-        
-        if party.tracksQueue.isEmpty {
-            lyricsAndQueueVC.expandTracksTable()
         }
     }
     
