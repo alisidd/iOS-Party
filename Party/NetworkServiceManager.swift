@@ -93,7 +93,7 @@ class NetworkServiceManager: NSObject {
     func sendPartyInfo(forParty party: Party, toSession session: MCSession) {
         if sessions.count > 0 {
             do {
-                let tracksData = NSKeyedArchiver.archivedData(withRootObject: id(ofTracks: party.tracksQueue, forService: party.musicService))
+                let tracksData = NSKeyedArchiver.archivedData(withRootObject: delegate!.id(ofTracks: party.tracksQueue, withRemoval: false))
                 let partyData = NSKeyedArchiver.archivedData(withRootObject: party)
                 print("Number of active sessions: \(sessions.count)")
                 try session.send(partyData, toPeers: session.connectedPeers, with: .reliable)
@@ -103,18 +103,6 @@ class NetworkServiceManager: NSObject {
                 print(error.localizedDescription)
             }
         }
-    }
-    
-    func id(ofTracks tracks: [Track], forService service: MusicService) -> [String] {
-        var result = [String]()
-        for track in tracks {
-            if service == .spotify {
-                result.append(track.id)
-            } else {
-                result.append(track.id + "-" + track.artist)
-            }
-        }
-        return result
     }
 }
 
@@ -247,7 +235,7 @@ extension NetworkServiceManager : MCSessionDelegate {
             delegate?.setupParty(withParty: party)
         } else if var tracksIDList = unarchivedData as? [String] {
             if !tracksIDList.isEmpty, case .removal = Track.typeOf(track: tracksIDList[0]) {
-                delegate?.removeTrackFromPeer(withTrack: tracksIDList[0])
+                delegate?.remove(trackID: tracksIDList[0])
             } else {
                 delegate?.addTracks(fromPeer: peerID, withTracks: tracksIDList)
             }

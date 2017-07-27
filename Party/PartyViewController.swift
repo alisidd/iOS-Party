@@ -16,7 +16,8 @@ protocol NetworkManagerDelegate: class {
     func sendPartyInfo(toSession session: MCSession)
     func setupParty(withParty party: Party)
     func addTracks(fromPeer peer: MCPeerID, withTracks tracks: [String])
-    func removeTrackFromPeer(withTrack track: String)
+    func id(ofTracks tracks: [Track], withRemoval: Bool) -> [String]
+    func remove(trackID: String)
     func updatePosition(position: TimeInterval)
 }
 
@@ -30,7 +31,7 @@ protocol PartyViewControllerInfoDelegate: class {
     func setTableHeight(withHeight height: CGFloat)
     func layout()
     func amHost() -> Bool
-    func removeFromOthersQueue(forTrack track: Track)
+    func sendTracksToPeers(forTracks: [Track], toRemove: Bool)
     func personalQueue(hasTrack track: Track) -> Bool
     func getCurrentProgress() -> TimeInterval?
 }
@@ -38,6 +39,8 @@ protocol PartyViewControllerInfoDelegate: class {
 class PartyViewController: UIViewController, SPTAudioStreamingDelegate, SPTAudioStreamingPlaybackDelegate, NetworkManagerDelegate, UpdatePartyDelegate, PartyViewControllerInfoDelegate {
     
     // MARK: - Storyboard Variables
+    
+    // FIXME: - When adding tracks on host, low res image only loads for first 5 tracks on apple music
     
     // Currently Playing
     @IBOutlet weak var currentlyPlayingArtwork: UIImageView!
@@ -200,6 +203,7 @@ class PartyViewController: UIViewController, SPTAudioStreamingDelegate, SPTAudio
                 if setCurrentlyPlaying && !party.tracksQueue.isEmpty && track == party.tracksQueue[0] {
                     let data = try Data(contentsOf: url)
                     // FIXME: - Crash here when adding a track on nonHost when party is empty on nonHost but 1 track in host
+                    // FIXME: - Crash on host here when tracks on host finish
                     print("Setting high res image for \(party.tracksQueue[0].name)")
                     setCurrentlyPlayingImage(withImage: UIImage(data: data))
                 } else if !setCurrentlyPlaying {
@@ -248,20 +252,22 @@ class PartyViewController: UIViewController, SPTAudioStreamingDelegate, SPTAudio
     }
     
     // Handles addition and removal of tracks
-    private func sendTracksToPeers(forTracks tracks: [Track]) {
-        let tracksIDString = id(ofTracks: tracks)
+    func sendTracksToPeers(forTracks tracks: [Track], toRemove: Bool = false) {
+        let tracksIDs = id(ofTracks: tracks, withRemoval: toRemove)
         if isHost || (!isHost && !tracks.isEmpty) {
-            networkManager.sendTracks(tracksIDString)
+            networkManager.sendTracks(tracksIDs)
         }
     }
     
-    func id(ofTracks tracks: [Track]) -> [String] {
+    func id(ofTracks tracks: [Track], withRemoval: Bool = false) -> [String] {
         var result = [String]()
         for track in tracks {
-            if party.musicService == .spotify {
-                result.append(track.id)
+            if withRemoval {
+                result.append("R:" + track.id)
+            } else if party.musicService == .spotify {
+                result.append("S:" + track.id)
             } else {
-                result.append(track.id + "-" + track.artist)
+                result.append("A:" + track.id + "-" + track.artist)
             }
         }
         return result
@@ -284,7 +290,7 @@ class PartyViewController: UIViewController, SPTAudioStreamingDelegate, SPTAudio
             if let requestTracks = self.APIManager.latestRequest[peer], requestTracks == tracks {
                 
                 for trackID in tracks {
-                    if self.isASpotifyTrack(forTrackID: trackID) {
+                    if case .service(.spotify) = Track.typeOf(track: trackID) {
                         API.makeHTTPRequestToSpotifyForSingleTrack(forID: trackID)
                     } else {
                         API.makeHTTPRequestToAppleForSingleTrack(forID: trackID)
@@ -338,11 +344,6 @@ class PartyViewController: UIViewController, SPTAudioStreamingDelegate, SPTAudio
         }
     }
     
-    func isASpotifyTrack(forTrackID id: String) -> Bool {
-        let ids = id.components(separatedBy: "-")
-        return ids.count == 1
-    }
-    
     func indexInCache(ofTrack track: Track) -> Int? {
         for i in 0..<cache.count {
             if cache[i].id == track.id {
@@ -361,12 +362,7 @@ class PartyViewController: UIViewController, SPTAudioStreamingDelegate, SPTAudio
         }
     }
     
-    func removeFromOthersQueue(forTrack track: Track) {
-        track.id = "R:" + track.id
-        sendTracksToPeers(forTracks: [track])
-    }
-    
-    func removeTrackFromPeer(withTrack trackID: String) {
+    func remove(trackID: String) {
         let id = trackID.components(separatedBy: ":")[1]
         
         for i in 0..<party.tracksQueue.count {
@@ -434,8 +430,7 @@ class PartyViewController: UIViewController, SPTAudioStreamingDelegate, SPTAudio
     
     @objc func playNextTrack() {
         if musicPlayer.safeToPlayNextTrack() && !party.tracksQueue.isEmpty {
-            removeFromOthersQueue(forTrack: party.tracksQueue[0])
-            print("Removing \(party.tracksQueue.removeFirst().name)")
+            sendTracksToPeers(forTracks: [party.tracksQueue.removeFirst()], toRemove: true)
             musicPlayer.modifyQueue(withTracks: party.tracksQueue)
             
             //TODO: - Isn't this automatically called by removing the top track?
@@ -445,11 +440,8 @@ class PartyViewController: UIViewController, SPTAudioStreamingDelegate, SPTAudio
     
     @IBAction func skipTrack(_ sender: UIButton) {
         if !party.tracksQueue.isEmpty {
-            removeFromOthersQueue(forTrack: party.tracksQueue[0])
-            print("Removing \(party.tracksQueue.removeFirst().name)")
+            sendTracksToPeers(forTracks: [party.tracksQueue.removeFirst()], toRemove: true)
             musicPlayer.modifyQueue(withTracks: party.tracksQueue)
-            
-            updateEveryonesTableView()
         }
     }
     

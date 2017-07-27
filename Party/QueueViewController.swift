@@ -264,7 +264,7 @@ class QueueViewController: UIViewController, UITableViewDelegate, UITableViewDat
     func removeTrack(atIndex index: Int) {
         let track = party.tracksQueue[index]
         party.tracksQueue.remove(at: index)
-        delegate?.removeFromOthersQueue(forTrack: track)
+        delegate?.sendTracksToPeers(forTracks: [track], toRemove: true)
     }
     
     func tableView(_ tableView: UITableView, editActionsForRowAt indexPath: IndexPath) -> [UITableViewRowAction]? {

@@ -92,7 +92,7 @@ class RestApiManager {
     }
     
     func makeHTTPRequestToAppleForSingleTrack(forID id: String) {
-        let ids = id.components(separatedBy: "-")
+        let ids = id.components(separatedBy: ":")[1].components(separatedBy: "-")
         let trackID = ids[0]
         let artistName = ids[1]
         makeHTTPRequestToApple(withString: artistName, withPossibleTrackID: trackID)
@@ -181,12 +181,18 @@ class RestApiManager {
     }
     
     func makeHTTPRequestToSpotifyForSingleTrack(forID id: String, shouldFetchLowRes fetchLowRes: Bool = true) {
+        if SpotifyAuthorizationManager.spotifyAccessToken.isEmpty {
+            print("Authorizing")
+            SpotifyAuthorizationManager.authorizeSpotifyAccess()
+            SpotifyAuthorizationManager.dispatchGroup.wait()
+        }
         dispatchGroup.enter()
-        
         DispatchQueue.global(qos: .userInitiated).async {
-            let requestURL = URL(string: self.spotifyTracksUrl + "tracks/" + id)
+            var requestURL = URLRequest(url: URL(string: self.spotifyTracksUrl + "tracks/" + id.components(separatedBy: ":")[1])!)
+            requestURL.addValue("Bearer \(SpotifyAuthorizationManager.spotifyAccessToken)", forHTTPHeaderField: "Authorization")
+            requestURL.addValue("application/x-www-form-urlencoded", forHTTPHeaderField: "Content-Type")
             
-            let task = URLSession.shared.dataTask(with: requestURL!) { (data, response, error) in
+            let task = URLSession.shared.dataTask(with: requestURL) { (data, response, error) in
                 if let statusCode = (response as? HTTPURLResponse)?.statusCode {
                     if statusCode == 200 {
                         let json = JSON(data: data!)
