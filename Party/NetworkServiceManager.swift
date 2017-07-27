@@ -61,7 +61,7 @@ class NetworkServiceManager: NSObject {
     
     // MARK: - Functions
     
-    func advertise(forPosition position: TimeInterval) {
+    func advertise(position: TimeInterval) {
         if sessions.count > 0 {
             do {
                 let positionData = NSKeyedArchiver.archivedData(withRootObject: position)
@@ -92,16 +92,11 @@ class NetworkServiceManager: NSObject {
     
     func sendPartyInfo(forParty party: Party, toSession session: MCSession) {
         if sessions.count > 0 {
-            do {
-                let tracksData = NSKeyedArchiver.archivedData(withRootObject: delegate!.id(ofTracks: party.tracksQueue, withRemoval: false))
-                let partyData = NSKeyedArchiver.archivedData(withRootObject: party)
-                print("Number of active sessions: \(sessions.count)")
-                try session.send(partyData, toPeers: session.connectedPeers, with: .reliable)
-                try session.send(tracksData, toPeers: session.connectedPeers, with: .reliable)
-                print("Sending Party info to other device")
-            } catch {
-                print(error.localizedDescription)
-            }
+            let tracksData = NSKeyedArchiver.archivedData(withRootObject: delegate!.id(ofTracks: party.tracksQueue, withRemoval: false))
+            let partyData = NSKeyedArchiver.archivedData(withRootObject: party)
+            print("Number of active sessions: \(sessions.count)")
+            try? session.send(partyData, toPeers: session.connectedPeers, with: .reliable)
+            try? session.send(tracksData, toPeers: session.connectedPeers, with: .reliable)
         }
     }
 }
@@ -213,7 +208,7 @@ extension NetworkServiceManager : MCSessionDelegate {
         print("peer \(peerID) didChangeState: \(state.stringValue())")
         delegate?.connectedDevicesChanged(self, connectedDevices: session.connectedPeers.map{$0.displayName})
         if !isHost {
-            delegate?.updateStatus(with: state)
+            delegate?.updateStatus(withState: state)
         }
         if state == .connected {
             print("Calling function to send party info")

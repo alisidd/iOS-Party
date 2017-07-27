@@ -10,37 +10,38 @@ import UIKit
 import MediaPlayer
 import MultipeerConnectivity
 
-protocol NetworkManagerDelegate: class {
-    func connectedDevicesChanged(_ manager : NetworkServiceManager, connectedDevices: [String])
-    func updateStatus(with state: MCSessionState)
-    func sendPartyInfo(toSession session: MCSession)
-    func setupParty(withParty party: Party)
-    func addTracks(fromPeer peer: MCPeerID, withTracks tracks: [String])
-    func id(ofTracks tracks: [Track], withRemoval: Bool) -> [String]
-    func remove(trackID: String)
-    func updatePosition(position: TimeInterval)
-}
-
 protocol UpdatePartyDelegate: class {
     func updateEveryonesTableView()
     func showCurrentlyPlayingArtwork()
 }
 
+protocol NetworkManagerDelegate: class {
+    func id(ofTracks tracks: [Track], withRemoval: Bool) -> [String]
+    func remove(trackID: String)
+    func connectedDevicesChanged(_ manager : NetworkServiceManager, connectedDevices: [String])
+    func updateStatus(withState state: MCSessionState)
+    func sendPartyInfo(toSession session: MCSession)
+    func setupParty(withParty party: Party)
+    func addTracks(fromPeer peer: MCPeerID, withTracks tracks: [String])
+    func updatePosition(position: TimeInterval)
+}
+
 protocol PartyViewControllerInfoDelegate: class {
+    var personalQueue: Set<Track> { get }
+    func sendTracksToPeers(forTracks: [Track], toRemove: Bool)
     func returnTableHeight() -> CGFloat
     func setTableHeight(withHeight height: CGFloat)
     func layout()
     func amHost() -> Bool
-    func sendTracksToPeers(forTracks: [Track], toRemove: Bool)
-    func personalQueue(hasTrack track: Track) -> Bool
     func getCurrentProgress() -> TimeInterval?
 }
 
-class PartyViewController: UIViewController, SPTAudioStreamingDelegate, SPTAudioStreamingPlaybackDelegate, NetworkManagerDelegate, UpdatePartyDelegate, PartyViewControllerInfoDelegate {
+class PartyViewController: UIViewController, SPTAudioStreamingDelegate, SPTAudioStreamingPlaybackDelegate, UpdatePartyDelegate, NetworkManagerDelegate, PartyViewControllerInfoDelegate {
     
     // MARK: - Storyboard Variables
     
     // FIXME: - When adding tracks on host, low res image only loads for first 5 tracks on apple music
+    // FIXME: - If nonhost adds first track, host queue doesn't pull down
     
     // Currently Playing
     @IBOutlet weak var currentlyPlayingArtwork: UIImageView!
@@ -81,7 +82,7 @@ class PartyViewController: UIViewController, SPTAudioStreamingDelegate, SPTAudio
     var party = Party()
     private var musicPlayer = MusicPlayer()
     var isHost = true
-    private var personalQueue = [Track]()
+    var personalQueue = Set<Track>()
     private var cache = [Track]()
     
     // MARK: - Lifecycle
@@ -120,7 +121,7 @@ class PartyViewController: UIViewController, SPTAudioStreamingDelegate, SPTAudio
         }
     }
     
-    func initializeMusicPlayer() {
+    private func initializeMusicPlayer() {
         setTimer()
         musicPlayer.musicService = party.musicService
         
@@ -133,28 +134,27 @@ class PartyViewController: UIViewController, SPTAudioStreamingDelegate, SPTAudio
         }
     }
     
-    func setTimer() {
+    private func setTimer() {
         let _ = Timer.scheduledTimer(withTimeInterval: 1, repeats: true) { [weak self] _ in
             self?.updateProgress()
         }
     }
     
-    func updateProgress() {
+    private func updateProgress() {
         if !party.tracksQueue.isEmpty {
             if party.musicService == .appleMusic {
                 musicPlayer.currentPosition = musicPlayer.appleMusicPlayer.currentPlaybackTime
-                networkManager.advertise(forPosition: musicPlayer.currentPosition!)
+                networkManager.advertise(position: musicPlayer.currentPosition!)
             }
         }
         print("Running")
     }
     
-    // MARK: - Modify Queue and Views From Peers
+    // MARK: - UpdatePartyDelegate
     
-    internal func updateEveryonesTableView() {
+    func updateEveryonesTableView() {
         // Update own table view
         lyricsAndQueueVC.updateTable()
-        
         updateCurrentlyPlayingTrack()
         
         // Update peers tableview
@@ -169,7 +169,7 @@ class PartyViewController: UIViewController, SPTAudioStreamingDelegate, SPTAudio
         }
     }
     
-    func updateCurrentlyPlayingTrack() {
+    private func updateCurrentlyPlayingTrack() {
         DispatchQueue.main.async {
             if !self.party.tracksQueue.isEmpty {
                 if self.party.tracksQueue.count == 1 {
@@ -184,7 +184,7 @@ class PartyViewController: UIViewController, SPTAudioStreamingDelegate, SPTAudio
         }
     }
     
-    func updateArtworkForCurrentlyPlaying() {
+    private func updateArtworkForCurrentlyPlaying() {
         if let highResArtwork = party.tracksQueue[0].highResArtwork {
             currentlyPlayingArtwork.image = highResArtwork.addGradient()
         } else {
@@ -219,7 +219,7 @@ class PartyViewController: UIViewController, SPTAudioStreamingDelegate, SPTAudio
         return nil
     }
     
-    func setCurrentlyPlayingImage(withImage image: UIImage?) {
+    private func setCurrentlyPlayingImage(withImage image: UIImage?) {
         if let unwrappedImage = image {
             DispatchQueue.main.async {
                 self.currentlyPlayingArtwork.image = unwrappedImage.addGradient()
@@ -239,7 +239,7 @@ class PartyViewController: UIViewController, SPTAudioStreamingDelegate, SPTAudio
         }
     }
     
-    func hideCurrentlyPlayingArtwork() {
+    private func hideCurrentlyPlayingArtwork() {
         DispatchQueue.main.async {
             self.currentlyPlayingArtwork.isHidden = true
             self.currentlyPlayingArtwork.image = nil
@@ -253,8 +253,8 @@ class PartyViewController: UIViewController, SPTAudioStreamingDelegate, SPTAudio
     
     // Handles addition and removal of tracks
     func sendTracksToPeers(forTracks tracks: [Track], toRemove: Bool = false) {
-        let tracksIDs = id(ofTracks: tracks, withRemoval: toRemove)
         if isHost || (!isHost && !tracks.isEmpty) {
+            let tracksIDs = id(ofTracks: tracks, withRemoval: toRemove)
             networkManager.sendTracks(tracksIDs)
         }
     }
@@ -273,7 +273,7 @@ class PartyViewController: UIViewController, SPTAudioStreamingDelegate, SPTAudio
         return result
     }
     
-    func updatePersonalQueue() {
+    private func updatePersonalQueue() {
         for track in personalQueue {
             if !party.tracksQueue.contains(track) {
                 personalQueue.remove(at: personalQueue.index(of: track)!)
@@ -282,6 +282,15 @@ class PartyViewController: UIViewController, SPTAudioStreamingDelegate, SPTAudio
     }
     
     func addTracks(fromPeer peer: MCPeerID, withTracks tracks: [String]) {
+        func indexInCache(ofTrack track: Track) -> Int? {
+            for i in 0..<cache.count {
+                if cache[i].id == track.id {
+                    return i
+                }
+            }
+            return nil
+        }
+        
         APIManager.latestRequest[peer] = tracks
         
         DispatchQueue.global(qos: .userInteractive).async {
@@ -304,7 +313,7 @@ class PartyViewController: UIViewController, SPTAudioStreamingDelegate, SPTAudio
                     if self.isHost {
                         self.party.tracksQueue.append(contentsOf: API.tracksList)
                         if self.party.tracksQueue.count == API.tracksList.count {
-                            self.musicPlayer.modifyQueue(withTracks: self.party.tracksQueue)
+                            self.musicPlayer.startPlayer(withTracks: self.party.tracksQueue)
                         }
                         self.fetchHighResArtwork(forTracks: API.tracksList)
                     } else {
@@ -320,7 +329,7 @@ class PartyViewController: UIViewController, SPTAudioStreamingDelegate, SPTAudio
                             var newTracks = [Track]()
                             
                             for newTrack in API.tracksList {
-                                if let index = self.indexInCache(ofTrack: newTrack) {
+                                if let index = indexInCache(ofTrack: newTrack) {
                                     wholeNewQueue.append(self.cache[index])
                                 } else {
                                     wholeNewQueue.append(newTrack)
@@ -344,16 +353,7 @@ class PartyViewController: UIViewController, SPTAudioStreamingDelegate, SPTAudio
         }
     }
     
-    func indexInCache(ofTrack track: Track) -> Int? {
-        for i in 0..<cache.count {
-            if cache[i].id == track.id {
-                return i
-            }
-        }
-        return nil
-    }
-    
-    func fetchHighResArtwork(forTracks tracks: [Track]) {
+    private func fetchHighResArtwork(forTracks tracks: [Track]) {
         for track in tracks {
             if let index = party.tracksQueue.index(of: track) {
                 print("Fetching high res artwork for \(track.name)")
@@ -375,11 +375,11 @@ class PartyViewController: UIViewController, SPTAudioStreamingDelegate, SPTAudio
     
     // MARK: - Playback
     
-    internal func audioStreamingDidLogin(_ audioStreaming: SPTAudioStreamingController!) {
+    func audioStreamingDidLogin(_ audioStreaming: SPTAudioStreamingController!) {
         // Make sure it's a premium account
     }
     
-    internal func audioStreaming(_ audioStreaming: SPTAudioStreamingController!, didChangePlaybackStatus isPlaying: Bool) {
+    func audioStreaming(_ audioStreaming: SPTAudioStreamingController!, didChangePlaybackStatus isPlaying: Bool) {
         if isPlaying {
             activateAudioSession()
         }
@@ -428,20 +428,17 @@ class PartyViewController: UIViewController, SPTAudioStreamingDelegate, SPTAudio
     
     // MARK: - Callbacks
     
-    @objc func playNextTrack() {
+    @objc private func playNextTrack() {
         if musicPlayer.safeToPlayNextTrack() && !party.tracksQueue.isEmpty {
             sendTracksToPeers(forTracks: [party.tracksQueue.removeFirst()], toRemove: true)
-            musicPlayer.modifyQueue(withTracks: party.tracksQueue)
-            
-            //TODO: - Isn't this automatically called by removing the top track?
-            updateEveryonesTableView()
+            musicPlayer.startPlayer(withTracks: party.tracksQueue)
         }
     }
     
     @IBAction func skipTrack(_ sender: UIButton) {
         if !party.tracksQueue.isEmpty {
             sendTracksToPeers(forTracks: [party.tracksQueue.removeFirst()], toRemove: true)
-            musicPlayer.modifyQueue(withTracks: party.tracksQueue)
+            musicPlayer.startPlayer(withTracks: party.tracksQueue)
         }
     }
     
@@ -461,14 +458,15 @@ class PartyViewController: UIViewController, SPTAudioStreamingDelegate, SPTAudio
             DispatchQueue.global(qos: .userInitiated).async {
                 self.party.tracksFromPeers.append(contentsOf: VC.tracksQueue)
                 self.party.tracksQueue.append(contentsOf: VC.tracksQueue)
-                self.personalQueue.append(contentsOf: VC.tracksQueue)
+                self.personalQueue = self.personalQueue.union(Set(VC.tracksQueue))
                 
+                // TODO: go out of editing mode
                 if self.party.tracksQueue.count > 0 {
                     self.lyricsAndQueueVC.minimizeTracksTable()
                 }
                 
                 if self.party.tracksQueue.count == VC.tracksQueue.count && self.isHost {
-                    self.musicPlayer.modifyQueue(withTracks: self.party.tracksQueue)
+                    self.musicPlayer.startPlayer(withTracks: self.party.tracksQueue)
                 }
                 
                 self.fetchHighResArtwork(forTracks: VC.tracksQueue)
@@ -480,33 +478,28 @@ class PartyViewController: UIViewController, SPTAudioStreamingDelegate, SPTAudio
     
     // MARK: NetworkManagerDelegate
     
-    internal func connectedDevicesChanged(_ manager: NetworkServiceManager, connectedDevices: [String]) {
+    func connectedDevicesChanged(_ manager: NetworkServiceManager, connectedDevices: [String]) {
         OperationQueue.main.addOperation { () -> Void in
             print("Connections: \(connectedDevices)")
         }
     }
     
-    func updateStatus(with state: MCSessionState) {
+    func updateStatus(withState state: MCSessionState) {
         connectionStatus = state
     }
     
-    internal func amHost() -> Bool {
-        return isHost
-    }
-    
-    internal func sendPartyInfo(toSession session: MCSession) {
+    func sendPartyInfo(toSession session: MCSession) {
         if isHost {
             networkManager.sendPartyInfo(forParty: party, toSession: session)
         }
     }
     
-    internal func setupParty(withParty party: Party) {
-        print("Setting up party using party info received")
+    func setupParty(withParty party: Party) {
         self.party.musicService = party.musicService
         self.party.danceability = party.danceability
     }
     
-    internal func updatePosition(position: TimeInterval) {
+    func updatePosition(position: TimeInterval) {
         musicPlayer.currentPosition = position
     }
     
@@ -524,13 +517,8 @@ class PartyViewController: UIViewController, SPTAudioStreamingDelegate, SPTAudio
         view.layoutIfNeeded()
     }
     
-    func personalQueue(hasTrack track: Track) -> Bool {
-        for trackinQueue in personalQueue {
-            if track.id == trackinQueue.id {
-                return true
-            }
-        }
-        return false
+    func amHost() -> Bool {
+        return isHost
     }
     
     func getCurrentProgress() -> TimeInterval? {

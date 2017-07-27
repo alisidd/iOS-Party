@@ -59,18 +59,18 @@ class MusicPlayer {
     
     // MARK: - Playback
     
-    func modifyQueue(withTracks tracks: [Track]) {
+    func startPlayer(withTracks tracks: [Track]) {
         DispatchQueue.main.async {
             BackgroundTask.startBackgroundTask()
             if self.musicService == .appleMusic {
-                self.modifyAppleMusicQueue(withTrack: tracks)
+                self.startAppleMusicPlayer(withTracks: tracks)
             } else {
-                self.modifySpotifyQueue(withTrack: tracks)
+                self.startSpotifyPlayer(withTracks: tracks)
             }
         }
     }
     
-    func modifyAppleMusicQueue(withTrack tracks: [Track]) {
+    func startAppleMusicPlayer(withTracks tracks: [Track]) {
         if !tracks.isEmpty {
             let id = [tracks[0].id]
             appleMusicPlayer.setQueueWithStoreIDs(id)
@@ -81,7 +81,7 @@ class MusicPlayer {
         }
     }
     
-    func modifySpotifyQueue(withTrack tracks: [Track]) {
+    func startSpotifyPlayer(withTracks tracks: [Track]) {
         if !tracks.isEmpty {
             try? AVAudioSession.sharedInstance().setActive(true)
             spotifyPlayer?.playSpotifyURI("spotify:track:" + tracks[0].id, startingWith: 0, startingWithPosition: 0, callback: nil)

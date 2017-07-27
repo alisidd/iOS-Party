@@ -163,9 +163,10 @@ class QueueViewController: UIViewController, UITableViewDelegate, UITableViewDat
         }
     }
     
+    // FIXME: - Do it in O(1)
     func tracksQueueHasEditableTracks() -> Bool {
         for track in party.tracksQueue {
-            if delegate!.personalQueue(hasTrack: track) && track != party.tracksQueue[0] {
+            if delegate!.personalQueue.contains(track) && track != party.tracksQueue[0] {
                 return true
             }
         }
@@ -231,7 +232,7 @@ class QueueViewController: UIViewController, UITableViewDelegate, UITableViewDat
     }
     
     func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
-        if !delegate!.amHost() && !delegate!.personalQueue(hasTrack: party.tracksQueue[indexPath.row + 1]){
+        if !delegate!.amHost() && !delegate!.personalQueue.contains(party.tracksQueue[indexPath.row + 1]) {
             return false
         } else {
             return true
