@@ -15,14 +15,14 @@ protocol AuthorizationManager {
 }
 
 class AppleMusicAuthorizationManager: AuthorizationManager {
-    static weak var delegate: ViewControllerAccess?
+    static weak var delegate: ViewControllerAccess!
     
     static let cloudServiceController = SKCloudServiceController()
     var isAuthorized = SKCloudServiceController.authorizationStatus() == .authorized
     static var storefrontIdentifier = String()
     
     func requestAuthorization() {
-        AppleMusicAuthorizationManager.delegate?.processingLogin = true
+        AppleMusicAuthorizationManager.delegate.processingLogin = true
         if isAuthorized {
             AppleMusicAuthorizationManager.requestStorefrontIdentifier()
         } else {
@@ -40,8 +40,7 @@ class AppleMusicAuthorizationManager: AuthorizationManager {
                 storefrontIdentifier = String(storefrontId[range])
                 print(storefrontIdentifier)
             }
-            AppleMusicAuthorizationManager.delegate?.processingLogin = false
+            delegate.processingLogin = false
         }
     }
-    
 }

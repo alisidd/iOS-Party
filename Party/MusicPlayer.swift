@@ -11,12 +11,9 @@ import StoreKit
 import MediaPlayer
 
 class MusicPlayer {
-    // MARK: - Apple Music Variables
+    // MARK: - Music Player Variables
+    
     var appleMusicPlayer = MPMusicPlayerController.applicationMusicPlayer()
-    let authorizationDispatchGroup = DispatchGroup()
-    
-    // MARK: - Spotify Variables
-    
     var spotifyPlayer = SPTAudioStreamingController.sharedInstance()
     
     // MARK: - General Variables
@@ -50,41 +47,12 @@ class MusicPlayer {
         }
     }
     
-    // MARK: - Apple Music Functions
-    /*
-    func hasCapabilities() {
-        SKCloudServiceController().requestCapabilities { (capability, error) in
-            if capability.contains(.musicCatalogPlayback) || capability.contains(.addToCloudMusicLibrary) {
-                print("Has Apple Music capabilities")
-            } else {
-                self.delegate?.postAlertForNoAppleMusic()
-            }
-        }
-    }
-    
-    func haveAuthorization() {
-        // If user has pressed Don't allow, move them to the settings
-        authorizationDispatchGroup.enter()
-        SKCloudServiceController.requestAuthorization { (status) in
-            switch status {
-            case .authorized:
-                self.isAuthorized = true
-            case .denied:
-                self.delegate?.postAlertForSettings()
-                fallthrough
-            default:
-                self.isAuthorized = false
-            }
-            self.authorizationDispatchGroup.leave()
-        }
-    }*/
-    
+    // FIXME: - Doesn't always work
     func safeToPlayNextTrack() -> Bool {
-        print(appleMusicPlayer.playbackState == .stopped)
         return appleMusicPlayer.playbackState == .stopped
     }
     
-    // TODO: - hard fails here randomly
+    // FIXME: - hard fails here randomly
     func isPaused() -> Bool {
         return party.musicService == .appleMusic ? appleMusicPlayer.playbackState == .paused : spotifyPlayer?.playbackState.isPlaying == false
     }

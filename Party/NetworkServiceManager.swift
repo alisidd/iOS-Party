@@ -25,20 +25,14 @@ class NetworkServiceManager: NSObject {
     
     // MARK: - Lifecycle
     
-    init(_ isHost: Bool) {
+    init(isHost: Bool) {
         self.isHost = isHost
+        
         let UUID = UIDevice.current.identifierForVendor!.uuidString
         let deviceName = UIDevice.current.name
+        myPeerId = isHost ? MCPeerID(displayName: deviceName) : MCPeerID(displayName: UUID)
         
-        if isHost {
-            myPeerId = MCPeerID(displayName: deviceName)
-        } else {
-            myPeerId = MCPeerID(displayName: UUID)
-        }
-        
-        let infoAboutHost = ["isHost": isHost.description]
-        
-        serviceAdvertiser = MCNearbyServiceAdvertiser(peer: myPeerId, discoveryInfo: infoAboutHost, serviceType: MessageServiceType)
+        serviceAdvertiser = MCNearbyServiceAdvertiser(peer: myPeerId, discoveryInfo: ["isHost": isHost.description], serviceType: MessageServiceType)
         serviceBrowser = MCNearbyServiceBrowser(peer: myPeerId, serviceType: MessageServiceType)
         
         super.init()

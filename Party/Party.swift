@@ -27,8 +27,8 @@ class Party: NSObject, NSCoding {
     // MARK: - NSCoding
     
     func encode(with aCoder: NSCoder) {
-        aCoder.encode(self.musicService.rawValue, forKey: "musicService")
-        aCoder.encode(self.danceability, forKey: "danceability")
+        aCoder.encode(musicService.rawValue, forKey: "musicService")
+        aCoder.encode(danceability, forKey: "danceability")
     }
     
     convenience required init?(coder aDecoder: NSCoder) {

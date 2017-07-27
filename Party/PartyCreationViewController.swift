@@ -26,19 +26,19 @@ class PartyCreationViewController: UIViewController, UITextFieldDelegate, UIPick
     // MARK: - General Variables
     
     private var partyMade = Party()
-    private var networkManager: NetworkServiceManager? = NetworkServiceManager(false)
+    private var networkManager: NetworkServiceManager? = NetworkServiceManager(isHost: false)
     var authorizationManager: AuthorizationManager!
     var processingLogin = false {
-        willSet {
+        didSet {
             DispatchQueue.main.async {
-                if newValue {
+                if self.processingLogin {
                     self.indicator.startAnimating()
                 } else {
                     self.indicator.stopAnimating()
                 }
-                self.createButton.isHidden = newValue
+                self.createButton.isHidden = self.processingLogin
                 
-                if self.partyMade.musicService == .appleMusic && !newValue {
+                if self.partyMade.musicService == .appleMusic && !self.processingLogin {
                     if self.authorizationManager.isAuthorized {
                         self.performSegue(withIdentifier: "Create Party", sender: nil)
                     } else {
@@ -61,7 +61,7 @@ class PartyCreationViewController: UIViewController, UITextFieldDelegate, UIPick
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        networkManager = NetworkServiceManager(false)
+        networkManager = NetworkServiceManager(isHost: false)
     }
     
     override func viewWillDisappear(_ animated: Bool) {

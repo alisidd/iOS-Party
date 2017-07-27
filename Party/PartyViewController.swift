@@ -48,24 +48,23 @@ class PartyViewController: UIViewController, SPTAudioStreamingDelegate, SPTAudio
     
     // Tracks Queue
     @IBOutlet weak var upNextLabel: UILabel!
-    
     @IBOutlet weak var tableHeightConstraint: NSLayoutConstraint!
     var lyricsAndQueueVC: HubAndQueuePageViewController {
-        get {
-            let vc = childViewControllers.first{ $0 is HubAndQueuePageViewController }
-            return vc as! HubAndQueuePageViewController
-        }
+        let vc = childViewControllers.first{ $0 is HubAndQueuePageViewController }
+        return vc as! HubAndQueuePageViewController
     }
     
     // Connection Status
     @IBOutlet weak var connectionStatusLabel: UILabel!
+    @IBOutlet weak var reconnectButton: UIButton!
+
     var connectionStatus: MCSessionState {
         get {
             return self.connectionStatus
         }
         set {
             DispatchQueue.main.async {
-                self.displayStatusSymbol()
+                self.displayStatusLabel()
                 self.connectionStatusLabel.text = newValue.stringValue()
                 
                 if newValue == .connected {
@@ -73,7 +72,7 @@ class PartyViewController: UIViewController, SPTAudioStreamingDelegate, SPTAudio
                     self.removeStatusLabel()
                 } else if newValue == .connecting {
                     self.displayReconnectButton()
-                    //self.setReconnectTimer()
+                    //TODO: set a reconnect timer
                     self.lyricsAndQueueVC.expandTracksTable()
                 } else {
                     self.displayReconnectButton()
@@ -82,9 +81,8 @@ class PartyViewController: UIViewController, SPTAudioStreamingDelegate, SPTAudio
             }
         }
     }
-    @IBOutlet weak var reconnectButton: UIButton!
     
-    func displayStatusSymbol() {
+    func displayStatusLabel() {
         UIView.animate(withDuration: 0.5) {
             self.connectionStatusLabel.isHidden = false
             self.connectionStatusLabel.alpha = 1
@@ -119,7 +117,8 @@ class PartyViewController: UIViewController, SPTAudioStreamingDelegate, SPTAudio
     
     @IBAction func reconnectToParty(_ sender: UIButton) {
         networkManager = nil
-        networkManager = NetworkServiceManager(self.isHost)
+        assert(!self.isHost, "Wasn't supposed to happen!")
+        networkManager = NetworkServiceManager(isHost: false)
         networkManager.delegate = self
         connectionStatus = .connecting
     }
@@ -127,17 +126,17 @@ class PartyViewController: UIViewController, SPTAudioStreamingDelegate, SPTAudio
     // MARK: - General Variables
     
     lazy var networkManager: NetworkServiceManager! = {
-        var manager = NetworkServiceManager(self.isHost)
+        let manager = NetworkServiceManager(isHost: self.isHost)
         manager.delegate = self
         return manager
     }()
     private let APIManager = RestApiManager()
     
     var party = Party()
-    var musicPlayer = MusicPlayer()
+    private var musicPlayer = MusicPlayer()
     var isHost = true
-    var personalQueue = [Track]()
-    var cache = [Track]()
+    private var personalQueue = [Track]()
+    private var cache = [Track]()
     
     // MARK: - Lifecycle
     
@@ -178,16 +177,31 @@ class PartyViewController: UIViewController, SPTAudioStreamingDelegate, SPTAudio
     
     func initializeMusicPlayer() {
         setTimer()
-        APIManager.authorizeSpotifyAccess()
         musicPlayer.party = party
         
         if party.musicService == .spotify {
+            SpotifyAuthorizationManager.authorizeSpotifyAccess()
             musicPlayer.spotifyPlayer?.setTargetBitrate(.low, callback: nil)
-            playUsingSession()
         } else {
             musicPlayer.appleMusicPlayer.beginGeneratingPlaybackNotifications()
             NotificationCenter.default.addObserver(self, selector: #selector(playNextTrack), name:.MPMusicPlayerControllerPlaybackStateDidChange, object: musicPlayer.appleMusicPlayer)
         }
+    }
+    
+    func setTimer() {
+        let _ = Timer.scheduledTimer(withTimeInterval: 1, repeats: true) { [weak self] (timer) in
+            self?.updateProgress()
+        }
+    }
+    
+    func updateProgress() {
+        if !party.tracksQueue.isEmpty {
+            if party.musicService == .appleMusic {
+                musicPlayer.currentPosition = musicPlayer.appleMusicPlayer.currentPlaybackTime
+                networkManager.advertise(forPosition: musicPlayer.currentPosition!)
+            }
+        }
+        print("Running")
     }
     
     // MARK: - Modify Queue and Views From Peers
@@ -397,10 +411,6 @@ class PartyViewController: UIViewController, SPTAudioStreamingDelegate, SPTAudio
     
     // MARK: - Playback
     
-    private func playUsingSession() {
-        musicPlayer.spotifyPlayer?.login(withAccessToken: SpotifyAuthorizationManager.getAuth().session.accessToken)
-    }
-    
     internal func audioStreamingDidLogin(_ audioStreaming: SPTAudioStreamingController!) {
         // Make sure it's a premium account
     }
@@ -422,7 +432,7 @@ class PartyViewController: UIViewController, SPTAudioStreamingDelegate, SPTAudio
         try? AVAudioSession.sharedInstance().setActive(true)
     }
     
-    internal func audioStreaming(_ audioStreaming: SPTAudioStreamingController!, didStopPlayingTrack trackUri: String!) {
+    func audioStreaming(_ audioStreaming: SPTAudioStreamingController!, didStopPlayingTrack trackUri: String!) {
         playNextTrack()
     }
     
@@ -482,27 +492,12 @@ class PartyViewController: UIViewController, SPTAudioStreamingDelegate, SPTAudio
         }
     }
     
-    func setTimer() {
-        let _ = Timer.scheduledTimer(withTimeInterval: 3, repeats: true) { [weak self] (timer) in
-            self?.updateProgress()
-        }
-    }
-    
-    func updateProgress() {
-        if !party.tracksQueue.isEmpty {
-            if party.musicService == .appleMusic {
-                musicPlayer.currentPosition = musicPlayer.appleMusicPlayer.currentPlaybackTime
-                networkManager.advertise(forPosition: musicPlayer.currentPosition!)
-            }
-        }
-        print("Running")
-    }
-    
     private func fetchImage(forTrack track: Track, setCurrentlyPlaying: Bool) -> UIImage? {
         if let url = URL(string: track.highResArtworkURL) {
             do {
                 if setCurrentlyPlaying && !party.tracksQueue.isEmpty && track == party.tracksQueue[0] {
                     let data = try Data(contentsOf: url)
+                    // FIXME: - Crash here when adding a track on nonHost when party is empty on nonHost but 1 track in host
                     print("Setting high res image for \(party.tracksQueue[0].name)")
                     setCurrentlyPlayingImage(withImage: UIImage(data: data))
                 } else if !setCurrentlyPlaying {
