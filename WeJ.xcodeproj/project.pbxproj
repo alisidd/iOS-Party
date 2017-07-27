@@ -13,6 +13,8 @@
 		41045F2D1E39ACBE00A29830 /* SpotifyAuthentication.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 41045F2B1E39ACBE00A29830 /* SpotifyAuthentication.framework */; };
 		41045F2F1E39AD6D00A29830 /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 41045F2E1E39AD6D00A29830 /* AVFoundation.framework */; };
 		41045F311E39AD7E00A29830 /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 41045F301E39AD7E00A29830 /* SystemConfiguration.framework */; };
+		411688751F2A69EB00C3CD4A /* PartyConnection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 411688741F2A69EB00C3CD4A /* PartyConnection.swift */; };
+		411688771F2A727500C3CD4A /* TrackType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 411688761F2A727500C3CD4A /* TrackType.swift */; };
 		411EEF401E346E2200216016 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 411EEF3F1E346E2200216016 /* Main.storyboard */; };
 		412FBED11E32CFA7007FFB6A /* MusicPlayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 412FBED01E32CFA7007FFB6A /* MusicPlayer.swift */; };
 		413533291E8DE4C600BE5B0F /* MusicService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 413533281E8DE4C600BE5B0F /* MusicService.swift */; };
@@ -60,6 +62,8 @@
 		41045F2E1E39AD6D00A29830 /* AVFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVFoundation.framework; path = System/Library/Frameworks/AVFoundation.framework; sourceTree = SDKROOT; };
 		41045F301E39AD7E00A29830 /* SystemConfiguration.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SystemConfiguration.framework; path = System/Library/Frameworks/SystemConfiguration.framework; sourceTree = SDKROOT; };
 		41045F321E39B80300A29830 /* Party-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Party-Bridging-Header.h"; sourceTree = SOURCE_ROOT; };
+		411688741F2A69EB00C3CD4A /* PartyConnection.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PartyConnection.swift; sourceTree = "<group>"; };
+		411688761F2A727500C3CD4A /* TrackType.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TrackType.swift; sourceTree = "<group>"; };
 		411EEF3F1E346E2200216016 /* Main.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = Main.storyboard; sourceTree = "<group>"; };
 		412FBED01E32CFA7007FFB6A /* MusicPlayer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MusicPlayer.swift; sourceTree = "<group>"; };
 		413533281E8DE4C600BE5B0F /* MusicService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MusicService.swift; sourceTree = "<group>"; };
@@ -149,8 +153,9 @@
 			isa = PBXGroup;
 			children = (
 				3472FB151DDAC81E00A35FCB /* Party.swift */,
-				413533281E8DE4C600BE5B0F /* MusicService.swift */,
 				417B9D521E31B3CE0021F36E /* Track.swift */,
+				413533281E8DE4C600BE5B0F /* MusicService.swift */,
+				411688761F2A727500C3CD4A /* TrackType.swift */,
 			);
 			name = "Party Classes";
 			sourceTree = "<group>";
@@ -273,6 +278,7 @@
 			isa = PBXGroup;
 			children = (
 				41A279EA1F28E54300C218A2 /* Appearance.swift */,
+				411688741F2A69EB00C3CD4A /* PartyConnection.swift */,
 			);
 			name = Extensions;
 			sourceTree = "<group>";
@@ -454,6 +460,7 @@
 				416551301F279EAC00FA33F5 /* BackgroundTask.swift in Sources */,
 				412FBED11E32CFA7007FFB6A /* MusicPlayer.swift in Sources */,
 				41C0AEBA1E7A0AC100C797F0 /* HubAndQueuePageViewController.swift in Sources */,
+				411688751F2A69EB00C3CD4A /* PartyConnection.swift in Sources */,
 				417B9D4F1E318D0D0021F36E /* AddSongViewController.swift in Sources */,
 				41C0AEBC1E7A12CB00C797F0 /* HubViewController.swift in Sources */,
 				41C1113F1F2A158500A33771 /* AppleMusicConstants.swift in Sources */,
@@ -476,6 +483,7 @@
 				417B9D4B1E317C3C0021F36E /* PartyViewController.swift in Sources */,
 				41A279EE1F28FF0A00C218A2 /* AppleMusicAuthorizationManager.swift in Sources */,
 				41835F901E81EE740082BA16 /* HubTableViewCell.swift in Sources */,
+				411688771F2A727500C3CD4A /* TrackType.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

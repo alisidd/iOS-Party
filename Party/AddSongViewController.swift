@@ -219,7 +219,7 @@ class AddSongViewController: UIViewController, UICollectionViewDelegate, UIColle
                         DispatchQueue.main.async {
                             if tracksCaptured == self.tracksList {
                                 if let artworkFetchedUnwrapped = artworkFetched {
-                                    self.tracksList[i].artwork = artworkFetchedUnwrapped
+                                    self.tracksList[i].lowResArtwork = artworkFetchedUnwrapped
                                     self.trackTableView.reloadData()
                                 }
                             }
@@ -268,7 +268,7 @@ class AddSongViewController: UIViewController, UICollectionViewDelegate, UIColle
                 }
             }
         } else {
-            cell.artworkImageView.image = trackToAdd.artwork ?? nil
+            cell.artworkImageView.image = trackToAdd.lowResArtwork ?? nil
         }
         
         cell.trackName.text = trackToAdd.name
@@ -304,7 +304,7 @@ class AddSongViewController: UIViewController, UICollectionViewDelegate, UIColle
         addToQueue(track: trackToAdd)
         
         DispatchQueue.global(qos: .userInitiated).async {
-            trackToAdd.artwork = self.APIManager.fetchImage(fromURL: trackToAdd.lowResArtworkURL)
+            trackToAdd.lowResArtwork = self.APIManager.fetchImage(fromURL: trackToAdd.lowResArtworkURL)
         }
         
     }
@@ -355,7 +355,7 @@ class AddSongViewController: UIViewController, UICollectionViewDelegate, UIColle
         cell.trackName.text = tracksList[indexPath.row].name
         cell.artistName.text = tracksList[indexPath.row].artist
 
-        if let unwrappedArtwork = tracksList[indexPath.row].artwork {
+        if let unwrappedArtwork = tracksList[indexPath.row].lowResArtwork {
             cell.artworkImageView.image = unwrappedArtwork
         } else {
             cell.artworkImageView.image = nil

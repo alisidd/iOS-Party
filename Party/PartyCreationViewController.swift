@@ -8,13 +8,13 @@
 
 import UIKit
 
-protocol ViewControllerAccess: class {
+protocol ViewControllerAccessDelegate: class {
     var processingLogin: Bool { get set }
     func present(_ viewControllerToPresent: UIViewController, animated flag: Bool, completion: (() -> Void)?)
     func performSegue(withIdentifier identifier: String, sender: Any?)
 }
 
-class PartyCreationViewController: UIViewController, UITextFieldDelegate, UIPickerViewDelegate, ViewControllerAccess {
+class PartyCreationViewController: UIViewController, UITextFieldDelegate, UIPickerViewDelegate, ViewControllerAccessDelegate {
     // MARK: - Storyboard Variables
     
     @IBOutlet weak var appleMusicButton: setupButton!

@@ -80,7 +80,7 @@ class RestApiManager {
             newTrack.lowResArtworkURL = track["artworkUrl60"].stringValue
             
             if tracksList.count < 5 {
-                newTrack.artwork = fetchImage(fromURL: newTrack.lowResArtworkURL)
+                newTrack.lowResArtwork = fetchImage(fromURL: newTrack.lowResArtworkURL)
             }
             
             newTrack.highResArtworkURL = newTrack.lowResArtworkURL.replacingOccurrences(of: "60x60", with: "400x400")
@@ -153,7 +153,7 @@ class RestApiManager {
                         }
                         if images["height"].stringValue == "64" {
                             newTrack.lowResArtworkURL = images["url"].stringValue
-                            newTrack.artwork = fetchImage(fromURL: newTrack.lowResArtworkURL)
+                            newTrack.lowResArtwork = fetchImage(fromURL: newTrack.lowResArtworkURL)
                         }
                     }
                     
@@ -216,7 +216,7 @@ class RestApiManager {
             if images["height"].stringValue == "64" {
                 newTrack.lowResArtworkURL = images["url"].stringValue
                 if fetchLowRes {
-                    newTrack.artwork = fetchImage(fromURL: newTrack.lowResArtworkURL)
+                    newTrack.lowResArtwork = fetchImage(fromURL: newTrack.lowResArtworkURL)
                 }
             }
            
@@ -224,7 +224,7 @@ class RestApiManager {
                 newTrack.mediumResArtworkURL = images["url"].stringValue
             } else {
                 if !fetchLowRes {
-                    newTrack.artwork = fetchImage(fromURL: newTrack.lowResArtworkURL)
+                    newTrack.lowResArtwork = fetchImage(fromURL: newTrack.lowResArtworkURL)
                 }
             }
             

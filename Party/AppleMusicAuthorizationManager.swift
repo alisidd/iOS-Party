@@ -15,7 +15,7 @@ protocol AuthorizationManager {
 }
 
 class AppleMusicAuthorizationManager: AuthorizationManager {
-    static weak var delegate: ViewControllerAccess!
+    static weak var delegate: ViewControllerAccessDelegate!
     
     static let cloudServiceController = SKCloudServiceController()
     var isAuthorized = SKCloudServiceController.authorizationStatus() == .authorized

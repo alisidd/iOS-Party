@@ -57,63 +57,6 @@ class PartyViewController: UIViewController, SPTAudioStreamingDelegate, SPTAudio
     // Connection Status
     @IBOutlet weak var connectionStatusLabel: UILabel!
     @IBOutlet weak var reconnectButton: UIButton!
-
-    var connectionStatus: MCSessionState {
-        get {
-            return self.connectionStatus
-        }
-        set {
-            DispatchQueue.main.async {
-                self.displayStatusLabel()
-                self.connectionStatusLabel.text = newValue.stringValue()
-                
-                if newValue == .connected {
-                    self.removeReconnectButton()
-                    self.removeStatusLabel()
-                } else if newValue == .connecting {
-                    self.displayReconnectButton()
-                    //TODO: set a reconnect timer
-                    self.lyricsAndQueueVC.expandTracksTable()
-                } else {
-                    self.displayReconnectButton()
-                    self.lyricsAndQueueVC.expandTracksTable()
-                }
-            }
-        }
-    }
-    
-    func displayStatusLabel() {
-        UIView.animate(withDuration: 0.5) {
-            self.connectionStatusLabel.isHidden = false
-            self.connectionStatusLabel.alpha = 1
-        }
-    }
-    
-    func removeStatusLabel() {
-        UIView.animate(withDuration: 1, animations: {
-            self.connectionStatusLabel.alpha = 0
-        }, completion: { (finished) in
-            self.connectionStatusLabel.isHidden = true
-        })
-    }
-    
-    func displayReconnectButton() {
-        view.layoutIfNeeded()
-        reconnectButton.isHidden = false
-        UIView.animate(withDuration: 0.4) {
-            self.reconnectButton.alpha = 1
-            self.view.layoutIfNeeded()
-        }
-    }
-    
-    func removeReconnectButton() {
-        view.layoutIfNeeded()
-        reconnectButton.isHidden = true
-        UIView.animate(withDuration: 0.4) {
-            self.reconnectButton.alpha = 0
-            self.view.layoutIfNeeded()
-        }
-    }
     
     @IBAction func reconnectToParty(_ sender: UIButton) {
         networkManager = nil
@@ -167,7 +110,6 @@ class PartyViewController: UIViewController, SPTAudioStreamingDelegate, SPTAudio
     
     private func adjustViews() {
         hideCurrentlyPlayingArtwork()
-        lyricsAndQueueVC.expandTracksTable()
         if !isHost {
             playPauseButton.isHidden = true
             skipTrackButton.isHidden = true
@@ -177,7 +119,7 @@ class PartyViewController: UIViewController, SPTAudioStreamingDelegate, SPTAudio
     
     func initializeMusicPlayer() {
         setTimer()
-        musicPlayer.party = party
+        musicPlayer.musicService = party.musicService
         
         if party.musicService == .spotify {
             SpotifyAuthorizationManager.authorizeSpotifyAccess()
@@ -189,7 +131,7 @@ class PartyViewController: UIViewController, SPTAudioStreamingDelegate, SPTAudio
     }
     
     func setTimer() {
-        let _ = Timer.scheduledTimer(withTimeInterval: 1, repeats: true) { [weak self] (timer) in
+        let _ = Timer.scheduledTimer(withTimeInterval: 1, repeats: true) { [weak self] _ in
             self?.updateProgress()
         }
     }
@@ -233,6 +175,8 @@ class PartyViewController: UIViewController, SPTAudioStreamingDelegate, SPTAudio
                 self.currentlyPlayingTrackName.text = self.party.tracksQueue[0].name
                 self.currentlyPlayingArtistName.text = self.party.tracksQueue[0].artist
                 self.updateArtworkForCurrentlyPlaying()
+            } else {
+                self.hideCurrentlyPlayingArtwork()
             }
         }
     }
@@ -246,6 +190,35 @@ class PartyViewController: UIViewController, SPTAudioStreamingDelegate, SPTAudio
                 if !self.party.tracksQueue.isEmpty && trackToSet == self.party.tracksQueue[0] {
                     let _ = self.fetchImage(forTrack: trackToSet, setCurrentlyPlaying: true)
                 }
+            }
+        }
+    }
+    
+    private func fetchImage(forTrack track: Track, setCurrentlyPlaying: Bool) -> UIImage? {
+        if let url = URL(string: track.highResArtworkURL) {
+            do {
+                if setCurrentlyPlaying && !party.tracksQueue.isEmpty && track == party.tracksQueue[0] {
+                    let data = try Data(contentsOf: url)
+                    // FIXME: - Crash here when adding a track on nonHost when party is empty on nonHost but 1 track in host
+                    print("Setting high res image for \(party.tracksQueue[0].name)")
+                    setCurrentlyPlayingImage(withImage: UIImage(data: data))
+                } else if !setCurrentlyPlaying {
+                    let data = try Data(contentsOf: url)
+                    return UIImage(data: data)
+                }
+                
+            } catch {
+                print("Error trying to get high resolution artwork")
+                return nil
+            }
+        }
+        return nil
+    }
+    
+    func setCurrentlyPlayingImage(withImage image: UIImage?) {
+        if let unwrappedImage = image {
+            DispatchQueue.main.async {
+                self.currentlyPlayingArtwork.image = unwrappedImage.addGradient()
             }
         }
     }
@@ -302,8 +275,7 @@ class PartyViewController: UIViewController, SPTAudioStreamingDelegate, SPTAudio
         }
     }
     
-    internal func addTracks(fromPeer peer: MCPeerID, withTracks tracks: [String]) {
-        print("HERE")
+    func addTracks(fromPeer peer: MCPeerID, withTracks tracks: [String]) {
         APIManager.latestRequest[peer] = tracks
         
         DispatchQueue.global(qos: .userInteractive).async {
@@ -389,12 +361,12 @@ class PartyViewController: UIViewController, SPTAudioStreamingDelegate, SPTAudio
         }
     }
     
-    internal func removeFromOthersQueue(forTrack track: Track) {
+    func removeFromOthersQueue(forTrack track: Track) {
         track.id += ":/?r"
         sendTracksToPeers(forTracks: [track])
     }
     
-    internal func removeTrackFromPeer(withTrack trackID: String) {
+    func removeTrackFromPeer(withTrack trackID: String) {
         let id = trackID.components(separatedBy: ":")[0]
         
         for trackInQueue in party.tracksQueue {
@@ -470,11 +442,8 @@ class PartyViewController: UIViewController, SPTAudioStreamingDelegate, SPTAudio
             print("Removing \(party.tracksQueue.removeFirst().name)")
             musicPlayer.modifyQueue(withTracks: party.tracksQueue)
             
+            //TODO: - Isn't this automatically called by removing the top track?
             updateEveryonesTableView()
-            
-            if self.party.tracksQueue.isEmpty {
-                self.hideCurrentlyPlayingArtwork()
-            }
         }
     }
     
@@ -485,39 +454,6 @@ class PartyViewController: UIViewController, SPTAudioStreamingDelegate, SPTAudio
             musicPlayer.modifyQueue(withTracks: party.tracksQueue)
             
             updateEveryonesTableView()
-            
-            if self.party.tracksQueue.isEmpty {
-                self.hideCurrentlyPlayingArtwork()
-            }
-        }
-    }
-    
-    private func fetchImage(forTrack track: Track, setCurrentlyPlaying: Bool) -> UIImage? {
-        if let url = URL(string: track.highResArtworkURL) {
-            do {
-                if setCurrentlyPlaying && !party.tracksQueue.isEmpty && track == party.tracksQueue[0] {
-                    let data = try Data(contentsOf: url)
-                    // FIXME: - Crash here when adding a track on nonHost when party is empty on nonHost but 1 track in host
-                    print("Setting high res image for \(party.tracksQueue[0].name)")
-                    setCurrentlyPlayingImage(withImage: UIImage(data: data))
-                } else if !setCurrentlyPlaying {
-                    let data = try Data(contentsOf: url)
-                    return UIImage(data: data)
-                }
-                
-            } catch {
-                print("Error trying to get high resolution artwork")
-                return nil
-            }
-        }
-        return nil
-    }
-    
-    func setCurrentlyPlayingImage(withImage image: UIImage?) {
-        if let unwrappedImage = image {
-            DispatchQueue.main.async {
-                self.currentlyPlayingArtwork.image = unwrappedImage.addGradient()
-            }
         }
     }
     

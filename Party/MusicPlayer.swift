@@ -18,7 +18,7 @@ class MusicPlayer {
     
     // MARK: - General Variables
     
-    var party = Party()
+    var musicService: MusicService!
     var currentPosition: TimeInterval?
     
     // MARK: - General Functions
@@ -54,7 +54,7 @@ class MusicPlayer {
     
     // FIXME: - hard fails here randomly
     func isPaused() -> Bool {
-        return party.musicService == .appleMusic ? appleMusicPlayer.playbackState == .paused : spotifyPlayer?.playbackState.isPlaying == false
+        return musicService == .appleMusic ? appleMusicPlayer.playbackState == .paused : spotifyPlayer?.playbackState.isPlaying == false
     }
     
     // MARK: - Playback
@@ -62,7 +62,7 @@ class MusicPlayer {
     func modifyQueue(withTracks tracks: [Track]) {
         DispatchQueue.main.async {
             BackgroundTask.startBackgroundTask()
-            if self.party.musicService == .appleMusic {
+            if self.musicService == .appleMusic {
                 self.modifyAppleMusicQueue(withTrack: tracks)
             } else {
                 self.modifySpotifyQueue(withTrack: tracks)
@@ -92,7 +92,7 @@ class MusicPlayer {
     
     func playTrack() {
         BackgroundTask.startBackgroundTask()
-        if party.musicService == .appleMusic {
+        if musicService == .appleMusic {
             appleMusicPlayer.play()
         } else {
             spotifyPlayer?.setIsPlaying(true, callback: nil)
@@ -102,7 +102,7 @@ class MusicPlayer {
     
     func pauseTrack() {
         BackgroundTask.stopBackgroundTask()
-        if party.musicService == .appleMusic {
+        if musicService == .appleMusic {
             appleMusicPlayer.pause()
         } else {
             spotifyPlayer?.setIsPlaying(false, callback: nil)

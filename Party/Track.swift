@@ -15,7 +15,7 @@ class Track: NSObject {
     var album = String()
     
     var lowResArtworkURL = String()
-    var artwork: UIImage?
+    var lowResArtwork: UIImage?
     
     var mediumResArtworkURL: String?
     var mediumResArtwork: UIImage?
@@ -24,4 +24,14 @@ class Track: NSObject {
     var highResArtwork: UIImage?
     
     var length: TimeInterval?
+    
+    static func typeOf(track: String) -> TrackType {
+        if track.hasPrefix("S:") {
+            return .service(ofType: .spotify)
+        } else if track.hasPrefix("A:") {
+            return .service(ofType: .appleMusic)
+        } else {
+            return .removal
+        }
+    }
 }

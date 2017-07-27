@@ -10,7 +10,7 @@ import Foundation
 import SwiftyJSON
 
 class SpotifyAuthorizationManager: AuthorizationManager {
-    static weak var delegate: ViewControllerAccess!
+    static weak var delegate: ViewControllerAccessDelegate!
     
     private static var authViewController: SFSafariViewController!
     var isAuthorized = false
