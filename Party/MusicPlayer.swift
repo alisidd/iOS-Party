@@ -11,13 +11,9 @@ import StoreKit
 import MediaPlayer
 
 class MusicPlayer {
-    
-    weak var delegate: AppleMusicAuthorizationAlertDelegate?
-    
     // MARK: - Apple Music Variables
     var appleMusicPlayer = MPMusicPlayerController.applicationMusicPlayer()
     let authorizationDispatchGroup = DispatchGroup()
-    var isAuthorized = false
     
     // MARK: - Spotify Variables
     
@@ -55,7 +51,7 @@ class MusicPlayer {
     }
     
     // MARK: - Apple Music Functions
-    
+    /*
     func hasCapabilities() {
         SKCloudServiceController().requestCapabilities { (capability, error) in
             if capability.contains(.musicCatalogPlayback) || capability.contains(.addToCloudMusicLibrary) {
@@ -81,7 +77,7 @@ class MusicPlayer {
             }
             self.authorizationDispatchGroup.leave()
         }
-    }
+    }*/
     
     func safeToPlayNextTrack() -> Bool {
         print(appleMusicPlayer.playbackState == .stopped)

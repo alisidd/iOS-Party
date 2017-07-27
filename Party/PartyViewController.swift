@@ -10,36 +10,6 @@ import UIKit
 import MediaPlayer
 import MultipeerConnectivity
 
-extension UIImage {
-    func addGradient() -> UIImage {
-        UIGraphicsBeginImageContext(self.size)
-        let context = UIGraphicsGetCurrentContext()
-        
-        self.draw(at: CGPoint(x: 0, y: 0))
-        
-        let colorSpace = CGColorSpaceCreateDeviceRGB()
-        let locations: [CGFloat] = [0.0, 1.0]
-        
-        let bottom = UIColor(red: 26/255, green: 26/255, blue: 26/255, alpha: 1).cgColor
-        let top = UIColor(red: 0, green: 0, blue: 0, alpha: 0.2).cgColor
-        
-        let colors = [top, bottom] as CFArray
-        
-        let gradient = CGGradient(colorsSpace: colorSpace, colors: colors, locations: locations)
-        
-        let startPoint = CGPoint(x: self.size.width/2, y: 0)
-        let endPoint = CGPoint(x: self.size.width/2, y: self.size.height)
-        
-        context!.drawLinearGradient(gradient!, start: startPoint, end: endPoint, options: CGGradientDrawingOptions(rawValue: UInt32(0)))
-        
-        let imageToReturn = UIGraphicsGetImageFromCurrentImageContext()
-        
-        UIGraphicsEndImageContext()
-        
-        return imageToReturn!
-    }
-}
-
 protocol NetworkManagerDelegate: class {
     func connectedDevicesChanged(_ manager : NetworkServiceManager, connectedDevices: [String])
     func updateStatus(with state: MCSessionState)
@@ -75,7 +45,6 @@ class PartyViewController: UIViewController, SPTAudioStreamingDelegate, SPTAudio
     @IBOutlet weak var currentlyPlayingArtistName: UILabel!
     @IBOutlet weak var playPauseButton: UIButton!
     @IBOutlet weak var skipTrackButton: UIButton!
-    @IBOutlet weak var progressBar: UIProgressView!
     
     // Tracks Queue
     @IBOutlet weak var upNextLabel: UILabel!
@@ -166,7 +135,6 @@ class PartyViewController: UIViewController, SPTAudioStreamingDelegate, SPTAudio
     
     var party = Party()
     var musicPlayer = MusicPlayer()
-    var spotifySession: SPTSession?
     var isHost = true
     var personalQueue = [Track]()
     var cache = [Track]()
@@ -199,7 +167,6 @@ class PartyViewController: UIViewController, SPTAudioStreamingDelegate, SPTAudio
     }
     
     private func adjustViews() {
-        progressBar.isHidden = true
         hideCurrentlyPlayingArtwork()
         lyricsAndQueueVC.expandTracksTable()
         if !isHost {
@@ -212,6 +179,7 @@ class PartyViewController: UIViewController, SPTAudioStreamingDelegate, SPTAudio
     func initializeMusicPlayer() {
         setTimer()
         APIManager.authorizeSpotifyAccess()
+        musicPlayer.party = party
         
         if party.musicService == .spotify {
             musicPlayer.spotifyPlayer?.setTargetBitrate(.low, callback: nil)
@@ -430,9 +398,7 @@ class PartyViewController: UIViewController, SPTAudioStreamingDelegate, SPTAudio
     // MARK: - Playback
     
     private func playUsingSession() {
-        if let session = spotifySession {
-            musicPlayer.spotifyPlayer?.login(withAccessToken: session.accessToken)
-        }
+        musicPlayer.spotifyPlayer?.login(withAccessToken: SpotifyAuthorizationManager.getAuth().session.accessToken)
     }
     
     internal func audioStreamingDidLogin(_ audioStreaming: SPTAudioStreamingController!) {
@@ -489,7 +455,6 @@ class PartyViewController: UIViewController, SPTAudioStreamingDelegate, SPTAudio
     // MARK: - Callbacks
     
     @objc func playNextTrack() {
-        print(progressBar.progress)
         if musicPlayer.safeToPlayNextTrack() && !party.tracksQueue.isEmpty {
             removeFromOthersQueue(forTrack: party.tracksQueue[0])
             print("Removing \(party.tracksQueue.removeFirst().name)")

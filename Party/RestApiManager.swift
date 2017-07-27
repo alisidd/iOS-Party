@@ -69,8 +69,6 @@ class RestApiManager {
     func fetchStorefrontIdentifier() {
         self.dispatchGroupForStorefrontFetch.enter()
         serviceController.requestStorefrontIdentifier { (storefrontIdentifier, error) in
-            
-            
             if let storefrontId = storefrontIdentifier, storefrontId.characters.count >= 6 {
                 let range = storefrontId.startIndex...storefrontId.index(storefrontId.startIndex, offsetBy: 5)
                 RestApiManager.storefrontIdentifierFound = String(storefrontId[range])
@@ -121,16 +119,6 @@ class RestApiManager {
     }
     
     // MARK: - Spotify
-    
-    func getAuthentication() -> SPTAuth? {
-        let auth = SPTAuth.defaultInstance()
-        auth?.clientID = "308657d9662146ecae57855ac2a01045"
-        auth?.redirectURL = URL(string: "partyapp://returnafterlogin")
-        auth?.requestedScopes = [SPTAuthStreamingScope]
-        auth?.sessionUserDefaultsKey = "current session"
-        
-        return auth
-    }
     
     func makeHTTPRequestToSpotify(withString string: String) {
         if RestApiManager.spotifyAccessToken == nil {

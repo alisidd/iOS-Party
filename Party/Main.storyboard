@@ -151,11 +151,6 @@
                                             <action selector="playPauseChange:" destination="IhU-0X-egj" eventType="touchUpInside" id="hxD-WC-TlW"/>
                                         </connections>
                                     </button>
-                                    <progressView opaque="NO" contentMode="scaleToFill" verticalHuggingPriority="750" progress="0.5" translatesAutoresizingMaskIntoConstraints="NO" id="nye-1U-YIH">
-                                        <rect key="frame" x="0.0" y="373" width="375" height="2"/>
-                                        <color key="tintColor" red="1" green="0.65098039215686276" blue="0.13725490196078433" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                        <color key="trackTintColor" red="0.96470588235294119" green="0.65098039215686276" blue="0.13725490196078433" alpha="0.34999999999999998" colorSpace="custom" customColorSpace="sRGB"/>
-                                    </progressView>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="C8i-W2-rUz">
                                         <rect key="frame" x="335" y="326" width="20" height="20"/>
                                         <constraints>
@@ -174,16 +169,13 @@
                                     <constraint firstItem="hHA-Uv-PtN" firstAttribute="centerY" secondItem="rcd-f2-VTo" secondAttribute="centerY" id="7HV-qe-bmF"/>
                                     <constraint firstItem="rcd-f2-VTo" firstAttribute="leading" secondItem="hHA-Uv-PtN" secondAttribute="trailing" constant="20" id="86F-xe-7jo"/>
                                     <constraint firstAttribute="bottom" secondItem="hHA-Uv-PtN" secondAttribute="bottom" constant="15" id="Dwn-Pq-mKH"/>
-                                    <constraint firstItem="nye-1U-YIH" firstAttribute="leading" secondItem="7Lx-lg-uJ4" secondAttribute="leading" id="Efh-lm-KZy"/>
                                     <constraint firstItem="HrH-IU-EqN" firstAttribute="top" secondItem="7Lx-lg-uJ4" secondAttribute="top" id="QQL-iS-IhJ"/>
                                     <constraint firstItem="HrH-IU-EqN" firstAttribute="leading" secondItem="7Lx-lg-uJ4" secondAttribute="leading" id="WAk-Fu-AZb"/>
                                     <constraint firstAttribute="width" secondItem="7Lx-lg-uJ4" secondAttribute="height" multiplier="1:1" id="clt-xl-pMG"/>
                                     <constraint firstItem="C8i-W2-rUz" firstAttribute="leading" secondItem="rcd-f2-VTo" secondAttribute="trailing" constant="40" id="ehX-6a-Xfz"/>
-                                    <constraint firstAttribute="bottom" secondItem="nye-1U-YIH" secondAttribute="bottom" id="kvf-un-bER"/>
                                     <constraint firstAttribute="bottom" secondItem="HrH-IU-EqN" secondAttribute="bottom" id="n9t-PY-ynf"/>
                                     <constraint firstAttribute="trailing" secondItem="HrH-IU-EqN" secondAttribute="trailing" id="nCd-nH-qTk"/>
                                     <constraint firstItem="hHA-Uv-PtN" firstAttribute="leading" secondItem="7Lx-lg-uJ4" secondAttribute="leading" constant="20" id="sNv-GL-oaw"/>
-                                    <constraint firstAttribute="trailing" secondItem="nye-1U-YIH" secondAttribute="trailing" id="tfi-66-R3E"/>
                                     <constraint firstItem="C8i-W2-rUz" firstAttribute="centerY" secondItem="hHA-Uv-PtN" secondAttribute="centerY" id="ufZ-yn-9ZP"/>
                                 </constraints>
                             </view>
@@ -237,7 +229,6 @@
                         <outlet property="currentlyPlayingArtwork" destination="HrH-IU-EqN" id="Dpl-AR-7y4"/>
                         <outlet property="currentlyPlayingTrackName" destination="ddX-fC-sB7" id="Elg-ej-lTp"/>
                         <outlet property="playPauseButton" destination="rcd-f2-VTo" id="8Xc-C1-cr0"/>
-                        <outlet property="progressBar" destination="nye-1U-YIH" id="Q5p-CY-yWX"/>
                         <outlet property="reconnectButton" destination="9lr-B6-Z3d" id="uTD-eN-KSW"/>
                         <outlet property="skipTrackButton" destination="C8i-W2-rUz" id="VZo-x7-Lwy"/>
                         <outlet property="tableHeightConstraint" destination="eBV-bE-wFh" id="65Q-z8-2Oj"/>
@@ -746,26 +737,33 @@
                                     <color key="titleColor" red="1" green="0.65098039215686276" blue="0.13725490196078433" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 </state>
                                 <connections>
-                                    <action selector="initializeMusicPlayer:" destination="9wA-Gp-aQL" eventType="touchUpInside" id="euW-Xh-Uui"/>
+                                    <action selector="createParty:" destination="9wA-Gp-aQL" eventType="touchUpInside" id="Tv9-5a-zwx"/>
                                 </connections>
                             </button>
+                            <activityIndicatorView hidden="YES" opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" hidesWhenStopped="YES" style="whiteLarge" translatesAutoresizingMaskIntoConstraints="NO" id="AJl-uB-kjX">
+                                <rect key="frame" x="170" y="554" width="37" height="37"/>
+                            </activityIndicatorView>
                         </subviews>
                         <color key="backgroundColor" red="0.10196078431372549" green="0.10196078431372549" blue="0.10196078431372549" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <constraints>
                             <constraint firstItem="6bl-l1-4XO" firstAttribute="leading" secondItem="bSR-i7-qO1" secondAttribute="leading" id="Jwq-Ml-3df"/>
                             <constraint firstItem="6bl-l1-4XO" firstAttribute="top" secondItem="bSR-i7-qO1" secondAttribute="bottom" constant="10" id="Lah-vV-po6"/>
                             <constraint firstItem="IDK-wT-eP1" firstAttribute="centerX" secondItem="BFI-Zo-17q" secondAttribute="centerX" id="Mih-ch-dMQ"/>
+                            <constraint firstItem="AJl-uB-kjX" firstAttribute="centerX" secondItem="AbB-Zi-Pt0" secondAttribute="centerX" id="S1S-zB-L1o"/>
                             <constraint firstItem="bSR-i7-qO1" firstAttribute="top" secondItem="IDK-wT-eP1" secondAttribute="bottom" constant="65" id="T6h-Sh-QW4"/>
                             <constraint firstItem="AbB-Zi-Pt0" firstAttribute="top" secondItem="6bl-l1-4XO" secondAttribute="bottom" constant="160" id="Vn8-Qr-pTQ"/>
                             <constraint firstItem="AbB-Zi-Pt0" firstAttribute="centerX" secondItem="6bl-l1-4XO" secondAttribute="centerX" id="hIX-Cv-Pcd"/>
                             <constraint firstItem="6bl-l1-4XO" firstAttribute="trailing" secondItem="IDK-wT-eP1" secondAttribute="trailing" id="itX-fv-i4d"/>
                             <constraint firstItem="IDK-wT-eP1" firstAttribute="top" secondItem="gAj-Q9-ed4" secondAttribute="bottom" constant="140" id="lZE-x9-KDt"/>
+                            <constraint firstItem="AJl-uB-kjX" firstAttribute="centerY" secondItem="AbB-Zi-Pt0" secondAttribute="centerY" id="nl4-KC-svO"/>
                             <constraint firstItem="bSR-i7-qO1" firstAttribute="leading" secondItem="IDK-wT-eP1" secondAttribute="leading" id="xN0-16-61r"/>
                         </constraints>
                     </view>
                     <connections>
                         <outlet property="appleMusicButton" destination="NXk-fz-9f9" id="XPA-n0-Scx"/>
+                        <outlet property="createButton" destination="AbB-Zi-Pt0" id="RSk-br-Pzt"/>
                         <outlet property="danceabilitySlider" destination="6bl-l1-4XO" id="rVH-2m-vY3"/>
+                        <outlet property="indicator" destination="AJl-uB-kjX" id="IVN-MG-d8e"/>
                         <outlet property="spotifyButton" destination="rLG-hj-JGO" id="SB4-GJ-mIQ"/>
                         <segue destination="IhU-0X-egj" kind="show" identifier="Create Party" id="myb-f1-PXz"/>
                     </connections>
