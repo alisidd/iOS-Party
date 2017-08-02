@@ -123,7 +123,6 @@ class PartyViewController: UIViewController, SPTAudioStreamingDelegate, SPTAudio
         musicPlayer.musicService = Party.musicService
         
         if Party.musicService == .spotify {
-            SpotifyAuthorizationManager.authorizeSpotifyAccess()
             musicPlayer.spotifyPlayer?.setTargetBitrate(.low, callback: nil)
         } else {
             musicPlayer.appleMusicPlayer.beginGeneratingPlaybackNotifications()
@@ -252,7 +251,7 @@ class PartyViewController: UIViewController, SPTAudioStreamingDelegate, SPTAudio
     func sendTracksToPeers(forTracks tracks: [Track], toRemove: Bool = false) {
         if isHost || (!isHost && !tracks.isEmpty) {
             let tracksIDs = id(ofTracks: tracks, withRemoval: toRemove)
-            networkManager.sendTracks(tracksIDs)
+            networkManager.sendTracks()
         }
     }
     
@@ -280,51 +279,37 @@ class PartyViewController: UIViewController, SPTAudioStreamingDelegate, SPTAudio
     
     func add(tracks: [String], fromPeer peer: MCPeerID) {
         func indexInCache(ofTrack track: Track) -> Int? {
-            for i in 0..<cache.count {
-                if cache[i].id == track.id {
-                    return i
-                }
-            }
-            return nil
+            return cache.index(where: { $0.id == track.id })
         }
         
         latestRequest[peer] = tracks
         
         DispatchQueue.global(qos: .userInitiated).async {
-            let API = RestApiManager()
-            let fetcher = AppleMusicFetcher()
+            let fetcher: Fetcher = Party.musicService == .spotify ? SpotifyFetcher() : AppleMusicFetcher()
             
             if let requestTracks = self.latestRequest[peer], requestTracks == tracks {
-                
                 for trackID in tracks {
-                    if case .service(.spotify) = Track.typeOf(track: trackID) {
-                        API.makeHTTPRequestToSpotifyForSingleTrack(forID: trackID)
-                        API.dispatchGroup.wait()
-                    } else {
-                        fetcher.getTrack(forID: trackID)
-                        fetcher.dispatchGroup.wait()
-                        API.tracksList = fetcher.tracksList
-                    }
+                    fetcher.getTrack(forID: trackID)
+                    fetcher.dispatchGroup.wait()
                 }
                 
-                
                 if let requestTracksCheck = self.latestRequest[peer], requestTracksCheck == tracks {
-                    if Party.tracksQueue.isEmpty && !API.tracksList.isEmpty{
+                    if Party.tracksQueue.isEmpty && !fetcher.tracksList.isEmpty {
                         self.lyricsAndQueueVC.minimizeTracksTable()
                     }
                     
                     if self.isHost {
-                        Party.tracksQueue.append(contentsOf: API.tracksList)
-                        if Party.tracksQueue.count == API.tracksList.count {
+                        Party.tracksQueue.append(contentsOf: fetcher.tracksList)
+                        if Party.tracksQueue.count == fetcher.tracksList.count {
                             self.musicPlayer.startPlayer(withTracks: Party.tracksQueue)
                         }
-                        self.fetchHighResArtwork(forTracks: API.tracksList)
-                    } else if API.tracksList != Party.tracksQueue {
+                        self.fetchHighResArtwork(forTracks: fetcher.tracksList)
+                    } else if fetcher.tracksList != Party.tracksQueue {
                         self.cache = Party.tracksQueue
                         var wholeNewQueue = [Track]()
                         var newTracks = [Track]()
                         
-                        for newTrack in API.tracksList {
+                        for newTrack in fetcher.tracksList {
                             if let index = indexInCache(ofTrack: newTrack) { // TODO: - Use a dictionary for cache
                                 wholeNewQueue.append(self.cache[index])
                             } else {
@@ -357,11 +342,8 @@ class PartyViewController: UIViewController, SPTAudioStreamingDelegate, SPTAudio
     func remove(trackID: String) {
         let id = trackID.components(separatedBy: ":")[1]
         
-        for i in 0..<Party.tracksQueue.count {
-            if id == Party.tracksQueue[i].id {
-                Party.tracksQueue.remove(at: i)
-                break
-            }
+        if let i = Party.tracksQueue.index(where: { $0.id == id }) {
+            Party.tracksQueue.remove(at: i)
         }
     }
     
@@ -447,20 +429,20 @@ class PartyViewController: UIViewController, SPTAudioStreamingDelegate, SPTAudio
     @IBAction func unwindToPartyViewController(_ sender: UIStoryboardSegue) {
         if let VC = sender.source as? AddSongViewController {
             DispatchQueue.global(qos: .userInitiated).async {
-                Party.tracksFromPeers.append(contentsOf: VC.tracksQueue)
-                Party.tracksQueue.append(contentsOf: VC.tracksQueue)
-                self.personalQueue = self.personalQueue.union(Set(VC.tracksQueue))
+                Party.tracksFromPeers.append(contentsOf: VC.tracksSelected)
+                Party.tracksQueue.append(contentsOf: VC.tracksSelected)
+                self.personalQueue = self.personalQueue.union(Set(VC.tracksSelected))
                 
                 // TODO: go out of editing mode
                 if Party.tracksQueue.count > 0 {
                     self.lyricsAndQueueVC.minimizeTracksTable()
                 }
                 
-                if Party.tracksQueue.count == VC.tracksQueue.count && self.isHost {
+                if Party.tracksQueue.count == VC.tracksSelected.count && self.isHost {
                     self.musicPlayer.startPlayer(withTracks: Party.tracksQueue)
                 }
                 
-                self.fetchHighResArtwork(forTracks: VC.tracksQueue)
+                self.fetchHighResArtwork(forTracks: VC.tracksSelected)
                 
                 VC.emptyArrays()
             }
@@ -482,7 +464,7 @@ class PartyViewController: UIViewController, SPTAudioStreamingDelegate, SPTAudio
     func setupParty(withParty party: Party) {
         Party.musicService = type(of: party).musicService
         Party.danceability = type(of: party).danceability
-        Party.countryCode = type(of: party).countryCode
+        Party.cookie = type(of: party).cookie
     }
     
     func updatePosition(position: TimeInterval) {

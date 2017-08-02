@@ -8,17 +8,13 @@
 
 import Foundation
 
-class Track: NSObject {
+class Track: NSObject, NSCoding {
     var id = String()
     var name = String()
     var artist = String()
-    var album = String()
     
     var lowResArtworkURL = String()
     var lowResArtwork: UIImage?
-    
-    var mediumResArtworkURL: String?
-    var mediumResArtwork: UIImage?
     
     var highResArtworkURL = String()
     var highResArtwork: UIImage?
@@ -47,5 +43,38 @@ class Track: NSObject {
             }
         }
         return nil
+    }
+    
+    func encode(with aCoder: NSCoder) {
+        aCoder.encode(id, forKey: "id")
+        aCoder.encode(name, forKey: "name")
+        aCoder.encode(artist, forKey: "artist")
+        aCoder.encode(lowResArtworkURL, forKey: "lowResArtworkURL")
+        aCoder.encode(lowResArtwork, forKey: "lowResArtwork")
+        aCoder.encode(highResArtworkURL, forKey: "highResArtworkURL")
+        aCoder.encode(highResArtwork, forKey: "highResArtwork")
+        aCoder.encode(length, forKey: "length")
+    }
+    
+    convenience required init?(coder aDecoder: NSCoder) {
+        let id = aDecoder.decodeObject(forKey: "id") as! String
+        let name = aDecoder.decodeObject(forKey: "name") as! String
+        let artist = aDecoder.decodeObject(forKey: "artist") as! String
+        let lowResArtworkURL = aDecoder.decodeObject(forKey: "lowResArtworkURL") as! String
+        let lowResArtwork = aDecoder.decodeObject(forKey: "lowResArtwork") as? UIImage
+        let highResArtworkURL = aDecoder.decodeObject(forKey: "highResArtworkURL") as! String
+        let highResArtwork = aDecoder.decodeObject(forKey: "highResArtwork") as? UIImage
+        let length = aDecoder.decodeObject(forKey: "length") as? TimeInterval
+        
+        self.init()
+        
+        self.id = id
+        self.name = name
+        self.artist = artist
+        self.lowResArtworkURL = lowResArtworkURL
+        self.lowResArtwork = lowResArtwork
+        self.highResArtworkURL = highResArtworkURL
+        self.highResArtwork = highResArtwork
+        self.length = length
     }
 }

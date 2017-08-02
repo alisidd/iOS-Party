@@ -74,10 +74,10 @@ class MultipeerManager: NSObject {
         }
     }
     
-    func sendTracks(_ tracksList: [String]) {
+    func sendTracks() {
         if sessions.count > 0 {
             do {
-                let tracksListData = NSKeyedArchiver.archivedData(withRootObject: tracksList)
+                let tracksListData = NSKeyedArchiver.archivedData(withRootObject: Party.tracksQueue)
                 print("Number of active sessions: \(sessions.count)")
                 for session in sessions.keys {
                     try session.send(tracksListData, toPeers: session.connectedPeers, with: .reliable)
@@ -90,7 +90,7 @@ class MultipeerManager: NSObject {
     }
     
     func sendPartyInfo(toSession session: MCSession) {
-        if sessions.count > 0 {
+        if sessions.count > 0 && delegate != nil {
             let tracksData = NSKeyedArchiver.archivedData(withRootObject: delegate!.id(ofTracks: Party.tracksQueue, withRemoval: false))
             let partyData = NSKeyedArchiver.archivedData(withRootObject: Party())
             print("Number of active sessions: \(sessions.count)")
@@ -202,7 +202,7 @@ extension MultipeerManager : MCSessionDelegate {
         if !isHost {
             delegate?.updateStatus(withState: state)
         }
-        if state == .connected {
+        if state == .connected && isHost {
             print("Calling function to send party info")
             sendPartyInfo(toSession: session)
         } else if state == .notConnected {
@@ -228,6 +228,8 @@ extension MultipeerManager : MCSessionDelegate {
             }
         } else if let position = unarchivedData as? TimeInterval {
             delegate?.updatePosition(position: position)
+        } else if let tracks = unarchivedData as? [Track] {
+            Party.tracksQueue = tracks
         }
     }
     

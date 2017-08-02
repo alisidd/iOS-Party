@@ -9,7 +9,6 @@
 import UIKit
 
 class HubAndQueuePageViewController: UIPageViewController, UIPageViewControllerDelegate, UIPageViewControllerDataSource {
-    
     weak var partyDelegate: PartyViewControllerInfoDelegate?
     var allViewControllers = [UIViewController]()
 

@@ -17,6 +17,7 @@
 		411688771F2A727500C3CD4A /* TrackType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 411688761F2A727500C3CD4A /* TrackType.swift */; };
 		411688791F2F236F00C3CD4A /* AppleMusicFetcher.swift in Sources */ = {isa = PBXBuildFile; fileRef = 411688781F2F236F00C3CD4A /* AppleMusicFetcher.swift */; };
 		4116887C1F2F248300C3CD4A /* AppleMusicURLFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4116887B1F2F248300C3CD4A /* AppleMusicURLFactory.swift */; };
+		411688831F320E5100C3CD4A /* SpotifyFetcher.swift in Sources */ = {isa = PBXBuildFile; fileRef = 411688821F320E5100C3CD4A /* SpotifyFetcher.swift */; };
 		411EEF401E346E2200216016 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 411EEF3F1E346E2200216016 /* Main.storyboard */; };
 		412FBED11E32CFA7007FFB6A /* MusicPlayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 412FBED01E32CFA7007FFB6A /* MusicPlayer.swift */; };
 		413533291E8DE4C600BE5B0F /* MusicService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 413533281E8DE4C600BE5B0F /* MusicService.swift */; };
@@ -29,7 +30,6 @@
 		417B9D4B1E317C3C0021F36E /* PartyViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 417B9D4A1E317C3C0021F36E /* PartyViewController.swift */; };
 		417B9D4F1E318D0D0021F36E /* AddSongViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 417B9D4E1E318D0D0021F36E /* AddSongViewController.swift */; };
 		417B9D531E31B3CE0021F36E /* Track.swift in Sources */ = {isa = PBXBuildFile; fileRef = 417B9D521E31B3CE0021F36E /* Track.swift */; };
-		417B9D551E31BC120021F36E /* RestApiManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 417B9D541E31BC120021F36E /* RestApiManager.swift */; };
 		417B9D571E31CD8D0021F36E /* TrackTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 417B9D561E31CD8D0021F36E /* TrackTableViewCell.swift */; };
 		417C38DA1DDA43FD00F59926 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 417C38D81DDA43FD00F59926 /* LaunchScreen.storyboard */; };
 		417C38EA1DDA91A100F59926 /* PartyCreationViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 417C38E21DDA447600F59926 /* PartyCreationViewController.swift */; };
@@ -68,6 +68,7 @@
 		411688761F2A727500C3CD4A /* TrackType.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TrackType.swift; sourceTree = "<group>"; };
 		411688781F2F236F00C3CD4A /* AppleMusicFetcher.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AppleMusicFetcher.swift; sourceTree = "<group>"; };
 		4116887B1F2F248300C3CD4A /* AppleMusicURLFactory.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AppleMusicURLFactory.swift; sourceTree = "<group>"; };
+		411688821F320E5100C3CD4A /* SpotifyFetcher.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SpotifyFetcher.swift; sourceTree = "<group>"; };
 		411EEF3F1E346E2200216016 /* Main.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = Main.storyboard; sourceTree = "<group>"; };
 		412FBED01E32CFA7007FFB6A /* MusicPlayer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MusicPlayer.swift; sourceTree = "<group>"; };
 		413533281E8DE4C600BE5B0F /* MusicService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MusicService.swift; sourceTree = "<group>"; };
@@ -81,7 +82,6 @@
 		417B9D4A1E317C3C0021F36E /* PartyViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PartyViewController.swift; sourceTree = "<group>"; };
 		417B9D4E1E318D0D0021F36E /* AddSongViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AddSongViewController.swift; sourceTree = "<group>"; };
 		417B9D521E31B3CE0021F36E /* Track.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Track.swift; sourceTree = "<group>"; };
-		417B9D541E31BC120021F36E /* RestApiManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RestApiManager.swift; sourceTree = "<group>"; };
 		417B9D561E31CD8D0021F36E /* TrackTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TrackTableViewCell.swift; sourceTree = "<group>"; };
 		417C38C91DDA43FD00F59926 /* WeJ.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = WeJ.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		417C38CC1DDA43FD00F59926 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -148,6 +148,7 @@
 			isa = PBXGroup;
 			children = (
 				411688781F2F236F00C3CD4A /* AppleMusicFetcher.swift */,
+				411688821F320E5100C3CD4A /* SpotifyFetcher.swift */,
 			);
 			name = Fetchers;
 			sourceTree = "<group>";
@@ -155,8 +156,8 @@
 		4116887D1F2F248700C3CD4A /* URL Factories */ = {
 			isa = PBXGroup;
 			children = (
-				41B4AE111F2A5FEF00F39E04 /* SpotifyURLFactory.swift */,
 				4116887B1F2F248300C3CD4A /* AppleMusicURLFactory.swift */,
+				41B4AE111F2A5FEF00F39E04 /* SpotifyURLFactory.swift */,
 			);
 			name = "URL Factories";
 			sourceTree = "<group>";
@@ -188,7 +189,6 @@
 				4116887A1F2F23A700C3CD4A /* Fetchers */,
 				41B4AE101F2A4D7300F39E04 /* Constants */,
 				4116887D1F2F248700C3CD4A /* URL Factories */,
-				417B9D541E31BC120021F36E /* RestApiManager.swift */,
 				34D750DF1E32E9C5009AFD63 /* MultipeerManager.swift */,
 			);
 			name = "Network Managers";
@@ -494,13 +494,13 @@
 				417C38EC1DDA91A800F59926 /* InitialSetupViewController.swift in Sources */,
 				3472FB161DDAC81E00A35FCB /* Party.swift in Sources */,
 				416551381F27D9D900FA33F5 /* MXMLyricsAction.m in Sources */,
+				411688831F320E5100C3CD4A /* SpotifyFetcher.swift in Sources */,
 				417C38EA1DDA91A100F59926 /* PartyCreationViewController.swift in Sources */,
 				4116887C1F2F248300C3CD4A /* AppleMusicURLFactory.swift in Sources */,
 				34D750E01E32E9C5009AFD63 /* MultipeerManager.swift in Sources */,
 				411688791F2F236F00C3CD4A /* AppleMusicFetcher.swift in Sources */,
 				417B9D571E31CD8D0021F36E /* TrackTableViewCell.swift in Sources */,
 				417B9D531E31B3CE0021F36E /* Track.swift in Sources */,
-				417B9D551E31BC120021F36E /* RestApiManager.swift in Sources */,
 				41A279F01F29141100C218A2 /* SpotifyAuthorizationManager.swift in Sources */,
 				41A279EB1F28E54300C218A2 /* Appearance.swift in Sources */,
 				416E8C3F1F2A046E00F524E0 /* SpotifyConstants.swift in Sources */,

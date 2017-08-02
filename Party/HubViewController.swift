@@ -147,7 +147,7 @@ class HubViewController: UIViewController, UITableViewDelegate, UITableViewDataS
             MXMLyricsAction.sharedExtension().findLyricsForSong(
                 withTitle: Party.tracksQueue[0].name,
                 artist: Party.tracksQueue[0].artist,
-                album: Party.tracksQueue[0].album,
+                album: "",
                 artWork: Party.tracksQueue[0].highResArtwork,
                 currentProgress: delegate!.getCurrentProgress()!,
                 trackDuration: Party.tracksQueue[0].length!,

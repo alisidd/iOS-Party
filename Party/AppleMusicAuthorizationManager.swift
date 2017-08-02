@@ -35,7 +35,7 @@ class AppleMusicAuthorizationManager: AuthorizationManager {
     static func requestStorefrontIdentifier() {
         cloudServiceController.requestStorefrontIdentifier { (storefrontId, _) in
             if let storefrontId = storefrontId?.components(separatedBy: "-").first {
-                Party.countryCode = AppleMusicConstants.countryCodes[storefrontId]
+                Party.cookie = AppleMusicConstants.countryCodes[storefrontId]
             }
             delegate.processingLogin = false
         }

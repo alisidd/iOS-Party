@@ -25,7 +25,6 @@ class PartyCreationViewController: UIViewController, UITextFieldDelegate, UIPick
     
     // MARK: - General Variables
     
-    private var partyMade = Party()
     private var networkManager: MultipeerManager? = MultipeerManager(isHost: false)
     var authorizationManager: AuthorizationManager!
     var processingLogin = false {

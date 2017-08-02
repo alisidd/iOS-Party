@@ -14,11 +14,14 @@ class SpotifyAuthorizationManager: AuthorizationManager {
     
     private static var authViewController: SFSafariViewController!
     var isAuthorized = false
-    static var spotifyAccessToken = String()
     
     private static let updateSession: (Error?, SPTSession?) -> Void = { (_, session) in
         if let sess = session {
             getAuth().session = sess
+            
+            authorizeSpotifyAccess()
+            dispatchGroup.wait()
+            
             delegate.performSegue(withIdentifier: "Create Party", sender: nil)
         }
         delegate.processingLogin = false
@@ -67,9 +70,14 @@ class SpotifyAuthorizationManager: AuthorizationManager {
     }
     
     private static func login(usingSession session: SPTSession) {
+        delegate.processingLogin = true
         SPTAudioStreamingController.sharedInstance().login(withAccessToken: session.accessToken)
+        
+        authorizeSpotifyAccess()
+        dispatchGroup.wait()
+        
+        delegate.processingLogin = false
         delegate.performSegue(withIdentifier: "Create Party", sender: nil)
-        print(session.expirationDate)
     }
     
     private static func renew(usingAuth auth: SPTAuth) {
@@ -83,11 +91,9 @@ class SpotifyAuthorizationManager: AuthorizationManager {
         dispatchGroup.enter()
         DispatchQueue.global(qos: .userInitiated).async {
             let task = URLSession.shared.dataTask(with: request) { (data, response, _) in
-                if let statusCode = (response as? HTTPURLResponse)?.statusCode {
-                    if statusCode == 200 {
-                        let json = JSON(data: data!)
-                        spotifyAccessToken = json["access_token"].stringValue
-                    }
+                if let statusCode = (response as? HTTPURLResponse)?.statusCode, statusCode == 200 {
+                    let json = JSON(data: data!)
+                    Party.cookie = json["access_token"].stringValue
                 }
                 dispatchGroup.leave()
             }

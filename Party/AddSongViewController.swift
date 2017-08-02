@@ -28,7 +28,6 @@ class AddSongViewController: UIViewController, UICollectionViewDelegate, UIColle
     
     // MARK: - General Variables
     
-    var party = Party()
     private var recommendedTracksList = [Track]() {
         didSet {
             DispatchQueue.main.async {
@@ -45,18 +44,19 @@ class AddSongViewController: UIViewController, UICollectionViewDelegate, UIColle
                 self.trackTableView.reloadData()
                 self.indicator.stopAnimating()
                 self.indicator.hidesWhenStopped = true
+                self.fetchImageForRestOfTracks()
             }
         }
     }
-    var tracksQueue = [Track]() {
+    var tracksSelected = [Track]() {
         didSet {
             DispatchQueue.main.async {
-                self.tracksCounter.isHidden = !(self.tracksQueue.count > 0)
-                self.tracksCounter.text = String(self.tracksQueue.count)
+                self.tracksCounter.isHidden = !(self.tracksSelected.count > 0)
+                self.tracksCounter.text = String(self.tracksSelected.count)
             }
         }
     }
-    private let APIManager = RestApiManager()
+    private lazy var fetcher: Fetcher = Party.musicService == .spotify ? SpotifyFetcher() : AppleMusicFetcher()
     private var indicator = UIActivityIndicatorView()
     private let noTracksFoundLabel = UILabel(frame: CGRect(x: 0, y: 0, width: 320, height: 70))
     
@@ -67,7 +67,6 @@ class AddSongViewController: UIViewController, UICollectionViewDelegate, UIColle
         setDelegates()
         initializeActivityIndicator()
         adjustViews()
-        populateRecommendations()
     }
     
     // MARK: - Functions
@@ -98,34 +97,6 @@ class AddSongViewController: UIViewController, UICollectionViewDelegate, UIColle
         navigationItem.hidesBackButton = true
     }
     
-    func populateRecommendations() {
-        if Party.tracksQueue.isEmpty {
-            recommendationsLabel.isHidden = true
-        } else {
-            recommendationsLabel.isHidden = false
-            indicator.startAnimating()
-            DispatchQueue.global(qos: .userInitiated).async {
-                self.APIManager.makeHTTPRequestToSpotifyForRecommendations(withTracks: Party.tracksQueue, forDanceability: Party.danceability)
-                self.APIManager.dispatchGroup.wait()
-                print("Got all tracks")
-                self.fetchImagesForFirstThree()
-                print("Got all pics")
-                self.recommendedTracksList = self.APIManager.tracksList
-            }
-        }
-    }
-    
-    func fetchImagesForFirstThree() {
-        for index in 0..<3 {
-            if let track = self.APIManager.tracksList[safe: index] {
-                if let url = track.mediumResArtworkURL {
-                    track.mediumResArtwork = self.APIManager.fetchImage(fromURL: url)
-                    print("Quick fetched artwork for \(track.name)")
-                }
-            }
-        }
-    }
-    
     func textFieldShouldReturn(_ searchSongsField: UITextField) -> Bool {
         searchTracksField.resignFirstResponder()
         if !searchTracksField.text!.isEmpty {
@@ -138,12 +109,13 @@ class AddSongViewController: UIViewController, UICollectionViewDelegate, UIColle
         indicator.startAnimating()
         hideCollectionsViews()
         showTableView()
-        makeRequestForTracks(forQuery: query)
+        fetcher.searchCatalog(forTerm: query)
         
-        DispatchQueue.global(qos: .userInitiated).async {
-            self.APIManager.dispatchGroup.wait()
-            self.populateTracksList()
-            self.scrollBackUp()
+        DispatchQueue.global(qos: .userInitiated).async { [weak self] in
+            self?.fetcher.dispatchGroup.wait()
+            
+            self?.populateTracksList()
+            self?.scrollBackUp()
         }
     }
     
@@ -161,14 +133,6 @@ class AddSongViewController: UIViewController, UICollectionViewDelegate, UIColle
         trackTableView.isHidden = false
     }
     
-    func makeRequestForTracks(forQuery query: String) {
-        if Party.musicService == .appleMusic {
-            APIManager.makeHTTPRequestToApple(withString: query, withPossibleTrackID: nil)
-        } else {
-            APIManager.makeHTTPRequestToSpotify(withString: query)
-        }
-    }
-    
     func scrollBackUp() {
         DispatchQueue.main.async {
             if !self.tracksList.isEmpty {
@@ -178,13 +142,12 @@ class AddSongViewController: UIViewController, UICollectionViewDelegate, UIColle
     }
     
     func populateTracksList() {
-        tracksList = APIManager.tracksList
+        tracksList = fetcher.tracksList
         DispatchQueue.main.async {
             if self.tracksList.isEmpty {
                 self.displayNoTracksLabel(with: "No Tracks Found")
             } else {
                 self.removeNoTracksFoundLabel()
-                self.fetchRestOfTracks()
             }
         }
     }
@@ -208,23 +171,17 @@ class AddSongViewController: UIViewController, UICollectionViewDelegate, UIColle
         noTracksFoundLabel.removeFromSuperview()
     }
     
-    func fetchRestOfTracks() {
+    func fetchImageForRestOfTracks() {
         let tracksCaptured = tracksList
         DispatchQueue.global(qos: .userInitiated).async {
-            if self.tracksList.count > 5 {
-                for i in 5..<self.tracksList.count {
-                    if tracksCaptured == self.tracksList {
-                        let artworkFetched = self.APIManager.fetchImage(fromURL: self.tracksList[i].lowResArtworkURL)
-                        DispatchQueue.main.async {
-                            if tracksCaptured == self.tracksList {
-                                if let artworkFetchedUnwrapped = artworkFetched {
-                                    self.tracksList[i].lowResArtwork = artworkFetchedUnwrapped
-                                    self.trackTableView.reloadData()
-                                }
-                            }
+            for track in self.tracksList {
+                if track.lowResArtwork == nil && self.tracksList == tracksCaptured {
+                    let artworkFetched = Track.fetchImage(fromURL: track.lowResArtworkURL)
+                    DispatchQueue.main.async {
+                        if let artworkFetched = artworkFetched, tracksCaptured == self.tracksList {
+                            track.lowResArtwork = artworkFetched
+                            self.trackTableView.reloadData()
                         }
-                    } else {
-                        break
                     }
                 }
             }
@@ -235,7 +192,7 @@ class AddSongViewController: UIViewController, UICollectionViewDelegate, UIColle
 
     func emptyArrays() {
         tracksList.removeAll()
-        tracksQueue.removeAll()
+        tracksSelected.removeAll()
     }
     
     // MARK: - Recommendation Table View
@@ -253,27 +210,23 @@ class AddSongViewController: UIViewController, UICollectionViewDelegate, UIColle
         
         let trackToAdd = recommendedTracksList[indexPath.row]
         
-        if let url = trackToAdd.mediumResArtworkURL {
-            if let image = trackToAdd.mediumResArtwork {
-                cell.artworkImageView.image = image
-            } else {
-                cell.artworkImageView.image = nil
-                DispatchQueue.global(qos: .userInitiated).async {
-                    trackToAdd.mediumResArtwork = self.APIManager.fetchImage(fromURL: url)
-                    DispatchQueue.main.async {
-                        cell.artworkImageView.image = trackToAdd.mediumResArtwork
-                        self.recommendationsCollectionView.reloadData()
-                    }
+        if let image = trackToAdd.lowResArtwork {
+            cell.artworkImageView.image = image
+        } else {
+            cell.artworkImageView.image = nil
+            DispatchQueue.global(qos: .userInitiated).async {
+                trackToAdd.lowResArtwork = Track.fetchImage(fromURL: trackToAdd.lowResArtworkURL)
+                DispatchQueue.main.async {
+                    cell.artworkImageView.image = trackToAdd.lowResArtwork
+                    self.recommendationsCollectionView.reloadData()
                 }
             }
-        } else {
-            cell.artworkImageView.image = trackToAdd.lowResArtwork ?? nil
         }
         
         cell.trackName.text = trackToAdd.name
         cell.artistName.text = trackToAdd.artist
         
-        if partyTracksQueue(hasTrack: recommendedTracksList[indexPath.row]) || tracksQueue.contains(recommendedTracksList[indexPath.row]) {
+        if partyTracksQueue(hasTrack: recommendedTracksList[indexPath.row]) || tracksSelected.contains(recommendedTracksList[indexPath.row]) {
             collectionView.selectItem(at: indexPath, animated: false, scrollPosition: .init(rawValue: 0))
             setCheckmark(for: cell, at: indexPath)
         } else {
@@ -303,7 +256,7 @@ class AddSongViewController: UIViewController, UICollectionViewDelegate, UIColle
         addToQueue(track: trackToAdd)
         
         DispatchQueue.global(qos: .userInitiated).async {
-            trackToAdd.lowResArtwork = self.APIManager.fetchImage(fromURL: trackToAdd.lowResArtworkURL)
+            trackToAdd.lowResArtwork = Track.fetchImage(fromURL: trackToAdd.lowResArtworkURL)
         }
         
     }
@@ -329,7 +282,7 @@ class AddSongViewController: UIViewController, UICollectionViewDelegate, UIColle
     
     func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
         cell.backgroundColor = .clear
-        if partyTracksQueue(hasTrack: tracksList[indexPath.row]) || tracksQueue.contains(tracksList[indexPath.row]) {
+        if partyTracksQueue(hasTrack: tracksList[indexPath.row]) || tracksSelected.contains(tracksList[indexPath.row]) {
             cell.accessoryType = .checkmark
             tableView.selectRow(at: indexPath, animated: true, scrollPosition: .none)
         } else {
@@ -338,13 +291,7 @@ class AddSongViewController: UIViewController, UICollectionViewDelegate, UIColle
     }
     
     func partyTracksQueue(hasTrack track: Track) -> Bool {
-        for trackInQueue in Party.tracksQueue {
-            if track.id == trackInQueue.id {
-                return true
-            }
-        }
-        
-        return false
+        return Party.tracksQueue.contains(where: { $0.id == track.id })
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -373,8 +320,8 @@ class AddSongViewController: UIViewController, UICollectionViewDelegate, UIColle
     }
     
     func addToQueue(track: Track) {
-        if !partyTracksQueue(hasTrack: track) && !tracksQueue.contains(track) {
-            tracksQueue.append(track)
+        if !partyTracksQueue(hasTrack: track) && !tracksSelected.contains(track) {
+            tracksSelected.append(track)
         }
     }
     
@@ -390,10 +337,6 @@ class AddSongViewController: UIViewController, UICollectionViewDelegate, UIColle
     }
     
     func removeFromQueue(track: Track) {
-        for trackInQueue in tracksQueue {
-            if trackInQueue.id == track.id {
-                tracksQueue.remove(at: tracksQueue.index(of: trackInQueue)!)
-            }
-        }
+        tracksSelected.remove(at: tracksSelected.index(where: {$0.id == track.id})!)
     }
 }

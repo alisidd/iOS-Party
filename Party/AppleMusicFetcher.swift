@@ -9,9 +9,35 @@
 import Foundation
 import SwiftyJSON
 
-class AppleMusicFetcher {
+protocol Fetcher {
+    var tracksList: [Track] { get set }
+    var dispatchGroup: DispatchGroup { get }
+    func searchCatalog(forTerm term: String)
+    func getTrack(forID id: String)
+}
+
+class AppleMusicFetcher: Fetcher {
     var tracksList = [Track]()
     let dispatchGroup = DispatchGroup()
+    
+    func searchCatalog(forTerm term: String) {
+        let request = AppleMusicURLFactory.createSearchRequest(forTerm: term)
+        
+        dispatchGroup.enter()
+        DispatchQueue.global(qos: .userInitiated).async {
+            let task = URLSession.shared.dataTask(with: request) { (data, response, _) in
+                if let statusCode = (response as? HTTPURLResponse)?.statusCode, statusCode == 200 {
+                    let json = JSON(data: data!)["results"]["songs"]["data"].arrayValue
+                    for trackJSON in json {
+                        self.tracksList.append(self.parse(json: trackJSON))
+                    }
+                }
+                self.dispatchGroup.leave()
+            }
+            
+            task.resume()
+        }
+    }
     
     func getTrack(forID id: String) {
         let request = AppleMusicURLFactory.createTrackRequest(forID: id)
@@ -19,13 +45,9 @@ class AppleMusicFetcher {
         dispatchGroup.enter()
         DispatchQueue.global(qos: .userInitiated).async {
             let task = URLSession.shared.dataTask(with: request) { (data, response, _) in
-                if let statusCode = (response as? HTTPURLResponse)?.statusCode {
-                    print(statusCode)
-                    if statusCode == 200 {
-                        let json = JSON(data: data!)["data"].arrayValue[0]
-                        print(json)
-                        self.tracksList.append(self.parse(json: json))
-                    }
+                if let statusCode = (response as? HTTPURLResponse)?.statusCode, statusCode == 200 {
+                    let json = JSON(data: data!)["data"].arrayValue
+                    self.tracksList.append(self.parse(json: json[0]))
                 }
                 self.dispatchGroup.leave()
             }
@@ -42,19 +64,19 @@ class AppleMusicFetcher {
         track.name = attributes["name"].stringValue
         track.artist = attributes["artistName"].stringValue
         
-        track.lowResArtworkURL = getImageURL(forURL: attributes["artwork"]["url"].stringValue, withSize: "60")
+        track.lowResArtworkURL = getImageURL(fromURL: attributes["artwork"]["url"].stringValue, withSize: "60")
         
         if tracksList.count < 5 {
             track.lowResArtwork = Track.fetchImage(fromURL: track.lowResArtworkURL)
         }
         
-        track.highResArtworkURL = getImageURL(forURL: attributes["artwork"]["url"].stringValue, withSize: "400")
-        track.length = TimeInterval(attributes["trackTimeMillis"].doubleValue / 1000)
+        track.highResArtworkURL = getImageURL(fromURL: attributes["artwork"]["url"].stringValue, withSize: "400")
+        track.length = TimeInterval(attributes["durationInMillis"].doubleValue / 1000)
         
         return track
     }
     
-    private func getImageURL(forURL url: String, withSize size: String) -> String {
+    private func getImageURL(fromURL url: String, withSize size: String) -> String {
         var url = url
         
         url = url.replacingOccurrences(of: "{w}", with: size)
