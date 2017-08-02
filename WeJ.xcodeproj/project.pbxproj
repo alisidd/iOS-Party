@@ -25,7 +25,6 @@
 		4165512C1F279A5900FA33F5 /* BlankAudio.wav in Resources */ = {isa = PBXBuildFile; fileRef = 4165512B1F279A5900FA33F5 /* BlankAudio.wav */; };
 		416551301F279EAC00FA33F5 /* BackgroundTask.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4165512F1F279EAC00FA33F5 /* BackgroundTask.swift */; };
 		416551381F27D9D900FA33F5 /* MXMLyricsAction.m in Sources */ = {isa = PBXBuildFile; fileRef = 416551361F27D9D900FA33F5 /* MXMLyricsAction.m */; };
-		416AB6B51E8CA6D200836680 /* RecommendedCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 416AB6B41E8CA6D200836680 /* RecommendedCollectionViewCell.swift */; };
 		416E8C3F1F2A046E00F524E0 /* SpotifyConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 416E8C3E1F2A046E00F524E0 /* SpotifyConstants.swift */; };
 		417B9D4B1E317C3C0021F36E /* PartyViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 417B9D4A1E317C3C0021F36E /* PartyViewController.swift */; };
 		417B9D4F1E318D0D0021F36E /* AddSongViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 417B9D4E1E318D0D0021F36E /* AddSongViewController.swift */; };
@@ -77,7 +76,6 @@
 		4165512F1F279EAC00FA33F5 /* BackgroundTask.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BackgroundTask.swift; sourceTree = "<group>"; };
 		416551351F27D9D900FA33F5 /* MXMLyricsAction.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MXMLyricsAction.h; sourceTree = "<group>"; };
 		416551361F27D9D900FA33F5 /* MXMLyricsAction.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MXMLyricsAction.m; sourceTree = "<group>"; };
-		416AB6B41E8CA6D200836680 /* RecommendedCollectionViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RecommendedCollectionViewCell.swift; sourceTree = "<group>"; };
 		416E8C3E1F2A046E00F524E0 /* SpotifyConstants.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SpotifyConstants.swift; sourceTree = "<group>"; };
 		417B9D4A1E317C3C0021F36E /* PartyViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PartyViewController.swift; sourceTree = "<group>"; };
 		417B9D4E1E318D0D0021F36E /* AddSongViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AddSongViewController.swift; sourceTree = "<group>"; };
@@ -198,7 +196,6 @@
 			isa = PBXGroup;
 			children = (
 				417B9D4E1E318D0D0021F36E /* AddSongViewController.swift */,
-				416AB6B41E8CA6D200836680 /* RecommendedCollectionViewCell.swift */,
 			);
 			name = "Add Tracks";
 			sourceTree = "<group>";
@@ -487,7 +484,6 @@
 				41C0AEBC1E7A12CB00C797F0 /* HubViewController.swift in Sources */,
 				41C1113F1F2A158500A33771 /* AppleMusicConstants.swift in Sources */,
 				418503F71E307BE900472006 /* setupButton.swift in Sources */,
-				416AB6B51E8CA6D200836680 /* RecommendedCollectionViewCell.swift in Sources */,
 				41B4AE121F2A5FEF00F39E04 /* SpotifyURLFactory.swift in Sources */,
 				417C38EF1DDA91B500F59926 /* Party.xcdatamodeld in Sources */,
 				417C38EE1DDA91B100F59926 /* AppDelegate.swift in Sources */,

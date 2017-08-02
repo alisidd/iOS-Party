@@ -15,28 +15,13 @@ extension Collection where Indices.Iterator.Element == Index {
     }
 }
 
-class AddSongViewController: UIViewController, UICollectionViewDelegate, UICollectionViewDataSource, UITextFieldDelegate, UITableViewDataSource, UITableViewDelegate {
-    // MARK: - Storyboard Variables
-
-    @IBOutlet weak var recommendationsLabel: UILabel!
-    @IBOutlet weak var recommendationsCollectionView: UICollectionView!
-    
+class AddSongViewController: UIViewController, UITextFieldDelegate, UITableViewDataSource, UITableViewDelegate {
     @IBOutlet weak var searchTracksField: UITextField!
     @IBOutlet weak var tracksCounter: BadgeSwift!
     
     @IBOutlet weak var trackTableView: UITableView!
     
     // MARK: - General Variables
-    
-    private var recommendedTracksList = [Track]() {
-        didSet {
-            DispatchQueue.main.async {
-                self.recommendationsCollectionView.reloadData()
-                self.indicator.stopAnimating()
-                self.indicator.hidesWhenStopped = true
-            }
-        }
-    }
     
     private var tracksList = [Track]() {
         didSet {
@@ -72,9 +57,6 @@ class AddSongViewController: UIViewController, UICollectionViewDelegate, UIColle
     // MARK: - Functions
     
     func setDelegates() {
-        recommendationsCollectionView.delegate = self
-        recommendationsCollectionView.dataSource = self
-        
         searchTracksField.delegate = self
         trackTableView.delegate    = self
         trackTableView.dataSource  = self
@@ -88,9 +70,6 @@ class AddSongViewController: UIViewController, UICollectionViewDelegate, UIColle
     }
     
     func adjustViews() {
-        recommendationsCollectionView.showsHorizontalScrollIndicator = false
-        recommendationsCollectionView.allowsMultipleSelection = true
-        
         trackTableView.backgroundColor = .clear
         trackTableView.tableFooterView = UIView()
         
@@ -107,7 +86,6 @@ class AddSongViewController: UIViewController, UICollectionViewDelegate, UIColle
     
     func fetchResults(forQuery query: String) {
         indicator.startAnimating()
-        hideCollectionsViews()
         showTableView()
         fetcher.searchCatalog(forTerm: query)
         
@@ -116,16 +94,6 @@ class AddSongViewController: UIViewController, UICollectionViewDelegate, UIColle
             
             self?.populateTracksList()
             self?.scrollBackUp()
-        }
-    }
-    
-    func hideCollectionsViews() {
-        UIView.animate(withDuration: 0.5, animations: {
-            self.recommendationsLabel.alpha = 0
-            self.recommendationsCollectionView.alpha = 0
-        }) { (finished) in
-            self.recommendationsLabel.isHidden = true
-            self.recommendationsCollectionView.isHidden = true
         }
     }
     
@@ -193,81 +161,6 @@ class AddSongViewController: UIViewController, UICollectionViewDelegate, UIColle
     func emptyArrays() {
         tracksList.removeAll()
         tracksSelected.removeAll()
-    }
-    
-    // MARK: - Recommendation Table View
-    
-    func numberOfSections(in collectionView: UICollectionView) -> Int {
-        return 1
-    }
-    
-    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return recommendedTracksList.count
-    }
-    
-    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "Recommendation Cell", for: indexPath) as! RecommendedCollectionViewCell
-        
-        let trackToAdd = recommendedTracksList[indexPath.row]
-        
-        if let image = trackToAdd.lowResArtwork {
-            cell.artworkImageView.image = image
-        } else {
-            cell.artworkImageView.image = nil
-            DispatchQueue.global(qos: .userInitiated).async {
-                trackToAdd.lowResArtwork = Track.fetchImage(fromURL: trackToAdd.lowResArtworkURL)
-                DispatchQueue.main.async {
-                    cell.artworkImageView.image = trackToAdd.lowResArtwork
-                    self.recommendationsCollectionView.reloadData()
-                }
-            }
-        }
-        
-        cell.trackName.text = trackToAdd.name
-        cell.artistName.text = trackToAdd.artist
-        
-        if partyTracksQueue(hasTrack: recommendedTracksList[indexPath.row]) || tracksSelected.contains(recommendedTracksList[indexPath.row]) {
-            collectionView.selectItem(at: indexPath, animated: false, scrollPosition: .init(rawValue: 0))
-            setCheckmark(for: cell, at: indexPath)
-        } else {
-            removeCheckmark(for: cell)
-        }
-        
-        return cell
-    }
-    
-    func setCheckmark(for cell: RecommendedCollectionViewCell, at indexPath: IndexPath) {
-        print("Setting checkmark")
-        DispatchQueue.main.async {
-            cell.checkmarkLabel.text = "✓"
-        }
-    }
-    
-    func removeCheckmark(for cell: RecommendedCollectionViewCell) {
-        print("Removing checkmark")
-        cell.checkmarkLabel.text = ""
-    }
-    
-    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        let cell = collectionView.cellForItem(at: indexPath) as! RecommendedCollectionViewCell
-        setCheckmark(for: cell, at: indexPath)
-        
-        let trackToAdd = self.recommendedTracksList[indexPath.row]
-        addToQueue(track: trackToAdd)
-        
-        DispatchQueue.global(qos: .userInitiated).async {
-            trackToAdd.lowResArtwork = Track.fetchImage(fromURL: trackToAdd.lowResArtworkURL)
-        }
-        
-    }
-    
-    func collectionView(_ collectionView: UICollectionView, didDeselectItemAt indexPath: IndexPath) {
-        let cell = collectionView.cellForItem(at: indexPath) as! RecommendedCollectionViewCell
-        
-        if !partyTracksQueue(hasTrack: recommendedTracksList[indexPath.row]) {
-            removeCheckmark(for: cell)
-            removeFromQueue(track: recommendedTracksList[indexPath.row])
-        }
     }
     
     // MARK: - Table
