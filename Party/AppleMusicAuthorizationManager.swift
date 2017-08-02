@@ -19,7 +19,6 @@ class AppleMusicAuthorizationManager: AuthorizationManager {
     
     static let cloudServiceController = SKCloudServiceController()
     var isAuthorized = SKCloudServiceController.authorizationStatus() == .authorized
-    static var storefrontIdentifier = String()
     
     func requestAuthorization() {
         AppleMusicAuthorizationManager.delegate.processingLogin = true
@@ -35,10 +34,8 @@ class AppleMusicAuthorizationManager: AuthorizationManager {
     
     static func requestStorefrontIdentifier() {
         cloudServiceController.requestStorefrontIdentifier { (storefrontId, _) in
-            if let storefrontId = storefrontId, storefrontId.characters.count >= 6 {
-                let range = storefrontId.startIndex...storefrontId.index(storefrontId.startIndex, offsetBy: 5)
-                storefrontIdentifier = String(storefrontId[range])
-                print(storefrontIdentifier)
+            if let storefrontId = storefrontId?.components(separatedBy: "-").first {
+                Party.countryCode = AppleMusicConstants.countryCodes[storefrontId]
             }
             delegate.processingLogin = false
         }

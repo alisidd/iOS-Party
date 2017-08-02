@@ -16,7 +16,6 @@ extension Collection where Indices.Iterator.Element == Index {
 }
 
 class AddSongViewController: UIViewController, UICollectionViewDelegate, UICollectionViewDataSource, UITextFieldDelegate, UITableViewDataSource, UITableViewDelegate {
-    
     // MARK: - Storyboard Variables
 
     @IBOutlet weak var recommendationsLabel: UILabel!
@@ -100,13 +99,13 @@ class AddSongViewController: UIViewController, UICollectionViewDelegate, UIColle
     }
     
     func populateRecommendations() {
-        if party.tracksQueue.isEmpty {
+        if Party.tracksQueue.isEmpty {
             recommendationsLabel.isHidden = true
         } else {
             recommendationsLabel.isHidden = false
             indicator.startAnimating()
             DispatchQueue.global(qos: .userInitiated).async {
-                self.APIManager.makeHTTPRequestToSpotifyForRecommendations(withTracks: self.party.tracksQueue, forDanceability: self.party.danceability)
+                self.APIManager.makeHTTPRequestToSpotifyForRecommendations(withTracks: Party.tracksQueue, forDanceability: Party.danceability)
                 self.APIManager.dispatchGroup.wait()
                 print("Got all tracks")
                 self.fetchImagesForFirstThree()
@@ -163,7 +162,7 @@ class AddSongViewController: UIViewController, UICollectionViewDelegate, UIColle
     }
     
     func makeRequestForTracks(forQuery query: String) {
-        if party.musicService == .appleMusic {
+        if Party.musicService == .appleMusic {
             APIManager.makeHTTPRequestToApple(withString: query, withPossibleTrackID: nil)
         } else {
             APIManager.makeHTTPRequestToSpotify(withString: query)
@@ -339,7 +338,7 @@ class AddSongViewController: UIViewController, UICollectionViewDelegate, UIColle
     }
     
     func partyTracksQueue(hasTrack track: Track) -> Bool {
-        for trackInQueue in party.tracksQueue {
+        for trackInQueue in Party.tracksQueue {
             if track.id == trackInQueue.id {
                 return true
             }

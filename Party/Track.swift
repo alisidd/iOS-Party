@@ -36,4 +36,16 @@ class Track: NSObject {
             return .none
         }
     }
+    
+    static func fetchImage(fromURL urlString: String) -> UIImage? {
+        if let url = URL(string: urlString) {
+            do {
+                let data = try Data(contentsOf: url)
+                return UIImage(data: data)
+            } catch {
+                print("Error trying to get data from Artwork URL")
+            }
+        }
+        return nil
+    }
 }

@@ -12,7 +12,6 @@ struct SpotifyURLFactory {
     private static let baseAccountsURLString = "accounts.spotify.com"
     
     static func createAccessTokenRequest() -> URLRequest {
-        
         var urlComponents = URLComponents()
         urlComponents.scheme = "https"
         urlComponents.host = baseAccountsURLString

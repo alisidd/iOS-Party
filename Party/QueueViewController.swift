@@ -30,9 +30,7 @@ class QueueViewController: UIViewController, UITableViewDelegate, UITableViewDat
         }
     }
     var previousScrollOffset: CGFloat = 0
-    
-    var party = Party()
-    
+        
     override func viewDidLoad() {
         super.viewDidLoad()
         setDelegates()
@@ -50,7 +48,7 @@ class QueueViewController: UIViewController, UITableViewDelegate, UITableViewDat
                 self.changeFontSizeForUpNext()
                 self.delegate?.layout()
             }
-            if self.party.tracksQueue.isEmpty {
+            if Party.tracksQueue.isEmpty {
                 self.comeOutOfEditingMode()
             }
         }
@@ -80,7 +78,7 @@ class QueueViewController: UIViewController, UITableViewDelegate, UITableViewDat
         let absoluteTop: CGFloat = 0
         
         let isScrollingDown = scrollDiff > 0 && scrollView.contentOffset.y > absoluteTop
-        let isScrollingUp = scrollDiff < 0 && scrollView.contentOffset.y < absoluteTop && !party.tracksQueue.isEmpty
+        let isScrollingUp = scrollDiff < 0 && scrollView.contentOffset.y < absoluteTop && !Party.tracksQueue.isEmpty
         
         var newHeight = headerHeightConstraint
         
@@ -157,7 +155,7 @@ class QueueViewController: UIViewController, UITableViewDelegate, UITableViewDat
     }
     
     func goIntoEditingMode() {
-        if (delegate!.amHost() && party.tracksQueue.count > 1) || tracksQueueHasEditableTracks() {
+        if (delegate!.amHost() && Party.tracksQueue.count > 1) || tracksQueueHasEditableTracks() {
             editButton.isHidden = false
             addButton.isHidden = true
         }
@@ -165,8 +163,8 @@ class QueueViewController: UIViewController, UITableViewDelegate, UITableViewDat
     
     // FIXME: - Do it in O(1)
     func tracksQueueHasEditableTracks() -> Bool {
-        for track in party.tracksQueue {
-            if delegate!.personalQueue.contains(track) && track != party.tracksQueue[0] {
+        for track in Party.tracksQueue {
+            if delegate!.personalQueue.contains(track) && track != Party.tracksQueue[0] {
                 return true
             }
         }
@@ -180,7 +178,7 @@ class QueueViewController: UIViewController, UITableViewDelegate, UITableViewDat
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return party.tracksQueue.count - 1
+        return Party.tracksQueue.count - 1
     }
     
     func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
@@ -193,14 +191,14 @@ class QueueViewController: UIViewController, UITableViewDelegate, UITableViewDat
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "Track In Queue") as! TrackTableViewCell
         
-        if party.tracksQueue.count > indexPath.row {
-            if let unwrappedArtwork = party.tracksQueue[indexPath.row + 1].lowResArtwork {
+        if Party.tracksQueue.count > indexPath.row {
+            if let unwrappedArtwork = Party.tracksQueue[indexPath.row + 1].lowResArtwork {
                 cell.artworkImageView.image = unwrappedArtwork
             } else {
                 cell.artworkImageView.image = nil
             }
-            cell.trackName.text = party.tracksQueue[indexPath.row + 1].name
-            cell.artistName.text = party.tracksQueue[indexPath.row + 1].artist
+            cell.trackName.text = Party.tracksQueue[indexPath.row + 1].name
+            cell.artistName.text = Party.tracksQueue[indexPath.row + 1].artist
         }
         
         return cell
@@ -209,14 +207,6 @@ class QueueViewController: UIViewController, UITableViewDelegate, UITableViewDat
     func updateTable() {
         DispatchQueue.main.async {
             self.tracksTableView.reloadData()
-        }
-    }
-    
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        if segue.identifier == "Add Tracks" {
-            if let vc = segue.destination as? AddSongViewController {
-                vc.party = party
-            }
         }
     }
 
@@ -232,7 +222,7 @@ class QueueViewController: UIViewController, UITableViewDelegate, UITableViewDat
     }
     
     func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
-        if !delegate!.amHost() && !delegate!.personalQueue.contains(party.tracksQueue[indexPath.row + 1]) {
+        if !delegate!.amHost() && !delegate!.personalQueue.contains(Party.tracksQueue[indexPath.row + 1]) {
             return false
         } else {
             return true
@@ -248,9 +238,9 @@ class QueueViewController: UIViewController, UITableViewDelegate, UITableViewDat
     
     
     func tableView(_ tableView: UITableView, moveRowAt sourceIndexPath: IndexPath, to destinationIndexPath: IndexPath) {
-        let itemMoved = party.tracksQueue[sourceIndexPath.row + 1]
-        party.tracksQueue.remove(at: sourceIndexPath.row + 1)
-        party.tracksQueue.insert(itemMoved, at: destinationIndexPath.row + 1)
+        let itemMoved = Party.tracksQueue[sourceIndexPath.row + 1]
+        Party.tracksQueue.remove(at: sourceIndexPath.row + 1)
+        Party.tracksQueue.insert(itemMoved, at: destinationIndexPath.row + 1)
     }
     
     func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCellEditingStyle, forRowAt indexPath: IndexPath) {
@@ -263,8 +253,8 @@ class QueueViewController: UIViewController, UITableViewDelegate, UITableViewDat
     }
     
     func removeTrack(atIndex index: Int) {
-        let track = party.tracksQueue[index]
-        party.tracksQueue.remove(at: index)
+        let track = Party.tracksQueue[index]
+        Party.tracksQueue.remove(at: index)
         delegate?.sendTracksToPeers(forTracks: [track], toRemove: true)
     }
     

@@ -10,7 +10,6 @@ import UIKit
 
 class HubAndQueuePageViewController: UIPageViewController, UIPageViewControllerDelegate, UIPageViewControllerDataSource {
     
-    var party = Party()
     weak var partyDelegate: PartyViewControllerInfoDelegate?
     var allViewControllers = [UIViewController]()
 
@@ -34,11 +33,9 @@ class HubAndQueuePageViewController: UIPageViewController, UIPageViewControllerD
         allViewControllers.append(tracksQueueViewController)
         
         let vc1 = allViewControllers[0] as! HubViewController
-        vc1.party = party
         vc1.delegate = partyDelegate!
         
         let vc2 = allViewControllers[1] as! QueueViewController
-        vc2.party = party
         vc2.delegate = partyDelegate!
         
         setViewControllers([tracksQueueViewController], direction: .reverse, animated: true, completion: nil)
@@ -46,7 +43,6 @@ class HubAndQueuePageViewController: UIPageViewController, UIPageViewControllerD
     
     func updateTable() {
         if let vc = allViewControllers[1] as? QueueViewController {
-            vc.party = party
             vc.updateTable()
         }
     }

@@ -1,6 +1,6 @@
 //
-//  NetworkServiceManager.swift
-//  Party
+//  MultipeerManager.swift
+//  WeJ
 //
 //  Created by Matthew Paletta on 2017-01-20.
 //  Copyright © 2017 Mohammad Ali Siddiqui. All rights reserved.
@@ -9,8 +9,7 @@
 import Foundation
 import MultipeerConnectivity
 
-class NetworkServiceManager: NSObject {
-    
+class MultipeerManager: NSObject {
     // MARK: - General Variables
     
     private let MessageServiceType = "localParty"
@@ -90,10 +89,10 @@ class NetworkServiceManager: NSObject {
         }
     }
     
-    func sendPartyInfo(forParty party: Party, toSession session: MCSession) {
+    func sendPartyInfo(toSession session: MCSession) {
         if sessions.count > 0 {
-            let tracksData = NSKeyedArchiver.archivedData(withRootObject: delegate!.id(ofTracks: party.tracksQueue, withRemoval: false))
-            let partyData = NSKeyedArchiver.archivedData(withRootObject: party)
+            let tracksData = NSKeyedArchiver.archivedData(withRootObject: delegate!.id(ofTracks: Party.tracksQueue, withRemoval: false))
+            let partyData = NSKeyedArchiver.archivedData(withRootObject: Party())
             print("Number of active sessions: \(sessions.count)")
             try? session.send(partyData, toPeers: session.connectedPeers, with: .reliable)
             try? session.send(tracksData, toPeers: session.connectedPeers, with: .reliable)
@@ -103,8 +102,7 @@ class NetworkServiceManager: NSObject {
 
 // MARK: - Invitation
 
-extension NetworkServiceManager : MCNearbyServiceAdvertiserDelegate {
-    
+extension MultipeerManager : MCNearbyServiceAdvertiserDelegate {
     func advertiser(_ advertiser: MCNearbyServiceAdvertiser, didReceiveInvitationFromPeer peerID: MCPeerID, withContext context: Data?, invitationHandler: @escaping ((Bool, MCSession?) -> Void)) {
         
         print("didReceiveInvitationFromPeer \(peerID)")
@@ -127,13 +125,11 @@ extension NetworkServiceManager : MCNearbyServiceAdvertiserDelegate {
     func advertiser(_ advertiser: MCNearbyServiceAdvertiser, didNotStartAdvertisingPeer error: Error) {
         print("didNotStartAdvertisingPeer: \(error)")
     }
-    
 }
 
 // MARK: - Peer Discovery Callbacks
 
-extension NetworkServiceManager : MCNearbyServiceBrowserDelegate {
-    
+extension MultipeerManager : MCNearbyServiceBrowserDelegate {
     @available(iOS 7.0, *)
     public func browser(_ browser: MCNearbyServiceBrowser, foundPeer peerID: MCPeerID, withDiscoveryInfo info: [String : String]?) {
         print("foundPeer: \(peerID)")
@@ -185,11 +181,9 @@ extension NetworkServiceManager : MCNearbyServiceBrowserDelegate {
     func browser(_ browser: MCNearbyServiceBrowser, didNotStartBrowsingForPeers error: Error) {
         print("didNotStartBrowsingForPeers: \(error)")
     }
-    
 }
 
 extension MCSessionState {
-    
     func stringValue() -> String {
         switch self {
         case .notConnected: return "Not Connected"
@@ -197,13 +191,11 @@ extension MCSessionState {
         case .connected: return "Connected"
         }
     }
-    
 }
 
 // MARK: - Session Callbacks
 
-extension NetworkServiceManager : MCSessionDelegate {
-    
+extension MultipeerManager : MCSessionDelegate {
     func session(_ session: MCSession, peer peerID: MCPeerID, didChange state: MCSessionState) {
         print("peer \(peerID) didChangeState: \(state.stringValue())")
         delegate?.connectedDevicesChanged(self, connectedDevices: session.connectedPeers.map{$0.displayName})
@@ -212,7 +204,7 @@ extension NetworkServiceManager : MCSessionDelegate {
         }
         if state == .connected {
             print("Calling function to send party info")
-            delegate?.sendPartyInfo(toSession: session)
+            sendPartyInfo(toSession: session)
         } else if state == .notConnected {
             if otherHosts.contains(peerID) {
                 otherHosts.remove(at: otherHosts.index(of: peerID)!)
@@ -232,7 +224,7 @@ extension NetworkServiceManager : MCSessionDelegate {
             if !tracksIDList.isEmpty, case .removal = Track.typeOf(track: tracksIDList[0]) {
                 delegate?.remove(trackID: tracksIDList[0])
             } else {
-                delegate?.addTracks(fromPeer: peerID, withTracks: tracksIDList)
+                delegate?.add(tracks: tracksIDList, fromPeer: peerID)
             }
         } else if let position = unarchivedData as? TimeInterval {
             delegate?.updatePosition(position: position)
@@ -254,5 +246,4 @@ extension NetworkServiceManager : MCSessionDelegate {
     func session(_ session: MCSession, didStartReceivingResourceWithName resourceName: String, fromPeer peerID: MCPeerID, with progress: Progress) {
         print("didStartReceivingResourceWithName")
     }
-    
 }

@@ -26,7 +26,6 @@ class RestApiManager {
 
     // Asynchronous Variables
     let dispatchGroup = DispatchGroup()
-    var latestRequest = [MCPeerID: [String]]()
     
     // MARK: - Apple Music
     
@@ -35,10 +34,10 @@ class RestApiManager {
         
         DispatchQueue.global(qos: .userInitiated).async {
             // Get storefront identifer to ensure tracks returned are playable by the user
-            let storefrontIdentifierFound = AppleMusicAuthorizationManager.storefrontIdentifier
+            let storefrontIdentifierFound = Party.countryCode
             let term = string.addingPercentEncoding(withAllowedCharacters:NSCharacterSet.urlQueryAllowed)!
             
-            let requestURL = URL(string: self.appleTracksUrl + term.replacingOccurrences(of: " ", with: "+") + "&s=" + storefrontIdentifierFound)
+            let requestURL = URL(string: self.appleTracksUrl + term.replacingOccurrences(of: " ", with: "+") + "&s=" + storefrontIdentifierFound!)
             
             if let unwrappedURL = requestURL {
                 let task = URLSession.shared.dataTask(with: unwrappedURL) { (data, response, error) in

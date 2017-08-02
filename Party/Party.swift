@@ -10,10 +10,10 @@ import Foundation
 
 @objc(Party)
 class Party: NSObject, NSCoding {
-    weak var delegate: UpdatePartyDelegate?
-    var musicService = MusicService.spotify
+    static weak var delegate: UpdatePartyDelegate?
+    static var musicService = MusicService.spotify
     
-    var tracksQueue = [Track]() {
+    static var tracksQueue = [Track]() {
         didSet {
             delegate?.updateEveryonesTableView()
             if tracksQueue.count > 0 {
@@ -21,23 +21,27 @@ class Party: NSObject, NSCoding {
             }
         }
     }
-    var tracksFromPeers = [Track]()
-    var danceability: Float = 0.5
+    static var tracksFromPeers = [Track]()
+    static var danceability: Float = 0.5
+    static var countryCode: String?
     
     // MARK: - NSCoding
     
     func encode(with aCoder: NSCoder) {
-        aCoder.encode(musicService.rawValue, forKey: "musicService")
-        aCoder.encode(danceability, forKey: "danceability")
+        aCoder.encode(Party.musicService.rawValue, forKey: "musicService")
+        aCoder.encode(Party.danceability, forKey: "danceability")
+        aCoder.encode(Party.countryCode, forKey: "countryCode")
     }
     
     convenience required init?(coder aDecoder: NSCoder) {
         let musicService = aDecoder.decodeObject(forKey: "musicService") as! String
         let danceability = aDecoder.decodeFloat(forKey: "danceability")
+        let countryCode = aDecoder.decodeObject(forKey: "countryCode") as? String
         
         self.init()
 
-        self.musicService = MusicService(rawValue: musicService)!
-        self.danceability = danceability
+        Party.musicService = MusicService(rawValue: musicService)!
+        Party.danceability = danceability
+        Party.countryCode = countryCode
     }
 }

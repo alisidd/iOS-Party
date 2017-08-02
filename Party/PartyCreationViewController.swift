@@ -26,7 +26,7 @@ class PartyCreationViewController: UIViewController, UITextFieldDelegate, UIPick
     // MARK: - General Variables
     
     private var partyMade = Party()
-    private var networkManager: NetworkServiceManager? = NetworkServiceManager(isHost: false)
+    private var networkManager: MultipeerManager? = MultipeerManager(isHost: false)
     var authorizationManager: AuthorizationManager!
     var processingLogin = false {
         didSet {
@@ -38,7 +38,7 @@ class PartyCreationViewController: UIViewController, UITextFieldDelegate, UIPick
                 }
                 self.createButton.isHidden = self.processingLogin
                 
-                if self.partyMade.musicService == .appleMusic && !self.processingLogin {
+                if Party.musicService == .appleMusic && !self.processingLogin {
                     if self.authorizationManager.isAuthorized {
                         self.performSegue(withIdentifier: "Create Party", sender: nil)
                     } else {
@@ -61,7 +61,7 @@ class PartyCreationViewController: UIViewController, UITextFieldDelegate, UIPick
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        networkManager = NetworkServiceManager(isHost: false)
+        networkManager = MultipeerManager(isHost: false)
     }
     
     override func viewWillDisappear(_ animated: Bool) {
@@ -99,12 +99,12 @@ class PartyCreationViewController: UIViewController, UITextFieldDelegate, UIPick
     
     @IBAction func changeToSpotify(_ sender: setupButton) {
         change(toButton: spotifyButton, fromButton: appleMusicButton)
-        partyMade.musicService = .spotify
+        Party.musicService = .spotify
     }
     
     @IBAction func changeToAppleMusic(_ sender: setupButton) {
         change(toButton: appleMusicButton, fromButton: spotifyButton)
-        partyMade.musicService = .appleMusic
+        Party.musicService = .appleMusic
     }
     
     private func change(toButton button: setupButton, fromButton otherButton: setupButton) {
@@ -118,13 +118,13 @@ class PartyCreationViewController: UIViewController, UITextFieldDelegate, UIPick
     }
     
     @IBAction func sliderValueChanged(_ sender: UISlider) {
-        partyMade.danceability = sender.value
+        Party.danceability = sender.value
     }
     
     @IBAction func createParty(_ sender: UIButton) {
         if networkManager!.otherHosts.isEmpty {            
             if !processingLogin {
-                authorizationManager = partyMade.musicService == .spotify ? SpotifyAuthorizationManager() : AppleMusicAuthorizationManager()
+                authorizationManager = Party.musicService == .spotify ? SpotifyAuthorizationManager() : AppleMusicAuthorizationManager()
                 authorizationManager.requestAuthorization()
             }
         } else {
@@ -160,7 +160,6 @@ class PartyCreationViewController: UIViewController, UITextFieldDelegate, UIPick
 
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if let controller = segue.destination as? PartyViewController, segue.identifier == "Create Party" {
-            controller.party = partyMade
             controller.networkManager?.delegate = controller
         }
     }
