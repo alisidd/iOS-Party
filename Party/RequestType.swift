@@ -1,5 +1,5 @@
 //
-//  TrackType.swift
+//  RequestType.swift
 //  WeJ
 //
 //  Created by Ali Siddiqui on 7/27/17.
@@ -8,8 +8,7 @@
 
 import Foundation
 
-enum TrackType {
+enum RequestType {
     case removal
-    case service(ofType: MusicService)
-    case none
+    case addition
 }

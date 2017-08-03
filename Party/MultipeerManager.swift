@@ -61,41 +61,31 @@ class MultipeerManager: NSObject {
     // MARK: - Functions
     
     func advertise(position: TimeInterval) {
-        if sessions.count > 0 {
-            do {
-                let positionData = NSKeyedArchiver.archivedData(withRootObject: position)
-                for session in sessions.keys {
-                    try session.send(positionData, toPeers: session.connectedPeers, with: .reliable)
-                }
-                print("Sending Position")
-            } catch let error as NSError {
-                print(error.localizedDescription)
+        if !sessions.isEmpty {
+            let positionData = NSKeyedArchiver.archivedData(withRootObject: position)
+            for session in sessions.keys {
+                try? session.send(positionData, toPeers: session.connectedPeers, with: .reliable)
             }
+            print("Sending Position")
         }
     }
     
-    func sendTracks() {
-        if sessions.count > 0 {
-            do {
-                let tracksListData = NSKeyedArchiver.archivedData(withRootObject: Party.tracksQueue)
-                print("Number of active sessions: \(sessions.count)")
-                for session in sessions.keys {
-                    try session.send(tracksListData, toPeers: session.connectedPeers, with: .reliable)
-                }
-                print("Sending Data")
-            } catch let error as NSError {
-                print(error.localizedDescription)
+    func send(tracks: [Track]) {
+        if !sessions.isEmpty {
+            let tracksListData = NSKeyedArchiver.archivedData(withRootObject: tracks)
+            print("Number of active sessions: \(sessions.count)")
+            for session in sessions.keys {
+                try? session.send(tracksListData, toPeers: session.connectedPeers, with: .reliable)
             }
+            print("Sending Data")
         }
     }
     
     func sendPartyInfo(toSession session: MCSession) {
-        if sessions.count > 0 && delegate != nil {
-            let tracksData = NSKeyedArchiver.archivedData(withRootObject: delegate!.id(ofTracks: Party.tracksQueue, withRemoval: false))
+        if !sessions.isEmpty && delegate != nil {
             let partyData = NSKeyedArchiver.archivedData(withRootObject: Party())
             print("Number of active sessions: \(sessions.count)")
             try? session.send(partyData, toPeers: session.connectedPeers, with: .reliable)
-            try? session.send(tracksData, toPeers: session.connectedPeers, with: .reliable)
         }
     }
 }
@@ -203,8 +193,8 @@ extension MultipeerManager : MCSessionDelegate {
             delegate?.updateStatus(withState: state)
         }
         if state == .connected && isHost {
-            print("Calling function to send party info")
             sendPartyInfo(toSession: session)
+            send(tracks: Party.tracksQueue)
         } else if state == .notConnected {
             if otherHosts.contains(peerID) {
                 otherHosts.remove(at: otherHosts.index(of: peerID)!)
@@ -220,16 +210,14 @@ extension MultipeerManager : MCSessionDelegate {
         let unarchivedData = NSKeyedUnarchiver.unarchiveObject(with: data)
         if let party = unarchivedData as? Party {
             delegate?.setupParty(withParty: party)
-        } else if var tracksIDList = unarchivedData as? [String] {
-            if !tracksIDList.isEmpty, case .removal = Track.typeOf(track: tracksIDList[0]) {
-                delegate?.remove(trackID: tracksIDList[0])
+        } else if let tracks = unarchivedData as? [Track], !tracks.isEmpty {
+            if case .removal = Track.typeOf(track: tracks[0]) {
+                delegate?.remove(track: tracks[0])
             } else {
-                delegate?.add(tracks: tracksIDList, fromPeer: peerID)
+                delegate?.add(tracksReceived: tracks, fromPeer: peerID)
             }
         } else if let position = unarchivedData as? TimeInterval {
             delegate?.updatePosition(position: position)
-        } else if let tracks = unarchivedData as? [Track] {
-            Party.tracksQueue = tracks
         }
     }
     

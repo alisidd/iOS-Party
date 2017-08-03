@@ -24,7 +24,6 @@ extension PartyViewController {
                     self.removeStatusLabel()
                 } else if newValue == .connecting {
                     self.displayReconnectButton()
-                    //TODO: set a reconnect timer
                     self.lyricsAndQueueVC.expandTracksTable()
                 } else {
                     self.displayReconnectButton()

@@ -9,12 +9,6 @@
 import UIKit
 import BadgeSwift
 
-extension Collection where Indices.Iterator.Element == Index {
-    subscript (safe index: Index) -> Iterator.Element? {
-        return indices.contains(index) ? self[index] : nil
-    }
-}
-
 class AddSongViewController: UIViewController, UITextFieldDelegate, UITableViewDataSource, UITableViewDelegate {
     @IBOutlet weak var searchTracksField: UITextField!
     @IBOutlet weak var tracksCounter: BadgeSwift!
@@ -154,13 +148,6 @@ class AddSongViewController: UIViewController, UITextFieldDelegate, UITableViewD
                 }
             }
         }
-    }
-    
-    // MARK: - Navigation
-
-    func emptyArrays() {
-        tracksList.removeAll()
-        tracksSelected.removeAll()
     }
     
     // MARK: - Table

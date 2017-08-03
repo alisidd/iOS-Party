@@ -20,8 +20,8 @@ class HubAndQueuePageViewController: UIPageViewController, UIPageViewControllerD
     }
     
     func setDelegates() {
-        self.delegate = self
-        self.dataSource = self
+        delegate = self
+        dataSource = self
     }
     
     func populateListOfViewControllers() {
@@ -60,20 +60,12 @@ class HubAndQueuePageViewController: UIPageViewController, UIPageViewControllerD
     
     func pageViewController(_ pageViewController: UIPageViewController, viewControllerBefore viewController: UIViewController) -> UIViewController? {
         let index = allViewControllers.index(of: viewController)
-        if index == 0 {
-            return nil
-        } else {
-            return allViewControllers[0]
-        }
+        return index == 0 ? nil : allViewControllers[0]
     }
     
     func pageViewController(_ pageViewController: UIPageViewController, viewControllerAfter viewController: UIViewController) -> UIViewController? {
         let index = allViewControllers.index(of: viewController)
-        if index == 1 {
-            return nil
-        } else {
-            return allViewControllers[1]
-        }
+        return index == 1 ? nil : allViewControllers[1]
     }
     
     func presentationCount(for pageViewController: UIPageViewController) -> Int {

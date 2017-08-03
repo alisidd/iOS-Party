@@ -14,7 +14,7 @@
 		41045F2F1E39AD6D00A29830 /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 41045F2E1E39AD6D00A29830 /* AVFoundation.framework */; };
 		41045F311E39AD7E00A29830 /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 41045F301E39AD7E00A29830 /* SystemConfiguration.framework */; };
 		411688751F2A69EB00C3CD4A /* PartyConnection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 411688741F2A69EB00C3CD4A /* PartyConnection.swift */; };
-		411688771F2A727500C3CD4A /* TrackType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 411688761F2A727500C3CD4A /* TrackType.swift */; };
+		411688771F2A727500C3CD4A /* RequestType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 411688761F2A727500C3CD4A /* RequestType.swift */; };
 		411688791F2F236F00C3CD4A /* AppleMusicFetcher.swift in Sources */ = {isa = PBXBuildFile; fileRef = 411688781F2F236F00C3CD4A /* AppleMusicFetcher.swift */; };
 		4116887C1F2F248300C3CD4A /* AppleMusicURLFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4116887B1F2F248300C3CD4A /* AppleMusicURLFactory.swift */; };
 		411688831F320E5100C3CD4A /* SpotifyFetcher.swift in Sources */ = {isa = PBXBuildFile; fileRef = 411688821F320E5100C3CD4A /* SpotifyFetcher.swift */; };
@@ -64,7 +64,7 @@
 		41045F301E39AD7E00A29830 /* SystemConfiguration.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SystemConfiguration.framework; path = System/Library/Frameworks/SystemConfiguration.framework; sourceTree = SDKROOT; };
 		41045F321E39B80300A29830 /* Party-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Party-Bridging-Header.h"; sourceTree = SOURCE_ROOT; };
 		411688741F2A69EB00C3CD4A /* PartyConnection.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PartyConnection.swift; sourceTree = "<group>"; };
-		411688761F2A727500C3CD4A /* TrackType.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TrackType.swift; sourceTree = "<group>"; };
+		411688761F2A727500C3CD4A /* RequestType.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RequestType.swift; sourceTree = "<group>"; };
 		411688781F2F236F00C3CD4A /* AppleMusicFetcher.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AppleMusicFetcher.swift; sourceTree = "<group>"; };
 		4116887B1F2F248300C3CD4A /* AppleMusicURLFactory.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AppleMusicURLFactory.swift; sourceTree = "<group>"; };
 		411688821F320E5100C3CD4A /* SpotifyFetcher.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SpotifyFetcher.swift; sourceTree = "<group>"; };
@@ -175,7 +175,7 @@
 				3472FB151DDAC81E00A35FCB /* Party.swift */,
 				417B9D521E31B3CE0021F36E /* Track.swift */,
 				413533281E8DE4C600BE5B0F /* MusicService.swift */,
-				411688761F2A727500C3CD4A /* TrackType.swift */,
+				411688761F2A727500C3CD4A /* RequestType.swift */,
 			);
 			name = "Party Classes";
 			sourceTree = "<group>";
@@ -183,11 +183,11 @@
 		413421651E3D57B100888403 /* Network Managers */ = {
 			isa = PBXGroup;
 			children = (
+				34D750DF1E32E9C5009AFD63 /* MultipeerManager.swift */,
 				41C111401F2A18FD00A33771 /* Authorization Managers */,
 				4116887A1F2F23A700C3CD4A /* Fetchers */,
-				41B4AE101F2A4D7300F39E04 /* Constants */,
 				4116887D1F2F248700C3CD4A /* URL Factories */,
-				34D750DF1E32E9C5009AFD63 /* MultipeerManager.swift */,
+				41B4AE101F2A4D7300F39E04 /* Constants */,
 			);
 			name = "Network Managers";
 			sourceTree = "<group>";
@@ -503,7 +503,7 @@
 				417B9D4B1E317C3C0021F36E /* PartyViewController.swift in Sources */,
 				41A279EE1F28FF0A00C218A2 /* AppleMusicAuthorizationManager.swift in Sources */,
 				41835F901E81EE740082BA16 /* HubTableViewCell.swift in Sources */,
-				411688771F2A727500C3CD4A /* TrackType.swift in Sources */,
+				411688771F2A727500C3CD4A /* RequestType.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

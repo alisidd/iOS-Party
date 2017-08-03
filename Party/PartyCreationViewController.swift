@@ -132,7 +132,6 @@ class PartyCreationViewController: UIViewController, UITextFieldDelegate, UIPick
     }
     
     // MARK: - General Authorization
-    //FIXME: Exit party and create another party
     private func postAlertForOtherHosts(withButton button: UIButton) {
         let alert = UIAlertController(title: "Another Party in Progress", message: nil, preferredStyle: .alert)
         alert.addAction(UIAlertAction(title: "Try Again", style: .default) { _ in
@@ -160,6 +159,7 @@ class PartyCreationViewController: UIViewController, UITextFieldDelegate, UIPick
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if let controller = segue.destination as? PartyViewController, segue.identifier == "Create Party" {
             controller.networkManager?.delegate = controller
+            Party.delegate = controller
         }
     }
 }

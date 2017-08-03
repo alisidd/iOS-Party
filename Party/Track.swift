@@ -21,16 +21,8 @@ class Track: NSObject, NSCoding {
     
     var length: TimeInterval?
     
-    static func typeOf(track: String) -> TrackType {
-        if track.hasPrefix("S:") {
-            return .service(ofType: .spotify)
-        } else if track.hasPrefix("A:") {
-            return .service(ofType: .appleMusic)
-        } else if track.hasPrefix("R:") {
-            return .removal
-        } else {
-            return .none
-        }
+    static func typeOf(track: Track) -> RequestType {
+        return track.id.hasPrefix("R:") ? .removal : .addition
     }
     
     static func fetchImage(fromURL urlString: String) -> UIImage? {

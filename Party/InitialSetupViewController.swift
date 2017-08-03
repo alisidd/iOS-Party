@@ -39,6 +39,7 @@ class InitialSetupViewController: UIViewController {
         if let controller = segue.destination as? PartyViewController, segue.identifier == "Join Party" {
             controller.isHost = false
             controller.networkManager?.delegate = controller
+            Party.delegate = controller
             navigationItem.backBarButtonItem = UIBarButtonItem(title: "", style: .plain, target: nil, action: nil)
         }
     }

@@ -8,7 +8,6 @@
 
 import Foundation
 
-@objc(Party)
 class Party: NSObject, NSCoding {
     static weak var delegate: UpdatePartyDelegate?
     static var musicService = MusicService.spotify
@@ -16,14 +15,25 @@ class Party: NSObject, NSCoding {
     static var tracksQueue = [Track]() {
         didSet {
             delegate?.updateEveryonesTableView()
-            if tracksQueue.count > 0 {
+            if !tracksQueue.isEmpty {
                 delegate?.showCurrentlyPlayingArtwork()
+            }
+            if oldValue.isEmpty && !tracksQueue.isEmpty || tracksQueue.count == 1 {
+                delegate?.lyricsAndQueueVC.minimizeTracksTable()
             }
         }
     }
-    static var tracksFromPeers = [Track]()
+    static var tracksFromMyself = [Track]()
     static var danceability: Float = 0.5
     static var cookie: String? // Represents Spotify access token or Apple Music country code
+    
+    static func reset() {
+        musicService = .spotify
+        tracksQueue.removeAll()
+        tracksFromMyself.removeAll()
+        danceability = 0.5
+        cookie = nil
+    }
     
     // MARK: - NSCoding
     

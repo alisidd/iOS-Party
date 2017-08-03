@@ -14,6 +14,7 @@ class SpotifyFetcher: Fetcher {
     let dispatchGroup = DispatchGroup()
     
     func searchCatalog(forTerm term: String) {
+        tracksList.removeAll()
         let request = SpotifyURLFactory.createSearchRequest(forTerm: term)
         
         dispatchGroup.enter()
