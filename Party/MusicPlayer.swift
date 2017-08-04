@@ -16,8 +16,11 @@ class MusicPlayer {
     var appleMusicPlayer = MPMusicPlayerController.applicationMusicPlayer()
     var spotifyPlayer = SPTAudioStreamingController.sharedInstance()
     
+    let musicService = Party.musicService
+    
     // MARK: - General Variables
     
+    //FIXME: - put this in the proper place
     var currentPosition: TimeInterval?
     
     // MARK: - General Functions
@@ -25,6 +28,10 @@ class MusicPlayer {
     init() {
         initializeCommandCenter()
         setupControlEvents()
+    }
+    
+    deinit {
+        stopPlayer()
     }
     
     private func initializeCommandCenter() {
@@ -35,13 +42,13 @@ class MusicPlayer {
     private func setupControlEvents() {
         UIApplication.shared.beginReceivingRemoteControlEvents()
         
-        MPRemoteCommandCenter.shared().pauseCommand.addTarget { _ -> MPRemoteCommandHandlerStatus in
-            self.pauseTrack()
+        MPRemoteCommandCenter.shared().pauseCommand.addTarget { [weak self] _ -> MPRemoteCommandHandlerStatus in
+            self?.pauseTrack()
             return .success
         }
         
-        MPRemoteCommandCenter.shared().playCommand.addTarget { _ -> MPRemoteCommandHandlerStatus in
-            self.playTrack()
+        MPRemoteCommandCenter.shared().playCommand.addTarget { [weak self] _ -> MPRemoteCommandHandlerStatus in
+            self?.playTrack()
             return .success
         }
     }
@@ -52,7 +59,7 @@ class MusicPlayer {
     }
     
     func isPaused() -> Bool {
-        return Party.musicService == .appleMusic ? appleMusicPlayer.playbackState == .paused : spotifyPlayer?.playbackState.isPlaying == false
+        return musicService == .appleMusic ? appleMusicPlayer.playbackState == .paused : spotifyPlayer?.playbackState.isPlaying == false
     }
     
     // MARK: - Playback
@@ -60,7 +67,7 @@ class MusicPlayer {
     func startPlayer(withTracks tracks: [Track]) {
         DispatchQueue.main.async {
             BackgroundTask.startBackgroundTask()
-            if Party.musicService == .appleMusic {
+            if self.musicService == .appleMusic {
                 self.startAppleMusicPlayer(withTracks: tracks)
             } else {
                 self.startSpotifyPlayer(withTracks: tracks)
@@ -88,9 +95,19 @@ class MusicPlayer {
         }
     }
     
+    func stopPlayer() {
+        BackgroundTask.stopBackgroundTask()
+        if musicService == .appleMusic && appleMusicPlayer.playbackState == .playing {
+            appleMusicPlayer.stop()
+        }
+        if musicService == .spotify && spotifyPlayer!.playbackState.isPlaying {
+            spotifyPlayer?.setIsPlaying(false, callback: nil)
+        }
+    }
+    
     func playTrack() {
         BackgroundTask.startBackgroundTask()
-        if Party.musicService == .appleMusic {
+        if musicService == .appleMusic {
             appleMusicPlayer.play()
         } else {
             spotifyPlayer?.setIsPlaying(true, callback: nil)
@@ -100,7 +117,7 @@ class MusicPlayer {
     
     func pauseTrack() {
         BackgroundTask.stopBackgroundTask()
-        if Party.musicService == .appleMusic {
+        if musicService == .appleMusic {
             appleMusicPlayer.pause()
         } else {
             spotifyPlayer?.setIsPlaying(false, callback: nil)
