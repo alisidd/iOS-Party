@@ -32,13 +32,12 @@ protocol PartyViewControllerInfoDelegate: class {
     func returnTableHeight() -> CGFloat
     func setTable(withHeight height: CGFloat)
     func layout()
-    func getCurrentProgress() -> TimeInterval?
 }
 
 class PartyViewController: UIViewController, SPTAudioStreamingDelegate, SPTAudioStreamingPlaybackDelegate, UpdatePartyDelegate, NetworkManagerDelegate, PartyViewControllerInfoDelegate {
     // MARK: - Storyboard Variables
     
-    // FIXME: - Handle background tasks properly (stop when music is stopped)
+    // FIXME: - Handle background tasks properly
     
     // Currently Playing
     @IBOutlet weak var currentlyPlayingArtwork: UIImageView!
@@ -101,6 +100,10 @@ class PartyViewController: UIViewController, SPTAudioStreamingDelegate, SPTAudio
     
     deinit {
         Party.reset()
+        
+        if isHost {
+            musicPlayer.stopPlayer()
+        }
     }
     
     // MARK: - General Functions
@@ -140,8 +143,10 @@ class PartyViewController: UIViewController, SPTAudioStreamingDelegate, SPTAudio
     private func updateProgress() {
         if !Party.tracksQueue.isEmpty {
             if Party.musicService == .appleMusic {
-                musicPlayer.currentPosition = musicPlayer.appleMusicPlayer.currentPlaybackTime
-                networkManager.advertise(position: musicPlayer.currentPosition!)
+                MusicPlayer.currentPosition = musicPlayer.appleMusicPlayer.currentPlaybackTime
+            }
+            if let position = MusicPlayer.currentPosition {
+                networkManager.advertise(position: position)
             }
         }
         print("Running")
@@ -294,7 +299,7 @@ class PartyViewController: UIViewController, SPTAudioStreamingDelegate, SPTAudio
     
     func audioStreaming(_ audioStreaming: SPTAudioStreamingController!, didChangePosition position: TimeInterval) {
         if !Party.tracksQueue.isEmpty {
-            musicPlayer.currentPosition = position
+            MusicPlayer.currentPosition = position
         }
     }
     
@@ -390,7 +395,7 @@ class PartyViewController: UIViewController, SPTAudioStreamingDelegate, SPTAudio
     }
     
     func update(usingPosition position: TimeInterval) {
-        musicPlayer.currentPosition = position
+        MusicPlayer.currentPosition = position
     }
     
     // MARK: PartyViewControllerInfoDelegate
@@ -405,9 +410,5 @@ class PartyViewController: UIViewController, SPTAudioStreamingDelegate, SPTAudio
     
     func layout() {
         view.layoutIfNeeded()
-    }
-    
-    func getCurrentProgress() -> TimeInterval? {
-        return musicPlayer.currentPosition
     }
 }

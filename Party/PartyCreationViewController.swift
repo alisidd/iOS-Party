@@ -146,6 +146,7 @@ class PartyCreationViewController: UIViewController, UITextFieldDelegate, UIPick
     }
     
     // MARK: - General Authorization
+    
     private func postAlertForOtherHosts(withButton button: UIButton) {
         let alert = UIAlertController(title: "Another Party in Progress", message: nil, preferredStyle: .alert)
         alert.addAction(UIAlertAction(title: "Try Again", style: .default) { _ in

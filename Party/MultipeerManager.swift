@@ -152,6 +152,10 @@ extension MultipeerManager : MCNearbyServiceBrowserDelegate {
         if otherHosts.contains(peerID) {
             otherHosts.remove(at: otherHosts.index(of: peerID)!)
         }
+        if !isHost {
+            delegate?.updateStatus(withState: .notConnected)
+        }
+        
         for (session, id) in sessions {
             print("Connected Peers: \(session.connectedPeers.count)")
             if id == peerID {

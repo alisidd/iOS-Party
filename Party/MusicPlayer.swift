@@ -20,18 +20,13 @@ class MusicPlayer {
     
     // MARK: - General Variables
     
-    //FIXME: - put this in the proper place
-    var currentPosition: TimeInterval?
+    static var currentPosition: TimeInterval?
     
     // MARK: - General Functions
     
     init() {
         initializeCommandCenter()
         setupControlEvents()
-    }
-    
-    deinit {
-        stopPlayer()
     }
     
     private func initializeCommandCenter() {
@@ -59,23 +54,32 @@ class MusicPlayer {
     }
     
     func isPaused() -> Bool {
-        return musicService == .appleMusic ? appleMusicPlayer.playbackState == .paused : spotifyPlayer?.playbackState.isPlaying == false
+        return musicService == .spotify ? spotifyPlayer?.playbackState.isPlaying == false : appleMusicPlayer.playbackState == .paused
     }
     
     // MARK: - Playback
     
     func startPlayer(withTracks tracks: [Track]) {
         DispatchQueue.main.async {
-            BackgroundTask.startBackgroundTask()
-            if self.musicService == .appleMusic {
-                self.startAppleMusicPlayer(withTracks: tracks)
-            } else {
+            if self.musicService == .spotify {
                 self.startSpotifyPlayer(withTracks: tracks)
+            } else {
+                BackgroundTask.startBackgroundTask()
+                self.startAppleMusicPlayer(withTracks: tracks)
             }
         }
     }
     
-    func startAppleMusicPlayer(withTracks tracks: [Track]) {
+    private func startSpotifyPlayer(withTracks tracks: [Track]) {
+        if !tracks.isEmpty {
+            try? AVAudioSession.sharedInstance().setActive(true)
+            spotifyPlayer?.playSpotifyURI("spotify:track:" + tracks[0].id, startingWith: 0, startingWithPosition: 0, callback: nil)
+        } else {
+            spotifyPlayer?.skipNext(nil)
+        }
+    }
+    
+    private func startAppleMusicPlayer(withTracks tracks: [Track]) {
         if !tracks.isEmpty {
             let id = [tracks[0].id]
             appleMusicPlayer.setQueueWithStoreIDs(id)
@@ -86,41 +90,33 @@ class MusicPlayer {
         }
     }
     
-    func startSpotifyPlayer(withTracks tracks: [Track]) {
-        if !tracks.isEmpty {
-            try? AVAudioSession.sharedInstance().setActive(true)
-            spotifyPlayer?.playSpotifyURI("spotify:track:" + tracks[0].id, startingWith: 0, startingWithPosition: 0, callback: nil)
-        } else {
-            spotifyPlayer?.skipNext(nil)
-        }
-    }
-    
     func stopPlayer() {
-        BackgroundTask.stopBackgroundTask()
-        if musicService == .appleMusic && appleMusicPlayer.playbackState == .playing {
-            appleMusicPlayer.stop()
-        }
         if musicService == .spotify && spotifyPlayer!.playbackState.isPlaying {
             spotifyPlayer?.setIsPlaying(false, callback: nil)
+        }
+        
+        if musicService == .appleMusic && appleMusicPlayer.playbackState == .playing {
+            BackgroundTask.stopBackgroundTask()
+            appleMusicPlayer.stop()
         }
     }
     
     func playTrack() {
-        BackgroundTask.startBackgroundTask()
-        if musicService == .appleMusic {
-            appleMusicPlayer.play()
-        } else {
+        if musicService == .spotify {
             spotifyPlayer?.setIsPlaying(true, callback: nil)
+        } else {
+            BackgroundTask.startBackgroundTask()
+            appleMusicPlayer.play()
         }
         
     }
     
     func pauseTrack() {
-        BackgroundTask.stopBackgroundTask()
-        if musicService == .appleMusic {
-            appleMusicPlayer.pause()
-        } else {
+        if musicService == .spotify {
             spotifyPlayer?.setIsPlaying(false, callback: nil)
+        } else {
+            BackgroundTask.stopBackgroundTask()
+            appleMusicPlayer.pause()
         }
     }
 }

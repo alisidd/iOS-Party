@@ -145,18 +145,27 @@ class HubViewController: UIViewController, UITableViewDelegate, UITableViewDataS
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         if hubTitles[indexPath.row] == "Leave Party" {
             leaveParty()
-        } else if !Party.tracksQueue.isEmpty && delegate!.getCurrentProgress() != nil {
+        } else if !Party.tracksQueue.isEmpty && MusicPlayer.currentPosition != nil {
             MXMLyricsAction.sharedExtension().findLyricsForSong(
                 withTitle: Party.tracksQueue[0].name,
                 artist: Party.tracksQueue[0].artist,
                 album: "",
                 artWork: Party.tracksQueue[0].highResArtwork,
-                currentProgress: delegate!.getCurrentProgress()!,
+                currentProgress: MusicPlayer.currentPosition!,
                 trackDuration: Party.tracksQueue[0].length!,
                 for: self,
                 sender: tableView.dequeueReusableCell(withIdentifier: "Hub Cell")!,
                 competionHandler: nil)
+        } else {
+            postAlertForNoTracks()
         }
+    }
+    
+    private func postAlertForNoTracks() {
+        let alert = UIAlertController(title: "No Tracks Playing", message: nil, preferredStyle: .alert)
+        alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
+        
+        present(alert, animated: true)
     }
     
     // MARK: = Navigation
