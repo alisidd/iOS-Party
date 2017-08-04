@@ -56,6 +56,8 @@ class PartyCreationViewController: UIViewController, UITextFieldDelegate, UIPick
         customizeSliderImage()
         setDelegates()
         setSpotifyVariables()
+        
+        setDefaultMusicService()
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -86,8 +88,20 @@ class PartyCreationViewController: UIViewController, UITextFieldDelegate, UIPick
     }
     
     private func setSpotifyVariables() {
-        spotifyButton.makeBorder()
         NotificationCenter.default.addObserver(self, selector: #selector(createSession(withNotification:)), name: SpotifyConstants.spotifyPlayerDidLoginNotification, object: nil)
+    }
+    
+    private func setDefaultMusicService() {
+        if let rawMusicService = UserDefaults.standard.object(forKey: "musicService") as? String,
+            let musicService = MusicService(rawValue: rawMusicService) {
+            if musicService == .spotify {
+                changeToSpotify(spotifyButton)
+            } else {
+                changeToAppleMusic(appleMusicButton)
+            }
+        } else {
+            changeToSpotify(spotifyButton)
+        }
     }
     
     @objc private func createSession(withNotification notification: NSNotification) {
@@ -160,6 +174,11 @@ class PartyCreationViewController: UIViewController, UITextFieldDelegate, UIPick
         if let controller = segue.destination as? PartyViewController, segue.identifier == "Create Party" {
             controller.networkManager?.delegate = controller
             Party.delegate = controller
+            saveDefaultMusicService()
         }
+    }
+    
+    private func saveDefaultMusicService() {
+        UserDefaults.standard.set(Party.musicService.rawValue, forKey: "musicService")
     }
 }
