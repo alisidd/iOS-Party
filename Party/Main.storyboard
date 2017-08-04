@@ -156,7 +156,7 @@
                                         </constraints>
                                         <state key="normal" title="Button" image="next"/>
                                         <connections>
-                                            <action selector="skipTrack:" destination="IhU-0X-egj" eventType="touchUpInside" id="fbP-Lr-988"/>
+                                            <action selector="skipTrack" destination="IhU-0X-egj" eventType="touchUpInside" id="m2I-jS-gtl"/>
                                         </connections>
                                     </button>
                                 </subviews>
@@ -215,7 +215,7 @@
                                             <color key="titleColor" red="0.96470588235294119" green="0.65098039215686276" blue="0.13725490196078433" alpha="1" colorSpace="calibratedRGB"/>
                                         </state>
                                         <connections>
-                                            <action selector="reconnectToParty:" destination="IhU-0X-egj" eventType="touchUpInside" id="VWp-qA-IOA"/>
+                                            <action selector="reconnectToParty" destination="IhU-0X-egj" eventType="touchUpInside" id="zX4-Yh-UnS"/>
                                         </connections>
                                     </button>
                                 </subviews>
@@ -252,7 +252,6 @@
                         <outlet property="currentlyPlayingArtwork" destination="HrH-IU-EqN" id="Dpl-AR-7y4"/>
                         <outlet property="currentlyPlayingTrackName" destination="ddX-fC-sB7" id="Elg-ej-lTp"/>
                         <outlet property="playPauseButton" destination="rcd-f2-VTo" id="8Xc-C1-cr0"/>
-                        <outlet property="reconnectButton" destination="9lr-B6-Z3d" id="xoQ-6g-Vek"/>
                         <outlet property="skipTrackButton" destination="C8i-W2-rUz" id="VZo-x7-Lwy"/>
                         <outlet property="statusIndicatorView" destination="0d8-aI-yDi" id="bFH-5A-bQK"/>
                         <outlet property="tableHeightConstraint" destination="eBV-bE-wFh" id="65Q-z8-2Oj"/>
@@ -646,7 +645,7 @@
                                             <color key="titleColor" red="1" green="0.65098039215686276" blue="0.13725490196078433" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                         </state>
                                         <connections>
-                                            <action selector="changeToSpotify:" destination="9wA-Gp-aQL" eventType="touchUpInside" id="Ayq-m4-eeg"/>
+                                            <action selector="changeToSpotify" destination="9wA-Gp-aQL" eventType="touchUpInside" id="Izo-bB-poY"/>
                                         </connections>
                                     </button>
                                     <button opaque="NO" alpha="0.59999999999999998" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="NXk-fz-9f9">
@@ -661,7 +660,7 @@
                                             <color key="titleColor" red="1" green="0.65098039215686276" blue="0.13725490196078433" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                         </state>
                                         <connections>
-                                            <action selector="changeToAppleMusic:" destination="9wA-Gp-aQL" eventType="touchUpInside" id="87M-cb-Ca5"/>
+                                            <action selector="changeToAppleMusic" destination="9wA-Gp-aQL" eventType="touchUpInside" id="E7t-ev-XBV"/>
                                         </connections>
                                     </button>
                                 </subviews>
@@ -692,7 +691,7 @@
                                     <color key="titleColor" red="1" green="0.65098039215686276" blue="0.13725490196078433" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 </state>
                                 <connections>
-                                    <action selector="createParty:" destination="9wA-Gp-aQL" eventType="touchUpInside" id="Tv9-5a-zwx"/>
+                                    <action selector="createParty" destination="9wA-Gp-aQL" eventType="touchUpInside" id="E4S-DU-bkA"/>
                                 </connections>
                             </button>
                             <activityIndicatorView hidden="YES" opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" hidesWhenStopped="YES" style="whiteLarge" translatesAutoresizingMaskIntoConstraints="NO" id="AJl-uB-kjX">

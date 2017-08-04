@@ -56,9 +56,8 @@ class PartyViewController: UIViewController, SPTAudioStreamingDelegate, SPTAudio
     @IBOutlet weak var connectionStatusViewConstraint: NSLayoutConstraint!
     @IBOutlet weak var statusIndicatorView: UIView!
     @IBOutlet weak var connectionStatusLabel: UILabel!
-    @IBOutlet weak var reconnectButton: UIButton!
     
-    @IBAction func reconnectToParty(_ sender: UIButton) {
+    @IBAction func reconnectToParty() {
         networkManager = nil
         networkManager = MultipeerManager(isHost: false)
         networkManager.delegate = self
@@ -117,6 +116,8 @@ class PartyViewController: UIViewController, SPTAudioStreamingDelegate, SPTAudio
     
     private func initializeMusicPlayer() {
         setTimer()
+        initializeCommandCenter()
+        setupControlEvents()
         
         if Party.musicService == .spotify {
             setSpotifyDelegates()
@@ -148,7 +149,31 @@ class PartyViewController: UIViewController, SPTAudioStreamingDelegate, SPTAudio
             }
         }
         networkManager.advertise()
-        print("Running")
+    }
+    
+    private func initializeCommandCenter() {
+        MPRemoteCommandCenter.shared().pauseCommand.isEnabled = true
+        MPRemoteCommandCenter.shared().playCommand.isEnabled = true
+        MPRemoteCommandCenter.shared().nextTrackCommand.isEnabled = true
+    }
+    
+    private func setupControlEvents() {
+        UIApplication.shared.beginReceivingRemoteControlEvents()
+        
+        MPRemoteCommandCenter.shared().pauseCommand.addTarget { [weak self] _ -> MPRemoteCommandHandlerStatus in
+            self?.musicPlayer.pauseTrack()
+            return .success
+        }
+        
+        MPRemoteCommandCenter.shared().playCommand.addTarget { [weak self] _ -> MPRemoteCommandHandlerStatus in
+            self?.musicPlayer.playTrack()
+            return .success
+        }
+        
+        MPRemoteCommandCenter.shared().nextTrackCommand.addTarget { [weak self] _ -> MPRemoteCommandHandlerStatus in
+            self?.skipTrack()
+            return .success
+        }
     }
     
     private func setSpotifyDelegates() {
@@ -337,7 +362,7 @@ class PartyViewController: UIViewController, SPTAudioStreamingDelegate, SPTAudio
         }
     }
     
-    @IBAction func skipTrack(_ sender: UIButton) {
+    @IBAction func skipTrack() {
         if !Party.tracksQueue.isEmpty {
             sendTracksToPeers(forTracks: [Party.tracksQueue.removeFirst()], toRemove: true)
             musicPlayer.startPlayer()

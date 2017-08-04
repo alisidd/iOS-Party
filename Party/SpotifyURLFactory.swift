@@ -41,8 +41,6 @@ struct SpotifyURLFactory {
         }
         urlComponents.queryItems = queryItems
         
-        print(urlComponents.url!)
-        
         var urlRequest = URLRequest(url: urlComponents.url!)
         urlRequest.addValue("Bearer \(Party.cookie!)", forHTTPHeaderField: "Authorization")
         urlRequest.addValue("application/x-www-form-urlencoded", forHTTPHeaderField: "Content-Type")

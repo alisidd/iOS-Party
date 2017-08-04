@@ -95,12 +95,12 @@ class PartyCreationViewController: UIViewController, UITextFieldDelegate, UIPick
         if let rawMusicService = UserDefaults.standard.object(forKey: "musicService") as? String,
             let musicService = MusicService(rawValue: rawMusicService) {
             if musicService == .spotify {
-                changeToSpotify(spotifyButton)
+                changeToSpotify()
             } else {
-                changeToAppleMusic(appleMusicButton)
+                changeToAppleMusic()
             }
         } else {
-            changeToSpotify(spotifyButton)
+            changeToSpotify()
         }
     }
     
@@ -110,12 +110,12 @@ class PartyCreationViewController: UIViewController, UITextFieldDelegate, UIPick
     
     // MARK: - Storyboard Functions
     
-    @IBAction func changeToSpotify(_ sender: setupButton) {
+    @IBAction func changeToSpotify() {
         change(toButton: spotifyButton, fromButton: appleMusicButton)
         Party.musicService = .spotify
     }
     
-    @IBAction func changeToAppleMusic(_ sender: setupButton) {
+    @IBAction func changeToAppleMusic() {
         change(toButton: appleMusicButton, fromButton: spotifyButton)
         Party.musicService = .appleMusic
     }
@@ -134,23 +134,23 @@ class PartyCreationViewController: UIViewController, UITextFieldDelegate, UIPick
         Party.danceability = sender.value
     }
     
-    @IBAction func createParty(_ sender: UIButton) {
-        if networkManager!.otherHosts.isEmpty {            
+    @IBAction func createParty() {
+        if networkManager!.otherHosts.isEmpty {
             if !processingLogin {
                 authorizationManager = Party.musicService == .spotify ? SpotifyAuthorizationManager() : AppleMusicAuthorizationManager()
                 authorizationManager.requestAuthorization()
             }
         } else {
-            postAlertForOtherHosts(withButton: sender)
+            postAlertForOtherHosts()
         }
     }
     
     // MARK: - General Authorization
     
-    private func postAlertForOtherHosts(withButton button: UIButton) {
+    private func postAlertForOtherHosts() {
         let alert = UIAlertController(title: "Another Party in Progress", message: nil, preferredStyle: .alert)
         alert.addAction(UIAlertAction(title: "Try Again", style: .default) { _ in
-            self.createParty(button)
+            self.createParty()
         })
         alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
         

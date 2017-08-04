@@ -24,30 +24,6 @@ class MusicPlayer {
     
     // MARK: - General Functions
     
-    init() {
-        initializeCommandCenter()
-        setupControlEvents()
-    }
-    
-    private func initializeCommandCenter() {
-        MPRemoteCommandCenter.shared().pauseCommand.isEnabled = true
-        MPRemoteCommandCenter.shared().playCommand.isEnabled = true
-    }
-    
-    private func setupControlEvents() {
-        UIApplication.shared.beginReceivingRemoteControlEvents()
-        
-        MPRemoteCommandCenter.shared().pauseCommand.addTarget { [weak self] _ -> MPRemoteCommandHandlerStatus in
-            self?.pauseTrack()
-            return .success
-        }
-        
-        MPRemoteCommandCenter.shared().playCommand.addTarget { [weak self] _ -> MPRemoteCommandHandlerStatus in
-            self?.playTrack()
-            return .success
-        }
-    }
-    
     // FIXME: - Doesn't always work
     func safeToPlayNextTrack() -> Bool {
         return appleMusicPlayer.playbackState == .stopped
