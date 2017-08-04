@@ -2,8 +2,8 @@
 //  AppleMusicFetcher.swift
 //  WeJ
 //
-//  Created by Ali Siddiqui on 7/31/17.
-//  Copyright © 2017 Ali Siddiqui.MatthewPaletta. All rights reserved.
+//  Created by Mohammad Ali Siddiqui on 7/31/17.
+//  Copyright © 2017 Mohammad Ali Siddiqui. All rights reserved.
 //
 
 import Foundation

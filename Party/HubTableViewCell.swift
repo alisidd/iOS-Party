@@ -2,7 +2,7 @@
 //  HubTableViewCell.swift
 //  WeJ
 //
-//  Created by Ali Siddiqui on 3/21/17.
+//  Created by Mohammad Ali Siddiqui on 3/21/17.
 //  Copyright © 2017 Mohammad Ali Siddiqui. All rights reserved.
 //
 

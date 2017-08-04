@@ -2,7 +2,7 @@
 //  InitialSetupViewController.swift
 //  Party
 //
-//  Created by Ali Siddiqui on 11/9/16.
+//  Created by Mohammad Ali Siddiqui on 11/9/16.
 //  Copyright © 2016 Mohammad Ali Siddiqui. All rights reserved.
 //
 

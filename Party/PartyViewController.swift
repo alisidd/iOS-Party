@@ -2,7 +2,7 @@
 //  PartyViewController.swift
 //  Party
 //
-//  Created by Ali Siddiqui on 1/19/17.
+//  Created by Mohammad Ali Siddiqui on 1/19/17.
 //  Copyright © 2017 Mohammad Ali Siddiqui. All rights reserved.
 //
 
@@ -294,7 +294,7 @@ class PartyViewController: UIViewController, SPTAudioStreamingDelegate, SPTAudio
         if isHost {
             Party.tracksQueue.append(contentsOf: tracksReceived)
             if Party.tracksQueue.count == tracksReceived.count {
-                musicPlayer.startPlayer()
+                musicPlayer.startPlayer(withErrorHandler: spotifyErrorHandler)
             }
         } else {
             Party.tracksQueue = tracksReceived
@@ -309,10 +309,13 @@ class PartyViewController: UIViewController, SPTAudioStreamingDelegate, SPTAudio
         }
     }
     
-    // MARK: - Playback
+    // MARK: - Spotify Playback
     
-    func audioStreamingDidLogin(_ audioStreaming: SPTAudioStreamingController!) {
-        // Make sure it's a premium account
+    lazy var spotifyErrorHandler: () -> Void = { [weak self] in
+        let alert = UIAlertController(title: "No Spotify Premium", message: "You need a Spotify premium account to play music", preferredStyle: .alert)
+        alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
+        
+        self?.present(alert, animated: true)
     }
     
     func audioStreaming(_ audioStreaming: SPTAudioStreamingController!, didChangePlaybackStatus isPlaying: Bool) {
@@ -365,7 +368,7 @@ class PartyViewController: UIViewController, SPTAudioStreamingDelegate, SPTAudio
     @IBAction func skipTrack() {
         if !Party.tracksQueue.isEmpty {
             sendTracksToPeers(forTracks: [Party.tracksQueue.removeFirst()], toRemove: true)
-            musicPlayer.startPlayer()
+            musicPlayer.startPlayer(withErrorHandler: spotifyErrorHandler)
         }
     }
     
@@ -374,7 +377,7 @@ class PartyViewController: UIViewController, SPTAudioStreamingDelegate, SPTAudio
     @objc private func playNextTrack() {
         if musicPlayer.safeToPlayNextTrack() && !Party.tracksQueue.isEmpty {
             sendTracksToPeers(forTracks: [Party.tracksQueue.removeFirst()], toRemove: true)
-            musicPlayer.startPlayer()
+            musicPlayer.startPlayer(withErrorHandler: spotifyErrorHandler)
         }
     }
     
@@ -395,7 +398,7 @@ class PartyViewController: UIViewController, SPTAudioStreamingDelegate, SPTAudio
             Party.tracksQueue.append(contentsOf: VC.tracksSelected)
             
             if Party.tracksQueue.count == VC.tracksSelected.count && isHost {
-                musicPlayer.startPlayer()
+                musicPlayer.startPlayer(withErrorHandler: spotifyErrorHandler)
             }
         }
     }

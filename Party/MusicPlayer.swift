@@ -2,7 +2,7 @@
 //  MusicPlayer.swift
 //  Party
 //
-//  Created by Ali Siddiqui on 1/20/17.
+//  Created by Mohammad Ali Siddiqui on 1/20/17.
 //  Copyright © 2017 Mohammad Ali Siddiqui. All rights reserved.
 //
 
@@ -24,7 +24,6 @@ class MusicPlayer {
     
     // MARK: - General Functions
     
-    // FIXME: - Doesn't always work
     func safeToPlayNextTrack() -> Bool {
         return appleMusicPlayer.playbackState == .stopped
     }
@@ -35,20 +34,24 @@ class MusicPlayer {
     
     // MARK: - Playback
     
-    func startPlayer() {
+    func startPlayer(withErrorHandler errorHandler: @escaping () -> Void) {
         DispatchQueue.main.async {
             if self.musicService == .spotify {
-                self.startSpotifyPlayer(withTracks: Party.tracksQueue)
+                self.startSpotifyPlayer(withTracks: Party.tracksQueue, withErrorHandler: errorHandler)
             } else {
                 self.startAppleMusicPlayer(withTracks: Party.tracksQueue)
             }
         }
     }
     
-    private func startSpotifyPlayer(withTracks tracks: [Track]) {
+    private func startSpotifyPlayer(withTracks tracks: [Track], withErrorHandler errorHandler: @escaping () -> Void) {
         if !tracks.isEmpty {
             try? AVAudioSession.sharedInstance().setActive(true)
-            spotifyPlayer?.playSpotifyURI("spotify:track:" + tracks[0].id, startingWith: 0, startingWithPosition: 0, callback: nil)
+            spotifyPlayer?.playSpotifyURI("spotify:track:" + tracks[0].id, startingWith: 0, startingWithPosition: 0) { (error) in
+                if error != nil {
+                    errorHandler()
+                }
+            }
         } else {
             spotifyPlayer?.skipNext(nil)
         }

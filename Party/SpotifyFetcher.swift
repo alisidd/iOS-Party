@@ -2,8 +2,8 @@
 //  SpotifyFetcher.swift
 //  WeJ
 //
-//  Created by Ali Siddiqui on 8/2/17.
-//  Copyright © 2017 Ali Siddiqui.MatthewPaletta. All rights reserved.
+//  Created by Mohammad Ali Siddiqui on 8/2/17.
+//  Copyright © 2017 Mohammad Ali Siddiqui. All rights reserved.
 //
 
 import Foundation
