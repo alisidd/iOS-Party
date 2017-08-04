@@ -15,6 +15,8 @@ class AddSongViewController: UIViewController, UITextFieldDelegate, UITableViewD
     
     @IBOutlet weak var trackTableView: UITableView!
     
+    // FIXME: - Done lags when adding tracks
+    
     // MARK: - General Variables
     
     private var tracksList = [Track]() {

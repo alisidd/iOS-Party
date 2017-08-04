@@ -59,13 +59,12 @@ class MusicPlayer {
     
     // MARK: - Playback
     
-    func startPlayer(withTracks tracks: [Track]) {
+    func startPlayer() {
         DispatchQueue.main.async {
             if self.musicService == .spotify {
-                self.startSpotifyPlayer(withTracks: tracks)
+                self.startSpotifyPlayer(withTracks: Party.tracksQueue)
             } else {
-                BackgroundTask.startBackgroundTask()
-                self.startAppleMusicPlayer(withTracks: tracks)
+                self.startAppleMusicPlayer(withTracks: Party.tracksQueue)
             }
         }
     }
@@ -81,10 +80,11 @@ class MusicPlayer {
     
     private func startAppleMusicPlayer(withTracks tracks: [Track]) {
         if !tracks.isEmpty {
-            let id = [tracks[0].id]
-            appleMusicPlayer.setQueueWithStoreIDs(id)
+            BackgroundTask.startBackgroundTask()
+            appleMusicPlayer.setQueueWithStoreIDs([tracks[0].id])
             playTrack()
         } else {
+            BackgroundTask.stopBackgroundTask()
             appleMusicPlayer.setQueueWithStoreIDs([])
             appleMusicPlayer.stop()
         }

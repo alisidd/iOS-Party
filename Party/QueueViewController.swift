@@ -194,13 +194,9 @@ class QueueViewController: UIViewController, UITableViewDelegate, UITableViewDat
         let cell = tableView.dequeueReusableCell(withIdentifier: "Track In Queue") as! TrackTableViewCell
         
         if Party.tracksQueue.count > indexPath.row {
-            if let unwrappedArtwork = Party.tracksQueue[indexPath.row + 1].lowResArtwork {
-                cell.artworkImageView.image = unwrappedArtwork
-            } else {
-                cell.artworkImageView.image = nil
-            }
             cell.trackName.text = Party.tracksQueue[indexPath.row + 1].name
             cell.artistName.text = Party.tracksQueue[indexPath.row + 1].artist
+            cell.artworkImageView.image = Party.tracksQueue[indexPath.row + 1].lowResArtwork
         }
         
         return cell
@@ -248,7 +244,7 @@ class QueueViewController: UIViewController, UITableViewDelegate, UITableViewDat
     }
     
     func tableView(_ tableView: UITableView, editActionsForRowAt indexPath: IndexPath) -> [UITableViewRowAction]? {
-        let deleteButton = UITableViewRowAction(style: .default, title: "Remove") { (action, indexPath) in
+        let deleteButton = UITableViewRowAction(style: .default, title: "Remove") { (_, indexPath) in
             tableView.dataSource?.tableView?(
                 tableView,
                 commit: .delete,

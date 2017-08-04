@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import SafariServices
 import SwiftyJSON
 
 class SpotifyAuthorizationManager: AuthorizationManager {

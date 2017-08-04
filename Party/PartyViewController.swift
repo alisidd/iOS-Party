@@ -37,8 +37,6 @@ protocol PartyViewControllerInfoDelegate: class {
 class PartyViewController: UIViewController, SPTAudioStreamingDelegate, SPTAudioStreamingPlaybackDelegate, UpdatePartyDelegate, NetworkManagerDelegate, PartyViewControllerInfoDelegate {
     // MARK: - Storyboard Variables
     
-    // FIXME: - Handle background tasks properly
-    
     // Currently Playing
     @IBOutlet weak var currentlyPlayingArtwork: UIImageView!
     @IBOutlet weak var currentlyPlayingTrackName: UILabel!
@@ -149,6 +147,7 @@ class PartyViewController: UIViewController, SPTAudioStreamingDelegate, SPTAudio
                 networkManager.advertise(position: position)
             }
         }
+        networkManager.advertise()
         print("Running")
     }
     
@@ -270,7 +269,7 @@ class PartyViewController: UIViewController, SPTAudioStreamingDelegate, SPTAudio
         if isHost {
             Party.tracksQueue.append(contentsOf: tracksReceived)
             if Party.tracksQueue.count == tracksReceived.count {
-                musicPlayer.startPlayer(withTracks: Party.tracksQueue)
+                musicPlayer.startPlayer()
             }
         } else {
             Party.tracksQueue = tracksReceived
@@ -318,7 +317,7 @@ class PartyViewController: UIViewController, SPTAudioStreamingDelegate, SPTAudio
         if musicPlayer.isPaused() {
             UIView.animate(withDuration: 0.1, animations: {
                 sender.alpha = 0.0
-            }, completion: { (finished) in
+            }, completion: { _ in
                 sender.setImage(#imageLiteral(resourceName: "pause"), for: .normal)
                 UIView.animate(withDuration: 0.25) {
                     sender.alpha = 1
@@ -328,7 +327,7 @@ class PartyViewController: UIViewController, SPTAudioStreamingDelegate, SPTAudio
         } else {
             UIView.animate(withDuration: 0.1, animations: {
                 sender.alpha = 0.0
-            }, completion: { (finished) in
+            }, completion: { _ in
                 sender.setImage(#imageLiteral(resourceName: "play"), for: .normal)
                 UIView.animate(withDuration: 0.25) {
                     sender.alpha = 1
@@ -338,19 +337,19 @@ class PartyViewController: UIViewController, SPTAudioStreamingDelegate, SPTAudio
         }
     }
     
+    @IBAction func skipTrack(_ sender: UIButton) {
+        if !Party.tracksQueue.isEmpty {
+            sendTracksToPeers(forTracks: [Party.tracksQueue.removeFirst()], toRemove: true)
+            musicPlayer.startPlayer()
+        }
+    }
+    
     // MARK: - Callbacks
     
     @objc private func playNextTrack() {
         if musicPlayer.safeToPlayNextTrack() && !Party.tracksQueue.isEmpty {
             sendTracksToPeers(forTracks: [Party.tracksQueue.removeFirst()], toRemove: true)
-            musicPlayer.startPlayer(withTracks: Party.tracksQueue)
-        }
-    }
-    
-    @IBAction func skipTrack(_ sender: UIButton) {
-        if !Party.tracksQueue.isEmpty {
-            sendTracksToPeers(forTracks: [Party.tracksQueue.removeFirst()], toRemove: true)
-            musicPlayer.startPlayer(withTracks: Party.tracksQueue)
+            musicPlayer.startPlayer()
         }
     }
     
@@ -371,7 +370,7 @@ class PartyViewController: UIViewController, SPTAudioStreamingDelegate, SPTAudio
             Party.tracksQueue.append(contentsOf: VC.tracksSelected)
             
             if Party.tracksQueue.count == VC.tracksSelected.count && isHost {
-                musicPlayer.startPlayer(withTracks: Party.tracksQueue)
+                musicPlayer.startPlayer()
             }
         }
     }

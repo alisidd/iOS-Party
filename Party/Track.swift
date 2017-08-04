@@ -26,7 +26,7 @@ class Track: NSObject, NSCoding {
     }
     
     static func fetchImage(fromURL urlString: String, completionHandler: @escaping (UIImage?) -> Void) {
-        if let data = try? Data(contentsOf: URL(string: urlString)!) {
+        if let url = URL(string: urlString), let data = try? Data(contentsOf: url) {
             DispatchQueue.main.async {
                 completionHandler(UIImage(data: data))
             }
