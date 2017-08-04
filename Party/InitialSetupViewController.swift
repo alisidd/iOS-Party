@@ -9,7 +9,6 @@
 import UIKit
 
 class InitialSetupViewController: UIViewController {
-    
     @IBOutlet weak var createPartyButton: setupButton!
     @IBOutlet weak var joinPartyButton: setupButton!
         

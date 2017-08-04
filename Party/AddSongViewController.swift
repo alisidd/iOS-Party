@@ -23,19 +23,19 @@ class AddSongViewController: UIViewController, UITextFieldDelegate, UITableViewD
                 self.trackTableView.reloadData()
                 self.indicator.stopAnimating()
                 self.indicator.hidesWhenStopped = true
-                self.fetchImageForRestOfTracks()
+                self.fetchArtworkForRestOfTracks()
             }
         }
     }
     var tracksSelected = [Track]() {
         didSet {
             DispatchQueue.main.async {
-                self.tracksCounter.isHidden = !(self.tracksSelected.count > 0)
+                self.tracksCounter.isHidden = self.tracksSelected.isEmpty
                 self.tracksCounter.text = String(self.tracksSelected.count)
             }
         }
     }
-    private lazy var fetcher: Fetcher = Party.musicService == .spotify ? SpotifyFetcher() : AppleMusicFetcher()
+    private var fetcher: Fetcher!
     private var indicator = UIActivityIndicatorView()
     private let noTracksFoundLabel = UILabel(frame: CGRect(x: 0, y: 0, width: 320, height: 70))
     
@@ -50,20 +50,20 @@ class AddSongViewController: UIViewController, UITextFieldDelegate, UITableViewD
     
     // MARK: - Functions
     
-    func setDelegates() {
+    private func setDelegates() {
         searchTracksField.delegate = self
         trackTableView.delegate    = self
         trackTableView.dataSource  = self
     }
     
-    func initializeActivityIndicator() {
+    private func initializeActivityIndicator() {
         indicator = UIActivityIndicatorView(frame: CGRect(x: 0, y: 0, width: 80, height: 80))
         indicator.activityIndicatorViewStyle = UIActivityIndicatorViewStyle.whiteLarge
         indicator.center = view.center
         view.addSubview(indicator)
     }
     
-    func adjustViews() {
+    private func adjustViews() {
         trackTableView.backgroundColor = .clear
         trackTableView.tableFooterView = UIView()
         
@@ -73,29 +73,27 @@ class AddSongViewController: UIViewController, UITextFieldDelegate, UITableViewD
     func textFieldShouldReturn(_ searchSongsField: UITextField) -> Bool {
         searchTracksField.resignFirstResponder()
         if !searchTracksField.text!.isEmpty {
-            fetchResults(forQuery: searchSongsField.text!)
+            fetcher = Party.musicService == .spotify ? SpotifyFetcher() : AppleMusicFetcher()
+            fetchResults(forTerm: searchSongsField.text!)
         }
         return true
     }
     
-    func fetchResults(forQuery query: String) {
+    private func fetchResults(forTerm term: String) {
         indicator.startAnimating()
         showTableView()
-        fetcher.searchCatalog(forTerm: query)
         
-        DispatchQueue.global(qos: .userInitiated).async { [weak self] in
-            self?.fetcher.dispatchGroup.wait()
-            
+        fetcher.searchCatalog(forTerm: term) { [weak self] in
             self?.populateTracksList()
-            self?.scrollBackUp()
+            self?.scrollUp()
         }
     }
     
-    func showTableView() {
+    private func showTableView() {
         trackTableView.isHidden = false
     }
     
-    func scrollBackUp() {
+    private func scrollUp() {
         DispatchQueue.main.async {
             if !self.tracksList.isEmpty {
                 self.trackTableView.scrollToRow(at: IndexPath(row: 0, section: 0), at: .top, animated: false)
@@ -103,24 +101,24 @@ class AddSongViewController: UIViewController, UITextFieldDelegate, UITableViewD
         }
     }
     
-    func populateTracksList() {
+    private func populateTracksList() {
         tracksList = fetcher.tracksList
         DispatchQueue.main.async {
             if self.tracksList.isEmpty {
-                self.displayNoTracksLabel(with: "No Tracks Found")
+                self.displayNoTracksLabel(withText: "No Tracks Found")
             } else {
                 self.removeNoTracksFoundLabel()
             }
         }
     }
     
-    func displayNoTracksLabel(with labelText: String) {
-        customizeLabel(with: labelText)
+    private func displayNoTracksLabel(withText text: String) {
+        customizeLabel(withText: text)
         view.addSubview(noTracksFoundLabel)
     }
     
-    func customizeLabel(with labelText: String) {
-        noTracksFoundLabel.text = labelText
+    private func customizeLabel(withText text: String) {
+        noTracksFoundLabel.text = text
         noTracksFoundLabel.textColor = .white
         noTracksFoundLabel.textAlignment = .center
         
@@ -129,22 +127,17 @@ class AddSongViewController: UIViewController, UITextFieldDelegate, UITableViewD
         noTracksFoundLabel.numberOfLines = 0
     }
     
-    func removeNoTracksFoundLabel() {
+    private func removeNoTracksFoundLabel() {
         noTracksFoundLabel.removeFromSuperview()
     }
     
-    func fetchImageForRestOfTracks() {
+    private func fetchArtworkForRestOfTracks() {
         let tracksCaptured = tracksList
-        DispatchQueue.global(qos: .userInitiated).async {
-            for track in self.tracksList {
-                if track.lowResArtwork == nil && self.tracksList == tracksCaptured {
-                    let artworkFetched = Track.fetchImage(fromURL: track.lowResArtworkURL)
-                    DispatchQueue.main.async {
-                        if let artworkFetched = artworkFetched, tracksCaptured == self.tracksList {
-                            track.lowResArtwork = artworkFetched
-                            self.trackTableView.reloadData()
-                        }
-                    }
+        for track in tracksList where tracksList == tracksCaptured && track.lowResArtwork == nil {
+            DispatchQueue.global(qos: .userInitiated).async { [weak self] in
+                Track.fetchImage(fromURL: track.lowResArtworkURL) { (image) in
+                    track.lowResArtwork = image
+                    self?.trackTableView.reloadData()
                 }
             }
         }
@@ -180,12 +173,7 @@ class AddSongViewController: UIViewController, UITextFieldDelegate, UITableViewD
         // Cell Properties
         cell.trackName.text = tracksList[indexPath.row].name
         cell.artistName.text = tracksList[indexPath.row].artist
-
-        if let unwrappedArtwork = tracksList[indexPath.row].lowResArtwork {
-            cell.artworkImageView.image = unwrappedArtwork
-        } else {
-            cell.artworkImageView.image = nil
-        }
+        cell.artworkImageView.image = tracksList[indexPath.row].lowResArtwork
         
         return cell
     }
@@ -199,7 +187,7 @@ class AddSongViewController: UIViewController, UITextFieldDelegate, UITableViewD
         }
     }
     
-    func addToQueue(track: Track) {
+    private func addToQueue(track: Track) {
         if !partyTracksQueue(hasTrack: track) && !tracksSelected.contains(track) {
             tracksSelected.append(track)
         }
@@ -216,7 +204,7 @@ class AddSongViewController: UIViewController, UITextFieldDelegate, UITableViewD
         }
     }
     
-    func removeFromQueue(track: Track) {
+    private func removeFromQueue(track: Track) {
         tracksSelected.remove(at: tracksSelected.index(where: {$0.id == track.id})!)
     }
 }

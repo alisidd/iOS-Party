@@ -16,11 +16,12 @@ class MultipeerManager: NSObject {
     private let serviceAdvertiser : MCNearbyServiceAdvertiser
     private let serviceBrowser : MCNearbyServiceBrowser
     
-    var myPeerId: MCPeerID!
-    var sessions = [MCSession : MCPeerID]()
+    fileprivate var myPeerId: MCPeerID!
+    fileprivate var sessions = [MCSession : MCPeerID]()
     var otherHosts = [MCPeerID]()
+    fileprivate var isHost: Bool
+    
     weak var delegate : NetworkManagerDelegate?
-    var isHost: Bool
     
     // MARK: - Lifecycle
     
@@ -48,7 +49,6 @@ class MultipeerManager: NSObject {
     deinit {
         serviceAdvertiser.stopAdvertisingPeer()
         serviceBrowser.stopBrowsingForPeers()
-        print("Destroying Network Manager")
     }
     
     func advertise() {
@@ -66,25 +66,21 @@ class MultipeerManager: NSObject {
             for session in sessions.keys {
                 try? session.send(positionData, toPeers: session.connectedPeers, with: .reliable)
             }
-            print("Sending Position")
         }
     }
-    
+    // TODO: - Do in background queue
     func send(tracks: [Track]) {
         if !sessions.isEmpty {
             let tracksListData = NSKeyedArchiver.archivedData(withRootObject: tracks)
-            print("Number of active sessions: \(sessions.count)")
             for session in sessions.keys {
                 try? session.send(tracksListData, toPeers: session.connectedPeers, with: .reliable)
             }
-            print("Sending Data")
         }
     }
     
     func sendPartyInfo(toSession session: MCSession) {
         if !sessions.isEmpty && delegate != nil {
             let partyData = NSKeyedArchiver.archivedData(withRootObject: Party())
-            print("Number of active sessions: \(sessions.count)")
             try? session.send(partyData, toPeers: session.connectedPeers, with: .reliable)
         }
     }
@@ -105,10 +101,8 @@ extension MultipeerManager : MCNearbyServiceAdvertiserDelegate {
             return
         }
         
-        for session in sessions.keys {
-            if session.connectedPeers.isEmpty {
-                invitationHandler(true, session)
-            }
+        for session in sessions.keys where session.connectedPeers.isEmpty {
+            invitationHandler(true, session)
         }
     }
     
@@ -209,15 +203,15 @@ extension MultipeerManager : MCSessionDelegate {
         print("didReceiveData: \(data.count) bytes")
         let unarchivedData = NSKeyedUnarchiver.unarchiveObject(with: data)
         if let party = unarchivedData as? Party {
-            delegate?.setupParty(withParty: party)
-        } else if let tracks = unarchivedData as? [Track], !tracks.isEmpty {
-            if case .removal = Track.typeOf(track: tracks[0]) {
+            delegate?.setup(withParty: party)
+        } else if let tracks = unarchivedData as? [Track] {
+            if !tracks.isEmpty, case .removal = Track.typeOf(track: tracks[0]) {
                 delegate?.remove(track: tracks[0])
             } else {
-                delegate?.add(tracksReceived: tracks, fromPeer: peerID)
+                delegate?.add(tracksReceived: tracks)
             }
         } else if let position = unarchivedData as? TimeInterval {
-            delegate?.updatePosition(position: position)
+            delegate?.update(usingPosition: position)
         }
     }
     

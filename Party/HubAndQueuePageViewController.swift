@@ -10,7 +10,7 @@ import UIKit
 
 class HubAndQueuePageViewController: UIPageViewController, UIPageViewControllerDelegate, UIPageViewControllerDataSource {
     weak var partyDelegate: PartyViewControllerInfoDelegate?
-    var allViewControllers = [UIViewController]()
+    private var allViewControllers = [UIViewController]()
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -19,12 +19,12 @@ class HubAndQueuePageViewController: UIPageViewController, UIPageViewControllerD
         populateListOfViewControllers()
     }
     
-    func setDelegates() {
+    private func setDelegates() {
         delegate = self
         dataSource = self
     }
     
-    func populateListOfViewControllers() {
+    private func populateListOfViewControllers() {
         let hubViewController = storyboard!.instantiateViewController(withIdentifier: "Hub")
         let tracksQueueViewController = storyboard!.instantiateViewController(withIdentifier: "Queue")
         

@@ -12,22 +12,23 @@ class HubViewController: UIViewController, UITableViewDelegate, UITableViewDataS
     
     weak var delegate: PartyViewControllerInfoDelegate?
     
-    let hubTitles = ["Lyrics", "Leave Party"]
+    private let hubTitles = ["Lyrics", "Leave Party"]
+    private let hubIcons = [#imageLiteral(resourceName: "lyricsIcon"), #imageLiteral(resourceName: "leavePartyIcon")]
     @IBOutlet weak var hubTableView: UITableView!
     @IBOutlet weak var hubLabel: UILabel!
     
-    let minHeight: CGFloat = 351
-    let maxHeight: CGFloat = -UIApplication.shared.statusBarFrame.height
-    var headerHeightConstraint: CGFloat {
+    private let minHeight: CGFloat = 351
+    private let maxHeight: CGFloat = -UIApplication.shared.statusBarFrame.height
+    private var headerHeightConstraint: CGFloat {
         get {
             return delegate!.returnTableHeight()
         }
         
         set {
-            delegate?.setTableHeight(withHeight: newValue)
+            delegate?.setTable(withHeight: newValue)
         }
     }
-    var previousScrollOffset: CGFloat = 0
+    private var previousScrollOffset: CGFloat = 0
 
     
     override func viewDidLoad() {
@@ -39,7 +40,7 @@ class HubViewController: UIViewController, UITableViewDelegate, UITableViewDataS
         changeFontSizeForHub()
     }
     
-    func setDelegates() {
+    private func setDelegates() {
         hubTableView.delegate = self
         hubTableView.dataSource = self
     }
@@ -59,7 +60,7 @@ class HubViewController: UIViewController, UITableViewDelegate, UITableViewDataS
             if newHeight != headerHeightConstraint {
                 headerHeightConstraint = newHeight
                 changeFontSizeForHub()
-                setScrollPosition(for: previousScrollOffset)
+                setScrollPosition(forOffset: previousScrollOffset)
             }
             
         } else if isScrollingUp {
@@ -67,7 +68,7 @@ class HubViewController: UIViewController, UITableViewDelegate, UITableViewDataS
             if newHeight != headerHeightConstraint && hubTableView.contentOffset.y < 2 {
                 headerHeightConstraint = newHeight
                 changeFontSizeForHub()
-                setScrollPosition(for: previousScrollOffset)
+                setScrollPosition(forOffset: previousScrollOffset)
             }
         }
         
@@ -75,13 +76,13 @@ class HubViewController: UIViewController, UITableViewDelegate, UITableViewDataS
         previousScrollOffset = scrollView.contentOffset.y
     }
     
-    func changeFontSizeForHub() {
+    private func changeFontSizeForHub() {
         UIView.animate(withDuration: 0.3) {
-            self.hubLabel.font = self.hubLabel.font.withSize(22 - 6 * (self.headerHeightConstraint / self.minHeight))
+            self.hubLabel.font = self.hubLabel.font.withSize(22 - 4 * (self.headerHeightConstraint / self.minHeight))
         }
     }
     
-    func setScrollPosition(for offset: CGFloat) {
+    private func setScrollPosition(forOffset offset: CGFloat) {
         hubTableView.contentOffset = CGPoint(x: hubTableView.contentOffset.x, y: offset)
     }
     
@@ -95,7 +96,7 @@ class HubViewController: UIViewController, UITableViewDelegate, UITableViewDataS
         }
     }
     
-    func scrollViewDidStopScrolling() {
+    private func scrollViewDidStopScrolling() {
         let range = maxHeight - minHeight
         let midPoint = minHeight + (range / 2)
         
@@ -133,9 +134,10 @@ class HubViewController: UIViewController, UITableViewDelegate, UITableViewDataS
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {        
-        let cell = tableView.dequeueReusableCell(withIdentifier: "Hub Cell")!
+        let cell = tableView.dequeueReusableCell(withIdentifier: "Hub Cell") as! HubTableViewCell
         
-        cell.textLabel?.text = hubTitles[indexPath.row]
+        cell.hubLabel.text = hubTitles[indexPath.row]
+        cell.iconView?.image = hubIcons[indexPath.row]
         
         return cell
     }
@@ -159,7 +161,7 @@ class HubViewController: UIViewController, UITableViewDelegate, UITableViewDataS
     
     // MARK: = Navigation
     
-    func leaveParty() {
+    private func leaveParty() {
         let _ = navigationController?.popToRootViewController(animated: true)
     }
 }

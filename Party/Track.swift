@@ -25,16 +25,12 @@ class Track: NSObject, NSCoding {
         return track.id.hasPrefix("R:") ? .removal : .addition
     }
     
-    static func fetchImage(fromURL urlString: String) -> UIImage? {
-        if let url = URL(string: urlString) {
-            do {
-                let data = try Data(contentsOf: url)
-                return UIImage(data: data)
-            } catch {
-                print("Error trying to get data from Artwork URL")
+    static func fetchImage(fromURL urlString: String, completionHandler: @escaping (UIImage?) -> Void) {
+        if let data = try? Data(contentsOf: URL(string: urlString)!) {
+            DispatchQueue.main.async {
+                completionHandler(UIImage(data: data))
             }
         }
-        return nil
     }
     
     func encode(with aCoder: NSCoder) {

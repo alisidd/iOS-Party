@@ -19,27 +19,27 @@ protocol UpdatePartyDelegate: class {
 protocol NetworkManagerDelegate: class {
     func connectedDevicesChanged(_ manager : MultipeerManager, connectedDevices: [String])
     func updateStatus(withState state: MCSessionState)
-    func setupParty(withParty party: Party)
-    func add(tracksReceived: [Track], fromPeer peer: MCPeerID)
+    func setup(withParty party: Party)
+    func add(tracksReceived: [Track])
     func remove(track: Track)
-    func updatePosition(position: TimeInterval)
+    func update(usingPosition position: TimeInterval)
 }
 
 protocol PartyViewControllerInfoDelegate: class {
+    var isHost: Bool { get }
     var personalQueue: Set<Track> { get }
     func sendTracksToPeers(forTracks: [Track], toRemove: Bool)
     func returnTableHeight() -> CGFloat
-    func setTableHeight(withHeight height: CGFloat)
+    func setTable(withHeight height: CGFloat)
     func layout()
-    func amHost() -> Bool
     func getCurrentProgress() -> TimeInterval?
 }
 
 class PartyViewController: UIViewController, SPTAudioStreamingDelegate, SPTAudioStreamingPlaybackDelegate, UpdatePartyDelegate, NetworkManagerDelegate, PartyViewControllerInfoDelegate {
     // MARK: - Storyboard Variables
     
-    // FIXME: - Update queue wheneveer a low res image gets loaded
     // FIXME: - Handle background tasks properly (stop when music is stopped)
+    // FIXME: - Remove memory leaks when fetching artwork
     // TODO: - Improve interface for reconnecting to parties
     
     // Currently Playing
@@ -151,6 +151,8 @@ class PartyViewController: UIViewController, SPTAudioStreamingDelegate, SPTAudio
     func updateEveryonesTableView() {
         // Update own table view
         lyricsAndQueueVC.updateTable()
+        fetchArtwork(forHighRes: false)
+        fetchArtwork(forHighRes: true)
         updateCurrentlyPlayingTrack()
         
         // Update peers tableview
@@ -163,45 +165,43 @@ class PartyViewController: UIViewController, SPTAudioStreamingDelegate, SPTAudio
         }
     }
     
-    private func updateCurrentlyPlayingTrack() {
-        DispatchQueue.main.async {
-            if !Party.tracksQueue.isEmpty {
-                self.currentlyPlayingTrackName.text = Party.tracksQueue[0].name
-                self.currentlyPlayingArtistName.text = Party.tracksQueue[0].artist
-                self.updateArtworkForCurrentlyPlaying()
-            } else {
-                self.hideCurrentlyPlayingArtwork()
-            }
-        }
-    }
-    
-    private func updateArtworkForCurrentlyPlaying() {
-        if let highResArtwork = Party.tracksQueue[0].highResArtwork {
-            currentlyPlayingArtwork.image = highResArtwork.addGradient()
-        } else {
-            let trackToSet = Party.tracksQueue[0]
-            DispatchQueue.global(qos: .userInitiated).async {
-                if !Party.tracksQueue.isEmpty && trackToSet == Party.tracksQueue[0] {
-                    self.fetchImageForCurrentlyPlaying(forTrack: trackToSet)
+    private func fetchArtwork(forHighRes: Bool) {
+        let latestTracks = Party.tracksQueue
+        DispatchQueue.global(qos: .userInitiated).async { [weak self] in
+            for track in Party.tracksQueue where latestTracks == Party.tracksQueue {
+                if forHighRes && track.highResArtwork == nil {
+                    self?.fetchHighResArtwork(forTrack: track)
+                } else if !forHighRes && track.lowResArtwork == nil {
+                    self?.fetchLowResArtwork(forTrack: track)
                 }
             }
         }
     }
     
-    private func fetchImageForCurrentlyPlaying(forTrack track: Track) {
-        if let url = URL(string: track.highResArtworkURL) {
-            if let data = try? Data(contentsOf: url), !Party.tracksQueue.isEmpty && track == Party.tracksQueue[0] {
-                setCurrentlyPlaying(withImage: UIImage(data: data), forTrack: track)
-            } else {
-                print("Error trying to get high resolution artwork")
+    private func fetchHighResArtwork(forTrack track: Track) {
+        Track.fetchImage(fromURL: track.highResArtworkURL) { [weak self] (image) in
+            track.highResArtwork = image
+            if !Party.tracksQueue.isEmpty && track == Party.tracksQueue[0] {
+                self?.currentlyPlayingArtwork.image = track.highResArtwork?.addGradient()
             }
         }
     }
+
+    private func fetchLowResArtwork(forTrack track: Track) {
+        Track.fetchImage(fromURL: track.lowResArtworkURL) { [weak self] (image) in
+            track.lowResArtwork = image
+            self?.lyricsAndQueueVC.updateTable()
+        }
+    }
     
-    private func setCurrentlyPlaying(withImage image: UIImage?, forTrack track: Track) {
+    private func updateCurrentlyPlayingTrack() {
         DispatchQueue.main.async {
-            if let image = image, !Party.tracksQueue.isEmpty && Party.tracksQueue[0] == track {
-                self.currentlyPlayingArtwork.image = image.addGradient()
+            if !Party.tracksQueue.isEmpty {
+                self.currentlyPlayingArtwork.image = Party.tracksQueue[0].highResArtwork?.addGradient()
+                self.currentlyPlayingTrackName.text = Party.tracksQueue[0].name
+                self.currentlyPlayingArtistName.text = Party.tracksQueue[0].artist
+            } else {
+                self.hideCurrentlyPlayingArtwork()
             }
         }
     }
@@ -250,14 +250,12 @@ class PartyViewController: UIViewController, SPTAudioStreamingDelegate, SPTAudio
     }
     
     private func updatePersonalQueue() {
-        for track in personalQueue {
-            if !Party.tracksQueue.contains(where: { $0.id == track.id }) {
-                personalQueue.remove(at: personalQueue.index(of: track)!)
-            }
+        for track in personalQueue where !Party.tracksQueue.contains(where: { $0.id == track.id }) {
+            personalQueue.remove(at: personalQueue.index(of: track)!)
         }
     }
     
-    func add(tracksReceived: [Track], fromPeer peer: MCPeerID) {
+    func add(tracksReceived: [Track]) {
         if isHost {
             Party.tracksQueue.append(contentsOf: tracksReceived)
             if Party.tracksQueue.count == tracksReceived.count {
@@ -265,25 +263,6 @@ class PartyViewController: UIViewController, SPTAudioStreamingDelegate, SPTAudio
             }
         } else {
             Party.tracksQueue = tracksReceived
-        }
-        
-        fetchHighResArtwork()
-    }
-    
-    private func fetchHighResArtwork() {
-        let latestTracks = Party.tracksQueue
-        DispatchQueue.global(qos: .userInitiated).async {
-            for track in Party.tracksQueue {
-                guard latestTracks == Party.tracksQueue else { return }
-
-                if track.highResArtwork == nil {
-                    print("Fetching high res artwork for \(track.name)")
-                    let image = Track.fetchImage(fromURL: track.highResArtworkURL)
-                    DispatchQueue.main.async {
-                        track.highResArtwork = image
-                    }
-                }
-            }
         }
     }
     
@@ -398,13 +377,13 @@ class PartyViewController: UIViewController, SPTAudioStreamingDelegate, SPTAudio
         connectionStatus = state
     }
     
-    func setupParty(withParty party: Party) {
+    func setup(withParty party: Party) {
         Party.musicService = type(of: party).musicService
         Party.danceability = type(of: party).danceability
         Party.cookie = type(of: party).cookie
     }
     
-    func updatePosition(position: TimeInterval) {
+    func update(usingPosition position: TimeInterval) {
         musicPlayer.currentPosition = position
     }
     
@@ -414,16 +393,12 @@ class PartyViewController: UIViewController, SPTAudioStreamingDelegate, SPTAudio
         return tableHeightConstraint.constant
     }
     
-    func setTableHeight(withHeight height: CGFloat) {
+    func setTable(withHeight height: CGFloat) {
         tableHeightConstraint.constant = height
     }
     
     func layout() {
         view.layoutIfNeeded()
-    }
-    
-    func amHost() -> Bool {
-        return isHost
     }
     
     func getCurrentProgress() -> TimeInterval? {

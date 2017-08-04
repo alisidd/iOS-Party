@@ -30,7 +30,7 @@ class BackgroundTask {
         }
     }
     
-    static func playAudio() {
+    private static func playAudio() {
         do {
             let bundle = Bundle.main.path(forResource: "BlankAudio", ofType: "wav")
             let alertSound = URL(fileURLWithPath: bundle!)

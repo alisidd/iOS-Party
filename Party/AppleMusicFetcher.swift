@@ -11,47 +11,27 @@ import SwiftyJSON
 
 protocol Fetcher {
     var tracksList: [Track] { get set }
-    var dispatchGroup: DispatchGroup { get }
-    func searchCatalog(forTerm term: String)
-    func getTrack(forID id: String)
+    func searchCatalog(forTerm term: String, completionHandler: @escaping () -> Void)
 }
 
 class AppleMusicFetcher: Fetcher {
     var tracksList = [Track]()
-    let dispatchGroup = DispatchGroup()
     
-    func searchCatalog(forTerm term: String) {
+    func searchCatalog(forTerm term: String, completionHandler: @escaping () -> Void) {
         let request = AppleMusicURLFactory.createSearchRequest(forTerm: term)
         
-        dispatchGroup.enter()
-        DispatchQueue.global(qos: .userInitiated).async {
+        DispatchQueue.global(qos: .userInitiated).async { [weak self] in
             let task = URLSession.shared.dataTask(with: request) { (data, response, _) in
                 if let statusCode = (response as? HTTPURLResponse)?.statusCode, statusCode == 200 {
                     let json = JSON(data: data!)["results"]["songs"]["data"].arrayValue
                     for trackJSON in json {
-                        self.tracksList.append(self.parse(json: trackJSON))
+                        guard self != nil else { return }
+                        self!.tracksList.append(self!.parse(json: trackJSON))
                     }
+                    completionHandler()
                 }
-                self.dispatchGroup.leave()
             }
-            
-            task.resume()
-        }
-    }
-    
-    func getTrack(forID id: String) {
-        let request = AppleMusicURLFactory.createTrackRequest(forID: id)
-        
-        dispatchGroup.enter()
-        DispatchQueue.global(qos: .userInitiated).async {
-            let task = URLSession.shared.dataTask(with: request) { (data, response, _) in
-                if let statusCode = (response as? HTTPURLResponse)?.statusCode, statusCode == 200 {
-                    let json = JSON(data: data!)["data"].arrayValue
-                    self.tracksList.append(self.parse(json: json[0]))
-                }
-                self.dispatchGroup.leave()
-            }
-            
+                
             task.resume()
         }
     }
@@ -66,8 +46,10 @@ class AppleMusicFetcher: Fetcher {
         
         track.lowResArtworkURL = getImageURL(fromURL: attributes["artwork"]["url"].stringValue, withSize: "60")
         
-        if tracksList.count < 5 {
-            track.lowResArtwork = Track.fetchImage(fromURL: track.lowResArtworkURL)
+        if tracksList.count < AppleMusicConstants.maxInitialLowRes {
+            Track.fetchImage(fromURL: track.lowResArtworkURL) { (image) in
+                track.lowResArtwork = image
+            }
         }
         
         track.highResArtworkURL = getImageURL(fromURL: attributes["artwork"]["url"].stringValue, withSize: "400")

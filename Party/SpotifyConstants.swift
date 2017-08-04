@@ -21,4 +21,6 @@ struct SpotifyConstants {
     static var authorizationToken: String {
         return Data((clientID + ":" + clientSecret).utf8).base64EncodedString()
     }
+    
+    static let maxInitialLowRes = 5
 }

@@ -11,39 +11,20 @@ import SwiftyJSON
 
 class SpotifyFetcher: Fetcher {
     var tracksList = [Track]()
-    let dispatchGroup = DispatchGroup()
     
-    func searchCatalog(forTerm term: String) {
-        tracksList.removeAll()
+    func searchCatalog(forTerm term: String, completionHandler: @escaping () -> Void) {
         let request = SpotifyURLFactory.createSearchRequest(forTerm: term)
         
-        dispatchGroup.enter()
-        DispatchQueue.global(qos: .userInitiated).async {
-            let task = URLSession.shared.dataTask(with: request) { (data, response, error) in
+        DispatchQueue.global(qos: .userInitiated).async { [weak self] in
+            let task = URLSession.shared.dataTask(with: request) { (data, response, _) in
                 if let statusCode = (response as? HTTPURLResponse)?.statusCode, statusCode == 200 {
                     let json = JSON(data: data!)["tracks"]["items"].arrayValue
                     for trackJSON in json {
-                        self.tracksList.append(self.parse(json: trackJSON))
+                        guard self != nil else { return }
+                        self!.tracksList.append(self!.parse(json: trackJSON))
                     }
+                    completionHandler()
                 }
-                self.dispatchGroup.leave()
-            }
-            
-            task.resume()
-        }
-    }
-    
-    func getTrack(forID id: String) {
-        let request = SpotifyURLFactory.createTrackRequest(forID: id)
-        
-        dispatchGroup.enter()
-        DispatchQueue.global(qos: .userInitiated).async {
-            let task = URLSession.shared.dataTask(with: request) { (data, response, _) in
-                if let statusCode = (response as? HTTPURLResponse)?.statusCode, statusCode == 200 {
-                    let json = JSON(data: data!)
-                    self.tracksList.append(self.parse(json: json))
-                }
-                self.dispatchGroup.leave()
             }
             
             task.resume()
@@ -60,8 +41,10 @@ class SpotifyFetcher: Fetcher {
         for images in json["album"]["images"].arrayValue {
             if images["height"].stringValue == "64" {
                 track.lowResArtworkURL = images["url"].stringValue
-                if tracksList.count < 5 {
-                    track.lowResArtwork = Track.fetchImage(fromURL: track.lowResArtworkURL)
+                if tracksList.count < SpotifyConstants.maxInitialLowRes {
+                    Track.fetchImage(fromURL: track.lowResArtworkURL) { (image) in
+                        track.lowResArtwork = image
+                    }
                 }
             }
             
