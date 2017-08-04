@@ -68,7 +68,7 @@ class MultipeerManager: NSObject {
             }
         }
     }
-    // TODO: - Do in background queue
+
     func send(tracks: [Track]) {
         if !sessions.isEmpty {
             let tracksListData = NSKeyedArchiver.archivedData(withRootObject: tracks)

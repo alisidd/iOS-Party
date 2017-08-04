@@ -9,6 +9,10 @@
 import Foundation
 import MultipeerConnectivity
 
+fileprivate let red = UIColor(red: 255/255, green: 71/255, blue: 62/255, alpha: 1)
+fileprivate let orange = UIColor(red: 255/255, green: 166/255, blue: 35/255, alpha: 1)
+fileprivate let green = UIColor(red: 117/255, green: 203/255, blue: 39/255, alpha: 1)
+
 extension PartyViewController {
     var connectionStatus: MCSessionState {
         get {
@@ -16,52 +20,39 @@ extension PartyViewController {
         }
         set {
             DispatchQueue.main.async {
-                self.displayStatusLabel()
+                self.displayStatusView()
                 self.connectionStatusLabel.text = newValue.stringValue()
                 
                 if newValue == .connected {
-                    self.removeReconnectButton()
-                    self.removeStatusLabel()
+                    self.changeStatusIndicatorView(toColor: green)
+                    self.hideStatusView()
                 } else if newValue == .connecting {
-                    self.displayReconnectButton()
-                    self.lyricsAndQueueVC.expandTracksTable()
+                    self.changeStatusIndicatorView(toColor: orange)
                 } else {
-                    self.displayReconnectButton()
-                    self.lyricsAndQueueVC.expandTracksTable()
+                    self.changeStatusIndicatorView(toColor: red)
                 }
             }
         }
     }
     
-    func displayStatusLabel() {
-        UIView.animate(withDuration: 0.5) {
-            self.connectionStatusLabel.isHidden = false
-            self.connectionStatusLabel.alpha = 1
-        }
-    }
-    
-    func removeStatusLabel() {
-        UIView.animate(withDuration: 1, animations: {
-            self.connectionStatusLabel.alpha = 0
-        }, completion: { (finished) in
-            self.connectionStatusLabel.isHidden = true
-        })
-    }
-    
-    func displayReconnectButton() {
+    func displayStatusView() {
         view.layoutIfNeeded()
-        reconnectButton.isHidden = false
-        UIView.animate(withDuration: 0.4) {
-            self.reconnectButton.alpha = 1
+        UIView.animate(withDuration: 0.5) {
+            self.connectionStatusViewConstraint.constant = 0
             self.view.layoutIfNeeded()
         }
     }
     
-    func removeReconnectButton() {
+    func changeStatusIndicatorView(toColor color: UIColor) {
+        UIView.animate(withDuration: 0.3) {
+            self.statusIndicatorView.backgroundColor = color
+        }
+    }
+    
+    func hideStatusView() {
         view.layoutIfNeeded()
-        reconnectButton.isHidden = true
-        UIView.animate(withDuration: 0.4) {
-            self.reconnectButton.alpha = 0
+        UIView.animate(withDuration: 1) {
+            self.connectionStatusViewConstraint.constant = -50
             self.view.layoutIfNeeded()
         }
     }

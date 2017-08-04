@@ -137,7 +137,7 @@
                                         </subviews>
                                     </stackView>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="rcd-f2-VTo">
-                                        <rect key="frame" x="280" y="326.5" width="15" height="20"/>
+                                        <rect key="frame" x="280" y="327" width="15" height="20"/>
                                         <constraints>
                                             <constraint firstAttribute="height" constant="20" id="KkT-xC-hrA"/>
                                             <constraint firstAttribute="width" constant="15" id="YRE-kt-lBg"/>
@@ -182,52 +182,79 @@
                                     <segue destination="E8C-Ne-jys" kind="embed" identifier="Show Lyrics and Queue" id="R0i-j5-9nI"/>
                                 </connections>
                             </containerView>
-                            <label hidden="YES" opaque="NO" userInteractionEnabled="NO" alpha="0.0" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Status" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="5Ep-vT-Sr3">
-                                <rect key="frame" x="152.5" y="524.5" width="70.5" height="34.5"/>
-                                <fontDescription key="fontDescription" name="AvenirNext-DemiBold" family="Avenir Next" pointSize="25"/>
-                                <color key="textColor" red="0.79607843137254897" green="0.7803921568627451" blue="0.7803921568627451" alpha="0.5" colorSpace="custom" customColorSpace="sRGB"/>
-                                <nil key="highlightedColor"/>
-                            </label>
-                            <button hidden="YES" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="9lr-B6-Z3d">
-                                <rect key="frame" x="143" y="592" width="88" height="40"/>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="2re-pn-Nzk" userLabel="Connection Status View">
+                                <rect key="frame" x="0.0" y="667" width="375" height="50"/>
+                                <subviews>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="9lr-B6-Z3d">
+                                        <rect key="frame" x="275" y="9" width="70" height="32"/>
+                                        <constraints>
+                                            <constraint firstAttribute="width" constant="70" id="MpK-FX-n4s"/>
+                                        </constraints>
+                                        <fontDescription key="fontDescription" name="AvenirNext-DemiBold" family="Avenir Next" pointSize="14"/>
+                                        <state key="normal" title="Reconnect">
+                                            <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                        </state>
+                                        <state key="highlighted">
+                                            <color key="titleColor" red="0.96470588235294119" green="0.65098039215686276" blue="0.13725490196078433" alpha="1" colorSpace="calibratedRGB"/>
+                                        </state>
+                                        <connections>
+                                            <action selector="reconnectToParty:" destination="IhU-0X-egj" eventType="touchUpInside" id="VWp-qA-IOA"/>
+                                        </connections>
+                                    </button>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Status Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="5Ep-vT-Sr3">
+                                        <rect key="frame" x="60" y="16" width="110" height="19.5"/>
+                                        <constraints>
+                                            <constraint firstAttribute="width" constant="110" id="F4a-Ui-AP4"/>
+                                        </constraints>
+                                        <fontDescription key="fontDescription" name="AvenirNext-DemiBold" family="Avenir Next" pointSize="14"/>
+                                        <color key="textColor" red="0.79607843137254897" green="0.7803921568627451" blue="0.7803921568627451" alpha="0.5" colorSpace="custom" customColorSpace="sRGB"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="0d8-aI-yDi">
+                                        <rect key="frame" x="30" y="17.5" width="15" height="15"/>
+                                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                        <constraints>
+                                            <constraint firstAttribute="height" constant="15" id="FEW-lz-JNL"/>
+                                            <constraint firstAttribute="width" constant="15" id="xU8-JY-4by"/>
+                                        </constraints>
+                                    </view>
+                                </subviews>
+                                <color key="backgroundColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <constraints>
-                                    <constraint firstAttribute="height" constant="40" id="Nf5-OW-5KO"/>
+                                    <constraint firstItem="9lr-B6-Z3d" firstAttribute="centerY" secondItem="2re-pn-Nzk" secondAttribute="centerY" id="30s-8H-QQQ"/>
+                                    <constraint firstItem="0d8-aI-yDi" firstAttribute="centerY" secondItem="5Ep-vT-Sr3" secondAttribute="centerY" id="5HC-wS-vWB"/>
+                                    <constraint firstItem="0d8-aI-yDi" firstAttribute="leading" secondItem="2re-pn-Nzk" secondAttribute="leading" constant="30" id="KfS-sK-BD2"/>
+                                    <constraint firstItem="5Ep-vT-Sr3" firstAttribute="leading" secondItem="0d8-aI-yDi" secondAttribute="trailing" constant="15" id="RFo-SY-FAb"/>
+                                    <constraint firstAttribute="height" constant="50" id="ae7-d5-A4n"/>
+                                    <constraint firstAttribute="trailing" secondItem="9lr-B6-Z3d" secondAttribute="trailing" constant="30" id="lis-zg-eBt"/>
+                                    <constraint firstItem="5Ep-vT-Sr3" firstAttribute="centerY" secondItem="2re-pn-Nzk" secondAttribute="centerY" id="vGn-fv-XWS"/>
                                 </constraints>
-                                <fontDescription key="fontDescription" name="AvenirNext-DemiBold" family="Avenir Next" pointSize="18"/>
-                                <state key="normal" title="Reconnect">
-                                    <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                                </state>
-                                <state key="highlighted">
-                                    <color key="titleColor" red="0.96470588235294119" green="0.65098039215686276" blue="0.13725490196078433" alpha="1" colorSpace="calibratedRGB"/>
-                                </state>
-                                <connections>
-                                    <action selector="reconnectToParty:" destination="IhU-0X-egj" eventType="touchUpInside" id="chq-C5-9Zq"/>
-                                </connections>
-                            </button>
+                            </view>
                         </subviews>
                         <color key="backgroundColor" red="0.10196078431372549" green="0.10196078431372549" blue="0.10196078431372549" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <constraints>
                             <constraint firstAttribute="trailing" secondItem="uNe-0s-jAa" secondAttribute="trailing" id="7e1-fv-0T1"/>
-                            <constraint firstItem="5Ep-vT-Sr3" firstAttribute="centerX" secondItem="uNe-0s-jAa" secondAttribute="centerX" id="9Aa-a8-FXx"/>
                             <constraint firstItem="7Lx-lg-uJ4" firstAttribute="leading" secondItem="ZZK-fY-JAX" secondAttribute="leading" id="KdH-6V-Y4P"/>
                             <constraint firstItem="uNe-0s-jAa" firstAttribute="leading" secondItem="ZZK-fY-JAX" secondAttribute="leading" id="OYZ-X7-SET"/>
-                            <constraint firstItem="9lr-B6-Z3d" firstAttribute="centerX" secondItem="5Ep-vT-Sr3" secondAttribute="centerX" id="cKo-4A-nq6"/>
+                            <constraint firstItem="2re-pn-Nzk" firstAttribute="leading" secondItem="uNe-0s-jAa" secondAttribute="leading" id="bny-Ba-K6Q"/>
                             <constraint firstItem="uNe-0s-jAa" firstAttribute="top" secondItem="aeu-Sl-Wwd" secondAttribute="bottom" constant="351" id="eBV-bE-wFh"/>
                             <constraint firstItem="IwS-71-ORn" firstAttribute="top" secondItem="uNe-0s-jAa" secondAttribute="bottom" id="fHs-bj-2F2"/>
                             <constraint firstItem="7Lx-lg-uJ4" firstAttribute="top" secondItem="ZZK-fY-JAX" secondAttribute="top" id="llA-ty-o66"/>
+                            <constraint firstAttribute="bottomMargin" secondItem="2re-pn-Nzk" secondAttribute="bottom" constant="-50" id="nl3-Qw-7nO"/>
                             <constraint firstAttribute="trailing" secondItem="7Lx-lg-uJ4" secondAttribute="trailing" id="s9k-IK-uNy"/>
-                            <constraint firstItem="5Ep-vT-Sr3" firstAttribute="centerY" secondItem="uNe-0s-jAa" secondAttribute="centerY" id="uYO-3n-X40"/>
-                            <constraint firstItem="9lr-B6-Z3d" firstAttribute="top" secondItem="5Ep-vT-Sr3" secondAttribute="bottom" constant="32.5" id="vhW-Y3-M6q"/>
+                            <constraint firstItem="2re-pn-Nzk" firstAttribute="trailing" secondItem="uNe-0s-jAa" secondAttribute="trailing" id="y4J-Uk-G9g"/>
                         </constraints>
                     </view>
                     <connections>
-                        <outlet property="connectionStatusLabel" destination="5Ep-vT-Sr3" id="enZ-Nd-Eed"/>
+                        <outlet property="connectionStatusLabel" destination="5Ep-vT-Sr3" id="TGA-Bk-8od"/>
+                        <outlet property="connectionStatusViewConstraint" destination="nl3-Qw-7nO" id="Ji2-q9-pwR"/>
                         <outlet property="currentlyPlayingArtistName" destination="DVp-9a-h3f" id="uwu-Ap-DOc"/>
                         <outlet property="currentlyPlayingArtwork" destination="HrH-IU-EqN" id="Dpl-AR-7y4"/>
                         <outlet property="currentlyPlayingTrackName" destination="ddX-fC-sB7" id="Elg-ej-lTp"/>
                         <outlet property="playPauseButton" destination="rcd-f2-VTo" id="8Xc-C1-cr0"/>
-                        <outlet property="reconnectButton" destination="9lr-B6-Z3d" id="uTD-eN-KSW"/>
+                        <outlet property="reconnectButton" destination="9lr-B6-Z3d" id="xoQ-6g-Vek"/>
                         <outlet property="skipTrackButton" destination="C8i-W2-rUz" id="VZo-x7-Lwy"/>
+                        <outlet property="statusIndicatorView" destination="0d8-aI-yDi" id="bFH-5A-bQK"/>
                         <outlet property="tableHeightConstraint" destination="eBV-bE-wFh" id="65Q-z8-2Oj"/>
                     </connections>
                 </viewController>
@@ -588,7 +615,7 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="SjL-Yh-saS" userLabel="First Responder" sceneMemberID="firstResponder"/>
                 <exit id="eT7-Kn-jht" userLabel="Exit" sceneMemberID="exit"/>
             </objects>
-            <point key="canvasLocation" x="6273" y="308"/>
+            <point key="canvasLocation" x="6268" y="284"/>
         </scene>
         <!--Party Creation View Controller-->
         <scene sceneID="2v2-wa-oxB">
@@ -725,6 +752,6 @@
         <image name="pause" width="585" height="967"/>
     </resources>
     <inferredMetricsTieBreakers>
-        <segue reference="j2I-Sz-fAw"/>
+        <segue reference="myb-f1-PXz"/>
     </inferredMetricsTieBreakers>
 </document>

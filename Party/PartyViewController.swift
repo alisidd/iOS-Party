@@ -39,8 +39,6 @@ class PartyViewController: UIViewController, SPTAudioStreamingDelegate, SPTAudio
     // MARK: - Storyboard Variables
     
     // FIXME: - Handle background tasks properly (stop when music is stopped)
-    // FIXME: - Remove memory leaks when fetching artwork
-    // TODO: - Improve interface for reconnecting to parties
     
     // Currently Playing
     @IBOutlet weak var currentlyPlayingArtwork: UIImageView!
@@ -58,6 +56,8 @@ class PartyViewController: UIViewController, SPTAudioStreamingDelegate, SPTAudio
     }
     
     // Connection Status
+    @IBOutlet weak var connectionStatusViewConstraint: NSLayoutConstraint!
+    @IBOutlet weak var statusIndicatorView: UIView!
     @IBOutlet weak var connectionStatusLabel: UILabel!
     @IBOutlet weak var reconnectButton: UIButton!
     
@@ -65,12 +65,11 @@ class PartyViewController: UIViewController, SPTAudioStreamingDelegate, SPTAudio
         networkManager = nil
         networkManager = MultipeerManager(isHost: false)
         networkManager.delegate = self
-        connectionStatus = .connecting
     }
     
     // MARK: - General Variables
     
-    lazy var networkManager: MultipeerManager! = {
+    lazy var networkManager: MultipeerManager! = { [unowned self] in
         let manager = MultipeerManager(isHost: self.isHost)
         manager.delegate = self
         return manager
@@ -88,6 +87,8 @@ class PartyViewController: UIViewController, SPTAudioStreamingDelegate, SPTAudio
         
         if isHost {
             initializeMusicPlayer()
+        } else {
+            initializeStatusIndicatorView()
         }
     }
     
@@ -123,6 +124,11 @@ class PartyViewController: UIViewController, SPTAudioStreamingDelegate, SPTAudio
             musicPlayer.appleMusicPlayer.beginGeneratingPlaybackNotifications()
             NotificationCenter.default.addObserver(self, selector: #selector(playNextTrack), name:.MPMusicPlayerControllerPlaybackStateDidChange, object: musicPlayer.appleMusicPlayer)
         }
+    }
+    
+    private func initializeStatusIndicatorView() {
+        statusIndicatorView.layer.cornerRadius = statusIndicatorView.frame.size.width / 2
+        statusIndicatorView.clipsToBounds = true
     }
     
     private func setTimer() {
