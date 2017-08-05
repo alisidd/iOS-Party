@@ -11,7 +11,7 @@ import MediaPlayer
 import MultipeerConnectivity
 
 protocol UpdatePartyDelegate: class {
-    var lyricsAndQueueVC: HubAndQueuePageViewController { get }
+    var hubAndQueueVC: HubAndQueuePageViewController { get }
     func updateEveryonesTableView()
     func showCurrentlyPlayingArtwork()
 }
@@ -47,7 +47,7 @@ class PartyViewController: UIViewController, SPTAudioStreamingDelegate, SPTAudio
     // Tracks Queue
     @IBOutlet weak var upNextLabel: UILabel!
     @IBOutlet weak var tableHeightConstraint: NSLayoutConstraint!
-    var lyricsAndQueueVC: HubAndQueuePageViewController {
+    var hubAndQueueVC: HubAndQueuePageViewController {
         let vc = childViewControllers.first{ $0 is HubAndQueuePageViewController }
         return vc as! HubAndQueuePageViewController
     }
@@ -185,7 +185,7 @@ class PartyViewController: UIViewController, SPTAudioStreamingDelegate, SPTAudio
     
     func updateEveryonesTableView() {
         // Update own table view
-        lyricsAndQueueVC.updateTable()
+        hubAndQueueVC.updateTable()
         fetchArtwork(forHighRes: false)
         fetchArtwork(forHighRes: true)
         updateCurrentlyPlayingTrack()
@@ -225,7 +225,7 @@ class PartyViewController: UIViewController, SPTAudioStreamingDelegate, SPTAudio
     private func fetchLowResArtwork(forTrack track: Track) {
         Track.fetchImage(fromURL: track.lowResArtworkURL) { [weak self] (image) in
             track.lowResArtwork = image
-            self?.lyricsAndQueueVC.updateTable()
+            self?.hubAndQueueVC.updateTable()
         }
     }
     
@@ -261,7 +261,7 @@ class PartyViewController: UIViewController, SPTAudioStreamingDelegate, SPTAudio
             self.currentlyPlayingArtistName.isHidden = true
             self.playPauseButton.isHidden = true
             self.skipTrackButton.isHidden = true
-            self.lyricsAndQueueVC.expandTracksTable()
+            self.hubAndQueueVC.expandTracksTable()
         }
     }
     
@@ -312,7 +312,7 @@ class PartyViewController: UIViewController, SPTAudioStreamingDelegate, SPTAudio
     // MARK: - Spotify Playback
     
     lazy var spotifyErrorHandler: () -> Void = { [weak self] in
-        let alert = UIAlertController(title: "No Spotify Premium", message: "You need a Spotify premium account to play music", preferredStyle: .alert)
+        let alert = UIAlertController(title: "No Spotify Premium", message: "A Spotify premium account is required to play music", preferredStyle: .alert)
         alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
         
         self?.present(alert, animated: true)
@@ -416,8 +416,8 @@ class PartyViewController: UIViewController, SPTAudioStreamingDelegate, SPTAudio
     }
     
     func setup(withParty party: Party) {
+        Party.name = type(of: party).name
         Party.musicService = type(of: party).musicService
-        Party.danceability = type(of: party).danceability
         Party.cookie = type(of: party).cookie
     }
     

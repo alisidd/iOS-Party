@@ -11,7 +11,8 @@ import UIKit
 class HubViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
     weak var delegate: PartyViewControllerInfoDelegate?
     
-    private let hubTitles = ["Lyrics", "Leave Party"]
+    @IBOutlet weak var hubTitle: UILabel?
+    private let hubOptions = ["Lyrics", "Leave Party"]
     private let hubIcons = [#imageLiteral(resourceName: "lyricsIcon"), #imageLiteral(resourceName: "leavePartyIcon")]
     @IBOutlet weak var hubTableView: UITableView!
     @IBOutlet weak var hubLabel: UILabel!
@@ -32,11 +33,17 @@ class HubViewController: UIViewController, UITableViewDelegate, UITableViewDataS
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        adjustViews()
         setDelegates()
     }
     
     override func viewWillAppear(_ animated: Bool) {
         changeFontSizeForHub()
+    }
+    
+    func adjustViews() {
+        updateHubTitle()
     }
     
     private func setDelegates() {
@@ -115,6 +122,17 @@ class HubViewController: UIViewController, UITableViewDelegate, UITableViewDataS
         }
     }
     
+    func updateHubTitle() {
+        guard Party.name != nil else { return }
+        DispatchQueue.main.async {
+            UIView.animate(withDuration: 0.4, animations: { self.hubTitle?.alpha = 0 }, completion: { _ in
+                self.hubTitle?.text = Party.name ?? "Hub"
+                UIView.animate(withDuration: 0.4) { self.hubTitle?.alpha = 1 }
+                
+            })
+        }
+    }
+    
     // MARK: - Table
     
     func numberOfSections(in tableView: UITableView) -> Int {
@@ -122,7 +140,7 @@ class HubViewController: UIViewController, UITableViewDelegate, UITableViewDataS
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return hubTitles.count
+        return hubOptions.count
     }
     
     func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
@@ -135,14 +153,14 @@ class HubViewController: UIViewController, UITableViewDelegate, UITableViewDataS
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {        
         let cell = tableView.dequeueReusableCell(withIdentifier: "Hub Cell") as! HubTableViewCell
         
-        cell.hubLabel.text = hubTitles[indexPath.row]
+        cell.hubLabel.text = hubOptions[indexPath.row]
         cell.iconView?.image = hubIcons[indexPath.row]
         
         return cell
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        if hubTitles[indexPath.row] == "Leave Party" {
+        if hubOptions[indexPath.row] == "Leave Party" {
             leaveParty()
         } else if !Party.tracksQueue.isEmpty && MusicPlayer.currentPosition != nil {
             MXMLyricsAction.sharedExtension().findLyricsForSong(

@@ -14,12 +14,12 @@ protocol ViewControllerAccessDelegate: class {
     func performSegue(withIdentifier identifier: String, sender: Any?)
 }
 
-class PartyCreationViewController: UIViewController, UITextFieldDelegate, UIPickerViewDelegate, ViewControllerAccessDelegate {
+class PartyCreationViewController: UIViewController, UITextFieldDelegate, ViewControllerAccessDelegate {
     // MARK: - Storyboard Variables
     
+    @IBOutlet weak var partyNameTextField: partyNameTextField!
     @IBOutlet weak var appleMusicButton: setupButton!
     @IBOutlet weak var spotifyButton: setupButton!
-    @IBOutlet weak var danceabilitySlider: UISlider!
     @IBOutlet weak var createButton: UIButton!
     @IBOutlet weak var indicator: UIActivityIndicatorView!
     
@@ -53,11 +53,11 @@ class PartyCreationViewController: UIViewController, UITextFieldDelegate, UIPick
     override func viewDidLoad() {
         super.viewDidLoad()
         makeNavigationBarTransparent()
-        customizeSliderImage()
         setDelegates()
         setSpotifyVariables()
         
-        setDefaultMusicService()
+        setPartyName()
+        setMusicService()
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -77,12 +77,8 @@ class PartyCreationViewController: UIViewController, UITextFieldDelegate, UIPick
         navigationController?.view.backgroundColor = UIColor.clear
     }
     
-    private func customizeSliderImage() {
-        danceabilitySlider.setThumbImage(#imageLiteral(resourceName: "thumbSlider"), for: .normal)
-        danceabilitySlider.setThumbImage(#imageLiteral(resourceName: "thumbSlider"), for: .highlighted)
-    }
-    
     func setDelegates() {
+        partyNameTextField.delegate = self
         SpotifyAuthorizationManager.delegate = self
         AppleMusicAuthorizationManager.delegate = self
     }
@@ -91,7 +87,21 @@ class PartyCreationViewController: UIViewController, UITextFieldDelegate, UIPick
         NotificationCenter.default.addObserver(self, selector: #selector(createSession(withNotification:)), name: SpotifyConstants.spotifyPlayerDidLoginNotification, object: nil)
     }
     
-    private func setDefaultMusicService() {
+    private func setPartyName() {
+        if let partyName = UserDefaults.standard.object(forKey: "partyName") as? String {
+            partyNameTextField.text = partyName
+            Party.name = partyName
+        } else {
+            setDefaultPartyName()
+        }
+    }
+    
+    private func setDefaultPartyName() {
+        partyNameTextField.text = UIDevice().userName() + " Party"
+        Party.name = UIDevice().userName() + " Party"
+    }
+    
+    private func setMusicService() {
         if let rawMusicService = UserDefaults.standard.object(forKey: "musicService") as? String,
             let musicService = MusicService(rawValue: rawMusicService) {
             if musicService == .spotify {
@@ -106,6 +116,22 @@ class PartyCreationViewController: UIViewController, UITextFieldDelegate, UIPick
     
     @objc private func createSession(withNotification notification: NSNotification) {
         SpotifyAuthorizationManager.createSession(withNotification: notification)
+    }
+    
+    // MARK: - Text Field
+    
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        textField.resignFirstResponder()
+        if !textField.text!.isEmpty {
+            Party.name = textField.text!
+        }
+        return true
+    }
+    
+    func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
+        let currentString = (textField.text ?? "") as NSString
+        let newString = currentString.replacingCharacters(in: range, with: string)
+        return  newString.characters.count <= 20
     }
     
     // MARK: - Storyboard Functions
@@ -128,10 +154,6 @@ class PartyCreationViewController: UIViewController, UITextFieldDelegate, UIPick
             button.alpha = 1
             otherButton.alpha = 0.6
         }
-    }
-    
-    @IBAction func sliderValueChanged(_ sender: UISlider) {
-        Party.danceability = sender.value
     }
     
     @IBAction func createParty() {
@@ -175,11 +197,12 @@ class PartyCreationViewController: UIViewController, UITextFieldDelegate, UIPick
         if let controller = segue.destination as? PartyViewController, segue.identifier == "Create Party" {
             controller.networkManager?.delegate = controller
             Party.delegate = controller
-            saveDefaultMusicService()
+            saveCustomization()
         }
     }
     
-    private func saveDefaultMusicService() {
+    private func saveCustomization() {
+        UserDefaults.standard.set(Party.name, forKey: "partyName")
         UserDefaults.standard.set(Party.musicService.rawValue, forKey: "musicService")
     }
 }

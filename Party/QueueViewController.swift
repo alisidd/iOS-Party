@@ -151,6 +151,17 @@ class QueueViewController: UIViewController, UITableViewDelegate, UITableViewDat
         }
     }
     
+    func showAddButton() {
+        self.addButton.isHidden = false
+        UIView.animate(withDuration: 0.3, animations: { self.addButton.alpha = 1 })
+    }
+    
+    func hideAddButton() {
+        UIView.animate(withDuration: 0.3, animations: { self.addButton.alpha = 0 }) { _ in
+            self.addButton.isHidden = true
+        }
+    }
+    
     func makeTracksTableTaller() {
         DispatchQueue.main.async {
             self.delegate?.layout()

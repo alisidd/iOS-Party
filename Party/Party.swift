@@ -10,6 +10,12 @@ import Foundation
 
 class Party: NSObject, NSCoding {
     static weak var delegate: UpdatePartyDelegate?
+    
+    static var name: String? {
+        didSet {
+            delegate?.hubAndQueueVC.updateHubTitle()
+        }
+    }
     static var musicService = MusicService.spotify
     
     static var tracksQueue = [Track]() {
@@ -19,39 +25,38 @@ class Party: NSObject, NSCoding {
                 delegate?.showCurrentlyPlayingArtwork()
             }
             if oldValue.isEmpty && !tracksQueue.isEmpty || tracksQueue.count == 1 {
-                delegate?.lyricsAndQueueVC.minimizeTracksTable()
+                delegate?.hubAndQueueVC.minimizeTracksTable()
             }
         }
     }
     static var tracksFromMyself = [Track]()
-    static var danceability: Float = 0.5
     static var cookie: String? // Represents Spotify access token or Apple Music country code
     
     static func reset() {
+        name = nil
         musicService = .spotify
         tracksQueue.removeAll()
         tracksFromMyself.removeAll()
-        danceability = 0.5
         cookie = nil
     }
     
     // MARK: - NSCoding
     
     func encode(with aCoder: NSCoder) {
+        aCoder.encode(Party.name, forKey: "name")
         aCoder.encode(Party.musicService.rawValue, forKey: "musicService")
-        aCoder.encode(Party.danceability, forKey: "danceability")
         aCoder.encode(Party.cookie, forKey: "cookie")
     }
     
     convenience required init?(coder aDecoder: NSCoder) {
+        let name = aDecoder.decodeObject(forKey: "name") as? String
         let musicService = aDecoder.decodeObject(forKey: "musicService") as! String
-        let danceability = aDecoder.decodeFloat(forKey: "danceability")
         let cookie = aDecoder.decodeObject(forKey: "cookie") as? String
         
         self.init()
-
+        
+        Party.name = name
         Party.musicService = MusicService(rawValue: musicService)!
-        Party.danceability = danceability
         Party.cookie = cookie
     }
 }

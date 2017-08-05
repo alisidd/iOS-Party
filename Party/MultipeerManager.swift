@@ -123,7 +123,7 @@ extension MultipeerManager : MCNearbyServiceBrowserDelegate {
             
             sessions.forEach { if $0.key.connectedPeers.isEmpty { sessions.removeValue(forKey: $0.key) } }
             let alreadyFound = sessions.contains(where: {$0.key.connectedPeers[0].displayName == peerID.displayName })
-            
+
             if !alreadyFound {
                 sessions[newSession] = peerID
                 if isHost {
@@ -218,3 +218,4 @@ extension MultipeerManager : MCSessionDelegate {
         print("didStartReceivingResourceWithName")
     }
 }
+

@@ -40,9 +40,27 @@ class HubAndQueuePageViewController: UIPageViewController, UIPageViewControllerD
         setViewControllers([tracksQueueViewController], direction: .reverse, animated: true, completion: nil)
     }
     
+    func updateHubTitle() {
+        if let vc = allViewControllers[0] as? HubViewController {
+            vc.updateHubTitle()
+        }
+    }
+    
     func updateTable() {
         if let vc = allViewControllers[1] as? QueueViewController {
             vc.updateTable()
+        }
+    }
+    
+    func showAddButton() {
+        if let vc = allViewControllers[1] as? QueueViewController {
+            vc.showAddButton()
+        }
+    }
+    
+    func hideAddButton() {
+        if let vc = allViewControllers[1] as? QueueViewController {
+            vc.hideAddButton()
         }
     }
     
