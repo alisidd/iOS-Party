@@ -8,9 +8,10 @@
 
 import UIKit
 
-class InitialSetupViewController: UIViewController {
+class InitialSetupViewController: UIViewController, UIGestureRecognizerDelegate {
     @IBOutlet weak var createPartyButton: setupButton!
     @IBOutlet weak var joinPartyButton: setupButton!
+    @IBOutlet weak var versionLabel: UILabel!
         
     // MARK: - Lifecycle
     
@@ -19,6 +20,21 @@ class InitialSetupViewController: UIViewController {
         DispatchQueue.main.async {
             self.navigationController?.setNavigationBarHidden(true, animated: animated)
         }
+    }
+    
+    override func viewDidLoad() {
+        populateVersionNumber()
+    }
+    
+    private func populateVersionNumber() {
+        if let versionNumber = Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String {
+            versionLabel.text = "Version " + versionNumber
+        }
+    }
+    
+    @IBAction func displayEasterEgg(_ sender: UILongPressGestureRecognizer) {
+        sender.isEnabled = false
+        versionLabel.text = "😎   " + versionLabel.text!
     }
     
     override func viewWillDisappear(_ animated: Bool) {

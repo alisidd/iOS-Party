@@ -51,6 +51,11 @@ class PartyCreationViewController: UIViewController, UITextFieldDelegate, ViewCo
     
     // MARK: - Lifecycle
     
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        networkManager = MultipeerManager(isHost: false)
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         makeNavigationBarTransparent()
@@ -60,11 +65,6 @@ class PartyCreationViewController: UIViewController, UITextFieldDelegate, ViewCo
         
         setPartyName()
         setMusicService()
-    }
-    
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-        networkManager = MultipeerManager(isHost: false)
     }
     
     override func viewWillDisappear(_ animated: Bool) {

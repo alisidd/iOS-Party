@@ -2,7 +2,7 @@
 //  setupButton.swift
 //  WeJ
 //
-//  Created by Mohammad Ali Siddiqui and Matthew Paletta on 11/9/16.
+//  Created by Mohammad Ali Siddiqui on 11/9/16.
 //  Copyright © 2017 Mohammad Ali Siddiqui. All rights reserved.
 //
 

@@ -17,7 +17,7 @@ protocol UpdatePartyDelegate: class {
 }
 
 protocol NetworkManagerDelegate: class {
-    func connectedDevicesChanged(_ manager : MultipeerManager, connectedDevices: [String])
+    func resetManager()
     func updateStatus(withState state: MCSessionState)
     func setup(withParty party: Party)
     func add(tracksReceived: [Track])
@@ -58,9 +58,7 @@ class PartyViewController: UIViewController, SPTAudioStreamingDelegate, SPTAudio
     @IBOutlet weak var connectionStatusLabel: UILabel!
     
     @IBAction func reconnectToParty() {
-        networkManager = nil
-        networkManager = MultipeerManager(isHost: false)
-        networkManager.delegate = self
+        resetManager()
     }
     
     // MARK: - General Variables
@@ -266,13 +264,13 @@ class PartyViewController: UIViewController, SPTAudioStreamingDelegate, SPTAudio
     }
     
     // Handles addition and removal of tracks
-    func sendTracksToPeers(forTracks tracks: [Track], toRemove: Bool = false) {
+    func sendTracksToPeers(forTracks tracks: [Track], toRemove isRemoval: Bool = false) {
         if isHost || (!isHost && !tracks.isEmpty) {
-            if toRemove {
+            if isRemoval {
                 let tracks = modifyTracksToRemove(usingTracks: tracks)
-                networkManager.send(tracks: tracks)
+                networkManager.send(tracks: tracks, toRemove: isRemoval)
             } else {
-                networkManager.send(tracks: tracks)
+                networkManager.send(tracks: tracks, toRemove: isRemoval)
             }
         }
     }
@@ -405,10 +403,10 @@ class PartyViewController: UIViewController, SPTAudioStreamingDelegate, SPTAudio
     
     // MARK: NetworkManagerDelegate
     
-    func connectedDevicesChanged(_ manager: MultipeerManager, connectedDevices: [String]) {
-        OperationQueue.main.addOperation { () -> Void in
-            print("Connections: \(connectedDevices)")
-        }
+    func resetManager() {
+        networkManager = nil
+        networkManager = MultipeerManager(isHost: self.isHost)
+        networkManager.delegate = self
     }
     
     func updateStatus(withState state: MCSessionState) {

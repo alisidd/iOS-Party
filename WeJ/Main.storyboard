@@ -66,11 +66,15 @@
                                     </button>
                                 </subviews>
                             </stackView>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Version 0.9" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="pci-f0-aMt">
+                            <label opaque="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Version 0.9" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="pci-f0-aMt">
                                 <rect key="frame" x="291.5" y="628.5" width="68.5" height="19.5"/>
+                                <gestureRecognizers/>
                                 <fontDescription key="fontDescription" name="AvenirNext-UltraLight" family="Avenir Next" pointSize="14"/>
                                 <color key="textColor" red="0.79607843137254897" green="0.7803921568627451" blue="0.7803921568627451" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <nil key="highlightedColor"/>
+                                <connections>
+                                    <outletCollection property="gestureRecognizers" destination="Yy9-jc-Kee" appends="YES" id="Y5a-iE-X8s"/>
+                                </connections>
                             </label>
                             <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="AppIcon120x120" translatesAutoresizingMaskIntoConstraints="NO" id="Vug-sN-tBG">
                                 <rect key="frame" x="26" y="74" width="100" height="100"/>
@@ -98,9 +102,15 @@
                     <connections>
                         <outlet property="createPartyButton" destination="QG0-gk-zbd" id="uab-m6-ig9"/>
                         <outlet property="joinPartyButton" destination="7L7-B0-Hdx" id="7Zv-L3-Rr3"/>
+                        <outlet property="versionLabel" destination="pci-f0-aMt" id="8Id-Wm-dYx"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
+                <pongPressGestureRecognizer allowableMovement="10" minimumPressDuration="2" id="Yy9-jc-Kee">
+                    <connections>
+                        <action selector="displayEasterEgg:" destination="BYZ-38-t0r" id="6mY-yc-b66"/>
+                    </connections>
+                </pongPressGestureRecognizer>
             </objects>
             <point key="canvasLocation" x="1436" y="79.610194902548727"/>
         </scene>
@@ -317,16 +327,16 @@
                                                     </constraints>
                                                 </imageView>
                                                 <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" spacing="2" translatesAutoresizingMaskIntoConstraints="NO" id="I6x-hr-uyF">
-                                                    <rect key="frame" x="109" y="31.5" width="257" height="37"/>
+                                                    <rect key="frame" x="109" y="31.5" width="218" height="37"/>
                                                     <subviews>
                                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Track Name" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="XDv-FN-wcj">
-                                                            <rect key="frame" x="0.0" y="0.0" width="257" height="18.5"/>
+                                                            <rect key="frame" x="0.0" y="0.0" width="218" height="18.5"/>
                                                             <fontDescription key="fontDescription" name="Helvetica-Light" family="Helvetica" pointSize="16"/>
                                                             <color key="textColor" red="0.85490196078431369" green="0.85490196078431369" blue="0.85490196078431369" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                             <nil key="highlightedColor"/>
                                                         </label>
                                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Artist Name" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="VWX-q8-f6f">
-                                                            <rect key="frame" x="0.0" y="20.5" width="257" height="16.5"/>
+                                                            <rect key="frame" x="0.0" y="20.5" width="218" height="16.5"/>
                                                             <fontDescription key="fontDescription" name="Helvetica-Light" family="Helvetica" pointSize="14"/>
                                                             <color key="textColor" red="0.63529411764705879" green="0.63529411764705879" blue="0.63529411764705879" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                             <nil key="highlightedColor"/>
@@ -740,6 +750,6 @@
         <image name="pause" width="585" height="967"/>
     </resources>
     <inferredMetricsTieBreakers>
-        <segue reference="myb-f1-PXz"/>
+        <segue reference="j2I-Sz-fAw"/>
     </inferredMetricsTieBreakers>
 </document>

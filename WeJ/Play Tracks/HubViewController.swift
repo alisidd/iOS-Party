@@ -29,17 +29,17 @@ class HubViewController: UIViewController, UITableViewDelegate, UITableViewDataS
         }
     }
     private var previousScrollOffset: CGFloat = 0
-
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        changeFontSizeForHub()
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
         adjustViews()
         setDelegates()
-    }
-    
-    override func viewWillAppear(_ animated: Bool) {
-        changeFontSizeForHub()
     }
     
     func adjustViews() {
