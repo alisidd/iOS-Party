@@ -1,9 +1,9 @@
 //
 //  AppDelegate.swift
-//  Party
+//  WeJ
 //
 //  Created by Mohammad Ali Siddiqui on 11/9/16.
-//  Copyright © 2016 Mohammad Ali Siddiqui. All rights reserved.
+//  Copyright © 2017 Mohammad Ali Siddiqui. All rights reserved.
 //
 
 import UIKit
@@ -16,7 +16,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     var window: UIWindow?
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
-        UIApplication.shared.statusBarStyle = .lightContent
         FirebaseApp.configure()
         return true
     }

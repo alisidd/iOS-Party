@@ -1,6 +1,6 @@
 //
 //  LyricsAndQueuePageViewController.swift
-//  Party
+//  WeJ
 //
 //  Created by Mohammad Ali Siddiqui on 3/15/17.
 //  Copyright © 2017 Mohammad Ali Siddiqui. All rights reserved.

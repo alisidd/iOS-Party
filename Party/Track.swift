@@ -1,6 +1,6 @@
 //
-//  Song.swift
-//  Party
+//  Track.swift
+//  WeJ
 //
 //  Created by Mohammad Ali Siddiqui on 1/19/17.
 //  Copyright © 2017 Mohammad Ali Siddiqui. All rights reserved.

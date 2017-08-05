@@ -1,6 +1,6 @@
 //
 //  Party.swift
-//  Party
+//  WeJ
 //
 //  Created by Matthew Paletta on 2016-11-14.
 //  Copyright © 2017 Mohammad Ali Siddiqui. All rights reserved.

@@ -90,9 +90,6 @@ class MultipeerManager: NSObject {
 
 extension MultipeerManager : MCNearbyServiceAdvertiserDelegate {
     func advertiser(_ advertiser: MCNearbyServiceAdvertiser, didReceiveInvitationFromPeer peerID: MCPeerID, withContext context: Data?, invitationHandler: @escaping ((Bool, MCSession?) -> Void)) {
-        
-        print("didReceiveInvitationFromPeer \(peerID)")
-        
         if sessions.isEmpty {
             let newSession = MCSession(peer: myPeerId, securityIdentity: nil, encryptionPreference: MCEncryptionPreference.none)
             newSession.delegate = self
@@ -116,32 +113,20 @@ extension MultipeerManager : MCNearbyServiceAdvertiserDelegate {
 extension MultipeerManager : MCNearbyServiceBrowserDelegate {
     @available(iOS 7.0, *)
     public func browser(_ browser: MCNearbyServiceBrowser, foundPeer peerID: MCPeerID, withDiscoveryInfo info: [String : String]?) {
-        print("foundPeer: \(peerID)")
-        if info?["isHost"] == "true" {
-            if !otherHosts.contains(peerID) {
-                otherHosts.append(peerID)
-            }
+        if info?["isHost"] == "true" && !otherHosts.contains(peerID) {
+            otherHosts.append(peerID)
         }
         
         if !(isHost == false && info?["isHost"] == "false") {
             let newSession = MCSession(peer: myPeerId, securityIdentity: nil, encryptionPreference: MCEncryptionPreference.none)
             newSession.delegate = self
             
-            var alreadyFound = false
-            for peerInSession in sessions.keys {
-                if !peerInSession.connectedPeers.isEmpty {
-                    if peerInSession.connectedPeers[0].displayName == peerID.displayName {
-                        alreadyFound = true
-                    }
-                } else {
-                    sessions.removeValue(forKey: peerInSession)
-                }
-            }
+            sessions.forEach { if $0.key.connectedPeers.isEmpty { sessions.removeValue(forKey: $0.key) } }
+            let alreadyFound = sessions.contains(where: {$0.key.connectedPeers[0].displayName == peerID.displayName })
             
             if !alreadyFound {
                 sessions[newSession] = peerID
                 if isHost {
-                    print("invitePeer: \(peerID)")
                     browser.invitePeer(peerID, to: newSession, withContext: nil, timeout: 10)
                 }
             }
@@ -157,11 +142,9 @@ extension MultipeerManager : MCNearbyServiceBrowserDelegate {
         }
         
         for (session, id) in sessions {
-            print("Connected Peers: \(session.connectedPeers.count)")
             if id == peerID {
                 session.disconnect()
                 sessions.removeValue(forKey: session)
-                print("lostPeer: \(peerID)")
             }
         }
     }
@@ -185,17 +168,17 @@ extension MCSessionState {
 
 extension MultipeerManager : MCSessionDelegate {
     func session(_ session: MCSession, peer peerID: MCPeerID, didChange state: MCSessionState) {
-        print("peer \(peerID) didChangeState: \(state.stringValue())")
         delegate?.connectedDevicesChanged(self, connectedDevices: session.connectedPeers.map{$0.displayName})
         if !isHost {
             delegate?.updateStatus(withState: state)
         }
+        
         if state == .connected && isHost {
             sendPartyInfo(toSession: session)
             send(tracks: Party.tracksQueue)
         } else if state == .notConnected {
-            if otherHosts.contains(peerID) {
-                otherHosts.remove(at: otherHosts.index(of: peerID)!)
+            if let index = otherHosts.index(of: peerID) {
+                otherHosts.remove(at: index)
             }
             if !isHost {
                 sessions.removeValue(forKey: session)
@@ -204,8 +187,8 @@ extension MultipeerManager : MCSessionDelegate {
     }
     
     func session(_ session: MCSession, didReceive data: Data, fromPeer peerID: MCPeerID) {
-        print("didReceiveData: \(data.count) bytes")
         let unarchivedData = NSKeyedUnarchiver.unarchiveObject(with: data)
+        
         if let party = unarchivedData as? Party {
             delegate?.setup(withParty: party)
         } else if let tracks = unarchivedData as? [Track] {

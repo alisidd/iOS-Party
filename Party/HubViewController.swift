@@ -1,6 +1,6 @@
 //
 //  LyricsViewController.swift
-//  Party
+//  WeJ
 //
 //  Created by Mohammad Ali Siddiqui on 3/15/17.
 //  Copyright © 2017 Mohammad Ali Siddiqui. All rights reserved.
@@ -9,7 +9,6 @@
 import UIKit
 
 class HubViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
-    
     weak var delegate: PartyViewControllerInfoDelegate?
     
     private let hubTitles = ["Lyrics", "Leave Party"]
