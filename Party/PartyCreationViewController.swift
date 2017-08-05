@@ -97,8 +97,9 @@ class PartyCreationViewController: UIViewController, UITextFieldDelegate, ViewCo
     }
     
     private func setDefaultPartyName() {
-        partyNameTextField.text = UIDevice().userName() + " Party"
-        Party.name = UIDevice().userName() + " Party"
+        let partyName = String(UIDevice().userName().characters.prefix(14)) + " Party"
+        partyNameTextField.text = partyName
+        Party.name = partyName
     }
     
     private func setMusicService() {

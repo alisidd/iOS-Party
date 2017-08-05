@@ -17,7 +17,7 @@ class HubViewController: UIViewController, UITableViewDelegate, UITableViewDataS
     @IBOutlet weak var hubTableView: UITableView!
     @IBOutlet weak var hubLabel: UILabel!
     
-    private let minHeight: CGFloat = 351
+    private let minHeight: CGFloat = 0.53 * UIScreen.main.bounds.height
     private let maxHeight: CGFloat = -UIApplication.shared.statusBarFrame.height
     private var headerHeightConstraint: CGFloat {
         get {
