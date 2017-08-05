@@ -1,0 +1,731 @@
+### Swift dependencies file v0 ###
+provides-top-level:
+provides-nominal:
+provides-member:
+- ["C3WeJ19PartyViewController", ""]
+- ["C3WeJ19PartyViewController", "connectionStatus"]
+- ["C3WeJ19PartyViewController", "displayStatusView"]
+- ["C3WeJ19PartyViewController", "changeStatusIndicatorView"]
+- ["C3WeJ19PartyViewController", "hideStatusView"]
+provides-dynamic-lookup:
+- "changeStatusIndicatorView"
+- "connectionStatus"
+- "displayStatusView"
+- "hideStatusView"
+depends-top-level:
+- "/"
+- !private "=="
+- !private "AssignmentPrecedence"
+- !private "DispatchQueue"
+- "MCSessionState"
+- "PartyViewController"
+- "UIColor"
+- !private "UIView"
+- !private "green"
+- !private "orange"
+- !private "red"
+depends-member:
+- !private ["Ps9AnyObject", "DispatchQueue"]
+- !private ["Ps9AnyObject", "UIView"]
+- !private ["Ps9AnyObject", "animate"]
+- !private ["Ps9AnyObject", "async"]
+- !private ["Ps9AnyObject", "backgroundColor"]
+- !private ["Ps9AnyObject", "changeStatusIndicatorView"]
+- !private ["Ps9AnyObject", "connectionStatus"]
+- !private ["Ps9AnyObject", "connectionStatusLabel"]
+- !private ["Ps9AnyObject", "connectionStatusViewConstraint"]
+- !private ["Ps9AnyObject", "constant"]
+- !private ["Ps9AnyObject", "displayStatusView"]
+- !private ["Ps9AnyObject", "green"]
+- !private ["Ps9AnyObject", "hideAddButton"]
+- !private ["Ps9AnyObject", "hideStatusView"]
+- !private ["Ps9AnyObject", "hubAndQueueVC"]
+- ["Ps9AnyObject", "init"]
+- !private ["Ps9AnyObject", "layoutIfNeeded"]
+- !private ["Ps9AnyObject", "main"]
+- !private ["Ps9AnyObject", "orange"]
+- !private ["Ps9AnyObject", "red"]
+- !private ["Ps9AnyObject", "showAddButton"]
+- !private ["Ps9AnyObject", "statusIndicatorView"]
+- !private ["Ps9AnyObject", "text"]
+- !private ["Ps9AnyObject", "view"]
+- !private ["Sb", "_getBuiltinLogicValue"]
+- !private ["PSo15CALayerDelegate", "animate"]
+- !private ["PSo15CALayerDelegate", "backgroundColor"]
+- !private ["PSo15CALayerDelegate", "layoutIfNeeded"]
+- !private ["PSo15CALayerDelegate", "text"]
+- !private ["Ps7CVarArg", "DispatchQueue"]
+- !private ["Ps7CVarArg", "UIView"]
+- !private ["Ps7CVarArg", "animate"]
+- !private ["Ps7CVarArg", "async"]
+- !private ["Ps7CVarArg", "backgroundColor"]
+- !private ["Ps7CVarArg", "changeStatusIndicatorView"]
+- !private ["Ps7CVarArg", "connectionStatus"]
+- !private ["Ps7CVarArg", "connectionStatusLabel"]
+- !private ["Ps7CVarArg", "connectionStatusViewConstraint"]
+- !private ["Ps7CVarArg", "constant"]
+- !private ["Ps7CVarArg", "displayStatusView"]
+- !private ["Ps7CVarArg", "green"]
+- !private ["Ps7CVarArg", "hideAddButton"]
+- !private ["Ps7CVarArg", "hideStatusView"]
+- !private ["Ps7CVarArg", "hubAndQueueVC"]
+- ["Ps7CVarArg", "init"]
+- !private ["Ps7CVarArg", "layoutIfNeeded"]
+- !private ["Ps7CVarArg", "main"]
+- !private ["Ps7CVarArg", "orange"]
+- !private ["Ps7CVarArg", "red"]
+- !private ["Ps7CVarArg", "showAddButton"]
+- !private ["Ps7CVarArg", "statusIndicatorView"]
+- !private ["Ps7CVarArg", "text"]
+- !private ["Ps7CVarArg", "view"]
+- !private ["Ps28CustomDebugStringConvertible", "DispatchQueue"]
+- !private ["Ps28CustomDebugStringConvertible", "UIView"]
+- !private ["Ps28CustomDebugStringConvertible", "animate"]
+- !private ["Ps28CustomDebugStringConvertible", "async"]
+- !private ["Ps28CustomDebugStringConvertible", "backgroundColor"]
+- !private ["Ps28CustomDebugStringConvertible", "changeStatusIndicatorView"]
+- !private ["Ps28CustomDebugStringConvertible", "connectionStatus"]
+- !private ["Ps28CustomDebugStringConvertible", "connectionStatusLabel"]
+- !private ["Ps28CustomDebugStringConvertible", "connectionStatusViewConstraint"]
+- !private ["Ps28CustomDebugStringConvertible", "constant"]
+- !private ["Ps28CustomDebugStringConvertible", "displayStatusView"]
+- !private ["Ps28CustomDebugStringConvertible", "green"]
+- !private ["Ps28CustomDebugStringConvertible", "hideAddButton"]
+- !private ["Ps28CustomDebugStringConvertible", "hideStatusView"]
+- !private ["Ps28CustomDebugStringConvertible", "hubAndQueueVC"]
+- ["Ps28CustomDebugStringConvertible", "init"]
+- !private ["Ps28CustomDebugStringConvertible", "layoutIfNeeded"]
+- !private ["Ps28CustomDebugStringConvertible", "main"]
+- !private ["Ps28CustomDebugStringConvertible", "orange"]
+- !private ["Ps28CustomDebugStringConvertible", "red"]
+- !private ["Ps28CustomDebugStringConvertible", "showAddButton"]
+- !private ["Ps28CustomDebugStringConvertible", "statusIndicatorView"]
+- !private ["Ps28CustomDebugStringConvertible", "text"]
+- !private ["Ps28CustomDebugStringConvertible", "view"]
+- !private ["Ps29CustomPlaygroundQuickLookable", "_getBuiltinLogicValue"]
+- !private ["Ps17CustomReflectable", "_getBuiltinLogicValue"]
+- !private ["Ps23CustomStringConvertible", "DispatchQueue"]
+- !private ["Ps23CustomStringConvertible", "UIView"]
+- !private ["Ps23CustomStringConvertible", "_getBuiltinLogicValue"]
+- !private ["Ps23CustomStringConvertible", "animate"]
+- !private ["Ps23CustomStringConvertible", "async"]
+- !private ["Ps23CustomStringConvertible", "backgroundColor"]
+- !private ["Ps23CustomStringConvertible", "changeStatusIndicatorView"]
+- !private ["Ps23CustomStringConvertible", "connectionStatus"]
+- !private ["Ps23CustomStringConvertible", "connectionStatusLabel"]
+- !private ["Ps23CustomStringConvertible", "connectionStatusViewConstraint"]
+- !private ["Ps23CustomStringConvertible", "constant"]
+- !private ["Ps23CustomStringConvertible", "displayStatusView"]
+- !private ["Ps23CustomStringConvertible", "green"]
+- !private ["Ps23CustomStringConvertible", "hideAddButton"]
+- !private ["Ps23CustomStringConvertible", "hideStatusView"]
+- !private ["Ps23CustomStringConvertible", "hubAndQueueVC"]
+- ["Ps23CustomStringConvertible", "init"]
+- !private ["Ps23CustomStringConvertible", "layoutIfNeeded"]
+- !private ["Ps23CustomStringConvertible", "main"]
+- !private ["Ps23CustomStringConvertible", "orange"]
+- !private ["Ps23CustomStringConvertible", "red"]
+- !private ["Ps23CustomStringConvertible", "showAddButton"]
+- !private ["Ps23CustomStringConvertible", "statusIndicatorView"]
+- !private ["Ps23CustomStringConvertible", "text"]
+- !private ["Ps23CustomStringConvertible", "view"]
+- !private ["CSo14DispatchObject", "async"]
+- !private ["CSo14DispatchObject", "main"]
+- !private ["CSo13DispatchQueue", "async"]
+- !private ["CSo13DispatchQueue", "main"]
+- !private ["Ps9Equatable", "DispatchQueue"]
+- !private ["Ps9Equatable", "UIView"]
+- !private ["Ps9Equatable", "_getBuiltinLogicValue"]
+- !private ["Ps9Equatable", "animate"]
+- !private ["Ps9Equatable", "async"]
+- !private ["Ps9Equatable", "backgroundColor"]
+- !private ["Ps9Equatable", "changeStatusIndicatorView"]
+- !private ["Ps9Equatable", "connected"]
+- !private ["Ps9Equatable", "connecting"]
+- !private ["Ps9Equatable", "connectionStatus"]
+- !private ["Ps9Equatable", "connectionStatusLabel"]
+- !private ["Ps9Equatable", "connectionStatusViewConstraint"]
+- !private ["Ps9Equatable", "constant"]
+- !private ["Ps9Equatable", "displayStatusView"]
+- !private ["Ps9Equatable", "green"]
+- !private ["Ps9Equatable", "hideAddButton"]
+- !private ["Ps9Equatable", "hideStatusView"]
+- !private ["Ps9Equatable", "hubAndQueueVC"]
+- ["Ps9Equatable", "init"]
+- !private ["Ps9Equatable", "layoutIfNeeded"]
+- !private ["Ps9Equatable", "main"]
+- !private ["Ps9Equatable", "orange"]
+- !private ["Ps9Equatable", "red"]
+- !private ["Ps9Equatable", "showAddButton"]
+- !private ["Ps9Equatable", "statusIndicatorView"]
+- !private ["Ps9Equatable", "stringValue"]
+- !private ["Ps9Equatable", "text"]
+- !private ["Ps9Equatable", "view"]
+- !private ["Ps27ExpressibleByBooleanLiteral", "_getBuiltinLogicValue"]
+- !private ["Ps8Hashable", "DispatchQueue"]
+- !private ["Ps8Hashable", "UIView"]
+- !private ["Ps8Hashable", "_getBuiltinLogicValue"]
+- !private ["Ps8Hashable", "animate"]
+- !private ["Ps8Hashable", "async"]
+- !private ["Ps8Hashable", "backgroundColor"]
+- !private ["Ps8Hashable", "changeStatusIndicatorView"]
+- !private ["Ps8Hashable", "connected"]
+- !private ["Ps8Hashable", "connecting"]
+- !private ["Ps8Hashable", "connectionStatus"]
+- !private ["Ps8Hashable", "connectionStatusLabel"]
+- !private ["Ps8Hashable", "connectionStatusViewConstraint"]
+- !private ["Ps8Hashable", "constant"]
+- !private ["Ps8Hashable", "displayStatusView"]
+- !private ["Ps8Hashable", "green"]
+- !private ["Ps8Hashable", "hideAddButton"]
+- !private ["Ps8Hashable", "hideStatusView"]
+- !private ["Ps8Hashable", "hubAndQueueVC"]
+- ["Ps8Hashable", "init"]
+- !private ["Ps8Hashable", "layoutIfNeeded"]
+- !private ["Ps8Hashable", "main"]
+- !private ["Ps8Hashable", "orange"]
+- !private ["Ps8Hashable", "red"]
+- !private ["Ps8Hashable", "showAddButton"]
+- !private ["Ps8Hashable", "statusIndicatorView"]
+- !private ["Ps8Hashable", "stringValue"]
+- !private ["Ps8Hashable", "text"]
+- !private ["Ps8Hashable", "view"]
+- !private ["C3WeJ29HubAndQueuePageViewController", "hideAddButton"]
+- !private ["C3WeJ29HubAndQueuePageViewController", "showAddButton"]
+- !private ["Ps25LosslessStringConvertible", "_getBuiltinLogicValue"]
+- !private ["OSC14MCSessionState", "connected"]
+- !private ["OSC14MCSessionState", "connecting"]
+- !private ["OSC14MCSessionState", "stringValue"]
+- !private ["PSo8NSCoding", "DispatchQueue"]
+- !private ["PSo8NSCoding", "UIView"]
+- !private ["PSo8NSCoding", "animate"]
+- !private ["PSo8NSCoding", "backgroundColor"]
+- !private ["PSo8NSCoding", "changeStatusIndicatorView"]
+- !private ["PSo8NSCoding", "connectionStatus"]
+- !private ["PSo8NSCoding", "connectionStatusLabel"]
+- !private ["PSo8NSCoding", "connectionStatusViewConstraint"]
+- !private ["PSo8NSCoding", "displayStatusView"]
+- !private ["PSo8NSCoding", "green"]
+- !private ["PSo8NSCoding", "hideAddButton"]
+- !private ["PSo8NSCoding", "hideStatusView"]
+- !private ["PSo8NSCoding", "hubAndQueueVC"]
+- ["PSo8NSCoding", "init"]
+- !private ["PSo8NSCoding", "layoutIfNeeded"]
+- !private ["PSo8NSCoding", "orange"]
+- !private ["PSo8NSCoding", "red"]
+- !private ["PSo8NSCoding", "showAddButton"]
+- !private ["PSo8NSCoding", "statusIndicatorView"]
+- !private ["PSo8NSCoding", "text"]
+- !private ["PSo8NSCoding", "view"]
+- ["PSo9NSCopying", "init"]
+- !private ["PSo26NSExtensionRequestHandling", "DispatchQueue"]
+- !private ["PSo26NSExtensionRequestHandling", "UIView"]
+- !private ["PSo26NSExtensionRequestHandling", "changeStatusIndicatorView"]
+- !private ["PSo26NSExtensionRequestHandling", "connectionStatus"]
+- !private ["PSo26NSExtensionRequestHandling", "connectionStatusLabel"]
+- !private ["PSo26NSExtensionRequestHandling", "connectionStatusViewConstraint"]
+- !private ["PSo26NSExtensionRequestHandling", "displayStatusView"]
+- !private ["PSo26NSExtensionRequestHandling", "green"]
+- !private ["PSo26NSExtensionRequestHandling", "hideAddButton"]
+- !private ["PSo26NSExtensionRequestHandling", "hideStatusView"]
+- !private ["PSo26NSExtensionRequestHandling", "hubAndQueueVC"]
+- !private ["PSo26NSExtensionRequestHandling", "orange"]
+- !private ["PSo26NSExtensionRequestHandling", "red"]
+- !private ["PSo26NSExtensionRequestHandling", "showAddButton"]
+- !private ["PSo26NSExtensionRequestHandling", "statusIndicatorView"]
+- !private ["PSo26NSExtensionRequestHandling", "view"]
+- !private ["CSo18NSLayoutConstraint", "constant"]
+- !private ["CSo8NSObject", "DispatchQueue"]
+- ["CSo8NSObject", "MCSessionState"]
+- ["CSo8NSObject", "UIColor"]
+- !private ["CSo8NSObject", "UIView"]
+- !private ["CSo8NSObject", "animate"]
+- !private ["CSo8NSObject", "async"]
+- !private ["CSo8NSObject", "backgroundColor"]
+- ["CSo8NSObject", "changeStatusIndicatorView"]
+- ["CSo8NSObject", "connectionStatus"]
+- !private ["CSo8NSObject", "connectionStatusLabel"]
+- !private ["CSo8NSObject", "connectionStatusViewConstraint"]
+- !private ["CSo8NSObject", "constant"]
+- ["CSo8NSObject", "displayStatusView"]
+- !private ["CSo8NSObject", "green"]
+- !private ["CSo8NSObject", "hideAddButton"]
+- ["CSo8NSObject", "hideStatusView"]
+- !private ["CSo8NSObject", "hubAndQueueVC"]
+- !private ["CSo8NSObject", "layoutIfNeeded"]
+- !private ["CSo8NSObject", "main"]
+- !private ["CSo8NSObject", "orange"]
+- !private ["CSo8NSObject", "red"]
+- !private ["CSo8NSObject", "showAddButton"]
+- !private ["CSo8NSObject", "statusIndicatorView"]
+- !private ["CSo8NSObject", "text"]
+- !private ["CSo8NSObject", "view"]
+- !private ["PSo16NSObjectProtocol", "DispatchQueue"]
+- !private ["PSo16NSObjectProtocol", "UIView"]
+- !private ["PSo16NSObjectProtocol", "animate"]
+- !private ["PSo16NSObjectProtocol", "async"]
+- !private ["PSo16NSObjectProtocol", "backgroundColor"]
+- !private ["PSo16NSObjectProtocol", "changeStatusIndicatorView"]
+- !private ["PSo16NSObjectProtocol", "connectionStatus"]
+- !private ["PSo16NSObjectProtocol", "connectionStatusLabel"]
+- !private ["PSo16NSObjectProtocol", "connectionStatusViewConstraint"]
+- !private ["PSo16NSObjectProtocol", "constant"]
+- !private ["PSo16NSObjectProtocol", "displayStatusView"]
+- !private ["PSo16NSObjectProtocol", "green"]
+- !private ["PSo16NSObjectProtocol", "hideAddButton"]
+- !private ["PSo16NSObjectProtocol", "hideStatusView"]
+- !private ["PSo16NSObjectProtocol", "hubAndQueueVC"]
+- ["PSo16NSObjectProtocol", "init"]
+- !private ["PSo16NSObjectProtocol", "layoutIfNeeded"]
+- !private ["PSo16NSObjectProtocol", "main"]
+- !private ["PSo16NSObjectProtocol", "orange"]
+- !private ["PSo16NSObjectProtocol", "red"]
+- !private ["PSo16NSObjectProtocol", "showAddButton"]
+- !private ["PSo16NSObjectProtocol", "statusIndicatorView"]
+- !private ["PSo16NSObjectProtocol", "text"]
+- !private ["PSo16NSObjectProtocol", "view"]
+- ["PSo14NSSecureCoding", "init"]
+- !private ["P3WeJ22NetworkManagerDelegate", "DispatchQueue"]
+- !private ["P3WeJ22NetworkManagerDelegate", "UIView"]
+- !private ["P3WeJ22NetworkManagerDelegate", "changeStatusIndicatorView"]
+- !private ["P3WeJ22NetworkManagerDelegate", "connectionStatus"]
+- !private ["P3WeJ22NetworkManagerDelegate", "connectionStatusLabel"]
+- !private ["P3WeJ22NetworkManagerDelegate", "connectionStatusViewConstraint"]
+- !private ["P3WeJ22NetworkManagerDelegate", "displayStatusView"]
+- !private ["P3WeJ22NetworkManagerDelegate", "green"]
+- !private ["P3WeJ22NetworkManagerDelegate", "hideStatusView"]
+- !private ["P3WeJ22NetworkManagerDelegate", "hubAndQueueVC"]
+- !private ["P3WeJ22NetworkManagerDelegate", "orange"]
+- !private ["P3WeJ22NetworkManagerDelegate", "red"]
+- !private ["P3WeJ22NetworkManagerDelegate", "statusIndicatorView"]
+- !private ["P3WeJ22NetworkManagerDelegate", "view"]
+- !private ["CSo9OS_object", "async"]
+- !private ["CSo9OS_object", "main"]
+- !private ["C3WeJ19PartyViewController", "DispatchQueue"]
+- ["C3WeJ19PartyViewController", "MCSessionState"]
+- ["C3WeJ19PartyViewController", "UIColor"]
+- !private ["C3WeJ19PartyViewController", "UIView"]
+- ["C3WeJ19PartyViewController", "changeStatusIndicatorView"]
+- ["C3WeJ19PartyViewController", "connectionStatus"]
+- !private ["C3WeJ19PartyViewController", "connectionStatusLabel"]
+- !private ["C3WeJ19PartyViewController", "connectionStatusViewConstraint"]
+- !private ["C3WeJ19PartyViewController", "deinit"]
+- ["C3WeJ19PartyViewController", "displayStatusView"]
+- !private ["C3WeJ19PartyViewController", "green"]
+- ["C3WeJ19PartyViewController", "hideStatusView"]
+- !private ["C3WeJ19PartyViewController", "hubAndQueueVC"]
+- !private ["C3WeJ19PartyViewController", "orange"]
+- !private ["C3WeJ19PartyViewController", "red"]
+- !private ["C3WeJ19PartyViewController", "statusIndicatorView"]
+- !private ["C3WeJ19PartyViewController", "view"]
+- !private ["P3WeJ31PartyViewControllerInfoDelegate", "DispatchQueue"]
+- !private ["P3WeJ31PartyViewControllerInfoDelegate", "UIView"]
+- !private ["P3WeJ31PartyViewControllerInfoDelegate", "changeStatusIndicatorView"]
+- !private ["P3WeJ31PartyViewControllerInfoDelegate", "connectionStatus"]
+- !private ["P3WeJ31PartyViewControllerInfoDelegate", "connectionStatusLabel"]
+- !private ["P3WeJ31PartyViewControllerInfoDelegate", "connectionStatusViewConstraint"]
+- !private ["P3WeJ31PartyViewControllerInfoDelegate", "displayStatusView"]
+- !private ["P3WeJ31PartyViewControllerInfoDelegate", "green"]
+- !private ["P3WeJ31PartyViewControllerInfoDelegate", "hideStatusView"]
+- !private ["P3WeJ31PartyViewControllerInfoDelegate", "hubAndQueueVC"]
+- !private ["P3WeJ31PartyViewControllerInfoDelegate", "orange"]
+- !private ["P3WeJ31PartyViewControllerInfoDelegate", "red"]
+- !private ["P3WeJ31PartyViewControllerInfoDelegate", "statusIndicatorView"]
+- !private ["P3WeJ31PartyViewControllerInfoDelegate", "view"]
+- !private ["Ps16RawRepresentable", "connected"]
+- !private ["Ps16RawRepresentable", "connecting"]
+- !private ["Ps16RawRepresentable", "stringValue"]
+- !private ["PSo25SPTAudioStreamingDelegate", "DispatchQueue"]
+- !private ["PSo25SPTAudioStreamingDelegate", "UIView"]
+- !private ["PSo25SPTAudioStreamingDelegate", "changeStatusIndicatorView"]
+- !private ["PSo25SPTAudioStreamingDelegate", "connectionStatus"]
+- !private ["PSo25SPTAudioStreamingDelegate", "connectionStatusLabel"]
+- !private ["PSo25SPTAudioStreamingDelegate", "connectionStatusViewConstraint"]
+- !private ["PSo25SPTAudioStreamingDelegate", "displayStatusView"]
+- !private ["PSo25SPTAudioStreamingDelegate", "green"]
+- !private ["PSo25SPTAudioStreamingDelegate", "hideStatusView"]
+- !private ["PSo25SPTAudioStreamingDelegate", "hubAndQueueVC"]
+- !private ["PSo25SPTAudioStreamingDelegate", "orange"]
+- !private ["PSo25SPTAudioStreamingDelegate", "red"]
+- !private ["PSo25SPTAudioStreamingDelegate", "statusIndicatorView"]
+- !private ["PSo25SPTAudioStreamingDelegate", "view"]
+- !private ["PSo33SPTAudioStreamingPlaybackDelegate", "DispatchQueue"]
+- !private ["PSo33SPTAudioStreamingPlaybackDelegate", "UIView"]
+- !private ["PSo33SPTAudioStreamingPlaybackDelegate", "changeStatusIndicatorView"]
+- !private ["PSo33SPTAudioStreamingPlaybackDelegate", "connectionStatus"]
+- !private ["PSo33SPTAudioStreamingPlaybackDelegate", "connectionStatusLabel"]
+- !private ["PSo33SPTAudioStreamingPlaybackDelegate", "connectionStatusViewConstraint"]
+- !private ["PSo33SPTAudioStreamingPlaybackDelegate", "displayStatusView"]
+- !private ["PSo33SPTAudioStreamingPlaybackDelegate", "green"]
+- !private ["PSo33SPTAudioStreamingPlaybackDelegate", "hideStatusView"]
+- !private ["PSo33SPTAudioStreamingPlaybackDelegate", "hubAndQueueVC"]
+- !private ["PSo33SPTAudioStreamingPlaybackDelegate", "orange"]
+- !private ["PSo33SPTAudioStreamingPlaybackDelegate", "red"]
+- !private ["PSo33SPTAudioStreamingPlaybackDelegate", "statusIndicatorView"]
+- !private ["PSo33SPTAudioStreamingPlaybackDelegate", "view"]
+- !private ["PSo29UIAccessibilityIdentification", "animate"]
+- !private ["PSo29UIAccessibilityIdentification", "backgroundColor"]
+- !private ["PSo29UIAccessibilityIdentification", "layoutIfNeeded"]
+- !private ["PSo29UIAccessibilityIdentification", "text"]
+- !private ["PSo12UIAppearance", "animate"]
+- !private ["PSo12UIAppearance", "backgroundColor"]
+- !private ["PSo12UIAppearance", "layoutIfNeeded"]
+- !private ["PSo12UIAppearance", "text"]
+- !private ["PSo21UIAppearanceContainer", "DispatchQueue"]
+- !private ["PSo21UIAppearanceContainer", "UIView"]
+- !private ["PSo21UIAppearanceContainer", "animate"]
+- !private ["PSo21UIAppearanceContainer", "backgroundColor"]
+- !private ["PSo21UIAppearanceContainer", "changeStatusIndicatorView"]
+- !private ["PSo21UIAppearanceContainer", "connectionStatus"]
+- !private ["PSo21UIAppearanceContainer", "connectionStatusLabel"]
+- !private ["PSo21UIAppearanceContainer", "connectionStatusViewConstraint"]
+- !private ["PSo21UIAppearanceContainer", "displayStatusView"]
+- !private ["PSo21UIAppearanceContainer", "green"]
+- !private ["PSo21UIAppearanceContainer", "hideAddButton"]
+- !private ["PSo21UIAppearanceContainer", "hideStatusView"]
+- !private ["PSo21UIAppearanceContainer", "hubAndQueueVC"]
+- !private ["PSo21UIAppearanceContainer", "layoutIfNeeded"]
+- !private ["PSo21UIAppearanceContainer", "orange"]
+- !private ["PSo21UIAppearanceContainer", "red"]
+- !private ["PSo21UIAppearanceContainer", "showAddButton"]
+- !private ["PSo21UIAppearanceContainer", "statusIndicatorView"]
+- !private ["PSo21UIAppearanceContainer", "text"]
+- !private ["PSo21UIAppearanceContainer", "view"]
+- ["CSo7UIColor", "init"]
+- !private ["PSo18UIContentContainer", "DispatchQueue"]
+- !private ["PSo18UIContentContainer", "UIView"]
+- !private ["PSo18UIContentContainer", "changeStatusIndicatorView"]
+- !private ["PSo18UIContentContainer", "connectionStatus"]
+- !private ["PSo18UIContentContainer", "connectionStatusLabel"]
+- !private ["PSo18UIContentContainer", "connectionStatusViewConstraint"]
+- !private ["PSo18UIContentContainer", "displayStatusView"]
+- !private ["PSo18UIContentContainer", "green"]
+- !private ["PSo18UIContentContainer", "hideAddButton"]
+- !private ["PSo18UIContentContainer", "hideStatusView"]
+- !private ["PSo18UIContentContainer", "hubAndQueueVC"]
+- !private ["PSo18UIContentContainer", "orange"]
+- !private ["PSo18UIContentContainer", "red"]
+- !private ["PSo18UIContentContainer", "showAddButton"]
+- !private ["PSo18UIContentContainer", "statusIndicatorView"]
+- !private ["PSo18UIContentContainer", "view"]
+- !private ["PSo30UIContentSizeCategoryAdjusting", "text"]
+- !private ["PSo17UICoordinateSpace", "animate"]
+- !private ["PSo17UICoordinateSpace", "backgroundColor"]
+- !private ["PSo17UICoordinateSpace", "layoutIfNeeded"]
+- !private ["PSo17UICoordinateSpace", "text"]
+- !private ["PSo13UIDynamicItem", "animate"]
+- !private ["PSo13UIDynamicItem", "backgroundColor"]
+- !private ["PSo13UIDynamicItem", "layoutIfNeeded"]
+- !private ["PSo13UIDynamicItem", "text"]
+- !private ["PSo18UIFocusEnvironment", "DispatchQueue"]
+- !private ["PSo18UIFocusEnvironment", "UIView"]
+- !private ["PSo18UIFocusEnvironment", "animate"]
+- !private ["PSo18UIFocusEnvironment", "backgroundColor"]
+- !private ["PSo18UIFocusEnvironment", "changeStatusIndicatorView"]
+- !private ["PSo18UIFocusEnvironment", "connectionStatus"]
+- !private ["PSo18UIFocusEnvironment", "connectionStatusLabel"]
+- !private ["PSo18UIFocusEnvironment", "connectionStatusViewConstraint"]
+- !private ["PSo18UIFocusEnvironment", "displayStatusView"]
+- !private ["PSo18UIFocusEnvironment", "green"]
+- !private ["PSo18UIFocusEnvironment", "hideAddButton"]
+- !private ["PSo18UIFocusEnvironment", "hideStatusView"]
+- !private ["PSo18UIFocusEnvironment", "hubAndQueueVC"]
+- !private ["PSo18UIFocusEnvironment", "layoutIfNeeded"]
+- !private ["PSo18UIFocusEnvironment", "orange"]
+- !private ["PSo18UIFocusEnvironment", "red"]
+- !private ["PSo18UIFocusEnvironment", "showAddButton"]
+- !private ["PSo18UIFocusEnvironment", "statusIndicatorView"]
+- !private ["PSo18UIFocusEnvironment", "text"]
+- !private ["PSo18UIFocusEnvironment", "view"]
+- !private ["PSo11UIFocusItem", "animate"]
+- !private ["PSo11UIFocusItem", "backgroundColor"]
+- !private ["PSo11UIFocusItem", "layoutIfNeeded"]
+- !private ["PSo11UIFocusItem", "text"]
+- !private ["CSo7UILabel", "text"]
+- !private ["CSo20UIPageViewController", "hideAddButton"]
+- !private ["CSo20UIPageViewController", "showAddButton"]
+- !private ["PSo30UIPageViewControllerDataSource", "hideAddButton"]
+- !private ["PSo30UIPageViewControllerDataSource", "showAddButton"]
+- !private ["PSo28UIPageViewControllerDelegate", "hideAddButton"]
+- !private ["PSo28UIPageViewControllerDelegate", "showAddButton"]
+- !private ["CSo11UIResponder", "DispatchQueue"]
+- ["CSo11UIResponder", "MCSessionState"]
+- ["CSo11UIResponder", "UIColor"]
+- !private ["CSo11UIResponder", "UIView"]
+- !private ["CSo11UIResponder", "animate"]
+- !private ["CSo11UIResponder", "backgroundColor"]
+- ["CSo11UIResponder", "changeStatusIndicatorView"]
+- ["CSo11UIResponder", "connectionStatus"]
+- !private ["CSo11UIResponder", "connectionStatusLabel"]
+- !private ["CSo11UIResponder", "connectionStatusViewConstraint"]
+- ["CSo11UIResponder", "displayStatusView"]
+- !private ["CSo11UIResponder", "green"]
+- !private ["CSo11UIResponder", "hideAddButton"]
+- ["CSo11UIResponder", "hideStatusView"]
+- !private ["CSo11UIResponder", "hubAndQueueVC"]
+- !private ["CSo11UIResponder", "layoutIfNeeded"]
+- !private ["CSo11UIResponder", "orange"]
+- !private ["CSo11UIResponder", "red"]
+- !private ["CSo11UIResponder", "showAddButton"]
+- !private ["CSo11UIResponder", "statusIndicatorView"]
+- !private ["CSo11UIResponder", "text"]
+- !private ["CSo11UIResponder", "view"]
+- !private ["PSo30UIResponderStandardEditActions", "DispatchQueue"]
+- !private ["PSo30UIResponderStandardEditActions", "UIView"]
+- !private ["PSo30UIResponderStandardEditActions", "animate"]
+- !private ["PSo30UIResponderStandardEditActions", "backgroundColor"]
+- !private ["PSo30UIResponderStandardEditActions", "changeStatusIndicatorView"]
+- !private ["PSo30UIResponderStandardEditActions", "connectionStatus"]
+- !private ["PSo30UIResponderStandardEditActions", "connectionStatusLabel"]
+- !private ["PSo30UIResponderStandardEditActions", "connectionStatusViewConstraint"]
+- !private ["PSo30UIResponderStandardEditActions", "displayStatusView"]
+- !private ["PSo30UIResponderStandardEditActions", "green"]
+- !private ["PSo30UIResponderStandardEditActions", "hideAddButton"]
+- !private ["PSo30UIResponderStandardEditActions", "hideStatusView"]
+- !private ["PSo30UIResponderStandardEditActions", "hubAndQueueVC"]
+- !private ["PSo30UIResponderStandardEditActions", "layoutIfNeeded"]
+- !private ["PSo30UIResponderStandardEditActions", "orange"]
+- !private ["PSo30UIResponderStandardEditActions", "red"]
+- !private ["PSo30UIResponderStandardEditActions", "showAddButton"]
+- !private ["PSo30UIResponderStandardEditActions", "statusIndicatorView"]
+- !private ["PSo30UIResponderStandardEditActions", "text"]
+- !private ["PSo30UIResponderStandardEditActions", "view"]
+- !private ["PSo16UIStateRestoring", "DispatchQueue"]
+- !private ["PSo16UIStateRestoring", "UIView"]
+- !private ["PSo16UIStateRestoring", "changeStatusIndicatorView"]
+- !private ["PSo16UIStateRestoring", "connectionStatus"]
+- !private ["PSo16UIStateRestoring", "connectionStatusLabel"]
+- !private ["PSo16UIStateRestoring", "connectionStatusViewConstraint"]
+- !private ["PSo16UIStateRestoring", "displayStatusView"]
+- !private ["PSo16UIStateRestoring", "green"]
+- !private ["PSo16UIStateRestoring", "hideAddButton"]
+- !private ["PSo16UIStateRestoring", "hideStatusView"]
+- !private ["PSo16UIStateRestoring", "hubAndQueueVC"]
+- !private ["PSo16UIStateRestoring", "orange"]
+- !private ["PSo16UIStateRestoring", "red"]
+- !private ["PSo16UIStateRestoring", "showAddButton"]
+- !private ["PSo16UIStateRestoring", "statusIndicatorView"]
+- !private ["PSo16UIStateRestoring", "view"]
+- !private ["PSo18UITraitEnvironment", "DispatchQueue"]
+- !private ["PSo18UITraitEnvironment", "UIView"]
+- !private ["PSo18UITraitEnvironment", "animate"]
+- !private ["PSo18UITraitEnvironment", "backgroundColor"]
+- !private ["PSo18UITraitEnvironment", "changeStatusIndicatorView"]
+- !private ["PSo18UITraitEnvironment", "connectionStatus"]
+- !private ["PSo18UITraitEnvironment", "connectionStatusLabel"]
+- !private ["PSo18UITraitEnvironment", "connectionStatusViewConstraint"]
+- !private ["PSo18UITraitEnvironment", "displayStatusView"]
+- !private ["PSo18UITraitEnvironment", "green"]
+- !private ["PSo18UITraitEnvironment", "hideAddButton"]
+- !private ["PSo18UITraitEnvironment", "hideStatusView"]
+- !private ["PSo18UITraitEnvironment", "hubAndQueueVC"]
+- !private ["PSo18UITraitEnvironment", "layoutIfNeeded"]
+- !private ["PSo18UITraitEnvironment", "orange"]
+- !private ["PSo18UITraitEnvironment", "red"]
+- !private ["PSo18UITraitEnvironment", "showAddButton"]
+- !private ["PSo18UITraitEnvironment", "statusIndicatorView"]
+- !private ["PSo18UITraitEnvironment", "text"]
+- !private ["PSo18UITraitEnvironment", "view"]
+- !private ["CSo6UIView", "animate"]
+- !private ["CSo6UIView", "backgroundColor"]
+- !private ["CSo6UIView", "layoutIfNeeded"]
+- !private ["CSo6UIView", "text"]
+- !private ["CSo16UIViewController", "DispatchQueue"]
+- ["CSo16UIViewController", "MCSessionState"]
+- ["CSo16UIViewController", "UIColor"]
+- !private ["CSo16UIViewController", "UIView"]
+- ["CSo16UIViewController", "changeStatusIndicatorView"]
+- ["CSo16UIViewController", "connectionStatus"]
+- !private ["CSo16UIViewController", "connectionStatusLabel"]
+- !private ["CSo16UIViewController", "connectionStatusViewConstraint"]
+- ["CSo16UIViewController", "displayStatusView"]
+- !private ["CSo16UIViewController", "green"]
+- !private ["CSo16UIViewController", "hideAddButton"]
+- ["CSo16UIViewController", "hideStatusView"]
+- !private ["CSo16UIViewController", "hubAndQueueVC"]
+- !private ["CSo16UIViewController", "orange"]
+- !private ["CSo16UIViewController", "red"]
+- !private ["CSo16UIViewController", "showAddButton"]
+- !private ["CSo16UIViewController", "statusIndicatorView"]
+- !private ["CSo16UIViewController", "view"]
+- !private ["P3WeJ19UpdatePartyDelegate", "DispatchQueue"]
+- !private ["P3WeJ19UpdatePartyDelegate", "UIView"]
+- !private ["P3WeJ19UpdatePartyDelegate", "changeStatusIndicatorView"]
+- !private ["P3WeJ19UpdatePartyDelegate", "connectionStatus"]
+- !private ["P3WeJ19UpdatePartyDelegate", "connectionStatusLabel"]
+- !private ["P3WeJ19UpdatePartyDelegate", "connectionStatusViewConstraint"]
+- !private ["P3WeJ19UpdatePartyDelegate", "displayStatusView"]
+- !private ["P3WeJ19UpdatePartyDelegate", "green"]
+- !private ["P3WeJ19UpdatePartyDelegate", "hideStatusView"]
+- !private ["P3WeJ19UpdatePartyDelegate", "hubAndQueueVC"]
+- !private ["P3WeJ19UpdatePartyDelegate", "orange"]
+- !private ["P3WeJ19UpdatePartyDelegate", "red"]
+- !private ["P3WeJ19UpdatePartyDelegate", "statusIndicatorView"]
+- !private ["P3WeJ19UpdatePartyDelegate", "view"]
+- !private ["Ps37_DefaultCustomPlaygroundQuickLookable", "animate"]
+- !private ["Ps37_DefaultCustomPlaygroundQuickLookable", "backgroundColor"]
+- !private ["Ps37_DefaultCustomPlaygroundQuickLookable", "layoutIfNeeded"]
+- !private ["Ps37_DefaultCustomPlaygroundQuickLookable", "text"]
+- !private ["Ps35_ExpressibleByBuiltinBooleanLiteral", "_getBuiltinLogicValue"]
+- ["Ps26_ExpressibleByColorLiteral", "init"]
+- !private ["Ps9_Hashable", "DispatchQueue"]
+- !private ["Ps9_Hashable", "UIView"]
+- !private ["Ps9_Hashable", "_getBuiltinLogicValue"]
+- !private ["Ps9_Hashable", "animate"]
+- !private ["Ps9_Hashable", "async"]
+- !private ["Ps9_Hashable", "backgroundColor"]
+- !private ["Ps9_Hashable", "changeStatusIndicatorView"]
+- !private ["Ps9_Hashable", "connected"]
+- !private ["Ps9_Hashable", "connecting"]
+- !private ["Ps9_Hashable", "connectionStatus"]
+- !private ["Ps9_Hashable", "connectionStatusLabel"]
+- !private ["Ps9_Hashable", "connectionStatusViewConstraint"]
+- !private ["Ps9_Hashable", "constant"]
+- !private ["Ps9_Hashable", "displayStatusView"]
+- !private ["Ps9_Hashable", "green"]
+- !private ["Ps9_Hashable", "hideAddButton"]
+- !private ["Ps9_Hashable", "hideStatusView"]
+- !private ["Ps9_Hashable", "hubAndQueueVC"]
+- ["Ps9_Hashable", "init"]
+- !private ["Ps9_Hashable", "layoutIfNeeded"]
+- !private ["Ps9_Hashable", "main"]
+- !private ["Ps9_Hashable", "orange"]
+- !private ["Ps9_Hashable", "red"]
+- !private ["Ps9_Hashable", "showAddButton"]
+- !private ["Ps9_Hashable", "statusIndicatorView"]
+- !private ["Ps9_Hashable", "stringValue"]
+- !private ["Ps9_Hashable", "text"]
+- !private ["Ps9_Hashable", "view"]
+- !private ["Ps21_ObjectiveCBridgeable", "_getBuiltinLogicValue"]
+depends-nominal:
+- "Ps9AnyObject"
+- !private "Sb"
+- !private "PSo15CALayerDelegate"
+- "Ps7CVarArg"
+- "Ps28CustomDebugStringConvertible"
+- !private "Ps29CustomPlaygroundQuickLookable"
+- !private "Ps17CustomReflectable"
+- "Ps23CustomStringConvertible"
+- !private "CSo14DispatchObject"
+- !private "CSo13DispatchQueue"
+- "Ps9Equatable"
+- !private "Ps27ExpressibleByBooleanLiteral"
+- "Ps8Hashable"
+- !private "C3WeJ29HubAndQueuePageViewController"
+- !private "Ps25LosslessStringConvertible"
+- !private "OSC14MCSessionState"
+- "PSo8NSCoding"
+- "PSo9NSCopying"
+- !private "PSo26NSExtensionRequestHandling"
+- !private "CSo18NSLayoutConstraint"
+- "CSo8NSObject"
+- "PSo16NSObjectProtocol"
+- "PSo14NSSecureCoding"
+- !private "P3WeJ22NetworkManagerDelegate"
+- !private "CSo9OS_object"
+- "C3WeJ19PartyViewController"
+- !private "P3WeJ31PartyViewControllerInfoDelegate"
+- !private "Ps16RawRepresentable"
+- !private "PSo25SPTAudioStreamingDelegate"
+- !private "PSo33SPTAudioStreamingPlaybackDelegate"
+- !private "PSo29UIAccessibilityIdentification"
+- !private "PSo12UIAppearance"
+- !private "PSo21UIAppearanceContainer"
+- "CSo7UIColor"
+- !private "PSo18UIContentContainer"
+- !private "PSo30UIContentSizeCategoryAdjusting"
+- !private "PSo17UICoordinateSpace"
+- !private "PSo13UIDynamicItem"
+- !private "PSo18UIFocusEnvironment"
+- !private "PSo11UIFocusItem"
+- !private "CSo7UILabel"
+- !private "CSo20UIPageViewController"
+- !private "PSo30UIPageViewControllerDataSource"
+- !private "PSo28UIPageViewControllerDelegate"
+- "CSo11UIResponder"
+- !private "PSo30UIResponderStandardEditActions"
+- !private "PSo16UIStateRestoring"
+- !private "PSo18UITraitEnvironment"
+- !private "CSo6UIView"
+- "CSo16UIViewController"
+- !private "P3WeJ19UpdatePartyDelegate"
+- !private "Ps37_DefaultCustomPlaygroundQuickLookable"
+- !private "Ps35_ExpressibleByBuiltinBooleanLiteral"
+- "Ps26_ExpressibleByColorLiteral"
+- "Ps9_Hashable"
+- !private "Ps21_ObjectiveCBridgeable"
+depends-dynamic-lookup:
+depends-external:
+- "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/swift/iphoneos/arm64/ObjectiveC.apinotesc"
+- "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/swift/iphoneos/arm64/CoreData.apinotesc"
+- "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/swift/iphoneos/arm64/Dispatch.apinotesc"
+- "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/swift/iphoneos/arm64/Metal.apinotesc"
+- "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/swift/iphoneos/arm64/Foundation.apinotesc"
+- "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/swift/iphoneos/arm64/AVFoundation.apinotesc"
+- "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/swift/iphoneos/arm64/MediaPlayer.apinotesc"
+- "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/swift/iphoneos/arm64/CoreGraphics.apinotesc"
+- "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/swift/iphoneos/arm64/UIKit.apinotesc"
+- "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/swift/iphoneos/arm64/StoreKit.apinotesc"
+- "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/swift/iphoneos/arm64/CoreText.apinotesc"
+- "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/swift/iphoneos/arm64/AudioToolbox.apinotesc"
+- "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/swift/iphoneos/arm64/MultipeerConnectivity.apinotesc"
+- "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/swift/iphoneos/arm64/ObjectiveC.swiftmodule"
+- "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/swift/iphoneos/arm64/CoreMedia.swiftmodule"
+- "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/swift/iphoneos/arm64/CoreData.swiftmodule"
+- "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/swift/iphoneos/arm64/CoreImage.swiftmodule"
+- "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/swift/iphoneos/arm64/QuartzCore.swiftmodule"
+- "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/swift/iphoneos/arm64/Dispatch.swiftmodule"
+- "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/swift/iphoneos/arm64/Darwin.swiftmodule"
+- "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/swift/iphoneos/arm64/Foundation.swiftmodule"
+- "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/swift/iphoneos/arm64/AVFoundation.swiftmodule"
+- "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/swift/iphoneos/arm64/CoreAudio.swiftmodule"
+- "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/swift/iphoneos/arm64/CoreGraphics.swiftmodule"
+- "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/swift/iphoneos/arm64/Swift.swiftmodule"
+- "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/swift/iphoneos/arm64/UIKit.swiftmodule"
+- "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/swift/iphoneos/arm64/SwiftOnoneSupport.swiftmodule"
+- "/Users/Ali/Documents/Projects/iOS-WeJ/Pods/FirebaseInstanceID/Frameworks/FirebaseInstanceID.framework/Headers/FIRInstanceID.h"
+- "/Users/Ali/Documents/Projects/iOS-WeJ/Pods/FirebaseInstanceID/Frameworks/FirebaseInstanceID.framework/Headers/FirebaseInstanceID.h"
+- "/Users/Ali/Documents/Projects/iOS-WeJ/SpotifyAudioPlayback.framework/Headers/SPTPlaybackMetadata.h"
+- "/Users/Ali/Documents/Projects/iOS-WeJ/SpotifyAudioPlayback.framework/Headers/SPTDiskCache.h"
+- "/Users/Ali/Documents/Projects/iOS-WeJ/Pods/FirebaseCore/Frameworks/FirebaseCore.framework/Headers/FirebaseCore.h"
+- "/Users/Ali/Documents/Projects/iOS-WeJ/Pods/Firebase/Core/Sources/Firebase.h"
+- "/Users/Ali/Documents/Projects/iOS-WeJ/Pods/FirebaseAnalytics/Frameworks/FirebaseAnalytics.framework/Headers/FIRAnalytics+AppDelegate.h"
+- "/Users/Ali/Documents/Projects/iOS-WeJ/SpotifyAudioPlayback.framework/Headers/SPTPlaybackState.h"
+- "/Users/Ali/Documents/Projects/iOS-WeJ/SpotifyAudioPlayback.framework/Headers/SPTDiskCaching.h"
+- "/Users/Ali/Documents/Projects/iOS-WeJ/SpotifyAuthentication.framework/Headers/SPTAuth.h"
+- "/Users/Ali/Documents/Projects/iOS-WeJ/SpotifyAudioPlayback.framework/Headers/SpotifyAudioPlayback.h"
+- "/Users/Ali/Documents/Projects/iOS-WeJ/Pods/FirebaseCore/Frameworks/FirebaseCore.framework/Headers/FIRLoggerLevel.h"
+- "/Users/Ali/Documents/Projects/iOS-WeJ/SpotifyAuthentication.framework/Headers/SPTSession.h"
+- "/Users/Ali/Documents/Projects/iOS-WeJ/SpotifyAuthentication.framework/Headers/SpotifyAuthentication.h"
+- "/Users/Ali/Documents/Projects/iOS-WeJ/Pods/FirebaseCore/Frameworks/FirebaseCore.framework/Headers/FIRConfiguration.h"
+- "/Users/Ali/Documents/Projects/iOS-WeJ/Pods/FirebaseAnalytics/Frameworks/FirebaseAnalytics.framework/Headers/FIRConfiguration.h"
+- "/Users/Ali/Documents/Projects/iOS-WeJ/Pods/FirebaseCore/Frameworks/FirebaseCore.framework/Headers/FIRAnalyticsConfiguration.h"
+- "/Users/Ali/Documents/Projects/iOS-WeJ/Pods/FirebaseAnalytics/Frameworks/FirebaseAnalytics.framework/Headers/FIRAnalyticsConfiguration.h"
+- "/Users/Ali/Documents/Projects/iOS-WeJ/MXMLyricsAction/MXMLyricsAction.h"
+- "/Users/Ali/Documents/Projects/iOS-WeJ/SpotifyAuthentication.framework/Headers/SPTConnectButton.h"
+- "/Users/Ali/Documents/Projects/iOS-WeJ/Pods/FirebaseCore/Frameworks/FirebaseCore.framework/Headers/FIRApp.h"
+- "/Users/Ali/Documents/Projects/iOS-WeJ/Pods/FirebaseAnalytics/Frameworks/FirebaseAnalytics.framework/Headers/FIRApp.h"
+- "/Users/Ali/Documents/Projects/iOS-WeJ/Party-Bridging-Header.h"
+- "/Users/Ali/Documents/Projects/iOS-WeJ/SpotifyAudioPlayback.framework/Headers/SPTCircularBuffer.h"
+- "/Users/Ali/Documents/Projects/iOS-WeJ/SpotifyAudioPlayback.framework/Headers/SPTAudioStreamingController.h"
+- "/Users/Ali/Documents/Projects/iOS-WeJ/SpotifyAudioPlayback.framework/Headers/SPTCoreAudioController.h"
+- "/Users/Ali/Documents/Projects/iOS-WeJ/SpotifyAuthentication.framework/Headers/SPTStoreViewController.h"
+- "/Users/Ali/Documents/Projects/iOS-WeJ/SpotifyAuthentication.framework/Headers/SPTAuthViewController.h"
+- "/Users/Ali/Documents/Projects/iOS-WeJ/Pods/FirebaseAnalytics/Frameworks/FirebaseAnalytics.framework/Headers/FIRAnalytics.h"
+- "/Users/Ali/Documents/Projects/iOS-WeJ/Pods/FirebaseAnalytics/Frameworks/FirebaseAnalytics.framework/Headers/FirebaseAnalytics.h"
+- "/Users/Ali/Documents/Projects/iOS-WeJ/SpotifyAudioPlayback.framework/Headers/SPTAudioStreamingController_ErrorCodes.h"
+- "/Users/Ali/Documents/Projects/iOS-WeJ/SpotifyAuthentication.framework/Headers/SPTEmbeddedImages.h"
+- "/Users/Ali/Documents/Projects/iOS-WeJ/Pods/FirebaseAnalytics/Frameworks/FirebaseAnalytics.framework/Headers/FIRParameterNames.h"
+- "/Users/Ali/Documents/Projects/iOS-WeJ/Pods/FirebaseAnalytics/Frameworks/FirebaseAnalytics.framework/Headers/FIREventNames.h"
+- "/Users/Ali/Documents/Projects/iOS-WeJ/Pods/FirebaseAnalytics/Frameworks/FirebaseAnalytics.framework/Headers/FIRUserPropertyNames.h"
+- "/Users/Ali/Documents/Projects/iOS-WeJ/SpotifyAudioPlayback.framework/Headers/SPTAudioPlaybackTypes.h"
+- "/Users/Ali/Documents/Projects/iOS-WeJ/Pods/FirebaseCore/Frameworks/FirebaseCore.framework/Headers/FIROptions.h"
+- "/Users/Ali/Documents/Projects/iOS-WeJ/Pods/FirebaseAnalytics/Frameworks/FirebaseAnalytics.framework/Headers/FIROptions.h"
+- "/Users/Ali/Documents/Projects/iOS-WeJ/SpotifyAudioPlayback.framework/Headers/SpPlaybackEvent.h"
+- "/Users/Ali/Documents/Projects/iOS-WeJ/Pods/FirebaseCore/Frameworks/FirebaseCore.framework/Headers/FIRCoreSwiftNameSupport.h"
+- "/Users/Ali/Documents/Projects/iOS-WeJ/Pods/FirebaseAnalytics/Frameworks/FirebaseAnalytics.framework/Headers/FIRAnalyticsSwiftNameSupport.h"
+- "/Users/Ali/Documents/Projects/iOS-WeJ/Pods/Firebase/Core/Sources/module.modulemap"
+- "/Users/Ali/Documents/Projects/iOS-WeJ/Pods/FirebaseInstanceID/Frameworks/FirebaseInstanceID.framework/Modules/module.modulemap"
+- "/Users/Ali/Documents/Projects/iOS-WeJ/Pods/FirebaseCore/Frameworks/FirebaseCore.framework/Modules/module.modulemap"
+- "/Users/Ali/Documents/Projects/iOS-WeJ/Pods/FirebaseAnalytics/Frameworks/FirebaseAnalytics.framework/Modules/module.modulemap"
+interface-hash: "a80544207807090a0b56a12b44f96322"

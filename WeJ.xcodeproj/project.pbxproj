@@ -58,57 +58,57 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		3472FB151DDAC81E00A35FCB /* Party.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Party.swift; sourceTree = "<group>"; };
-		34D750DF1E32E9C5009AFD63 /* MultipeerManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MultipeerManager.swift; sourceTree = "<group>"; };
+		3472FB151DDAC81E00A35FCB /* Party.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Party.swift; path = "Party Classes/Party.swift"; sourceTree = "<group>"; };
+		34D750DF1E32E9C5009AFD63 /* MultipeerManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = MultipeerManager.swift; path = "Network Managers/MultipeerManager.swift"; sourceTree = "<group>"; };
 		3EB77C24F7978848084888F9 /* Pods-WeJ.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-WeJ.debug.xcconfig"; path = "Pods/Target Support Files/Pods-WeJ/Pods-WeJ.debug.xcconfig"; sourceTree = "<group>"; };
 		41045F2A1E39ACBE00A29830 /* SpotifyAudioPlayback.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = SpotifyAudioPlayback.framework; sourceTree = "<group>"; };
 		41045F2B1E39ACBE00A29830 /* SpotifyAuthentication.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = SpotifyAuthentication.framework; sourceTree = "<group>"; };
 		41045F2E1E39AD6D00A29830 /* AVFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVFoundation.framework; path = System/Library/Frameworks/AVFoundation.framework; sourceTree = SDKROOT; };
 		41045F301E39AD7E00A29830 /* SystemConfiguration.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SystemConfiguration.framework; path = System/Library/Frameworks/SystemConfiguration.framework; sourceTree = SDKROOT; };
 		41045F321E39B80300A29830 /* Party-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Party-Bridging-Header.h"; sourceTree = SOURCE_ROOT; };
-		4113CFE61F36163F000628B1 /* partyNameTextField.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = partyNameTextField.swift; sourceTree = "<group>"; };
-		4113CFE81F362420000628B1 /* Automation.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Automation.swift; sourceTree = "<group>"; };
-		411688741F2A69EB00C3CD4A /* PartyConnection.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PartyConnection.swift; sourceTree = "<group>"; };
-		411688761F2A727500C3CD4A /* RequestType.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RequestType.swift; sourceTree = "<group>"; };
-		411688781F2F236F00C3CD4A /* AppleMusicFetcher.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AppleMusicFetcher.swift; sourceTree = "<group>"; };
-		4116887B1F2F248300C3CD4A /* AppleMusicURLFactory.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AppleMusicURLFactory.swift; sourceTree = "<group>"; };
-		411688821F320E5100C3CD4A /* SpotifyFetcher.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SpotifyFetcher.swift; sourceTree = "<group>"; };
+		4113CFE61F36163F000628B1 /* partyNameTextField.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = partyNameTextField.swift; path = "Custom Appearance/partyNameTextField.swift"; sourceTree = "<group>"; };
+		4113CFE81F362420000628B1 /* Automation.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Automation.swift; path = Extensions/Automation.swift; sourceTree = "<group>"; };
+		411688741F2A69EB00C3CD4A /* PartyConnection.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = PartyConnection.swift; path = Extensions/PartyConnection.swift; sourceTree = "<group>"; };
+		411688761F2A727500C3CD4A /* RequestType.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = RequestType.swift; path = "Party Classes/RequestType.swift"; sourceTree = "<group>"; };
+		411688781F2F236F00C3CD4A /* AppleMusicFetcher.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = AppleMusicFetcher.swift; path = "Network Managers/Fetchers/AppleMusicFetcher.swift"; sourceTree = "<group>"; };
+		4116887B1F2F248300C3CD4A /* AppleMusicURLFactory.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = AppleMusicURLFactory.swift; path = "Network Managers/URL Factories/AppleMusicURLFactory.swift"; sourceTree = "<group>"; };
+		411688821F320E5100C3CD4A /* SpotifyFetcher.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = SpotifyFetcher.swift; path = "Network Managers/Fetchers/SpotifyFetcher.swift"; sourceTree = "<group>"; };
 		411EEF3F1E346E2200216016 /* Main.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = Main.storyboard; sourceTree = "<group>"; };
-		412FBED01E32CFA7007FFB6A /* MusicPlayer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MusicPlayer.swift; sourceTree = "<group>"; };
-		413533281E8DE4C600BE5B0F /* MusicService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MusicService.swift; sourceTree = "<group>"; };
+		412FBED01E32CFA7007FFB6A /* MusicPlayer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = MusicPlayer.swift; path = "Play Tracks/MusicPlayer.swift"; sourceTree = "<group>"; };
+		413533281E8DE4C600BE5B0F /* MusicService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = MusicService.swift; path = "Party Classes/MusicService.swift"; sourceTree = "<group>"; };
 		4165512B1F279A5900FA33F5 /* BlankAudio.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = BlankAudio.wav; sourceTree = "<group>"; };
-		4165512F1F279EAC00FA33F5 /* BackgroundTask.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BackgroundTask.swift; sourceTree = "<group>"; };
+		4165512F1F279EAC00FA33F5 /* BackgroundTask.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = BackgroundTask.swift; path = "Play Tracks/BackgroundTask.swift"; sourceTree = "<group>"; };
 		416551351F27D9D900FA33F5 /* MXMLyricsAction.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MXMLyricsAction.h; sourceTree = "<group>"; };
 		416551361F27D9D900FA33F5 /* MXMLyricsAction.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MXMLyricsAction.m; sourceTree = "<group>"; };
-		416E8C3E1F2A046E00F524E0 /* SpotifyConstants.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SpotifyConstants.swift; sourceTree = "<group>"; };
-		417B9D4A1E317C3C0021F36E /* PartyViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PartyViewController.swift; sourceTree = "<group>"; };
-		417B9D4E1E318D0D0021F36E /* AddSongViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AddSongViewController.swift; sourceTree = "<group>"; };
-		417B9D521E31B3CE0021F36E /* Track.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Track.swift; sourceTree = "<group>"; };
-		417B9D561E31CD8D0021F36E /* TrackTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TrackTableViewCell.swift; sourceTree = "<group>"; };
+		416E8C3E1F2A046E00F524E0 /* SpotifyConstants.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = SpotifyConstants.swift; path = "Network Managers/Constants/SpotifyConstants.swift"; sourceTree = "<group>"; };
+		417B9D4A1E317C3C0021F36E /* PartyViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = PartyViewController.swift; path = "Play Tracks/PartyViewController.swift"; sourceTree = "<group>"; };
+		417B9D4E1E318D0D0021F36E /* AddSongViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = AddSongViewController.swift; path = "Add Tracks/AddSongViewController.swift"; sourceTree = "<group>"; };
+		417B9D521E31B3CE0021F36E /* Track.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Track.swift; path = "Party Classes/Track.swift"; sourceTree = "<group>"; };
+		417B9D561E31CD8D0021F36E /* TrackTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = TrackTableViewCell.swift; path = "Play Tracks/TrackTableViewCell.swift"; sourceTree = "<group>"; };
 		417C38C91DDA43FD00F59926 /* WeJ.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = WeJ.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		417C38CC1DDA43FD00F59926 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		417C38D41DDA43FD00F59926 /* Party.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = Party.xcdatamodel; sourceTree = "<group>"; };
 		417C38D91DDA43FD00F59926 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		417C38DB1DDA43FD00F59926 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		417C38E11DDA447600F59926 /* InitialSetupViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = InitialSetupViewController.swift; sourceTree = "<group>"; };
-		417C38E21DDA447600F59926 /* PartyCreationViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PartyCreationViewController.swift; sourceTree = "<group>"; };
-		41835F8F1E81EE740082BA16 /* HubTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HubTableViewCell.swift; sourceTree = "<group>"; };
-		418503F61E307BE900472006 /* setupButton.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = setupButton.swift; sourceTree = "<group>"; };
+		417C38E21DDA447600F59926 /* PartyCreationViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = PartyCreationViewController.swift; path = "Create Party/PartyCreationViewController.swift"; sourceTree = "<group>"; };
+		41835F8F1E81EE740082BA16 /* HubTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = HubTableViewCell.swift; path = "Play Tracks/HubTableViewCell.swift"; sourceTree = "<group>"; };
+		418503F61E307BE900472006 /* setupButton.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = setupButton.swift; path = "Custom Appearance/setupButton.swift"; sourceTree = "<group>"; };
 		41A279E01F28DE1700C218A2 /* BadgeSwift.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = BadgeSwift.framework; path = "../../../Library/Developer/Xcode/DerivedData/WeJ-cvuxapiwahhdbhcxsozsrbwpxwln/Build/Products/Debug-iphonesimulator/BadgeSwift/BadgeSwift.framework"; sourceTree = "<group>"; };
 		41A279E11F28DE1700C218A2 /* GoogleToolboxForMac.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = GoogleToolboxForMac.framework; path = "../../../Library/Developer/Xcode/DerivedData/WeJ-cvuxapiwahhdbhcxsozsrbwpxwln/Build/Products/Debug-iphonesimulator/GoogleToolboxForMac/GoogleToolboxForMac.framework"; sourceTree = "<group>"; };
 		41A279E21F28DE1700C218A2 /* nanopb.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = nanopb.framework; path = "../../../Library/Developer/Xcode/DerivedData/WeJ-cvuxapiwahhdbhcxsozsrbwpxwln/Build/Products/Debug-iphonesimulator/nanopb/nanopb.framework"; sourceTree = "<group>"; };
 		41A279E31F28DE1700C218A2 /* Pods_WeJ.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Pods_WeJ.framework; path = "../../../Library/Developer/Xcode/DerivedData/WeJ-cvuxapiwahhdbhcxsozsrbwpxwln/Build/Products/Debug-iphonesimulator/Pods_WeJ.framework"; sourceTree = "<group>"; };
 		41A279E41F28DE1700C218A2 /* SwiftyJSON.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SwiftyJSON.framework; path = "../../../Library/Developer/Xcode/DerivedData/WeJ-cvuxapiwahhdbhcxsozsrbwpxwln/Build/Products/Debug-iphonesimulator/SwiftyJSON/SwiftyJSON.framework"; sourceTree = "<group>"; };
-		41A279EA1F28E54300C218A2 /* Appearance.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Appearance.swift; sourceTree = "<group>"; };
-		41A279ED1F28FF0A00C218A2 /* AppleMusicAuthorizationManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AppleMusicAuthorizationManager.swift; sourceTree = "<group>"; };
-		41A279EF1F29141100C218A2 /* SpotifyAuthorizationManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SpotifyAuthorizationManager.swift; sourceTree = "<group>"; };
-		41B4AE111F2A5FEF00F39E04 /* SpotifyURLFactory.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SpotifyURLFactory.swift; sourceTree = "<group>"; };
-		41C0AEB51E79512D00C797F0 /* searchTextField.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = searchTextField.swift; sourceTree = "<group>"; };
+		41A279EA1F28E54300C218A2 /* Appearance.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Appearance.swift; path = Extensions/Appearance.swift; sourceTree = "<group>"; };
+		41A279ED1F28FF0A00C218A2 /* AppleMusicAuthorizationManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = AppleMusicAuthorizationManager.swift; path = "Network Managers/Authorization Managers/AppleMusicAuthorizationManager.swift"; sourceTree = "<group>"; };
+		41A279EF1F29141100C218A2 /* SpotifyAuthorizationManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = SpotifyAuthorizationManager.swift; path = "Network Managers/Authorization Managers/SpotifyAuthorizationManager.swift"; sourceTree = "<group>"; };
+		41B4AE111F2A5FEF00F39E04 /* SpotifyURLFactory.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = SpotifyURLFactory.swift; path = "Network Managers/URL Factories/SpotifyURLFactory.swift"; sourceTree = "<group>"; };
+		41C0AEB51E79512D00C797F0 /* searchTextField.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = searchTextField.swift; path = "Custom Appearance/searchTextField.swift"; sourceTree = "<group>"; };
 		41C0AEB71E79EDC700C797F0 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
-		41C0AEB91E7A0AC100C797F0 /* HubAndQueuePageViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HubAndQueuePageViewController.swift; sourceTree = "<group>"; };
-		41C0AEBB1E7A12CB00C797F0 /* HubViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HubViewController.swift; sourceTree = "<group>"; };
-		41C0AEBD1E7A12E000C797F0 /* QueueViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = QueueViewController.swift; sourceTree = "<group>"; };
-		41C1113E1F2A158500A33771 /* AppleMusicConstants.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AppleMusicConstants.swift; sourceTree = "<group>"; };
+		41C0AEB91E7A0AC100C797F0 /* HubAndQueuePageViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = HubAndQueuePageViewController.swift; path = "Play Tracks/HubAndQueuePageViewController.swift"; sourceTree = "<group>"; };
+		41C0AEBB1E7A12CB00C797F0 /* HubViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = HubViewController.swift; path = "Play Tracks/HubViewController.swift"; sourceTree = "<group>"; };
+		41C0AEBD1E7A12E000C797F0 /* QueueViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = QueueViewController.swift; path = "Play Tracks/QueueViewController.swift"; sourceTree = "<group>"; };
+		41C1113E1F2A158500A33771 /* AppleMusicConstants.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = AppleMusicConstants.swift; path = "Network Managers/Constants/AppleMusicConstants.swift"; sourceTree = "<group>"; };
 		41F345A31F34BD05007A250B /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		41FE730C1F20C42400BD9E65 /* BadgeSwift.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = BadgeSwift.framework; path = "build/Debug-iphonesimulator/BadgeSwift/BadgeSwift.framework"; sourceTree = "<group>"; };
 		41FE730D1F20C42400BD9E65 /* GoogleToolboxForMac.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = GoogleToolboxForMac.framework; path = "build/Debug-iphonesimulator/GoogleToolboxForMac/GoogleToolboxForMac.framework"; sourceTree = "<group>"; };
@@ -286,8 +286,7 @@
 				417C38D31DDA43FD00F59926 /* Party.xcdatamodeld */,
 				419448001E3FFFDD00B9370C /* Resources */,
 			);
-			name = WeJ;
-			path = Party;
+			path = WeJ;
 			sourceTree = "<group>";
 		};
 		419448001E3FFFDD00B9370C /* Resources */ = {
@@ -380,7 +379,7 @@
 			attributes = {
 				LastSwiftUpdateCheck = 0810;
 				LastUpgradeCheck = 0900;
-				ORGANIZATIONNAME = "Ali Siddiqui.MatthewPaletta";
+				ORGANIZATIONNAME = "Ali Siddiqui";
 				TargetAttributes = {
 					417C38C81DDA43FD00F59926 = {
 						CreatedOnToolsVersion = 8.1;
@@ -650,7 +649,7 @@
 					"$(inherited)",
 					"$(PROJECT_DIR)",
 				);
-				INFOPLIST_FILE = Party/Info.plist;
+				INFOPLIST_FILE = WeJ/Info.plist;
 				INSTALL_PATH = "@executable_path/../Frameworks";
 				IPHONEOS_DEPLOYMENT_TARGET = 10.3;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
@@ -682,7 +681,7 @@
 					"$(inherited)",
 					"$(PROJECT_DIR)",
 				);
-				INFOPLIST_FILE = Party/Info.plist;
+				INFOPLIST_FILE = WeJ/Info.plist;
 				INSTALL_PATH = "@executable_path/../Frameworks";
 				IPHONEOS_DEPLOYMENT_TARGET = 10.3;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
