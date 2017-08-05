@@ -20,11 +20,15 @@ PODS:
     - nanopb/encode (= 0.3.8)
   - nanopb/decode (0.3.8)
   - nanopb/encode (0.3.8)
+  - NVActivityIndicatorView (3.7.0):
+    - NVActivityIndicatorView/Presenter (= 3.7.0)
+  - NVActivityIndicatorView/Presenter (3.7.0)
   - SwiftyJSON (3.1.4)
 
 DEPENDENCIES:
   - BadgeSwift (~> 4.0)
   - Firebase/Core
+  - NVActivityIndicatorView
   - SwiftyJSON
 
 SPEC CHECKSUMS:
@@ -35,8 +39,9 @@ SPEC CHECKSUMS:
   FirebaseInstanceID: 9fbf536668f4d3f0880e7438456dabd1376e294b
   GoogleToolboxForMac: 8e329f1b599f2512c6b10676d45736bcc2cbbeb0
   nanopb: 22bc080fa3955e2116b6ff3ee6c2cb3c15ab97cb
+  NVActivityIndicatorView: d3738df7e2e476aca0ba6bf32a8c9fbcfc33d64b
   SwiftyJSON: c2842d878f95482ffceec5709abc3d05680c0220
 
-PODFILE CHECKSUM: d735c3fdbbe8422cf17c114b7789ea7f3e00aea0
+PODFILE CHECKSUM: f9bf637bd70101a372e7dd4592be4a00a8552ba3
 
 COCOAPODS: 1.2.0

@@ -9,5 +9,6 @@ target ‘WeJ’ do
   pod 'Firebase/Core'
   pod ‘SwiftyJSON’
   pod 'BadgeSwift', '~> 4.0'
+  pod 'NVActivityIndicatorView'
 
 end

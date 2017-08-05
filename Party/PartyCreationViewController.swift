@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import NVActivityIndicatorView
 
 protocol ViewControllerAccessDelegate: class {
     var processingLogin: Bool { get set }
@@ -21,7 +22,7 @@ class PartyCreationViewController: UIViewController, UITextFieldDelegate, ViewCo
     @IBOutlet weak var appleMusicButton: setupButton!
     @IBOutlet weak var spotifyButton: setupButton!
     @IBOutlet weak var createButton: UIButton!
-    @IBOutlet weak var indicator: UIActivityIndicatorView!
+    private var activityIndicator: NVActivityIndicatorView!
     
     // MARK: - General Variables
     
@@ -31,9 +32,9 @@ class PartyCreationViewController: UIViewController, UITextFieldDelegate, ViewCo
         didSet {
             DispatchQueue.main.async {
                 if self.processingLogin {
-                    self.indicator.startAnimating()
+                    self.activityIndicator.startAnimating()
                 } else {
-                    self.indicator.stopAnimating()
+                    self.activityIndicator.stopAnimating()
                 }
                 self.createButton.isHidden = self.processingLogin
                 
@@ -53,6 +54,7 @@ class PartyCreationViewController: UIViewController, UITextFieldDelegate, ViewCo
     override func viewDidLoad() {
         super.viewDidLoad()
         makeNavigationBarTransparent()
+        initializeActivityIndicator()
         setDelegates()
         setSpotifyVariables()
         
@@ -75,6 +77,12 @@ class PartyCreationViewController: UIViewController, UITextFieldDelegate, ViewCo
         navigationController?.navigationBar.shadowImage = UIImage()
         navigationController?.navigationBar.isTranslucent = true
         navigationController?.view.backgroundColor = UIColor.clear
+    }
+    
+    func initializeActivityIndicator() {
+        let rect = CGRect(x: createButton.center.x - 20, y: createButton.center.y - 20, width: 40, height: 40)
+        activityIndicator = NVActivityIndicatorView(frame: rect, type: .ballClipRotateMultiple, color: .white, padding: 0)
+        view.addSubview(activityIndicator)
     }
     
     func setDelegates() {

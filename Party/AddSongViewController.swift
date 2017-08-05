@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import NVActivityIndicatorView
 import BadgeSwift
 
 class AddSongViewController: UIViewController, UITextFieldDelegate, UITableViewDataSource, UITableViewDelegate {
@@ -21,8 +22,7 @@ class AddSongViewController: UIViewController, UITextFieldDelegate, UITableViewD
         didSet {
             DispatchQueue.main.async {
                 self.trackTableView.reloadData()
-                self.indicator.stopAnimating()
-                self.indicator.hidesWhenStopped = true
+                self.activityIndicator.stopAnimating()
                 self.fetchArtworkForRestOfTracks()
             }
         }
@@ -36,7 +36,7 @@ class AddSongViewController: UIViewController, UITextFieldDelegate, UITableViewD
         }
     }
     private var fetcher: Fetcher!
-    private var indicator = UIActivityIndicatorView()
+    private var activityIndicator: NVActivityIndicatorView!
     private let noTracksFoundLabel = UILabel(frame: CGRect(x: 0, y: 0, width: 320, height: 70))
     
     // MARK: - Lifecycle
@@ -57,10 +57,10 @@ class AddSongViewController: UIViewController, UITextFieldDelegate, UITableViewD
     }
     
     private func initializeActivityIndicator() {
-        indicator = UIActivityIndicatorView(frame: CGRect(x: 0, y: 0, width: 80, height: 80))
-        indicator.activityIndicatorViewStyle = UIActivityIndicatorViewStyle.whiteLarge
-        indicator.center = view.center
-        view.addSubview(indicator)
+        let rect = CGRect(x: view.center.x - 20, y: view.center.x - 20, width: 40, height: 40)
+        activityIndicator = NVActivityIndicatorView(frame: rect, type: .ballClipRotateMultiple, color: .white, padding: 0)
+        activityIndicator.center = view.center
+        view.addSubview(activityIndicator)
     }
     
     private func adjustViews() {
@@ -74,30 +74,19 @@ class AddSongViewController: UIViewController, UITextFieldDelegate, UITableViewD
         searchTracksField.resignFirstResponder()
         if !searchTracksField.text!.isEmpty {
             fetcher = Party.musicService == .spotify ? SpotifyFetcher() : AppleMusicFetcher()
+            trackTableView.isHidden = true
             fetchResults(forTerm: searchSongsField.text!)
         }
         return true
     }
     
     private func fetchResults(forTerm term: String) {
-        indicator.startAnimating()
-        showTableView()
+        activityIndicator.startAnimating()
         
         fetcher.searchCatalog(forTerm: term) { [weak self] in
             self?.populateTracksList()
+            self?.showTableView()
             self?.scrollUp()
-        }
-    }
-    
-    private func showTableView() {
-        trackTableView.isHidden = false
-    }
-    
-    private func scrollUp() {
-        DispatchQueue.main.async {
-            if !self.tracksList.isEmpty {
-                self.trackTableView.scrollToRow(at: IndexPath(row: 0, section: 0), at: .top, animated: false)
-            }
         }
     }
     
@@ -108,6 +97,20 @@ class AddSongViewController: UIViewController, UITextFieldDelegate, UITableViewD
                 self.displayNoTracksLabel(withText: "No Tracks Found")
             } else {
                 self.removeNoTracksFoundLabel()
+            }
+        }
+    }
+    
+    private func showTableView() {
+        DispatchQueue.main.async {
+            self.trackTableView.isHidden = false
+        }
+    }
+    
+    private func scrollUp() {
+        DispatchQueue.main.async {
+            if !self.tracksList.isEmpty {
+                self.trackTableView.scrollToRow(at: IndexPath(row: 0, section: 0), at: .top, animated: false)
             }
         }
     }
