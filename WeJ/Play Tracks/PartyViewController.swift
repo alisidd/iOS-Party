@@ -145,8 +145,13 @@ class PartyViewController: UIViewController, SPTAudioStreamingDelegate, SPTAudio
             if let position = MusicPlayer.currentPosition {
                 networkManager?.advertise(position: position)
             }
+            if musicPlayer.isPaused() && Party.musicService == .appleMusic {
+                BackgroundTask.stopBackgroundTask()
+            } else if Party.musicService == .appleMusic {
+                BackgroundTask.startBackgroundTask()
+            }
+            networkManager?.advertise()
         }
-        networkManager?.advertise()
     }
     
     private func initializeCommandCenter() {
@@ -201,8 +206,8 @@ class PartyViewController: UIViewController, SPTAudioStreamingDelegate, SPTAudio
     private func fetchArtwork(forHighRes: Bool) {
         let latestTracks = Party.tracksQueue
         DispatchQueue.global(qos: .userInitiated).async { [weak self] in
-            for track in Party.tracksQueue where latestTracks == Party.tracksQueue {
-                if forHighRes && track.highResArtwork == nil {
+            for (i, track) in Party.tracksQueue.enumerated() where latestTracks == Party.tracksQueue {
+                if forHighRes && track.highResArtwork == nil && i < 15 {
                     self?.fetchHighResArtwork(forTrack: track)
                 } else if !forHighRes && track.lowResArtwork == nil {
                     self?.fetchLowResArtwork(forTrack: track)
@@ -216,6 +221,7 @@ class PartyViewController: UIViewController, SPTAudioStreamingDelegate, SPTAudio
             track.highResArtwork = image
             if !Party.tracksQueue.isEmpty && track == Party.tracksQueue[0] {
                 self?.currentlyPlayingArtwork.image = track.highResArtwork?.addGradient()
+                self?.updateControlCenter()
             }
         }
     }
@@ -233,9 +239,20 @@ class PartyViewController: UIViewController, SPTAudioStreamingDelegate, SPTAudio
                 self.currentlyPlayingArtwork.image = Party.tracksQueue[0].highResArtwork?.addGradient()
                 self.currentlyPlayingTrackName.text = Party.tracksQueue[0].name
                 self.currentlyPlayingArtistName.text = Party.tracksQueue[0].artist
+                self.updateControlCenter()
             } else {
                 self.hideCurrentlyPlayingArtwork()
             }
+        }
+    }
+    
+    private func updateControlCenter() {
+        if let image = Party.tracksQueue[0].highResArtwork {
+            let image = MPMediaItemArtwork.init(boundsSize: image.size) { _ in return image }
+            let trackInfo: [String: Any] = [MPMediaItemPropertyTitle: Party.tracksQueue[0].name,
+                                             MPMediaItemPropertyArtist: Party.tracksQueue[0].artist,
+                                             MPMediaItemPropertyArtwork: image]
+            MPNowPlayingInfoCenter.default().nowPlayingInfo = trackInfo
         }
     }
     

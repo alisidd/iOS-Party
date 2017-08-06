@@ -224,6 +224,10 @@ extension MultipeerManager: MCSessionDelegate {
         print("didReceiveStream")
     }
     
+    func session(_ session: MCSession, didFinishReceivingResourceWithName resourceName: String, fromPeer peerID: MCPeerID, at localURL: URL, withError error: Error?) {
+        print("didFinishReceivingResourceWithName")
+    }
+    
     func session(_ session: MCSession, didFinishReceivingResourceWithName resourceName: String, fromPeer peerID: MCPeerID, at localURL: URL?, withError error: Error?) {
         print("didFinishReceivingResourceWithName")
     }
