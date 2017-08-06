@@ -16,16 +16,11 @@ class SpotifyAuthorizationManager: AuthorizationManager {
     private static var authViewController: SFSafariViewController!
     var isAuthorized = false
     
-    private static let updateSession: (Error?, SPTSession?) -> Void = { (_, session) in
+    private static let updateSession: (Error?, SPTSession?) -> Void = { (error, session) in
         if let sess = session {
             getAuth().session = sess
-            
             authorizeSpotifyAccess()
-            dispatchGroup.wait()
-            
-            delegate.performSegue(withIdentifier: "Create Party", sender: nil)
         }
-        delegate.processingLogin = false
     }
     static let dispatchGroup = DispatchGroup()
     
@@ -75,10 +70,6 @@ class SpotifyAuthorizationManager: AuthorizationManager {
         SPTAudioStreamingController.sharedInstance().login(withAccessToken: session.accessToken)
         
         authorizeSpotifyAccess()
-        dispatchGroup.wait()
-        
-        delegate.processingLogin = false
-        delegate.performSegue(withIdentifier: "Create Party", sender: nil)
     }
     
     private static func renew(usingAuth auth: SPTAuth) {
@@ -89,14 +80,16 @@ class SpotifyAuthorizationManager: AuthorizationManager {
     static func authorizeSpotifyAccess() {
         let request = SpotifyURLFactory.createAccessTokenRequest()
         
-        dispatchGroup.enter()
         DispatchQueue.global(qos: .userInitiated).async {
             let task = URLSession.shared.dataTask(with: request) { (data, response, _) in
                 if let statusCode = (response as? HTTPURLResponse)?.statusCode, statusCode == 200 {
                     let json = JSON(data: data!)
                     Party.cookie = json["access_token"].stringValue
+                    DispatchQueue.main.async {
+                        delegate.performSegue(withIdentifier: "Create Party", sender: nil)
+                    }
                 }
-                dispatchGroup.leave()
+                delegate.processingLogin = false
             }
             
             task.resume()

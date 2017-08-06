@@ -33,18 +33,17 @@ class AppleMusicAuthorizationManager: AuthorizationManager {
     }
     
     static func requestStorefrontIdentifier() {
-        let countryCodeHandler: (String?, Error?) -> Void = { (possibleCountryCode, _) in
+        let countryCodeHandler: (String?, Error?) -> Void = { (possibleCountryCode, error) in
             if let storefrontId = possibleCountryCode?.components(separatedBy: "-").first, AppleMusicConstants.countryCodes.keys.contains(storefrontId) {
                 Party.cookie = AppleMusicConstants.countryCodes[storefrontId]
-                delegate?.processingLogin = false
             } else if possibleCountryCode != nil {
                 Party.cookie = possibleCountryCode
-                delegate?.processingLogin = false
             }
+            delegate?.processingLogin = false
         }
         
         if #available(iOS 11.0, *) {
-            cloudServiceController.requestStorefrontCountryCode(completionHandler: countryCodeHandler)
+            //cloudServiceController.requestStorefrontCountryCode(completionHandler: countryCodeHandler)
         } else {
             cloudServiceController.requestStorefrontIdentifier(completionHandler: countryCodeHandler)
         }

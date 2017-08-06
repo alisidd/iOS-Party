@@ -61,11 +61,11 @@ class MultipeerManager: NSObject {
     }
     
     func advertise() {
-        DispatchQueue.global(qos: .background).async { [weak self] in
-            if self != nil && self!.isHost {
-                self?.serviceAdvertiser.startAdvertisingPeer()
+        DispatchQueue.global(qos: .background).async {
+            if self.isHost {
+                self.serviceAdvertiser.startAdvertisingPeer()
             } else {
-                self?.serviceBrowser.startBrowsingForPeers()
+                self.serviceBrowser.startBrowsingForPeers()
             }
         }
     }
@@ -228,9 +228,10 @@ extension MultipeerManager: MCSessionDelegate {
         print("didFinishReceivingResourceWithName")
     }
     
+    /*
     func session(_ session: MCSession, didFinishReceivingResourceWithName resourceName: String, fromPeer peerID: MCPeerID, at localURL: URL?, withError error: Error?) {
         print("didFinishReceivingResourceWithName")
-    }
+    }*/
     
     func session(_ session: MCSession, didStartReceivingResourceWithName resourceName: String, fromPeer peerID: MCPeerID, with progress: Progress) {
         print("didStartReceivingResourceWithName")

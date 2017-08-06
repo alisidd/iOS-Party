@@ -35,16 +35,23 @@ class PartyCreationViewController: UIViewController, UITextFieldDelegate, ViewCo
                     self.activityIndicator.startAnimating()
                 } else {
                     self.activityIndicator.stopAnimating()
+                    self.completeAuthorization()
                 }
                 self.createButton.isHidden = self.processingLogin
-                
-                if Party.musicService == .appleMusic && !self.processingLogin {
-                    if self.authorizationManager.isAuthorized {
-                        self.performSegue(withIdentifier: "Create Party", sender: nil)
-                    } else {
-                        self.postAlertForSettings()
-                    }
-                }
+            }
+        }
+    }
+    
+    private func completeAuthorization() {
+        if Party.musicService == .spotify && Party.cookie == nil {
+            postAlertForInternet()
+        } else if Party.musicService == .appleMusic {
+            if authorizationManager.isAuthorized && Party.cookie != nil {
+                performSegue(withIdentifier: "Create Party", sender: nil)
+            } else if !authorizationManager.isAuthorized {
+                postAlertForSettings()
+            } else {
+                postAlertForInternet()
             }
         }
     }
@@ -185,6 +192,15 @@ class PartyCreationViewController: UIViewController, UITextFieldDelegate, ViewCo
         })
         alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
         
+        present(alert, animated: true)
+    }
+    
+    private func postAlertForInternet() {
+        let alert = UIAlertController(title: "Error", message: "Please check your internet connection", preferredStyle: .alert)
+        alert.addAction(UIAlertAction(title: "Try Again", style: .default) { _ in
+            self.createParty()
+        })
+        alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
         present(alert, animated: true)
     }
     
