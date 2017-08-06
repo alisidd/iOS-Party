@@ -63,7 +63,7 @@ class PartyViewController: UIViewController, SPTAudioStreamingDelegate, SPTAudio
     
     // MARK: - General Variables
     
-    lazy var networkManager: MultipeerManager! = { [unowned self] in
+    lazy var networkManager: MultipeerManager? = { [unowned self] in
         let manager = MultipeerManager(isHost: self.isHost)
         manager.delegate = self
         return manager
@@ -143,10 +143,10 @@ class PartyViewController: UIViewController, SPTAudioStreamingDelegate, SPTAudio
                 MusicPlayer.currentPosition = musicPlayer.appleMusicPlayer.currentPlaybackTime
             }
             if let position = MusicPlayer.currentPosition {
-                networkManager.advertise(position: position)
+                networkManager?.advertise(position: position)
             }
         }
-        networkManager.advertise()
+        networkManager?.advertise()
     }
     
     private func initializeCommandCenter() {
@@ -268,9 +268,9 @@ class PartyViewController: UIViewController, SPTAudioStreamingDelegate, SPTAudio
         if isHost || (!isHost && !tracks.isEmpty) {
             if isRemoval {
                 let tracks = modifyTracksToRemove(usingTracks: tracks)
-                networkManager.send(tracks: tracks, toRemove: isRemoval)
+                networkManager?.send(tracks: tracks, toRemove: isRemoval)
             } else {
-                networkManager.send(tracks: tracks, toRemove: isRemoval)
+                networkManager?.send(tracks: tracks, toRemove: isRemoval)
             }
         }
     }
@@ -406,7 +406,7 @@ class PartyViewController: UIViewController, SPTAudioStreamingDelegate, SPTAudio
     func resetManager() {
         networkManager = nil
         networkManager = MultipeerManager(isHost: self.isHost)
-        networkManager.delegate = self
+        networkManager?.delegate = self
     }
     
     func updateStatus(withState state: MCSessionState) {
