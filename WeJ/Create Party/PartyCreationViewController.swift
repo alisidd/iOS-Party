@@ -86,13 +86,13 @@ class PartyCreationViewController: UIViewController, UITextFieldDelegate, ViewCo
         navigationController?.view.backgroundColor = UIColor.clear
     }
     
-    func initializeActivityIndicator() {
+    private func initializeActivityIndicator() {
         let rect = CGRect(x: createButton.center.x - 20, y: createButton.center.y - 20, width: 40, height: 40)
         activityIndicator = NVActivityIndicatorView(frame: rect, type: .ballClipRotateMultiple, color: .white, padding: 0)
         view.addSubview(activityIndicator)
     }
     
-    func setDelegates() {
+    private func setDelegates() {
         partyNameTextField.delegate = self
         SpotifyAuthorizationManager.delegate = self
         AppleMusicAuthorizationManager.delegate = self

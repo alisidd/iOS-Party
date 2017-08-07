@@ -8,6 +8,8 @@
 	<string>WeJ</string>
 	<key>CFBundleExecutable</key>
 	<string>$(EXECUTABLE_NAME)</string>
+	<key>CFBundleGetInfoString</key>
+	<string></string>
 	<key>CFBundleIdentifier</key>
 	<string>$(PRODUCT_BUNDLE_IDENTIFIER)</string>
 	<key>CFBundleInfoDictionaryVersion</key>
@@ -30,7 +32,7 @@
 		</dict>
 	</array>
 	<key>CFBundleVersion</key>
-	<string>1</string>
+	<string>1.2</string>
 	<key>LSApplicationCategoryType</key>
 	<string></string>
 	<key>LSApplicationQueriesSchemes</key>
@@ -45,7 +47,7 @@
 		<true/>
 	</dict>
 	<key>NSAppleMusicUsageDescription</key>
-	<string></string>
+	<string>App can play Apple Music tracks</string>
 	<key>NSHumanReadableCopyright</key>
 	<string>Copyright © 2017 Mohammad Ali Siddiqui. All rights reserved.</string>
 	<key>UIBackgroundModes</key>
