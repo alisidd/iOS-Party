@@ -33,8 +33,8 @@
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" distribution="fillEqually" spacing="50" translatesAutoresizingMaskIntoConstraints="NO" id="9SL-NN-BUz">
-                                <rect key="frame" x="131" y="269" width="113" height="130"/>
+                            <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" distribution="fillEqually" spacing="70" translatesAutoresizingMaskIntoConstraints="NO" id="9SL-NN-BUz">
+                                <rect key="frame" x="131" y="259" width="113" height="150"/>
                                 <subviews>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="QG0-gk-zbd" customClass="setupButton" customModule="WeJ" customModuleProvider="target">
                                         <rect key="frame" x="0.0" y="0.0" width="113" height="40"/>
@@ -51,7 +51,7 @@
                                         </connections>
                                     </button>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="7L7-B0-Hdx" customClass="setupButton" customModule="WeJ" customModuleProvider="target">
-                                        <rect key="frame" x="0.0" y="90" width="113" height="40"/>
+                                        <rect key="frame" x="0.0" y="110" width="113" height="40"/>
                                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                         <fontDescription key="fontDescription" name="AvenirNext-DemiBold" family="Avenir Next" pointSize="20"/>
                                         <state key="normal" title="Join Party">
@@ -76,36 +76,16 @@
                                     <outletCollection property="gestureRecognizers" destination="Yy9-jc-Kee" appends="YES" id="Y5a-iE-X8s"/>
                                 </connections>
                             </label>
-                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="AppIcon120" translatesAutoresizingMaskIntoConstraints="NO" id="Vug-sN-tBG">
-                                <rect key="frame" x="26" y="84" width="60" height="60"/>
-                                <constraints>
-                                    <constraint firstAttribute="width" constant="60" id="N1X-Jo-Yps"/>
-                                    <constraint firstAttribute="height" constant="60" id="XJk-4H-WNv"/>
-                                </constraints>
-                            </imageView>
                             <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Y3U-BK-zVp" customClass="NVActivityIndicatorView" customModule="NVActivityIndicatorView">
                                 <rect key="frame" x="102" y="504" width="240" height="128"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             </view>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="WeJ" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="e33-0N-jPB">
-                                <rect key="frame" x="87" y="99" width="50" height="31.5"/>
-                                <constraints>
-                                    <constraint firstAttribute="width" constant="50" id="O5X-on-OEJ"/>
-                                </constraints>
-                                <fontDescription key="fontDescription" name="AvenirNext-DemiBold" family="Avenir Next" pointSize="23"/>
-                                <color key="textColor" red="0.96470588235294119" green="0.65098039215686276" blue="0.13725490196078433" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                <nil key="highlightedColor"/>
-                            </label>
                         </subviews>
                         <color key="backgroundColor" red="0.10196078431372549" green="0.10196078431372549" blue="0.10196078431372549" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <constraints>
-                            <constraint firstItem="e33-0N-jPB" firstAttribute="leading" secondItem="Vug-sN-tBG" secondAttribute="trailing" constant="1" id="B8e-VK-IGT"/>
-                            <constraint firstItem="Vug-sN-tBG" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leadingMargin" constant="10" id="Bsg-me-GrG"/>
-                            <constraint firstItem="e33-0N-jPB" firstAttribute="centerY" secondItem="Vug-sN-tBG" secondAttribute="centerY" id="F9u-zp-qJs"/>
                             <constraint firstItem="wfy-db-euE" firstAttribute="top" secondItem="pci-f0-aMt" secondAttribute="bottom" constant="19" id="M8Z-LX-cpR"/>
                             <constraint firstAttribute="trailingMargin" secondItem="pci-f0-aMt" secondAttribute="trailing" constant="-1" id="Rj6-2z-fue"/>
                             <constraint firstItem="9SL-NN-BUz" firstAttribute="centerX" secondItem="8bC-Xf-vdC" secondAttribute="centerX" id="k5i-FO-VLm"/>
-                            <constraint firstItem="Vug-sN-tBG" firstAttribute="top" secondItem="y3c-jy-aDJ" secondAttribute="bottom" constant="20" id="pCg-Rb-3w5"/>
                             <constraint firstItem="9SL-NN-BUz" firstAttribute="centerY" secondItem="8bC-Xf-vdC" secondAttribute="centerY" id="r4p-t3-i89"/>
                         </constraints>
                     </view>
@@ -756,7 +736,6 @@
         </scene>
     </scenes>
     <resources>
-        <image name="AppIcon120" width="200" height="200"/>
         <image name="next" width="1119" height="952"/>
         <image name="pause" width="585" height="967"/>
     </resources>
