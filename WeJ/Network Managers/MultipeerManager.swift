@@ -10,18 +10,17 @@ import Foundation
 import MultipeerConnectivity
 
 class MultipeerManager: NSObject {
-    // MARK: - General Variables
+    weak var delegate : NetworkManagerDelegate?
+    
     private let mssageServiceType = "localParty"
     private var serviceAdvertiser: MCNearbyServiceAdvertiser!
     private var serviceBrowser: MCNearbyServiceBrowser!
-    
     fileprivate var myPeerId: MCPeerID!
+    
+    fileprivate var isHost: Bool
     fileprivate var sessions = [MCSession : MCPeerID]()
     var otherHosts = Set<MCPeerID>()
-    fileprivate var isHost: Bool
     private var latestRequest = Data()
-    
-    weak var delegate : NetworkManagerDelegate?
     
     // MARK: - Lifecycle
     

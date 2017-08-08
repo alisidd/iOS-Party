@@ -13,6 +13,7 @@ protocol ViewControllerAccessDelegate: class {
     var processingLogin: Bool { get set }
     func present(_ viewControllerToPresent: UIViewController, animated flag: Bool, completion: (() -> Void)?)
     func performSegue(withIdentifier identifier: String, sender: Any?)
+    func createParty()
 }
 
 class PartyCreationViewController: UIViewController, UITextFieldDelegate, ViewControllerAccessDelegate {
@@ -27,7 +28,7 @@ class PartyCreationViewController: UIViewController, UITextFieldDelegate, ViewCo
     // MARK: - General Variables
     
     private var networkManager: MultipeerManager? = MultipeerManager(isHost: false)
-    var authorizationManager: AuthorizationManager!
+    private var authorizationManager: AuthorizationManager!
     var processingLogin = false {
         didSet {
             DispatchQueue.main.async {
@@ -35,23 +36,8 @@ class PartyCreationViewController: UIViewController, UITextFieldDelegate, ViewCo
                     self.activityIndicator.startAnimating()
                 } else {
                     self.activityIndicator.stopAnimating()
-                    self.completeAuthorization()
                 }
                 self.createButton.isHidden = self.processingLogin
-            }
-        }
-    }
-    
-    private func completeAuthorization() {
-        if Party.musicService == .spotify && Party.cookie == nil {
-            postAlertForInternet()
-        } else if Party.musicService == .appleMusic {
-            if authorizationManager.isAuthorized && Party.cookie != nil {
-                performSegue(withIdentifier: "Create Party", sender: nil)
-            } else if !authorizationManager.isAuthorized {
-                postAlertForSettings()
-            } else {
-                postAlertForInternet()
             }
         }
     }
@@ -95,11 +81,15 @@ class PartyCreationViewController: UIViewController, UITextFieldDelegate, ViewCo
     private func setDelegates() {
         partyNameTextField.delegate = self
         SpotifyAuthorizationManager.delegate = self
-        AppleMusicAuthorizationManager.delegate = self
+        AppleMusicAuthorizationManager.delegate = self        
     }
     
     private func setSpotifyVariables() {
         NotificationCenter.default.addObserver(self, selector: #selector(createSession(withNotification:)), name: SpotifyConstants.spotifyPlayerDidLoginNotification, object: nil)
+    }
+    
+    @objc private func createSession(withNotification notification: NSNotification) {
+        SpotifyAuthorizationManager.createSession(withNotification: notification)
     }
     
     private func setPartyName() {
@@ -130,10 +120,6 @@ class PartyCreationViewController: UIViewController, UITextFieldDelegate, ViewCo
         }
     }
     
-    @objc private func createSession(withNotification notification: NSNotification) {
-        SpotifyAuthorizationManager.createSession(withNotification: notification)
-    }
-    
     // MARK: - Text Field
     
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
@@ -153,11 +139,13 @@ class PartyCreationViewController: UIViewController, UITextFieldDelegate, ViewCo
     // MARK: - Storyboard Functions
     
     @IBAction func changeToSpotify() {
+        guard !processingLogin else { return }
         change(toButton: spotifyButton, fromButton: appleMusicButton)
         Party.musicService = .spotify
     }
     
     @IBAction func changeToAppleMusic() {
+        guard !processingLogin else { return }
         change(toButton: appleMusicButton, fromButton: spotifyButton)
         Party.musicService = .appleMusic
     }
@@ -191,27 +179,6 @@ class PartyCreationViewController: UIViewController, UITextFieldDelegate, ViewCo
             self.createParty()
         })
         alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
-        
-        present(alert, animated: true)
-    }
-    
-    private func postAlertForInternet() {
-        let alert = UIAlertController(title: "Error", message: "Please check your internet connection", preferredStyle: .alert)
-        alert.addAction(UIAlertAction(title: "Try Again", style: .default) { _ in
-            self.createParty()
-        })
-        alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
-        present(alert, animated: true)
-    }
-    
-    // MARK: - Apple Music Authorization
-    
-    private func postAlertForSettings() {
-        let alert = UIAlertController(title: "Apple Music Access Denied", message: "Go to Settings to enable Apple Music", preferredStyle: .alert)
-        alert.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil))
-        alert.addAction(UIAlertAction(title: "Settings", style: .default) { _ in
-            UIApplication.shared.open(URL(string: UIApplicationOpenSettingsURLString)!, options: [:], completionHandler: nil)
-        })
         
         present(alert, animated: true)
     }

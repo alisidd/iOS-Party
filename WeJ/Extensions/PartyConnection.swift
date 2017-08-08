@@ -26,12 +26,12 @@ extension PartyViewController {
                 if newValue == .connected {
                     self.changeStatusIndicatorView(toColor: green)
                     self.hideStatusView()
-                    self.hubAndQueueVC.showAddButton()
+                    self.hubAndQueueVC?.showAddButton()
                 } else if newValue == .connecting {
                     self.changeStatusIndicatorView(toColor: orange)
                 } else {
                     self.changeStatusIndicatorView(toColor: red)
-                    self.hubAndQueueVC.hideAddButton()
+                    self.hubAndQueueVC?.hideAddButton()
                 }
             }
         }

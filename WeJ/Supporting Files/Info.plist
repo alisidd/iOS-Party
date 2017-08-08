@@ -47,7 +47,7 @@
 		<true/>
 	</dict>
 	<key>NSAppleMusicUsageDescription</key>
-	<string>App can play Apple Music tracks</string>
+	<string>WeJ requires access to play Apple Music tracks</string>
 	<key>NSHumanReadableCopyright</key>
 	<string>Copyright © 2017 Mohammad Ali Siddiqui. All rights reserved.</string>
 	<key>UIBackgroundModes</key>

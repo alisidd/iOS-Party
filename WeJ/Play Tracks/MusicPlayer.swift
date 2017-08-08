@@ -34,24 +34,20 @@ class MusicPlayer {
     
     // MARK: - Playback
     
-    func startPlayer(withErrorHandler errorHandler: @escaping () -> Void) {
+    func startPlayer() {
         DispatchQueue.main.async {
             if self.musicService == .spotify {
-                self.startSpotifyPlayer(withTracks: Party.tracksQueue, withErrorHandler: errorHandler)
+                self.startSpotifyPlayer(withTracks: Party.tracksQueue)
             } else {
                 self.startAppleMusicPlayer(withTracks: Party.tracksQueue)
             }
         }
     }
     
-    private func startSpotifyPlayer(withTracks tracks: [Track], withErrorHandler errorHandler: @escaping () -> Void) {
+    private func startSpotifyPlayer(withTracks tracks: [Track]) {
         if !tracks.isEmpty {
             try? AVAudioSession.sharedInstance().setActive(true)
-            spotifyPlayer?.playSpotifyURI("spotify:track:" + tracks[0].id, startingWith: 0, startingWithPosition: 0) { (error) in
-                if error != nil {
-                    errorHandler()
-                }
-            }
+            spotifyPlayer?.playSpotifyURI("spotify:track:" + tracks[0].id, startingWith: 0, startingWithPosition: 0, callback: nil)
         } else {
             spotifyPlayer?.skipNext(nil)
         }

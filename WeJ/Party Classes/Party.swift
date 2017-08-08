@@ -13,7 +13,7 @@ class Party: NSObject, NSCoding {
     
     static var name: String? {
         didSet {
-            delegate?.hubAndQueueVC.updateHubTitle()
+            delegate?.hubAndQueueVC?.updateHubTitle()
         }
     }
     static var musicService = MusicService.spotify
@@ -25,7 +25,7 @@ class Party: NSObject, NSCoding {
                 delegate?.showCurrentlyPlayingArtwork()
             }
             if oldValue.isEmpty && !tracksQueue.isEmpty || tracksQueue.count == 1 {
-                delegate?.hubAndQueueVC.minimizeTracksTable()
+                delegate?.hubAndQueueVC?.minimizeTracksTable()
             }
         }
     }

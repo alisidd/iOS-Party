@@ -10,19 +10,23 @@ import Foundation
 import SafariServices
 import SwiftyJSON
 
-class SpotifyAuthorizationManager: AuthorizationManager {
-    static weak var delegate: ViewControllerAccessDelegate!
+class SpotifyAuthorizationManager: NSObject, AuthorizationManager, SPTAudioStreamingDelegate {
+    static weak var delegate: ViewControllerAccessDelegate?
     
     private static var authViewController: SFSafariViewController!
-    var isAuthorized = false
-    
     private static let updateSession: (Error?, SPTSession?) -> Void = { (error, session) in
         if let sess = session {
             getAuth().session = sess
+            SPTAudioStreamingController.sharedInstance().login(withAccessToken: sess.accessToken)
             authorizeSpotifyAccess()
         }
     }
-    static let dispatchGroup = DispatchGroup()
+    private static var isLoggedIn = false
+    
+    override init() {
+        super.init()
+        SPTAudioStreamingController.sharedInstance().delegate = self
+    }
     
     // MARK: - Authorization
     
@@ -62,18 +66,18 @@ class SpotifyAuthorizationManager: AuthorizationManager {
         let authURL = auth.spotifyWebAuthenticationURL()
         
         authViewController = SFSafariViewController(url: authURL!)
-        delegate.present(authViewController, animated: true, completion: nil)
+        delegate?.present(authViewController, animated: true, completion: nil)
     }
     
     private static func login(usingSession session: SPTSession) {
-        delegate.processingLogin = true
+        delegate?.processingLogin = true
         SPTAudioStreamingController.sharedInstance().login(withAccessToken: session.accessToken)
         
         authorizeSpotifyAccess()
     }
     
     private static func renew(usingAuth auth: SPTAuth) {
-        delegate.processingLogin = true
+        delegate?.processingLogin = true
         auth.renewSession(auth.session, callback: updateSession)
     }
     
@@ -86,10 +90,16 @@ class SpotifyAuthorizationManager: AuthorizationManager {
                     let json = JSON(data: data!)
                     Party.cookie = json["access_token"].stringValue
                     DispatchQueue.main.async {
-                        delegate.performSegue(withIdentifier: "Create Party", sender: nil)
+                        guard delegate != nil else { return }
+                        if isLoggedIn && delegate!.processingLogin {
+                            delegate?.processingLogin = false
+                            delegate?.performSegue(withIdentifier: "Create Party", sender: nil)
+                        }
                     }
+                } else {
+                    postAlertForInternet()
+                    delegate?.processingLogin = false
                 }
-                delegate.processingLogin = false
             }
             
             task.resume()
@@ -104,8 +114,46 @@ class SpotifyAuthorizationManager: AuthorizationManager {
         
         if auth.canHandle(url) {
             authViewController.dismiss(animated: true, completion: nil)
-            delegate.processingLogin = true
+            delegate?.processingLogin = true
             auth.handleAuthCallback(withTriggeredAuthURL: url, callback: updateSession)
         }
+    }
+    
+    func audioStreamingDidLogin(_ audioStreaming: SPTAudioStreamingController!) {
+        SpotifyAuthorizationManager.isLoggedIn = true
+        DispatchQueue.main.async {
+            guard SpotifyAuthorizationManager.delegate != nil else { return }
+            if Party.cookie != nil && SpotifyAuthorizationManager.delegate!.processingLogin {
+                SpotifyAuthorizationManager.delegate?.processingLogin = false
+                SpotifyAuthorizationManager.delegate?.performSegue(withIdentifier: "Create Party", sender: nil)
+            }
+        }
+    }
+    
+    func audioStreaming(_ audioStreaming: SPTAudioStreamingController!, didReceiveError error: Error!) {
+        SpotifyAuthorizationManager.postAlertForSpotifyPremium()
+        SpotifyAuthorizationManager.delegate?.processingLogin = false
+        SpotifyAuthorizationManager.getAuth().session = nil
+    }
+    
+    // MARK: - Alerts
+    
+    private static func postAlertForInternet() {
+        DispatchQueue.main.async {
+            let alert = UIAlertController(title: "Error", message: "Please check your internet connection", preferredStyle: .alert)
+            alert.addAction(UIAlertAction(title: "Try Again", style: .default) { _ in
+                delegate?.createParty()
+            })
+            alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
+            
+            delegate?.present(alert, animated: true, completion: nil)
+        }
+    }
+    
+    private static func postAlertForSpotifyPremium() {
+        let alert = UIAlertController(title: "No Spotify Premium", message: "A Spotify Premium account is required to play music", preferredStyle: .alert)
+        alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
+        
+        delegate?.present(alert, animated: true, completion: nil)
     }
 }

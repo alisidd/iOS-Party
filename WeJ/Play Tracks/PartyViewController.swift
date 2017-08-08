@@ -11,7 +11,7 @@ import MediaPlayer
 import MultipeerConnectivity
 
 protocol UpdatePartyDelegate: class {
-    var hubAndQueueVC: HubAndQueuePageViewController { get }
+    var hubAndQueueVC: HubAndQueuePageViewController? { get }
     func updateEveryonesTableView()
     func showCurrentlyPlayingArtwork()
 }
@@ -34,7 +34,7 @@ protocol PartyViewControllerInfoDelegate: class {
     func layout()
 }
 
-class PartyViewController: UIViewController, SPTAudioStreamingDelegate, SPTAudioStreamingPlaybackDelegate, UpdatePartyDelegate, NetworkManagerDelegate, PartyViewControllerInfoDelegate {
+class PartyViewController: UIViewController, SPTAudioStreamingPlaybackDelegate, UpdatePartyDelegate, NetworkManagerDelegate, PartyViewControllerInfoDelegate {
     // MARK: - Storyboard Variables
     
     // Currently Playing
@@ -47,9 +47,9 @@ class PartyViewController: UIViewController, SPTAudioStreamingDelegate, SPTAudio
     // Tracks Queue
     @IBOutlet weak var upNextLabel: UILabel!
     @IBOutlet weak var tableHeightConstraint: NSLayoutConstraint!
-    var hubAndQueueVC: HubAndQueuePageViewController {
+    var hubAndQueueVC: HubAndQueuePageViewController? {
         let vc = childViewControllers.first{ $0 is HubAndQueuePageViewController }
-        return vc as! HubAndQueuePageViewController
+        return vc as? HubAndQueuePageViewController
     }
     
     // Connection Status
@@ -180,7 +180,6 @@ class PartyViewController: UIViewController, SPTAudioStreamingDelegate, SPTAudio
     }
     
     private func setSpotifyDelegates() {
-        musicPlayer.spotifyPlayer?.delegate = self
         musicPlayer.spotifyPlayer?.playbackDelegate = self
     }
     
@@ -188,7 +187,7 @@ class PartyViewController: UIViewController, SPTAudioStreamingDelegate, SPTAudio
     
     func updateEveryonesTableView() {
         // Update own table view
-        hubAndQueueVC.updateTable()
+        hubAndQueueVC?.updateTable()
         fetchArtwork(forHighRes: false)
         fetchArtwork(forHighRes: true)
         updateCurrentlyPlayingTrack()
@@ -229,7 +228,7 @@ class PartyViewController: UIViewController, SPTAudioStreamingDelegate, SPTAudio
     private func fetchLowResArtwork(forTrack track: Track) {
         Track.fetchImage(fromURL: track.lowResArtworkURL) { [weak self] (image) in
             track.lowResArtwork = image
-            self?.hubAndQueueVC.updateTable()
+            self?.hubAndQueueVC?.updateTable()
         }
     }
     
@@ -276,7 +275,7 @@ class PartyViewController: UIViewController, SPTAudioStreamingDelegate, SPTAudio
             self.currentlyPlayingArtistName.isHidden = true
             self.playPauseButton.isHidden = true
             self.skipTrackButton.isHidden = true
-            self.hubAndQueueVC.expandTracksTable()
+            self.hubAndQueueVC?.expandTracksTable()
         }
     }
     
@@ -309,7 +308,7 @@ class PartyViewController: UIViewController, SPTAudioStreamingDelegate, SPTAudio
         if isHost {
             Party.tracksQueue.append(contentsOf: tracksReceived)
             if Party.tracksQueue.count == tracksReceived.count {
-                musicPlayer.startPlayer(withErrorHandler: spotifyErrorHandler)
+                musicPlayer.startPlayer()
             }
         } else {
             Party.tracksQueue = tracksReceived
@@ -325,13 +324,6 @@ class PartyViewController: UIViewController, SPTAudioStreamingDelegate, SPTAudio
     }
     
     // MARK: - Spotify Playback
-    
-    lazy var spotifyErrorHandler: () -> Void = { [weak self] in
-        let alert = UIAlertController(title: "No Spotify Premium", message: "A Spotify premium account is required to play music", preferredStyle: .alert)
-        alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
-        
-        self?.present(alert, animated: true)
-    }
     
     func audioStreaming(_ audioStreaming: SPTAudioStreamingController!, didChangePlaybackStatus isPlaying: Bool) {
         if isPlaying {
@@ -383,7 +375,7 @@ class PartyViewController: UIViewController, SPTAudioStreamingDelegate, SPTAudio
     @IBAction func skipTrack() {
         if !Party.tracksQueue.isEmpty {
             sendTracksToPeers(forTracks: [Party.tracksQueue.removeFirst()], toRemove: true)
-            musicPlayer.startPlayer(withErrorHandler: spotifyErrorHandler)
+            musicPlayer.startPlayer()
         }
     }
     
@@ -392,7 +384,7 @@ class PartyViewController: UIViewController, SPTAudioStreamingDelegate, SPTAudio
     @objc private func playNextTrack() {
         if musicPlayer.safeToPlayNextTrack() && !Party.tracksQueue.isEmpty {
             sendTracksToPeers(forTracks: [Party.tracksQueue.removeFirst()], toRemove: true)
-            musicPlayer.startPlayer(withErrorHandler: spotifyErrorHandler)
+            musicPlayer.startPlayer()
         }
     }
     
@@ -413,7 +405,7 @@ class PartyViewController: UIViewController, SPTAudioStreamingDelegate, SPTAudio
             Party.tracksQueue.append(contentsOf: VC.tracksSelected)
             
             if Party.tracksQueue.count == VC.tracksSelected.count && isHost {
-                musicPlayer.startPlayer(withErrorHandler: spotifyErrorHandler)
+                musicPlayer.startPlayer()
             }
         }
     }

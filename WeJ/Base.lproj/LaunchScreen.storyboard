@@ -9,6 +9,11 @@
         <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
+    <customFonts key="customFonts">
+        <array key="AvenirNext.ttc">
+            <string>AvenirNext-DemiBold</string>
+        </array>
+    </customFonts>
     <scenes>
         <!--View Controller-->
         <scene sceneID="EHf-IW-A2E">
@@ -23,17 +28,28 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="AppIcon120" translatesAutoresizingMaskIntoConstraints="NO" id="Dsq-yy-vSh">
-                                <rect key="frame" x="26" y="40" width="80" height="80"/>
+                                <rect key="frame" x="26" y="40" width="60" height="60"/>
                                 <constraints>
-                                    <constraint firstAttribute="width" constant="80" id="Aot-MM-9La"/>
-                                    <constraint firstAttribute="height" constant="80" id="TOh-0F-z6d"/>
+                                    <constraint firstAttribute="width" constant="60" id="Aot-MM-9La"/>
+                                    <constraint firstAttribute="height" constant="60" id="TOh-0F-z6d"/>
                                 </constraints>
                             </imageView>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="WeJ" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="GiC-xe-Dyu">
+                                <rect key="frame" x="87" y="55" width="50" height="31.5"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="50" id="pgT-dl-de0"/>
+                                </constraints>
+                                <fontDescription key="fontDescription" name="AvenirNext-DemiBold" family="Avenir Next" pointSize="23"/>
+                                <color key="textColor" red="0.96470588239999999" green="0.65098039220000004" blue="0.13725490200000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <nil key="highlightedColor"/>
+                            </label>
                         </subviews>
                         <color key="backgroundColor" red="0.10196078431372549" green="0.10196078431372549" blue="0.10196078431372549" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <constraints>
                             <constraint firstItem="Dsq-yy-vSh" firstAttribute="leading" secondItem="Ze5-6b-2t3" secondAttribute="leadingMargin" constant="10" id="Be9-k5-ob7"/>
                             <constraint firstItem="Dsq-yy-vSh" firstAttribute="top" secondItem="Llm-lL-Icb" secondAttribute="bottom" constant="20" id="EIT-TC-MzE"/>
+                            <constraint firstItem="GiC-xe-Dyu" firstAttribute="centerY" secondItem="Dsq-yy-vSh" secondAttribute="centerY" id="lt2-IY-hl5"/>
+                            <constraint firstItem="GiC-xe-Dyu" firstAttribute="leading" secondItem="Dsq-yy-vSh" secondAttribute="trailing" constant="1" id="mJs-mN-5Vt"/>
                         </constraints>
                     </view>
                     <simulatedStatusBarMetrics key="simulatedStatusBarMetrics" statusBarStyle="lightContent"/>
@@ -44,6 +60,6 @@
         </scene>
     </scenes>
     <resources>
-        <image name="AppIcon120" width="120" height="120"/>
+        <image name="AppIcon120" width="200" height="200"/>
     </resources>
 </document>
