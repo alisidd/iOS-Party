@@ -7,8 +7,10 @@
 //
 
 import Foundation
+import MediaPlayer
 
 class Track: NSObject, NSCoding {
+    
     var id = String()
     var name = String()
     var artist = String()
@@ -25,10 +27,31 @@ class Track: NSObject, NSCoding {
         return track.id.hasPrefix("R:") ? .removal : .addition
     }
     
+    static func convert(tracks: [MPMediaItem]) -> [Track] {
+        var newTracks = [Track]()
+        
+        for track in tracks {
+            let newTrack = Track()
+            
+            newTrack.id = String(track.persistentID)
+            newTrack.name = track.title ?? ""
+            newTrack.artist = track.artist ?? ""
+            newTrack.lowResArtwork = track.artwork?.image(at: CGSize(width: 60, height: 60)) ?? #imageLiteral(resourceName: "stockArtwork")
+            
+            newTracks.append(newTrack)
+        }
+        
+        return newTracks
+    }
+    
     static func fetchImage(fromURL urlString: String, completionHandler: @escaping (UIImage?) -> Void) {
         if let url = URL(string: urlString), let data = try? Data(contentsOf: url) {
             DispatchQueue.main.async {
                 completionHandler(UIImage(data: data))
+            }
+        } else {
+            DispatchQueue.main.async {
+                completionHandler(#imageLiteral(resourceName: "stockArtwork"))
             }
         }
     }
@@ -65,4 +88,5 @@ class Track: NSObject, NSCoding {
         self.highResArtwork = highResArtwork
         self.length = length
     }
+    
 }

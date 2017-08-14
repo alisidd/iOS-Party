@@ -9,6 +9,7 @@
 import UIKit
 
 class QueueViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
+    
     weak var delegate: PartyViewControllerInfoDelegate?
 
     @IBOutlet weak var upNextLabel: UILabel!
@@ -17,23 +18,10 @@ class QueueViewController: UIViewController, UITableViewDelegate, UITableViewDat
     
     @IBOutlet weak var tracksTableView: UITableView!
 
-    private let minHeight: CGFloat = 0.53 * UIScreen.main.bounds.height
-    private let maxHeight: CGFloat = -UIApplication.shared.statusBarFrame.height
-    private var headerHeightConstraint: CGFloat {
-        get {
-            return delegate?.returnTableHeight() ?? maxHeight
-        }
-        
-        set {
-            delegate?.setTable(withHeight: newValue)
-            if headerHeightConstraint == maxHeight {
-                goIntoEditingMode()
-            } else if headerHeightConstraint == minHeight {
-                comeOutOfEditingMode()
-            }
-        }
-    }
-    private var previousScrollOffset: CGFloat = 0
+    fileprivate let minHeight = HubAndQueuePageViewController.minHeight
+    fileprivate let maxHeight = HubAndQueuePageViewController.maxHeight
+    
+    fileprivate var previousScrollOffset: CGFloat = 0
         
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -47,141 +35,6 @@ class QueueViewController: UIViewController, UITableViewDelegate, UITableViewDat
     private func setDelegates() {
         tracksTableView.delegate = self
         tracksTableView.dataSource = self
-    }
-    
-    // Code taken from https://michiganlabs.com/ios/development/2016/05/31/ios-animating-uitableview-header/
-    func scrollViewDidScroll(_ scrollView: UIScrollView) {
-        let scrollDiff = scrollView.contentOffset.y - previousScrollOffset
-
-        let absoluteTop: CGFloat = 0
-        
-        let isScrollingDown = scrollDiff > 0 && scrollView.contentOffset.y > absoluteTop
-        let isScrollingUp = scrollDiff < 0 && scrollView.contentOffset.y < absoluteTop && !Party.tracksQueue.isEmpty
-        
-        var newHeight = headerHeightConstraint
-        
-        if isScrollingDown {
-            newHeight = max(maxHeight, headerHeightConstraint - abs(scrollDiff))
-            if newHeight != headerHeightConstraint {
-                headerHeightConstraint = newHeight
-                changeFontSizeForUpNext()
-                setScrollPosition(forOffset: previousScrollOffset)
-            }
-            
-        } else if isScrollingUp {
-            newHeight = min(minHeight, headerHeightConstraint + abs(scrollDiff))
-            if newHeight != headerHeightConstraint && tracksTableView.contentOffset.y < 2 {
-                headerHeightConstraint = newHeight
-                changeFontSizeForUpNext()
-                setScrollPosition(forOffset: previousScrollOffset)
-            }
-        }
-        
-        previousScrollOffset = scrollView.contentOffset.y
-    }
-    
-    private func changeFontSizeForUpNext() {
-        UIView.animate(withDuration: 0.3) {
-            self.upNextLabel.font = self.upNextLabel.font.withSize(22 - 4 * (self.headerHeightConstraint / self.minHeight))
-        }
-    }
-    
-    private func setScrollPosition(forOffset offset: CGFloat) {
-        tracksTableView.contentOffset = CGPoint(x: tracksTableView.contentOffset.x, y: offset)
-    }
-    
-    private func goIntoEditingMode() {
-        if (delegate!.isHost && Party.tracksQueue.count > 1) || tracksQueueHasEditableTracks() {
-            editButton.isHidden = false
-            addButton.isHidden = true
-        }
-    }
-    
-    private func comeOutOfEditingMode() {
-        tracksTableView.setEditing(false, animated: true)
-        editButton.isHidden = true
-        addButton.isHidden = false
-        editButton.setTitle("Edit", for: .normal)
-    }
-    
-    func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
-        scrollViewDidStopScrolling()
-    }
-    
-    func scrollViewDidEndDragging(_ scrollView: UIScrollView, willDecelerate decelerate: Bool) {
-        if !decelerate {
-            scrollViewDidStopScrolling()
-        }
-    }
-    
-    func scrollViewDidStopScrolling() {
-        let range = maxHeight - minHeight
-        let midPoint = minHeight + (range / 2)
-        
-        delegate?.layout()
-        if headerHeightConstraint > midPoint {
-            UIView.animate(withDuration: 0.2, animations: {
-                self.headerHeightConstraint = self.minHeight
-                self.changeFontSizeForUpNext()
-                self.delegate?.layout()
-            })
-        } else {
-            UIView.animate(withDuration: 0.2, animations: {
-                self.headerHeightConstraint = self.maxHeight
-                self.changeFontSizeForUpNext()
-                self.delegate?.layout()
-            })
-        }
-    }
-    
-    private func tracksQueueHasEditableTracks() -> Bool {
-        for track in Party.tracksQueue {
-            if delegate!.personalQueue.contains(where: { $0.id == track.id }) && track != Party.tracksQueue[0] {
-                return true
-            }
-        }
-        return false
-    }
-    
-    // MARK: - Party Control
-    
-    func updateTable() {
-        DispatchQueue.main.async {
-            self.tracksTableView.reloadData()
-        }
-    }
-    
-    func showAddButton() {
-        self.addButton.isHidden = false
-        UIView.animate(withDuration: 0.3, animations: { self.addButton.alpha = 1 })
-    }
-    
-    func hideAddButton() {
-        UIView.animate(withDuration: 0.3, animations: { self.addButton.alpha = 0 }) { _ in
-            self.addButton.isHidden = true
-        }
-    }
-    
-    func makeTracksTableTaller() {
-        DispatchQueue.main.async {
-            self.delegate?.layout()
-            UIView.animate(withDuration: 0.4) {
-                self.headerHeightConstraint = self.maxHeight
-                self.changeFontSizeForUpNext()
-                self.delegate?.layout()
-            }
-        }
-    }
-    
-    func makeTracksTableShorter() {
-        DispatchQueue.main.async {
-            self.delegate?.layout()
-            UIView.animate(withDuration: 0.4) {
-                self.headerHeightConstraint = self.minHeight
-                self.changeFontSizeForUpNext()
-                self.delegate?.layout()
-            }
-        }
     }
     
     // MARK: - Table
@@ -264,4 +117,166 @@ class QueueViewController: UIViewController, UITableViewDelegate, UITableViewDat
         
         return [deleteButton]
     }
+    
+}
+
+extension QueueViewController {
+    
+    private var headerHeightConstraint: CGFloat {
+        get {
+            return delegate?.returnTableHeight() ?? maxHeight
+        }
+        
+        set {
+            delegate?.setTable(withHeight: newValue)
+            if headerHeightConstraint == maxHeight {
+                goIntoEditingMode()
+            } else if headerHeightConstraint == minHeight {
+                comeOutOfEditingMode()
+            }
+        }
+    }
+    
+    // Code taken from https://michiganlabs.com/ios/development/2016/05/31/ios-animating-uitableview-header/
+    func scrollViewDidScroll(_ scrollView: UIScrollView) {
+        let scrollDiff = scrollView.contentOffset.y - previousScrollOffset
+        
+        let absoluteTop: CGFloat = 0
+        
+        let isScrollingDown = scrollDiff > 0 && scrollView.contentOffset.y > absoluteTop
+        let isScrollingUp = scrollDiff < 0 && scrollView.contentOffset.y < absoluteTop && !Party.tracksQueue.isEmpty
+        
+        var newHeight = headerHeightConstraint
+        
+        if isScrollingDown {
+            newHeight = max(maxHeight, headerHeightConstraint - abs(scrollDiff))
+            if newHeight != headerHeightConstraint {
+                headerHeightConstraint = newHeight
+                changeFontSizeForUpNext()
+                setScrollPosition(forOffset: previousScrollOffset)
+            }
+            
+        } else if isScrollingUp {
+            newHeight = min(minHeight, headerHeightConstraint + abs(scrollDiff))
+            if newHeight != headerHeightConstraint && tracksTableView.contentOffset.y < 2 {
+                headerHeightConstraint = newHeight
+                changeFontSizeForUpNext()
+                setScrollPosition(forOffset: previousScrollOffset)
+            }
+        }
+        
+        previousScrollOffset = scrollView.contentOffset.y
+    }
+    
+    func scrollViewDidScrollToTop(_ scrollView: UIScrollView) {
+        makeTracksTableShorter()
+    }
+    
+    fileprivate func changeFontSizeForUpNext() {
+        UIView.animate(withDuration: 0.3) {
+            self.upNextLabel.font = self.upNextLabel.font.withSize(22 - 6 * (self.headerHeightConstraint / self.minHeight))
+        }
+    }
+    
+    private func setScrollPosition(forOffset offset: CGFloat) {
+        tracksTableView.contentOffset = CGPoint(x: tracksTableView.contentOffset.x, y: offset)
+    }
+    
+    fileprivate func goIntoEditingMode() {
+        if (delegate!.isHost && Party.tracksQueue.count > 1) || tracksQueueHasEditableTracks() {
+            editButton.isHidden = false
+            addButton.isHidden = true
+        }
+    }
+    
+    private func tracksQueueHasEditableTracks() -> Bool {
+        for track in Party.tracksQueue {
+            if delegate!.personalQueue.contains(where: { $0.id == track.id }) && track != Party.tracksQueue[0] {
+                return true
+            }
+        }
+        return false
+    }
+    
+    fileprivate func comeOutOfEditingMode() {
+        tracksTableView.setEditing(false, animated: true)
+        editButton.isHidden = true
+        addButton.isHidden = false
+        editButton.setTitle("Edit", for: .normal)
+    }
+    
+    func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
+        scrollViewDidStopScrolling()
+    }
+    
+    func scrollViewDidEndDragging(_ scrollView: UIScrollView, willDecelerate decelerate: Bool) {
+        if !decelerate {
+            scrollViewDidStopScrolling()
+        }
+    }
+    
+    func scrollViewDidStopScrolling() {
+        let range = maxHeight - minHeight
+        let midPoint = minHeight + (range / 2)
+        
+        delegate?.layout()
+        if headerHeightConstraint > midPoint {
+            UIView.animate(withDuration: 0.2, animations: {
+                self.headerHeightConstraint = self.minHeight
+                self.changeFontSizeForUpNext()
+                self.delegate?.layout()
+            })
+        } else {
+            UIView.animate(withDuration: 0.2, animations: {
+                self.headerHeightConstraint = self.maxHeight
+                self.changeFontSizeForUpNext()
+                self.delegate?.layout()
+            })
+        }
+    }
+    
+    // MARK: - Party Control
+    
+    func updateTable() {
+        DispatchQueue.main.async {
+            self.tracksTableView.reloadData()
+        }
+    }
+    
+    func showAddButton() {
+        DispatchQueue.main.async {
+            self.addButton.isHidden = false
+            self.editButton.isHidden = true
+            UIView.animate(withDuration: 0.3, animations: { self.addButton.alpha = 1 })
+        }
+    }
+    
+    func hideAddButton() {
+        UIView.animate(withDuration: 0.3, animations: { self.addButton.alpha = 0 }) { _ in
+            self.addButton.isHidden = true
+        }
+    }
+    
+    func makeTracksTableTaller() {
+        DispatchQueue.main.async {
+            self.delegate?.layout()
+            UIView.animate(withDuration: 0.4) {
+                self.headerHeightConstraint = self.maxHeight
+                self.changeFontSizeForUpNext()
+                self.delegate?.layout()
+            }
+        }
+    }
+    
+    func makeTracksTableShorter() {
+        DispatchQueue.main.async {
+            self.delegate?.layout()
+            UIView.animate(withDuration: 0.4) {
+                self.headerHeightConstraint = self.minHeight
+                self.changeFontSizeForUpNext()
+                self.delegate?.layout()
+            }
+        }
+    }
+    
 }

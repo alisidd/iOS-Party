@@ -9,7 +9,7 @@
 import UIKit
 
 class searchTextField: UITextField {
-    let orange = UIColor(red: 1, green: 166/255, blue: 35/255, alpha: 1)
+    
     let searchIconView = UIImageView(frame: CGRect(x: 0, y: 0, width: 17, height: 17))
     
     required init?(coder aDecoder: NSCoder) {
@@ -18,9 +18,7 @@ class searchTextField: UITextField {
     }
     
     func customizeTextField() {
-        attributedPlaceholder = NSAttributedString(string: "Search", attributes: [NSForegroundColorAttributeName: UIColor.lightGray])
-        
-        tintColor = orange
+        tintColor = AppConstants.orange
         autocapitalizationType = UITextAutocapitalizationType.sentences
         returnKeyType = .search
         addBottomBorder()
@@ -30,7 +28,7 @@ class searchTextField: UITextField {
     func addBottomBorder() {
         let bottomLine = CALayer()
         bottomLine.frame = CGRect(x: 0, y: frame.height - 1, width: frame.width, height: 1)
-        bottomLine.backgroundColor = orange.cgColor
+        bottomLine.backgroundColor = AppConstants.orange.cgColor
         borderStyle = .none
         layer.addSublayer(bottomLine)
     }
@@ -49,4 +47,5 @@ class searchTextField: UITextField {
     override func editingRect(forBounds bounds: CGRect) -> CGRect {
         return CGRect(x: searchIconView.frame.maxX + 10, y: bounds.origin.y, width: bounds.width, height: bounds.height)
     }
+    
 }

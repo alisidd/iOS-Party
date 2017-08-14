@@ -10,6 +10,7 @@ import Foundation
 import MultipeerConnectivity
 
 class MultipeerManager: NSObject {
+    
     weak var delegate : NetworkManagerDelegate?
     
     private let mssageServiceType = "localParty"
@@ -20,16 +21,17 @@ class MultipeerManager: NSObject {
     fileprivate var isHost: Bool
     fileprivate var sessions = [MCSession : MCPeerID]()
     var otherHosts = Set<MCPeerID>()
-    private var latestRequest = Data()
+    private var latestRequest = [Track]()
+    static var tracksFailedToSend = [Track]()
     
     // MARK: - Lifecycle
     
     init(isHost: Bool) {
         self.isHost = isHost
         
-        let UUID = UIDevice.current.identifierForVendor!.uuidString
+        let deviceIdentifier = UIDevice.current.identifierForVendor!.uuidString
         let deviceName = UIDevice.current.name
-        myPeerId = isHost ? MCPeerID(displayName: deviceName) : MCPeerID(displayName: UUID)
+        myPeerId = isHost ? MCPeerID(displayName: deviceName) : MCPeerID(displayName: deviceIdentifier)
         
         if isHost {
             serviceAdvertiser = MCNearbyServiceAdvertiser(peer: myPeerId, discoveryInfo: ["isHost": isHost.description], serviceType: mssageServiceType)
@@ -82,14 +84,24 @@ class MultipeerManager: NSObject {
 
     func send(tracks: [Track], toRemove isRemoval: Bool = false) {
         if !sessions.isEmpty {
-            let tracksListData = NSKeyedArchiver.archivedData(withRootObject: tracks)
             if !isRemoval {
-                latestRequest = tracksListData
+                latestRequest = tracks
             }
             DispatchQueue.global(qos: .userInitiated).async { [weak self] in
-                guard tracksListData == self?.latestRequest || isRemoval else { return }
-                self?.sessions.keys.forEach { try? $0.send(tracksListData, toPeers: $0.connectedPeers, with: .reliable) }
+                guard self != nil && (isRemoval || tracks == self!.latestRequest) else { return }
+                
+                let tracksListData = NSKeyedArchiver.archivedData(withRootObject: tracks)
+                self?.sessions.keys.forEach {
+                    guard self != nil else { return }
+                    if (try? $0.send(tracksListData, toPeers: $0.connectedPeers, with: .reliable)) == nil && !self!.isHost {
+                        MultipeerManager.tracksFailedToSend = tracks
+                    } else {
+                        MultipeerManager.tracksFailedToSend = []
+                    }
+                }
             }
+        } else if !isHost {
+            MultipeerManager.tracksFailedToSend = tracks
         }
     }
     
@@ -99,11 +111,13 @@ class MultipeerManager: NSObject {
             try? session.send(partyData, toPeers: session.connectedPeers, with: .reliable)
         }
     }
+    
 }
 
 // MARK: - Invitation
 
 extension MultipeerManager: MCNearbyServiceAdvertiserDelegate {
+    
     func advertiser(_ advertiser: MCNearbyServiceAdvertiser, didReceiveInvitationFromPeer peerID: MCPeerID, withContext context: Data?, invitationHandler: @escaping ((Bool, MCSession?) -> Void)) {
         print("Received invitation from \(peerID)")
         if !sessions.contains(where: { $0.1 == peerID }) {
@@ -121,15 +135,14 @@ extension MultipeerManager: MCNearbyServiceAdvertiserDelegate {
     func advertiser(_ advertiser: MCNearbyServiceAdvertiser, didNotStartAdvertisingPeer error: Error) {
         print("didNotStartAdvertisingPeer: \(error)")
     }
+    
 }
 
 // MARK: - Peer Discovery Callbacks
 
 extension MultipeerManager: MCNearbyServiceBrowserDelegate {
-    @available(iOS 7.0, *)
+    
     public func browser(_ browser: MCNearbyServiceBrowser, foundPeer peerID: MCPeerID, withDiscoveryInfo info: [String : String]?) {
-        print("Found peer \(peerID)")
-        
         otherHosts.update(with: peerID)
         
         let newSession = MCSession(peer: myPeerId, securityIdentity: nil, encryptionPreference: MCEncryptionPreference.none)
@@ -146,7 +159,6 @@ extension MultipeerManager: MCNearbyServiceBrowserDelegate {
     }
     
     func browser(_ browser: MCNearbyServiceBrowser, lostPeer peerID: MCPeerID) {
-        print("lost peer \(peerID)")
         otherHosts.remove(peerID)
         
         for (session, id) in sessions where id == peerID {
@@ -162,9 +174,11 @@ extension MultipeerManager: MCNearbyServiceBrowserDelegate {
     func browser(_ browser: MCNearbyServiceBrowser, didNotStartBrowsingForPeers error: Error) {
         print("didNotStartBrowsingForPeers: \(error)")
     }
+    
 }
 
 extension MCSessionState {
+    
     func stringValue() -> String {
         switch self {
         case .notConnected: return "Not Connected"
@@ -172,20 +186,20 @@ extension MCSessionState {
         case .connected: return "Connected"
         }
     }
+    
 }
 
 // MARK: - Session Callbacks
 
 extension MultipeerManager: MCSessionDelegate {
-    func session(_ session: MCSession, peer peerID: MCPeerID, didChange state: MCSessionState) {
-        print("State for \(peerID) changed to \(state.stringValue())")
-        if !isHost {
+    
+    func session(_ session: MCSession, peer peerID: MCPeerID, didChange state: MCSessionState) {        
+        if state == .connected {
+            if isHost {
+                sendPartyInfo(toSession: session)
+                send(tracks: Party.tracksQueue)
+            }
             delegate?.updateStatus(withState: state)
-        }
-        
-        if state == .connected && isHost {
-            sendPartyInfo(toSession: session)
-            send(tracks: Party.tracksQueue)
         } else if state == .notConnected {
             if otherHosts.contains(peerID) {
                 otherHosts.remove(peerID)
@@ -193,8 +207,11 @@ extension MultipeerManager: MCSessionDelegate {
             
             sessions.removeValue(forKey: session)
             if sessions.isEmpty {
+                delegate?.updateStatus(withState: state)
                 delegate?.resetManager()
             }
+        } else {
+            delegate?.updateStatus(withState: state)
         }
     }
     
@@ -235,5 +252,6 @@ extension MultipeerManager: MCSessionDelegate {
     func session(_ session: MCSession, didStartReceivingResourceWithName resourceName: String, fromPeer peerID: MCPeerID, with progress: Progress) {
         print("didStartReceivingResourceWithName")
     }
+    
 }
 

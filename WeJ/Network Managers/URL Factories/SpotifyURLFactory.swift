@@ -9,6 +9,7 @@
 import Foundation
 
 struct SpotifyURLFactory {
+    
     private static let baseAccountsURL = "accounts.spotify.com"
     private static let baseSpotifyWebAPI = "api.spotify.com"
     
@@ -28,12 +29,15 @@ struct SpotifyURLFactory {
     }
     
     static func createSearchRequest(forTerm term: String) -> URLRequest {
+        let disallowedChars = CharacterSet(charactersIn: "()[],.!?")
+        let escapedTerm = term.components(separatedBy: disallowedChars).joined(separator: " ").replacedWhiteSpaceForURL
+        
         var urlComponents = URLComponents()
         urlComponents.scheme = "https"
         urlComponents.host = baseSpotifyWebAPI
         urlComponents.path = "/v1/search"
         
-        let urlParameters = ["q": term.replacingOccurrences(of: " ", with: "+"),
+        let urlParameters = ["q": escapedTerm,
                              "type": "track"]
         var queryItems = [URLQueryItem]()
         for (key, value) in urlParameters {
@@ -43,7 +47,6 @@ struct SpotifyURLFactory {
         
         var urlRequest = URLRequest(url: urlComponents.url!)
         urlRequest.addValue("Bearer \(Party.cookie!)", forHTTPHeaderField: "Authorization")
-        urlRequest.addValue("application/x-www-form-urlencoded", forHTTPHeaderField: "Content-Type")
         
         return urlRequest
     }
@@ -56,8 +59,80 @@ struct SpotifyURLFactory {
         
         var urlRequest = URLRequest(url: urlComponents.url!)
         urlRequest.addValue("Bearer \(Party.cookie!)", forHTTPHeaderField: "Authorization")
-        urlRequest.addValue("application/x-www-form-urlencoded", forHTTPHeaderField: "Content-Type")
         
         return urlRequest
     }
+    
+    static func createUserAlbumsRequest() -> URLRequest {
+        var urlComponents = URLComponents()
+        urlComponents.scheme = "https"
+        urlComponents.host = baseSpotifyWebAPI
+        urlComponents.path = "/v1/me/albums"
+        
+        var urlRequest = URLRequest(url: urlComponents.url!)
+        urlRequest.addValue("Bearer \(SpotifyAuthorizationManager.getAuth().session.accessToken!)", forHTTPHeaderField: "Authorization")
+        
+        return urlRequest
+    }
+    
+    static func createUserPlaylistsRequest() -> URLRequest {
+        var urlComponents = URLComponents()
+        urlComponents.scheme = "https"
+        urlComponents.host = baseSpotifyWebAPI
+        urlComponents.path = "/v1/me/playlists"
+        
+        var urlRequest = URLRequest(url: urlComponents.url!)
+        urlRequest.addValue("Bearer \(SpotifyAuthorizationManager.getAuth().session.accessToken!)", forHTTPHeaderField: "Authorization")
+        
+        return urlRequest
+    }
+    
+    static func createUserTracksRequest() -> URLRequest {
+        var urlComponents = URLComponents()
+        urlComponents.scheme = "https"
+        urlComponents.host = baseSpotifyWebAPI
+        urlComponents.path = "/v1/me/tracks"
+        
+        var urlRequest = URLRequest(url: urlComponents.url!)
+        urlRequest.addValue("Bearer \(SpotifyAuthorizationManager.getAuth().session.accessToken!)", forHTTPHeaderField: "Authorization")
+        
+        return urlRequest
+    }
+    
+    static func createMyPlaylistsRequest(forOwnerID ownerID: String, forPlaylistID playlistID: String) -> URLRequest {
+        var urlComponents = URLComponents()
+        urlComponents.scheme = "https"
+        urlComponents.host = baseSpotifyWebAPI
+        urlComponents.path = "/v1/users/\(ownerID)/playlists/\(playlistID)"
+        
+        var urlRequest = URLRequest(url: urlComponents.url!)
+        urlRequest.addValue("Bearer \(SpotifyAuthorizationManager.getAuth().session.accessToken!)", forHTTPHeaderField: "Authorization")
+        
+        return urlRequest
+    }
+    
+    static func createPlaylistsRequest(forOwnerID ownerID: String, forPlaylistID playlistID: String) -> URLRequest {
+        var urlComponents = URLComponents()
+        urlComponents.scheme = "https"
+        urlComponents.host = baseSpotifyWebAPI
+        urlComponents.path = "/v1/users/\(ownerID)/playlists/\(playlistID)"
+        
+        var urlRequest = URLRequest(url: urlComponents.url!)
+        urlRequest.addValue("Bearer \(Party.cookie!)", forHTTPHeaderField: "Authorization")
+        
+        return urlRequest
+    }
+    
+    static func createPlaylistsIDRequest(forCategoryID categoryID: String) -> URLRequest {
+        var urlComponents = URLComponents()
+        urlComponents.scheme = "https"
+        urlComponents.host = baseSpotifyWebAPI
+        urlComponents.path = "/v1/browse/categories/\(categoryID)/playlists"
+        
+        var urlRequest = URLRequest(url: urlComponents.url!)
+        urlRequest.addValue("Bearer \(Party.cookie!)", forHTTPHeaderField: "Authorization")
+        
+        return urlRequest
+    }
+    
 }

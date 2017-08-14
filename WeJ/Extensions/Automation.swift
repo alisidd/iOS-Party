@@ -10,6 +10,7 @@ import Foundation
 
 //Code taken from https://stackoverflow.com/questions/8261961/better-way-to-get-the-users-name-from-device
 extension UIDevice {
+    
     func userName() -> String {
         let deviceName = self.name
         let expression = "^(?:iPhone|phone|iPad|iPod)\\s+(?:de\\s+)?(?:[1-9]?S?\\s+)?|(\\S+?)(?:['']?s)?(?:\\s+(?:iPhone|phone|iPad|iPod)\\s+(?:[1-9]?S?\\s+)?)?$|(\\S+?)(?:['']?的)?(?:\\s*(?:iPhone|phone|iPad|iPod))?$|(\\S+)\\s+"
@@ -39,5 +40,12 @@ extension UIDevice {
         catch { NSLog("[Error] While searching for username from device name") }
         
         return username
+    }
+    
+}
+
+extension String {
+    var replacedWhiteSpaceForURL: String {
+        return components(separatedBy: " ").filter { !$0.isEmpty }.joined(separator: "+")
     }
 }

@@ -9,21 +9,21 @@
 import UIKit
 
 class InitialSetupViewController: UIViewController, UIGestureRecognizerDelegate {
+    
     @IBOutlet weak var createPartyButton: setupButton!
     @IBOutlet weak var joinPartyButton: setupButton!
     @IBOutlet weak var versionLabel: UILabel!
         
     // MARK: - Lifecycle
     
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-        DispatchQueue.main.async {
-            self.navigationController?.setNavigationBarHidden(true, animated: animated)
-        }
-    }
-    
     override func viewDidLoad() {
         populateVersionNumber()
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        navigationController?.setNavigationBarHidden(false, animated: false)
+        navigationController?.navigationBar.isHidden = true
     }
     
     private func populateVersionNumber() {
@@ -37,26 +37,14 @@ class InitialSetupViewController: UIViewController, UIGestureRecognizerDelegate 
         versionLabel.text = "😎   " + versionLabel.text!
     }
     
-    override func viewWillDisappear(_ animated: Bool) {
-        super.viewWillDisappear(animated)
-        DispatchQueue.main.async {
-            self.navigationController?.setNavigationBarHidden(false, animated: animated)
-        }
-    }
-    
     // MARK: - Navigation
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        let backItem = UIBarButtonItem()
-        backItem.title = ""
-        navigationItem.backBarButtonItem = backItem
-        
-        if let controller = segue.destination as? PartyViewController, segue.identifier == "Join Party" {
+        if let controller = segue.destination as? PartyViewController {
             controller.isHost = false
             controller.networkManager?.delegate = controller
             Party.delegate = controller
-            navigationItem.backBarButtonItem = UIBarButtonItem(title: "", style: .plain, target: nil, action: nil)
         }
     }
+    
 }
-

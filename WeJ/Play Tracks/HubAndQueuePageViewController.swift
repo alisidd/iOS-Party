@@ -9,8 +9,12 @@
 import UIKit
 
 class HubAndQueuePageViewController: UIPageViewController, UIPageViewControllerDelegate, UIPageViewControllerDataSource {
+    
     weak var partyDelegate: PartyViewControllerInfoDelegate?
     private var allViewControllers = [UIViewController]()
+    
+    static let minHeight = 0.53 * UIScreen.main.bounds.height
+    static let maxHeight: CGFloat = -UIApplication.shared.statusBarFrame.height
 
     override func viewDidLoad() {
         super.viewDidLoad()

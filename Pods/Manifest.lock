@@ -1,5 +1,5 @@
 PODS:
-  - BadgeSwift (4.0.0)
+  - BadgeSwift (5.0.1)
   - Firebase/Core (4.0.4):
     - FirebaseAnalytics (= 4.0.2)
     - FirebaseCore (= 4.0.4)
@@ -26,13 +26,13 @@ PODS:
   - SwiftyJSON (3.1.4)
 
 DEPENDENCIES:
-  - BadgeSwift (~> 4.0)
+  - BadgeSwift
   - Firebase/Core
   - NVActivityIndicatorView
   - SwiftyJSON
 
 SPEC CHECKSUMS:
-  BadgeSwift: b291cf8ca88674d61cd781f14988272988f4dff4
+  BadgeSwift: 3defa56f504bfb46f2300122c4a565ec9e405c1e
   Firebase: 1492bf04e1b73a7353b4fb2cf5a20bac9692f341
   FirebaseAnalytics: ad41720e3e67fc63fbe3d2948d3e26932a8de311
   FirebaseCore: cfc042628ef9f20debe09c0eb683135fcd404cb4
@@ -42,6 +42,6 @@ SPEC CHECKSUMS:
   NVActivityIndicatorView: d3738df7e2e476aca0ba6bf32a8c9fbcfc33d64b
   SwiftyJSON: c2842d878f95482ffceec5709abc3d05680c0220
 
-PODFILE CHECKSUM: f9bf637bd70101a372e7dd4592be4a00a8552ba3
+PODFILE CHECKSUM: 7493cfc806d38e2768c1c88968716acfb823bb5c
 
 COCOAPODS: 1.2.0

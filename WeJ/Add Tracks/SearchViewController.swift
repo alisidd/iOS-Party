@@ -1,5 +1,5 @@
 //
-//  AddSongViewController.swift
+//  SearchViewController.swift
 //  WeJ
 //
 //  Created by Mohammad Ali Siddiqui on 1/19/17.
@@ -7,18 +7,23 @@
 //
 
 import UIKit
-import NVActivityIndicatorView
 import BadgeSwift
+import NVActivityIndicatorView
 
-class AddSongViewController: UIViewController, UITextFieldDelegate, UITableViewDataSource, UITableViewDelegate {
+class SearchViewController: UIViewController, UITextFieldDelegate {
+    
+    private weak var delegate: AddTracksTabBarController!
+    
+    // MARK: - Storyboard Variables
+    
+    @IBOutlet weak var badge: BadgeSwift!
     @IBOutlet weak var searchTracksField: UITextField!
-    @IBOutlet weak var tracksCounter: BadgeSwift!
+    @IBOutlet weak var doneButton: UIButton!
     
     @IBOutlet weak var trackTableView: UITableView!
-        
-    // MARK: - General Variables
     
-    private var tracksList = [Track]() {
+    // MARK: - General Variables
+    var tracksList = [Track]() {
         didSet {
             DispatchQueue.main.async {
                 self.trackTableView.reloadData()
@@ -27,33 +32,46 @@ class AddSongViewController: UIViewController, UITextFieldDelegate, UITableViewD
             }
         }
     }
-    var tracksSelected = [Track]() {
-        didSet {
-            DispatchQueue.main.async {
-                self.tracksCounter.isHidden = self.tracksSelected.isEmpty
-                self.tracksCounter.text = String(self.tracksSelected.count)
-            }
-        }
-    }
     private var fetcher: Fetcher!
     private var activityIndicator: NVActivityIndicatorView!
     private let noTracksFoundLabel = UILabel(frame: CGRect(x: 0, y: 0, width: 320, height: 70))
+    
+    func setBadge(to count: Int) {
+        guard badge != nil else { return }
+        badge.isHidden = count == 0
+        badge.text = String(count)
+    }
     
     // MARK: - Lifecycle
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        initializeVariables()
         setDelegates()
         initializeActivityIndicator()
         adjustViews()
     }
     
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        initializeBadge()
+    }
+    
+    private func initializeBadge() {
+        let controller = tabBarController! as! AddTracksTabBarController
+        setBadge(to: controller.tracksSelected.count + controller.libraryTracksSelected.count)
+    }
+    
     // MARK: - Functions
+    
+    private func initializeVariables() {
+        delegate = tabBarController as? AddTracksTabBarController
+    }
     
     private func setDelegates() {
         searchTracksField.delegate = self
-        trackTableView.delegate    = self
-        trackTableView.dataSource  = self
+        trackTableView.delegate    = delegate
+        trackTableView.dataSource  = delegate
     }
     
     private func initializeActivityIndicator() {
@@ -64,16 +82,18 @@ class AddSongViewController: UIViewController, UITextFieldDelegate, UITableViewD
     }
     
     private func adjustViews() {
-        trackTableView.backgroundColor = .clear
-        trackTableView.tableFooterView = UIView()
-        
         navigationItem.hidesBackButton = true
+        
+        let placeholderText = "Search " + Party.musicService.toString()
+        searchTracksField.attributedPlaceholder = NSAttributedString(string: placeholderText, attributes: [NSForegroundColorAttributeName: UIColor.lightGray])
+        
+        trackTableView.backgroundColor = .clear
+        trackTableView.contentInset = UIEdgeInsets(top: 0, left: 0, bottom: 50, right: 0)
     }
     
     func textFieldShouldReturn(_ searchSongsField: UITextField) -> Bool {
         searchTracksField.resignFirstResponder()
         if !searchTracksField.text!.isEmpty {
-            fetcher = Party.musicService == .spotify ? SpotifyFetcher() : AppleMusicFetcher()
             trackTableView.isHidden = true
             fetchResults(forTerm: searchSongsField.text!)
         }
@@ -81,6 +101,7 @@ class AddSongViewController: UIViewController, UITextFieldDelegate, UITableViewD
     }
     
     private func fetchResults(forTerm term: String) {
+        fetcher = Party.musicService == .spotify ? SpotifyFetcher() : AppleMusicFetcher()
         activityIndicator.startAnimating()
         
         fetcher.searchCatalog(forTerm: term) { [weak self] in
@@ -145,69 +166,5 @@ class AddSongViewController: UIViewController, UITextFieldDelegate, UITableViewD
             }
         }
     }
-    
-    // MARK: - Table
-    
-    func numberOfSections(in tableView: UITableView) -> Int {
-        return 1
-    }
-    
-    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return tracksList.count
-    }
-    
-    func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
-        cell.backgroundColor = .clear
-        if partyTracksQueue(hasTrack: tracksList[indexPath.row]) || tracksSelected.contains(tracksList[indexPath.row]) {
-            cell.accessoryType = .checkmark
-            tableView.selectRow(at: indexPath, animated: true, scrollPosition: .none)
-        } else {
-            cell.accessoryType = .none
-        }
-    }
-    
-    func partyTracksQueue(hasTrack track: Track) -> Bool {
-        return Party.tracksQueue.contains(where: { $0.id == track.id })
-    }
-    
-    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = trackTableView.dequeueReusableCell(withIdentifier: "Track", for: indexPath) as! TrackTableViewCell
-        
-        // Cell Properties
-        cell.trackName.text = tracksList[indexPath.row].name
-        cell.artistName.text = tracksList[indexPath.row].artist
-        cell.artworkImageView.image = tracksList[indexPath.row].lowResArtwork
-        
-        return cell
-    }
-    
-    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        let cell = trackTableView.cellForRow(at: indexPath)!
-        
-        addToQueue(track: tracksList[indexPath.row])
-        UIView.animate(withDuration: 0.35) {
-            cell.accessoryType = .checkmark
-        }
-    }
-    
-    private func addToQueue(track: Track) {
-        if !partyTracksQueue(hasTrack: track) && !tracksSelected.contains(track) {
-            tracksSelected.append(track)
-        }
-    }
-    
-    func tableView(_ tableView: UITableView, didDeselectRowAt indexPath: IndexPath) {
-        let cell = trackTableView.cellForRow(at: indexPath)!
-        removeFromQueue(track: tracksList[indexPath.row])
-        
-        if !partyTracksQueue(hasTrack: tracksList[indexPath.row]) {
-            UIView.animate(withDuration: 0.35) {
-                cell.accessoryType = .none
-            }
-        }
-    }
-    
-    private func removeFromQueue(track: Track) {
-        tracksSelected.remove(at: tracksSelected.index(where: {$0.id == track.id})!)
-    }
+
 }

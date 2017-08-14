@@ -9,38 +9,12 @@
 import Foundation
 import MultipeerConnectivity
 
-fileprivate let red = UIColor(red: 255/255, green: 71/255, blue: 62/255, alpha: 1)
-fileprivate let orange = UIColor(red: 255/255, green: 166/255, blue: 35/255, alpha: 1)
-fileprivate let green = UIColor(red: 117/255, green: 203/255, blue: 39/255, alpha: 1)
-
 extension PartyViewController {
-    var connectionStatus: MCSessionState {
-        get {
-            return self.connectionStatus
-        }
-        set {
-            DispatchQueue.main.async {
-                self.displayStatusView()
-                self.connectionStatusLabel.text = newValue.stringValue()
-                
-                if newValue == .connected {
-                    self.changeStatusIndicatorView(toColor: green)
-                    self.hideStatusView()
-                    self.hubAndQueueVC?.showAddButton()
-                } else if newValue == .connecting {
-                    self.changeStatusIndicatorView(toColor: orange)
-                } else {
-                    self.changeStatusIndicatorView(toColor: red)
-                    self.hubAndQueueVC?.hideAddButton()
-                }
-            }
-        }
-    }
     
-    func displayStatusView() {
+    func displayAlert() {
         view.layoutIfNeeded()
         UIView.animate(withDuration: 0.5) {
-            self.connectionStatusViewConstraint.constant = 0
+            self.alertViewConstraint.constant = 0
             self.view.layoutIfNeeded()
         }
     }
@@ -51,11 +25,23 @@ extension PartyViewController {
         }
     }
     
-    func hideStatusView() {
+    func hideAlert(completionHandler: ((Bool) -> Void)? = nil) {
         view.layoutIfNeeded()
-        UIView.animate(withDuration: 1) {
-            self.connectionStatusViewConstraint.constant = -50
+        UIView.animate(withDuration: 1, animations: {
+            self.alertViewConstraint.constant = -50
             self.view.layoutIfNeeded()
-        }
+        }, completion: completionHandler)
     }
+    
+    func showConnectionRelatedViewsOnAlert() {
+        reconnectButton.isHidden = false
+        statusIndicatorView.isHidden = false
+        resendButton.isHidden = true
+    }
+    
+    func hideConnectionRelatedViewsOnAlert() {
+        reconnectButton.isHidden = true
+        statusIndicatorView.isHidden = true
+    }
+    
 }

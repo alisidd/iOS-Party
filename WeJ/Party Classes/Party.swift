@@ -9,6 +9,7 @@
 import Foundation
 
 class Party: NSObject, NSCoding {
+    
     static weak var delegate: UpdatePartyDelegate?
     
     static var name: String? {
@@ -30,7 +31,11 @@ class Party: NSObject, NSCoding {
         }
     }
     static var tracksFromMyself = [Track]()
-    static var cookie: String? // Represents Spotify access token or Apple Music country code
+    static var cookie: String? { // Represents Spotify access token or Apple Music country code
+        didSet {
+            delegate?.hubAndQueueVC?.showAddButton()
+        }
+    }
     
     static func reset() {
         name = nil
@@ -38,6 +43,10 @@ class Party: NSObject, NSCoding {
         tracksQueue.removeAll()
         tracksFromMyself.removeAll()
         cookie = nil
+    }
+    
+    static func tracksQueue(hasTrack track: Track) -> Bool {
+        return Party.tracksQueue.contains(where: { $0.id == track.id })
     }
     
     // MARK: - NSCoding
@@ -59,4 +68,5 @@ class Party: NSObject, NSCoding {
         Party.musicService = MusicService(rawValue: musicService)!
         Party.cookie = cookie
     }
+    
 }

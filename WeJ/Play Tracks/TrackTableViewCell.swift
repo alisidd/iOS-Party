@@ -7,7 +7,16 @@
 //
 
 class TrackTableViewCell: UITableViewCell {
+    
     @IBOutlet weak var artworkImageView: UIImageView!
     @IBOutlet weak var trackName: UILabel!
     @IBOutlet weak var artistName: UILabel!
+    
+    override func awakeFromNib() {
+        super.awakeFromNib()
+        
+        artworkImageView.layer.cornerRadius = 10
+        artworkImageView.clipsToBounds = true
+    }
+    
 }

@@ -9,7 +9,6 @@
 import UIKit
 
 class partyNameTextField: UITextField {
-    let orange = UIColor(red: 1, green: 166/255, blue: 35/255, alpha: 1)
     
     required init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
@@ -17,7 +16,7 @@ class partyNameTextField: UITextField {
     }
     
     func customizeTextField() {
-        tintColor = orange
+        tintColor = AppConstants.orange
         autocapitalizationType = .words
         returnKeyType = .done
         addBottomBorder()
@@ -25,9 +24,10 @@ class partyNameTextField: UITextField {
     
     func addBottomBorder() {
         let bottomLine = CALayer()
-        bottomLine.frame = CGRect(x: 0, y: frame.height + 10, width: frame.width, height: 2)
-        bottomLine.backgroundColor = orange.cgColor
+        bottomLine.frame = CGRect(x: 0, y: frame.height + 10, width: frame.width, height: 1)
+        bottomLine.backgroundColor = AppConstants.orange.cgColor
         borderStyle = .none
         layer.addSublayer(bottomLine)
     }
+    
 }

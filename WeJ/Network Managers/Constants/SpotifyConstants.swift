@@ -9,6 +9,7 @@
 import Foundation
 
 struct SpotifyConstants {
+    
     static let spotifyPlayerDidLoginNotification = Notification.Name("spotifyPlayerDidLoginNotification")
     
     static let clientID = "308657d9662146ecae57855ac2a01045"
@@ -23,4 +24,5 @@ struct SpotifyConstants {
     }
     
     static let maxInitialLowRes = 5
+    
 }

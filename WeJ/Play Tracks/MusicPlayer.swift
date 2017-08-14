@@ -11,6 +11,7 @@ import StoreKit
 import MediaPlayer
 
 class MusicPlayer {
+    
     // MARK: - Music Player Variables
     
     var appleMusicPlayer = MPMusicPlayerController.applicationMusicPlayer()
@@ -94,4 +95,5 @@ class MusicPlayer {
             appleMusicPlayer.pause()
         }
     }
+    
 }

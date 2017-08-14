@@ -7,6 +7,16 @@
 //
 
 enum MusicService: String {
+    
     case appleMusic
     case spotify
+    
+    func toString() -> String {
+        if self == .spotify {
+            return "Spotify"
+        } else {
+            return "Apple Music"
+        }
+    }
+    
 }

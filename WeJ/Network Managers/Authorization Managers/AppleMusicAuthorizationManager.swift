@@ -14,9 +14,11 @@ protocol AuthorizationManager {
 }
 
 class AppleMusicAuthorizationManager: AuthorizationManager {
+    
     static weak var delegate: ViewControllerAccessDelegate?
     
     static let cloudServiceController = SKCloudServiceController()
+    static var storyboardSegue: String!
     
     func requestAuthorization() {
         AppleMusicAuthorizationManager.delegate?.processingLogin = true
@@ -34,12 +36,20 @@ class AppleMusicAuthorizationManager: AuthorizationManager {
     }
     
     static func requestStorefrontIdentifier() {
+        guard Party.cookie == nil else {
+            DispatchQueue.main.async {
+                delegate?.performSegue(withIdentifier: storyboardSegue, sender: nil)
+            }
+            delegate?.processingLogin = false
+            return
+        }
+        
         let countryCodeHandler: (String?, Error?) -> Void = { (countryCode, error) in
             if let storefrontId = countryCode?.components(separatedBy: "-").first,
                 let countryCode = AppleMusicConstants.countryCodes[storefrontId] ?? countryCode {
                 Party.cookie = countryCode
                 DispatchQueue.main.async {
-                    delegate?.performSegue(withIdentifier: "Create Party", sender: nil)
+                    delegate?.performSegue(withIdentifier: storyboardSegue, sender: nil)
                 }
             } else {
                 postAlertForInternet()
@@ -70,11 +80,12 @@ class AppleMusicAuthorizationManager: AuthorizationManager {
         DispatchQueue.main.async {
             let alert = UIAlertController(title: "Error", message: "Please check your internet connection", preferredStyle: .alert)
             alert.addAction(UIAlertAction(title: "Try Again", style: .default) { _ in
-                delegate?.createParty()
+                delegate?.tryAgain()
             })
             alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
             
             delegate?.present(alert, animated: true, completion: nil)
         }
     }
+    
 }

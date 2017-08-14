@@ -9,6 +9,7 @@
 import Foundation
 
 struct AppleMusicConstants {
+    
     static let developerToken = "eyJhbGciOiJFUzI1NiIsInR5cCI6IkpXVCIsImtpZCI6IkNaRjQ2VzdIUDcifQ.eyJpc3MiOiJZM1k4TTk4RjJNIiwiaWF0IjoxNTAxNjcyMTU2LCJleHAiOjE1MTczOTY5NTZ9.F9NbaxumNK1HmjSLaQEfFMVgT_h7kS1mjgERolROImDqJsVuTHdqLhSds67MXPf1zSvXtMbLTiKSz1diHzfVkA"
     static let countryCodes = [
                               "143563": "DZ",
@@ -141,4 +142,5 @@ struct AppleMusicConstants {
                               "143502": "VE",
                               "143471": "VN"]
     static let maxInitialLowRes = 5
+    
 }

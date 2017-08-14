@@ -9,16 +9,18 @@
 import UIKit
 
 class HubTableViewCell: UITableViewCell {
+    
     @IBOutlet weak var iconView: UIImageView!
     @IBOutlet weak var hubLabel: UILabel!
     
     override func setHighlighted(_ highlighted: Bool, animated: Bool) {
         DispatchQueue.main.async {
             if highlighted {
-                self.hubLabel.textColor = UIColor(red: 1, green: 166/255, blue: 35/255, alpha: 1)
+                self.hubLabel.textColor = AppConstants.orange
             } else {
                 self.hubLabel.textColor = .white
             }
         }
     }
+    
 }

@@ -23,12 +23,21 @@
 		411EEF401E346E2200216016 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 411EEF3F1E346E2200216016 /* Main.storyboard */; };
 		412FBED11E32CFA7007FFB6A /* MusicPlayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 412FBED01E32CFA7007FFB6A /* MusicPlayer.swift */; };
 		413533291E8DE4C600BE5B0F /* MusicService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 413533281E8DE4C600BE5B0F /* MusicService.swift */; };
+		414BF7DB1F3B3B660022289E /* MusicLibrarySelectionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 414BF7DA1F3B3B660022289E /* MusicLibrarySelectionViewController.swift */; };
+		4164CCB51F40FEBE009EBAAF /* Option.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4164CCB41F40FEBE009EBAAF /* Option.swift */; };
 		4165512C1F279A5900FA33F5 /* BlankAudio.wav in Resources */ = {isa = PBXBuildFile; fileRef = 4165512B1F279A5900FA33F5 /* BlankAudio.wav */; };
 		416551301F279EAC00FA33F5 /* BackgroundTask.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4165512F1F279EAC00FA33F5 /* BackgroundTask.swift */; };
 		416551381F27D9D900FA33F5 /* MXMLyricsAction.m in Sources */ = {isa = PBXBuildFile; fileRef = 416551361F27D9D900FA33F5 /* MXMLyricsAction.m */; };
+		416A25D51F3F76DD008F7D19 /* UserTracksViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 416A25D41F3F76DD008F7D19 /* UserTracksViewController.swift */; };
 		416E8C3F1F2A046E00F524E0 /* SpotifyConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 416E8C3E1F2A046E00F524E0 /* SpotifyConstants.swift */; };
+		41774CCC1F3B72BB00108470 /* AppConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 41774CCB1F3B72BB00108470 /* AppConstants.swift */; };
+		41774CCE1F3B7A2C00108470 /* AddTracksTabBarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 41774CCD1F3B7A2C00108470 /* AddTracksTabBarController.swift */; };
+		41774CD81F3CE54C00108470 /* PlaylistSelectionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 41774CD71F3CE54C00108470 /* PlaylistSelectionViewController.swift */; };
+		41774CDA1F3E267F00108470 /* PlaylistSubcategorySelectionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 41774CD91F3E267F00108470 /* PlaylistSubcategorySelectionViewController.swift */; };
+		41774CDD1F3E26C900108470 /* PlaylistType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 41774CDC1F3E26C900108470 /* PlaylistType.swift */; };
+		41774CDF1F3E295D00108470 /* PlaylistSubcategoryTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 41774CDE1F3E295D00108470 /* PlaylistSubcategoryTableViewCell.swift */; };
 		417B9D4B1E317C3C0021F36E /* PartyViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 417B9D4A1E317C3C0021F36E /* PartyViewController.swift */; };
-		417B9D4F1E318D0D0021F36E /* AddSongViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 417B9D4E1E318D0D0021F36E /* AddSongViewController.swift */; };
+		417B9D4F1E318D0D0021F36E /* SearchViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 417B9D4E1E318D0D0021F36E /* SearchViewController.swift */; };
 		417B9D531E31B3CE0021F36E /* Track.swift in Sources */ = {isa = PBXBuildFile; fileRef = 417B9D521E31B3CE0021F36E /* Track.swift */; };
 		417B9D571E31CD8D0021F36E /* TrackTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 417B9D561E31CD8D0021F36E /* TrackTableViewCell.swift */; };
 		417C38DA1DDA43FD00F59926 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 417C38D81DDA43FD00F59926 /* LaunchScreen.storyboard */; };
@@ -38,7 +47,6 @@
 		417C38EF1DDA91B500F59926 /* Party.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 417C38D31DDA43FD00F59926 /* Party.xcdatamodeld */; };
 		41835F901E81EE740082BA16 /* HubTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 41835F8F1E81EE740082BA16 /* HubTableViewCell.swift */; };
 		418503F71E307BE900472006 /* setupButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 418503F61E307BE900472006 /* setupButton.swift */; };
-		41A279E51F28DE1700C218A2 /* BadgeSwift.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 41A279E01F28DE1700C218A2 /* BadgeSwift.framework */; };
 		41A279E61F28DE1700C218A2 /* GoogleToolboxForMac.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 41A279E11F28DE1700C218A2 /* GoogleToolboxForMac.framework */; };
 		41A279E71F28DE1700C218A2 /* nanopb.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 41A279E21F28DE1700C218A2 /* nanopb.framework */; };
 		41A279E81F28DE1700C218A2 /* Pods_WeJ.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 41A279E31F28DE1700C218A2 /* Pods_WeJ.framework */; };
@@ -76,13 +84,22 @@
 		411EEF3F1E346E2200216016 /* Main.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = Main.storyboard; sourceTree = "<group>"; };
 		412FBED01E32CFA7007FFB6A /* MusicPlayer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = MusicPlayer.swift; path = "Play Tracks/MusicPlayer.swift"; sourceTree = "<group>"; };
 		413533281E8DE4C600BE5B0F /* MusicService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = MusicService.swift; path = "Party Classes/MusicService.swift"; sourceTree = "<group>"; };
+		414BF7DA1F3B3B660022289E /* MusicLibrarySelectionViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = MusicLibrarySelectionViewController.swift; path = "Add Tracks/MusicLibrarySelectionViewController.swift"; sourceTree = "<group>"; };
+		4164CCB41F40FEBE009EBAAF /* Option.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Option.swift; path = "Party Classes/Option.swift"; sourceTree = "<group>"; };
 		4165512B1F279A5900FA33F5 /* BlankAudio.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; name = BlankAudio.wav; path = "Supporting Files/BlankAudio.wav"; sourceTree = "<group>"; };
 		4165512F1F279EAC00FA33F5 /* BackgroundTask.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = BackgroundTask.swift; path = "Play Tracks/BackgroundTask.swift"; sourceTree = "<group>"; };
 		416551351F27D9D900FA33F5 /* MXMLyricsAction.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MXMLyricsAction.h; sourceTree = "<group>"; };
 		416551361F27D9D900FA33F5 /* MXMLyricsAction.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MXMLyricsAction.m; sourceTree = "<group>"; };
+		416A25D41F3F76DD008F7D19 /* UserTracksViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = UserTracksViewController.swift; path = "Add Tracks/My Music/UserTracksViewController.swift"; sourceTree = "<group>"; };
 		416E8C3E1F2A046E00F524E0 /* SpotifyConstants.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = SpotifyConstants.swift; path = "Network Managers/Constants/SpotifyConstants.swift"; sourceTree = "<group>"; };
+		41774CCB1F3B72BB00108470 /* AppConstants.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = AppConstants.swift; path = "Network Managers/Constants/AppConstants.swift"; sourceTree = "<group>"; };
+		41774CCD1F3B7A2C00108470 /* AddTracksTabBarController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = AddTracksTabBarController.swift; path = "Add Tracks/AddTracksTabBarController.swift"; sourceTree = "<group>"; };
+		41774CD71F3CE54C00108470 /* PlaylistSelectionViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = PlaylistSelectionViewController.swift; path = "Add Tracks/My Music/PlaylistSelectionViewController.swift"; sourceTree = "<group>"; };
+		41774CD91F3E267F00108470 /* PlaylistSubcategorySelectionViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = PlaylistSubcategorySelectionViewController.swift; path = "Add Tracks/My Music/PlaylistSubcategorySelectionViewController.swift"; sourceTree = "<group>"; };
+		41774CDC1F3E26C900108470 /* PlaylistType.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = PlaylistType.swift; path = "Party Classes/PlaylistType.swift"; sourceTree = "<group>"; };
+		41774CDE1F3E295D00108470 /* PlaylistSubcategoryTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = PlaylistSubcategoryTableViewCell.swift; path = "Add Tracks/My Music/PlaylistSubcategoryTableViewCell.swift"; sourceTree = "<group>"; };
 		417B9D4A1E317C3C0021F36E /* PartyViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = PartyViewController.swift; path = "Play Tracks/PartyViewController.swift"; sourceTree = "<group>"; };
-		417B9D4E1E318D0D0021F36E /* AddSongViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = AddSongViewController.swift; path = "Add Tracks/AddSongViewController.swift"; sourceTree = "<group>"; };
+		417B9D4E1E318D0D0021F36E /* SearchViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = SearchViewController.swift; path = "Add Tracks/SearchViewController.swift"; sourceTree = "<group>"; };
 		417B9D521E31B3CE0021F36E /* Track.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Track.swift; path = "Party Classes/Track.swift"; sourceTree = "<group>"; };
 		417B9D561E31CD8D0021F36E /* TrackTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = TrackTableViewCell.swift; path = "Play Tracks/TrackTableViewCell.swift"; sourceTree = "<group>"; };
 		417C38C91DDA43FD00F59926 /* WeJ.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = WeJ.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -102,6 +119,7 @@
 		41A279EA1F28E54300C218A2 /* Appearance.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Appearance.swift; path = Extensions/Appearance.swift; sourceTree = "<group>"; };
 		41A279ED1F28FF0A00C218A2 /* AppleMusicAuthorizationManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = AppleMusicAuthorizationManager.swift; path = "Network Managers/Authorization Managers/AppleMusicAuthorizationManager.swift"; sourceTree = "<group>"; };
 		41A279EF1F29141100C218A2 /* SpotifyAuthorizationManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = SpotifyAuthorizationManager.swift; path = "Network Managers/Authorization Managers/SpotifyAuthorizationManager.swift"; sourceTree = "<group>"; };
+		41B32DB81F3B586200743DEE /* ENMBadgedBarButtonItem.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ENMBadgedBarButtonItem.framework; path = "../../../Library/Developer/Xcode/DerivedData/WeJ-cvuxapiwahhdbhcxsozsrbwpxwln/Build/Products/Debug-iphoneos/ENMBadgedBarButtonItem/ENMBadgedBarButtonItem.framework"; sourceTree = "<group>"; };
 		41B4AE111F2A5FEF00F39E04 /* SpotifyURLFactory.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = SpotifyURLFactory.swift; path = "Network Managers/URL Factories/SpotifyURLFactory.swift"; sourceTree = "<group>"; };
 		41C0AEB51E79512D00C797F0 /* searchTextField.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = searchTextField.swift; path = "Custom Appearance/searchTextField.swift"; sourceTree = "<group>"; };
 		41C0AEB71E79EDC700C797F0 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = "GoogleService-Info.plist"; path = "Supporting Files/GoogleService-Info.plist"; sourceTree = "<group>"; };
@@ -109,6 +127,7 @@
 		41C0AEBB1E7A12CB00C797F0 /* HubViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = HubViewController.swift; path = "Play Tracks/HubViewController.swift"; sourceTree = "<group>"; };
 		41C0AEBD1E7A12E000C797F0 /* QueueViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = QueueViewController.swift; path = "Play Tracks/QueueViewController.swift"; sourceTree = "<group>"; };
 		41C1113E1F2A158500A33771 /* AppleMusicConstants.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = AppleMusicConstants.swift; path = "Network Managers/Constants/AppleMusicConstants.swift"; sourceTree = "<group>"; };
+		41D4E8FD1F3B5F140050951F /* MIBadgeButton_Swift.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MIBadgeButton_Swift.framework; path = "../../../Library/Developer/Xcode/DerivedData/WeJ-cvuxapiwahhdbhcxsozsrbwpxwln/Build/Products/Debug-iphoneos/MIBadgeButton-Swift/MIBadgeButton_Swift.framework"; sourceTree = "<group>"; };
 		41F345A31F34BD05007A250B /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; name = Assets.xcassets; path = "Supporting Files/Assets.xcassets"; sourceTree = "<group>"; };
 		41FE730C1F20C42400BD9E65 /* BadgeSwift.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = BadgeSwift.framework; path = "build/Debug-iphonesimulator/BadgeSwift/BadgeSwift.framework"; sourceTree = "<group>"; };
 		41FE730D1F20C42400BD9E65 /* GoogleToolboxForMac.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = GoogleToolboxForMac.framework; path = "build/Debug-iphonesimulator/GoogleToolboxForMac/GoogleToolboxForMac.framework"; sourceTree = "<group>"; };
@@ -125,7 +144,6 @@
 			files = (
 				41A279E81F28DE1700C218A2 /* Pods_WeJ.framework in Frameworks */,
 				41A279E91F28DE1700C218A2 /* SwiftyJSON.framework in Frameworks */,
-				41A279E51F28DE1700C218A2 /* BadgeSwift.framework in Frameworks */,
 				41A279E61F28DE1700C218A2 /* GoogleToolboxForMac.framework in Frameworks */,
 				41A279E71F28DE1700C218A2 /* nanopb.framework in Frameworks */,
 				41045F2D1E39ACBE00A29830 /* SpotifyAuthentication.framework in Frameworks */,
@@ -181,8 +199,10 @@
 			children = (
 				3472FB151DDAC81E00A35FCB /* Party.swift */,
 				417B9D521E31B3CE0021F36E /* Track.swift */,
+				4164CCB41F40FEBE009EBAAF /* Option.swift */,
 				413533281E8DE4C600BE5B0F /* MusicService.swift */,
 				411688761F2A727500C3CD4A /* RequestType.swift */,
+				41774CDC1F3E26C900108470 /* PlaylistType.swift */,
 			);
 			name = "Party Classes";
 			sourceTree = "<group>";
@@ -194,7 +214,6 @@
 				41C111401F2A18FD00A33771 /* Authorization Managers */,
 				4116887A1F2F23A700C3CD4A /* Fetchers */,
 				4116887D1F2F248700C3CD4A /* URL Factories */,
-				41B4AE101F2A4D7300F39E04 /* Constants */,
 			);
 			name = "Network Managers";
 			sourceTree = "<group>";
@@ -202,7 +221,10 @@
 		413421661E3D57BE00888403 /* Add Tracks */ = {
 			isa = PBXGroup;
 			children = (
-				417B9D4E1E318D0D0021F36E /* AddSongViewController.swift */,
+				41774CCD1F3B7A2C00108470 /* AddTracksTabBarController.swift */,
+				414BF7DA1F3B3B660022289E /* MusicLibrarySelectionViewController.swift */,
+				41774CDB1F3E268C00108470 /* My Music */,
+				417B9D4E1E318D0D0021F36E /* SearchViewController.swift */,
 			);
 			name = "Add Tracks";
 			sourceTree = "<group>";
@@ -248,6 +270,17 @@
 			path = ..;
 			sourceTree = "<group>";
 		};
+		41774CDB1F3E268C00108470 /* My Music */ = {
+			isa = PBXGroup;
+			children = (
+				41774CD71F3CE54C00108470 /* PlaylistSelectionViewController.swift */,
+				41774CD91F3E267F00108470 /* PlaylistSubcategorySelectionViewController.swift */,
+				41774CDE1F3E295D00108470 /* PlaylistSubcategoryTableViewCell.swift */,
+				416A25D41F3F76DD008F7D19 /* UserTracksViewController.swift */,
+			);
+			name = "My Music";
+			sourceTree = "<group>";
+		};
 		417C38C01DDA43FD00F59926 = {
 			isa = PBXGroup;
 			children = (
@@ -281,6 +314,7 @@
 				413421641E3D57A300888403 /* Party Classes */,
 				413421631E3D579600888403 /* Custom Appearance */,
 				41A279EC1F28E54700C218A2 /* Extensions */,
+				41B4AE101F2A4D7300F39E04 /* Constants */,
 				41045F321E39B80300A29830 /* WeJ-Bridging-Header.h */,
 				419448001E3FFFDD00B9370C /* Supporting Files */,
 				417C38D31DDA43FD00F59926 /* Party.xcdatamodeld */,
@@ -312,6 +346,7 @@
 		41B4AE101F2A4D7300F39E04 /* Constants */ = {
 			isa = PBXGroup;
 			children = (
+				41774CCB1F3B72BB00108470 /* AppConstants.swift */,
 				41C1113E1F2A158500A33771 /* AppleMusicConstants.swift */,
 				416E8C3E1F2A046E00F524E0 /* SpotifyConstants.swift */,
 			);
@@ -330,6 +365,8 @@
 		B2F645F37144B3727E5025EE /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				41D4E8FD1F3B5F140050951F /* MIBadgeButton_Swift.framework */,
+				41B32DB81F3B586200743DEE /* ENMBadgedBarButtonItem.framework */,
 				41A279E01F28DE1700C218A2 /* BadgeSwift.framework */,
 				41A279E11F28DE1700C218A2 /* GoogleToolboxForMac.framework */,
 				41A279E21F28DE1700C218A2 /* nanopb.framework */,
@@ -484,21 +521,27 @@
 				41C0AEB61E79512D00C797F0 /* searchTextField.swift in Sources */,
 				413533291E8DE4C600BE5B0F /* MusicService.swift in Sources */,
 				416551301F279EAC00FA33F5 /* BackgroundTask.swift in Sources */,
+				41774CCC1F3B72BB00108470 /* AppConstants.swift in Sources */,
 				4113CFE71F36163F000628B1 /* partyNameTextField.swift in Sources */,
 				412FBED11E32CFA7007FFB6A /* MusicPlayer.swift in Sources */,
 				41C0AEBA1E7A0AC100C797F0 /* HubAndQueuePageViewController.swift in Sources */,
 				411688751F2A69EB00C3CD4A /* PartyConnection.swift in Sources */,
-				417B9D4F1E318D0D0021F36E /* AddSongViewController.swift in Sources */,
+				417B9D4F1E318D0D0021F36E /* SearchViewController.swift in Sources */,
 				41C0AEBC1E7A12CB00C797F0 /* HubViewController.swift in Sources */,
+				41774CCE1F3B7A2C00108470 /* AddTracksTabBarController.swift in Sources */,
 				41C1113F1F2A158500A33771 /* AppleMusicConstants.swift in Sources */,
 				418503F71E307BE900472006 /* setupButton.swift in Sources */,
+				41774CDD1F3E26C900108470 /* PlaylistType.swift in Sources */,
 				41B4AE121F2A5FEF00F39E04 /* SpotifyURLFactory.swift in Sources */,
+				4164CCB51F40FEBE009EBAAF /* Option.swift in Sources */,
 				417C38EF1DDA91B500F59926 /* Party.xcdatamodeld in Sources */,
 				417C38EE1DDA91B100F59926 /* AppDelegate.swift in Sources */,
 				417C38EC1DDA91A800F59926 /* InitialSetupViewController.swift in Sources */,
 				3472FB161DDAC81E00A35FCB /* Party.swift in Sources */,
 				416551381F27D9D900FA33F5 /* MXMLyricsAction.m in Sources */,
 				411688831F320E5100C3CD4A /* SpotifyFetcher.swift in Sources */,
+				41774CDF1F3E295D00108470 /* PlaylistSubcategoryTableViewCell.swift in Sources */,
+				416A25D51F3F76DD008F7D19 /* UserTracksViewController.swift in Sources */,
 				417C38EA1DDA91A100F59926 /* PartyCreationViewController.swift in Sources */,
 				4116887C1F2F248300C3CD4A /* AppleMusicURLFactory.swift in Sources */,
 				34D750E01E32E9C5009AFD63 /* MultipeerManager.swift in Sources */,
@@ -508,10 +551,13 @@
 				41A279F01F29141100C218A2 /* SpotifyAuthorizationManager.swift in Sources */,
 				41A279EB1F28E54300C218A2 /* Appearance.swift in Sources */,
 				4113CFE91F362420000628B1 /* Automation.swift in Sources */,
+				41774CD81F3CE54C00108470 /* PlaylistSelectionViewController.swift in Sources */,
 				416E8C3F1F2A046E00F524E0 /* SpotifyConstants.swift in Sources */,
 				417B9D4B1E317C3C0021F36E /* PartyViewController.swift in Sources */,
+				414BF7DB1F3B3B660022289E /* MusicLibrarySelectionViewController.swift in Sources */,
 				41A279EE1F28FF0A00C218A2 /* AppleMusicAuthorizationManager.swift in Sources */,
 				41835F901E81EE740082BA16 /* HubTableViewCell.swift in Sources */,
+				41774CDA1F3E267F00108470 /* PlaylistSubcategorySelectionViewController.swift in Sources */,
 				411688771F2A727500C3CD4A /* RequestType.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -584,7 +630,7 @@
 				SDKROOT = iphoneos;
 				SKIP_INSTALL = NO;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
-				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_OPTIMIZATION_LEVEL = "-Owholemodule";
 			};
 			name = Debug;
 		};

@@ -10,6 +10,7 @@ import Foundation
 import UIKit
 
 class setupButton: UIButton {
+    
     required init(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)!
     }
@@ -21,4 +22,5 @@ class setupButton: UIButton {
             super.setTitleColor(UIColor.white, for: state)
         }
     }
+    
 }

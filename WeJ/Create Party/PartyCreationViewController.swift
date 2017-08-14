@@ -13,11 +13,14 @@ protocol ViewControllerAccessDelegate: class {
     var processingLogin: Bool { get set }
     func present(_ viewControllerToPresent: UIViewController, animated flag: Bool, completion: (() -> Void)?)
     func performSegue(withIdentifier identifier: String, sender: Any?)
-    func createParty()
+    func tryAgain()
 }
 
 class PartyCreationViewController: UIViewController, UITextFieldDelegate, ViewControllerAccessDelegate {
+    
     // MARK: - Storyboard Variables
+    
+    @IBOutlet weak var backButton: UIButton!
     
     @IBOutlet weak var partyNameTextField: partyNameTextField!
     @IBOutlet weak var appleMusicButton: setupButton!
@@ -47,14 +50,14 @@ class PartyCreationViewController: UIViewController, UITextFieldDelegate, ViewCo
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         networkManager = MultipeerManager(isHost: false)
+        self.navigationController?.setNavigationBarHidden(false, animated: animated)
     }
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        makeNavigationBarTransparent()
         initializeActivityIndicator()
         setDelegates()
-        setSpotifyVariables()
+        initializeVariables()
         
         setPartyName()
         setMusicService()
@@ -63,13 +66,6 @@ class PartyCreationViewController: UIViewController, UITextFieldDelegate, ViewCo
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
         networkManager = nil
-    }
-    
-    private func makeNavigationBarTransparent() {
-        navigationController?.navigationBar.setBackgroundImage(UIImage(), for: UIBarMetrics.default)
-        navigationController?.navigationBar.shadowImage = UIImage()
-        navigationController?.navigationBar.isTranslucent = true
-        navigationController?.view.backgroundColor = UIColor.clear
     }
     
     private func initializeActivityIndicator() {
@@ -84,8 +80,10 @@ class PartyCreationViewController: UIViewController, UITextFieldDelegate, ViewCo
         AppleMusicAuthorizationManager.delegate = self        
     }
     
-    private func setSpotifyVariables() {
+    private func initializeVariables() {
         NotificationCenter.default.addObserver(self, selector: #selector(createSession(withNotification:)), name: SpotifyConstants.spotifyPlayerDidLoginNotification, object: nil)
+        SpotifyAuthorizationManager.storyboardSegue = "Create Party"
+        AppleMusicAuthorizationManager.storyboardSegue = "Create Party"
     }
     
     @objc private func createSession(withNotification notification: NSNotification) {
@@ -171,6 +169,10 @@ class PartyCreationViewController: UIViewController, UITextFieldDelegate, ViewCo
         }
     }
     
+    func tryAgain() {
+        createParty()
+    }
+    
     // MARK: - General Authorization
     
     private func postAlertForOtherHosts() {
@@ -185,6 +187,10 @@ class PartyCreationViewController: UIViewController, UITextFieldDelegate, ViewCo
     
     // MARK: - Navigation
 
+    @IBAction func goBack() {
+        navigationController?.popViewController(animated: true)
+    }
+    
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if let controller = segue.destination as? PartyViewController, segue.identifier == "Create Party" {
             controller.networkManager?.delegate = controller
@@ -197,4 +203,5 @@ class PartyCreationViewController: UIViewController, UITextFieldDelegate, ViewCo
         UserDefaults.standard.set(Party.name, forKey: "partyName")
         UserDefaults.standard.set(Party.musicService.rawValue, forKey: "musicService")
     }
+    
 }

@@ -19,7 +19,7 @@
 	<key>CFBundlePackageType</key>
 	<string>APPL</string>
 	<key>CFBundleShortVersionString</key>
-	<string>1.0</string>
+	<string>1.1</string>
 	<key>CFBundleURLTypes</key>
 	<array>
 		<dict>
@@ -32,7 +32,7 @@
 		</dict>
 	</array>
 	<key>CFBundleVersion</key>
-	<string>1.5</string>
+	<string>1.0</string>
 	<key>LSApplicationCategoryType</key>
 	<string></string>
 	<key>LSApplicationQueriesSchemes</key>
@@ -47,7 +47,7 @@
 		<true/>
 	</dict>
 	<key>NSAppleMusicUsageDescription</key>
-	<string>WeJ requires access to play Apple Music tracks</string>
+	<string>WeJ requires access to play Apple Music tracks and show you your library</string>
 	<key>NSHumanReadableCopyright</key>
 	<string>Copyright © 2017 Mohammad Ali Siddiqui. All rights reserved.</string>
 	<key>UIBackgroundModes</key>

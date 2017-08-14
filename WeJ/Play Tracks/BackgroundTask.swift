@@ -8,6 +8,7 @@
 import AVFoundation
 
 class BackgroundTask {
+    
     static var player = AVAudioPlayer()
     static var isPlaying = false
     
@@ -47,4 +48,5 @@ class BackgroundTask {
             player.play()
         } catch { print(error) }
     }
+    
 }
