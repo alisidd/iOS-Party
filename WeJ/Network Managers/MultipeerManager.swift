@@ -192,6 +192,9 @@ extension MCSessionState {
 // MARK: - Session Callbacks
 
 extension MultipeerManager: MCSessionDelegate {
+    func session(_ session: MCSession, didFinishReceivingResourceWithName resourceName: String, fromPeer peerID: MCPeerID, at localURL: URL?, withError error: Error?) {
+        print("DidFinishReceiving")
+    }
     
     func session(_ session: MCSession, peer peerID: MCPeerID, didChange state: MCSessionState) {        
         if state == .connected {
@@ -238,10 +241,6 @@ extension MultipeerManager: MCSessionDelegate {
     
     func session(_ session: MCSession, didReceive stream: InputStream, withName streamName: String, fromPeer peerID: MCPeerID) {
         print("didReceiveStream")
-    }
-    
-    func session(_ session: MCSession, didFinishReceivingResourceWithName resourceName: String, fromPeer peerID: MCPeerID, at localURL: URL, withError error: Error?) {
-        print("didFinishReceivingResourceWithName")
     }
     
     /*

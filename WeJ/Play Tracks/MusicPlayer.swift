@@ -14,7 +14,7 @@ class MusicPlayer {
     
     // MARK: - Music Player Variables
     
-    var appleMusicPlayer = MPMusicPlayerController.applicationMusicPlayer()
+    var appleMusicPlayer = MPMusicPlayerController.applicationMusicPlayer
     var spotifyPlayer = SPTAudioStreamingController.sharedInstance()
     
     let musicService = Party.musicService
@@ -57,11 +57,11 @@ class MusicPlayer {
     private func startAppleMusicPlayer(withTracks tracks: [Track]) {
         if !tracks.isEmpty {
             BackgroundTask.startBackgroundTask()
-            appleMusicPlayer.setQueueWithStoreIDs([tracks[0].id])
+            appleMusicPlayer.setQueue(with: [tracks[0].id])
             playTrack()
         } else {
             BackgroundTask.stopBackgroundTask()
-            appleMusicPlayer.setQueueWithStoreIDs([])
+            appleMusicPlayer.setQueue(with: [])
             appleMusicPlayer.stop()
         }
     }
