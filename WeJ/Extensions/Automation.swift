@@ -27,8 +27,8 @@ extension UIDevice {
             var nameParts = [String]()
             for result in matches {
                 for i in 1..<result.numberOfRanges {
-                    if !NSEqualRanges(result.rangeAt(i), rangeNotFound) {
-                        nameParts.append((deviceName as NSString).substring(with: result.rangeAt(i)).capitalized)
+                    if !NSEqualRanges(result.range(at: i), rangeNotFound) {
+                        nameParts.append((deviceName as NSString).substring(with: result.range(at: i)).capitalized)
                     }
                 }
             }

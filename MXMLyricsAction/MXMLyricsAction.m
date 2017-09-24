@@ -99,9 +99,7 @@ NSString *musixmatchAppStoreAppID = @"448278467";
 }
 
 - (void)openStoreWithOpenURL {
-    
     [[UIApplication sharedApplication] openURL:[NSURL URLWithString:musixmatchAppStoreURL]];
-    
 }
 
 - (void)showAppStoreForMusixmatchFromViewController:(UIViewController*)controller {
@@ -193,6 +191,7 @@ NSString *musixmatchAppStoreAppID = @"448278467";
                                                                 delegate:self
                                                        cancelButtonTitle:@"No, thanks"
                                                        otherButtonTitles:@"Get the app", nil];
+            
             [storeAlert show];
         }else {
             [self openAppStore];
@@ -256,8 +255,8 @@ NSString *musixmatchAppStoreAppID = @"448278467";
 
 #pragma mark - UIAlertView Delegate
 
-- (void)alertView:(UIAlertView *)alertView didDismissWithButtonIndex:(NSInteger)buttonIndex {
-    
+- (void)alertView:(UIAlertController *)alertView didDismissWithButtonIndex:(NSInteger)buttonIndex {
+
     if (buttonIndex==1) {
         [self openAppStore];
     }
