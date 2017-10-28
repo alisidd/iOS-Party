@@ -12,6 +12,14 @@ class PlaylistSubcategoryTableViewCell: UITableViewCell {
 
     @IBOutlet weak var optionLabel: UILabel!
     
+    override func awakeFromNib() {
+        super.awakeFromNib()
+        
+        if UIDevice.deviceType == .iPhone4_4s || UIDevice.deviceType == .iPhone5_5s_SE {
+            optionLabel.changeToSmallerFont()
+        }
+    }
+    
     override func setHighlighted(_ highlighted: Bool, animated: Bool) {
         DispatchQueue.main.async {
             if highlighted {
@@ -21,4 +29,5 @@ class PlaylistSubcategoryTableViewCell: UITableViewCell {
             }
         }
     }
+    
 }

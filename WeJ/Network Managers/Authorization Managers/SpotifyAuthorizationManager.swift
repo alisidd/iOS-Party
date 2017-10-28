@@ -34,11 +34,12 @@ class SpotifyAuthorizationManager: NSObject, AuthorizationManager, SPTAudioStrea
     static func getAuth() -> SPTAuth {
         let auth = SPTAuth.defaultInstance()
         auth?.clientID = SpotifyConstants.clientID
+        
         auth?.redirectURL = SpotifyConstants.redirectURL
         auth?.tokenSwapURL = SpotifyConstants.swapURL
         auth?.tokenRefreshURL = SpotifyConstants.refreshURL
         auth?.requestedScopes = [SPTAuthStreamingScope, SPTAuthPlaylistReadPrivateScope, SPTAuthUserLibraryReadScope]
-        auth?.sessionUserDefaultsKey = "current session"
+        auth?.sessionUserDefaultsKey = "local session"
         
         return auth!
     }
@@ -110,7 +111,6 @@ class SpotifyAuthorizationManager: NSObject, AuthorizationManager, SPTAudioStrea
     func audioStreamingDidLogin(_ audioStreaming: SPTAudioStreamingController!) {
         SpotifyAuthorizationManager.isLoggedIn = true
         Party.cookie = SpotifyAuthorizationManager.getAuth().session.accessToken
-        
         DispatchQueue.main.async {
             guard SpotifyAuthorizationManager.delegate != nil else { return }
             if Party.cookie != nil && SpotifyAuthorizationManager.delegate!.processingLogin {
@@ -130,19 +130,19 @@ class SpotifyAuthorizationManager: NSObject, AuthorizationManager, SPTAudioStrea
     
     private static func postAlertForInternet() {
         DispatchQueue.main.async {
-            let alert = UIAlertController(title: "Error", message: "Please check your internet connection", preferredStyle: .alert)
-            alert.addAction(UIAlertAction(title: "Try Again", style: .default) { _ in
+            let alert = UIAlertController(title: NSLocalizedString("Error", comment: ""), message: NSLocalizedString("Please check your internet connection", comment: ""), preferredStyle: .alert)
+            alert.addAction(UIAlertAction(title: NSLocalizedString("Try Again", comment: ""), style: .default) { _ in
                 delegate?.tryAgain()
             })
-            alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
+            alert.addAction(UIAlertAction(title: NSLocalizedString("OK", comment: ""), style: .default, handler: nil))
             
             delegate?.present(alert, animated: true, completion: nil)
         }
     }
     
     private static func postAlertForSpotifyPremium() {
-        let alert = UIAlertController(title: "No Spotify Premium", message: "A Spotify Premium account is required to play music", preferredStyle: .alert)
-        alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
+        let alert = UIAlertController(title: NSLocalizedString("No Spotify Premium", comment: ""), message: NSLocalizedString("A Spotify Premium account is required to play music", comment: ""), preferredStyle: .alert)
+        alert.addAction(UIAlertAction(title: NSLocalizedString("OK", comment: ""), style: .default, handler: nil))
         
         delegate?.present(alert, animated: true, completion: nil)
     }

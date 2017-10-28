@@ -21,6 +21,7 @@ class Party: NSObject, NSCoding {
     
     static var tracksQueue = [Track]() {
         didSet {
+            delegate?.updateCache()
             delegate?.updateEveryonesTableView()
             if !tracksQueue.isEmpty {
                 delegate?.showCurrentlyPlayingArtwork()

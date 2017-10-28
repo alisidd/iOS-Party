@@ -5,10 +5,8 @@ target ‘WeJ’ do
   # Comment the next line if you're not using Swift and don't want to use dynamic frameworks
   use_frameworks!
 
-  # Pods for Party
-  pod 'Firebase/Core'
+  # Pods for WeJ
+  pod 'RKNotificationHub'
   pod ‘SwiftyJSON’
-  pod 'BadgeSwift'
   pod 'NVActivityIndicatorView'
-
 end

@@ -14,7 +14,7 @@ class HubAndQueuePageViewController: UIPageViewController, UIPageViewControllerD
     private var allViewControllers = [UIViewController]()
     
     static let minHeight = 0.53 * UIScreen.main.bounds.height
-    static let maxHeight: CGFloat = -UIApplication.shared.statusBarFrame.height
+    static let maxHeight = -UIApplication.shared.statusBarFrame.height
 
     override func viewDidLoad() {
         super.viewDidLoad()

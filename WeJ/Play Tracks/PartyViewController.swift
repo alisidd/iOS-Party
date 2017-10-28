@@ -12,11 +12,13 @@ import MultipeerConnectivity
 
 protocol UpdatePartyDelegate: class {
     var hubAndQueueVC: HubAndQueuePageViewController? { get }
+    func updateCache()
     func updateEveryonesTableView()
     func showCurrentlyPlayingArtwork()
 }
 
 protocol NetworkManagerDelegate: class {
+    var connectionStatus: MCSessionState { get }
     func resetManager()
     func updateStatus(withState state: MCSessionState)
     func setup(withParty party: Party)
@@ -27,6 +29,7 @@ protocol NetworkManagerDelegate: class {
 
 protocol PartyViewControllerInfoDelegate: class {
     var isHost: Bool { get }
+    func getCurrentPosition() -> TimeInterval?
     var personalQueue: Set<Track> { get }
     func sendTracksToPeers(forTracks: [Track], toRemove: Bool)
     func returnTableHeight() -> CGFloat
@@ -48,13 +51,13 @@ class PartyViewController: UIViewController, SPTAudioStreamingPlaybackDelegate, 
     @IBOutlet weak var skipTrackButton: UIButton!
     
     // Tracks Queue
-    @IBOutlet weak var upNextLabel: UILabel!
     @IBOutlet weak var tableHeightConstraint: NSLayoutConstraint!
     var hubAndQueueVC: HubAndQueuePageViewController? {
         return childViewControllers.first{ $0 is HubAndQueuePageViewController } as? HubAndQueuePageViewController
     }
     
     // Connection Status
+    @IBOutlet weak var alertLabelConstraint: NSLayoutConstraint!
     @IBOutlet weak var alertViewConstraint: NSLayoutConstraint!
     @IBOutlet weak var statusIndicatorView: UIView!
     @IBOutlet weak var alertLabel: UILabel!
@@ -64,7 +67,7 @@ class PartyViewController: UIViewController, SPTAudioStreamingPlaybackDelegate, 
     var connectionStatus: MCSessionState = .notConnected {
         willSet {
             showConnectionRelatedViewsOnAlert()
-            alertLabel.text = newValue.stringValue()
+            alertLabel.text = newValue.stringValue
             displayAlert()
             
             if newValue == .connected {
@@ -86,21 +89,24 @@ class PartyViewController: UIViewController, SPTAudioStreamingPlaybackDelegate, 
     // MARK: - General Variables
     
     lazy var networkManager: MultipeerManager? = { [unowned self] in
-        let manager = MultipeerManager(isHost: self.isHost)
+        let manager = MultipeerManager(isHost: self.isHost, partyName: self.isHost ? Party.name! : NSLocalizedString("Party", comment: ""))
         manager.delegate = self
         return manager
     }()
     var fetcher: Fetcher!
     
     private var musicPlayer = MusicPlayer()
+    private var currentPositionFromHost: TimeInterval?
     var isHost = true
     var personalQueue = Set<Track>()
+    var cache = [String: Track]()
     
     // MARK: - Lifecycle
     
     override func viewDidLoad() {
         super.viewDidLoad()
         adjustViews()
+        adjustFontSizes()
         
         if isHost {
             initializeMusicPlayer()
@@ -134,16 +140,25 @@ class PartyViewController: UIViewController, SPTAudioStreamingPlaybackDelegate, 
         }
     }
     
+    private func adjustFontSizes() {
+        if UIDevice.deviceType == .iPhone4_4s || UIDevice.deviceType == .iPhone5_5s_SE {
+            currentlyPlayingTrackName.changeToSmallerFont()
+            currentlyPlayingArtistName.changeToSmallerFont()
+            alertLabel.changeToSmallerFont()
+            reconnectButton.changeToSmallerFont()
+            resendButton.changeToSmallerFont()
+        }
+    }
+    
     private func initializeMusicPlayer() {
         setTimer()
         initializeCommandCenter()
         setupControlEvents()
+        musicPlayer.preparePlayer()
         
         if Party.musicService == .spotify {
             setSpotifyDelegates()
-            musicPlayer.spotifyPlayer?.setTargetBitrate(.low, callback: nil)
         } else {
-            musicPlayer.appleMusicPlayer.beginGeneratingPlaybackNotifications()
             NotificationCenter.default.addObserver(self, selector: #selector(playNextTrack), name:.MPMusicPlayerControllerPlaybackStateDidChange, object: musicPlayer.appleMusicPlayer)
         }
     }
@@ -161,15 +176,14 @@ class PartyViewController: UIViewController, SPTAudioStreamingPlaybackDelegate, 
     
     private func updateProgress() {
         if !Party.tracksQueue.isEmpty {
-            if Party.musicService == .appleMusic {
-                MusicPlayer.currentPosition = musicPlayer.appleMusicPlayer.currentPlaybackTime
-            }
-            if let position = MusicPlayer.currentPosition {
+            if let position = musicPlayer.currentPosition {
                 networkManager?.advertise(position: position)
             }
-            if musicPlayer.isPaused() && Party.musicService == .appleMusic {
+            if musicPlayer.isPaused && Party.musicService == .appleMusic {
+                changeToPlayButton(animated: false)
                 BackgroundTask.stopBackgroundTask()
             } else if Party.musicService == .appleMusic {
+                changeToPauseButton(animated: false)
                 BackgroundTask.startBackgroundTask()
             }
         }
@@ -206,6 +220,13 @@ class PartyViewController: UIViewController, SPTAudioStreamingPlaybackDelegate, 
     }
     
     // MARK: - UpdatePartyDelegate
+    
+    func updateCache() {
+        cache.removeAll()
+        for track in Party.tracksQueue {
+            cache[track.id] = track
+        }
+    }
     
     func updateEveryonesTableView() {
         // Update own table view
@@ -303,6 +324,7 @@ class PartyViewController: UIViewController, SPTAudioStreamingPlaybackDelegate, 
     
     // Handles addition and removal of tracks
     func sendTracksToPeers(forTracks tracks: [Track], toRemove isRemoval: Bool = false) {
+        let tracks = removeImages(fromTracks: tracks)
         if isHost || (!isHost && !tracks.isEmpty) {
             if isRemoval {
                 let tracks = modifyTracksToRemove(usingTracks: tracks)
@@ -310,6 +332,15 @@ class PartyViewController: UIViewController, SPTAudioStreamingPlaybackDelegate, 
             } else {
                 networkManager?.send(tracks: tracks, toRemove: isRemoval)
             }
+        }
+    }
+    
+    private func removeImages(fromTracks tracks: [Track]) -> [Track] {
+        return tracks.map { track in
+            let newTrack = track.copy() as! Track
+            newTrack.lowResArtwork = nil
+            newTrack.highResArtwork = nil
+            return newTrack
         }
     }
     
@@ -328,13 +359,22 @@ class PartyViewController: UIViewController, SPTAudioStreamingPlaybackDelegate, 
     
     func add(tracksReceived: [Track]) {
         if isHost {
-            Party.tracksQueue.append(contentsOf: tracksReceived)
+            let tracksReceived = tracksReceived.filter { !Party.tracksQueue(hasTrack: $0) }
+            Party.tracksQueue.append(contentsOf: getCacheOptimizedTracks(fromTracks: tracksReceived))
             if Party.tracksQueue.count == tracksReceived.count {
                 musicPlayer.startPlayer()
             }
         } else {
-            Party.tracksQueue = tracksReceived
+            Party.tracksQueue = getCacheOptimizedTracks(fromTracks: tracksReceived)
         }
+    }
+    
+    private func getCacheOptimizedTracks(fromTracks tracks: [Track]) -> [Track] {
+        var optimizedTracks = [Track]()
+        for track in tracks {
+            optimizedTracks.append(cache[track.id] ?? track)
+        }
+        return optimizedTracks
     }
     
     func remove(track: Track) {
@@ -353,12 +393,6 @@ class PartyViewController: UIViewController, SPTAudioStreamingPlaybackDelegate, 
         }
     }
     
-    func audioStreaming(_ audioStreaming: SPTAudioStreamingController!, didChangePosition position: TimeInterval) {
-        if !Party.tracksQueue.isEmpty {
-            MusicPlayer.currentPosition = position
-        }
-    }
-    
     private func activateAudioSession() {
         try? AVAudioSession.sharedInstance().setCategory(AVAudioSessionCategoryPlayback)
         try? AVAudioSession.sharedInstance().setActive(true)
@@ -368,31 +402,63 @@ class PartyViewController: UIViewController, SPTAudioStreamingPlaybackDelegate, 
         playNextTrack()
     }
     
+    func audioStreaming(_ audioStreaming: SPTAudioStreamingController!, didReceive event: SpPlaybackEvent) {
+        if event == SPPlaybackNotifyPlay {
+            changeToPauseButton(animated: true)
+        } else if event == SPPlaybackNotifyPause {
+            changeToPlayButton(animated: true)
+        }
+    }
+    
     // MARK: - Storyboard Functions
     
     @IBAction func playPauseChange(_ sender: UIButton) {
-        if musicPlayer.isPaused() {
-            UIView.animate(withDuration: 0.1, animations: {
-                sender.alpha = 0.0
-            }, completion: { _ in
-                sender.setImage(#imageLiteral(resourceName: "pauseIcon"), for: .normal)
-                sender.setImage(#imageLiteral(resourceName: "pauseIconHighlighted"), for: .highlighted)
-                UIView.animate(withDuration: 0.25) {
-                    sender.alpha = 1
-                }
-            })
+        if musicPlayer.isPaused {
+            changeToPauseButton(animated: true)
             musicPlayer.playTrack()
         } else {
+            changeToPlayButton(animated: true)
+            musicPlayer.pauseTrack()
+        }
+    }
+    
+    private func changeToPlayButton(animated: Bool) {
+        let setImage: () -> Void = { [weak self] in
+            self?.playPauseButton.setImage(#imageLiteral(resourceName: "playIcon"), for: .normal)
+            self?.playPauseButton.setImage(#imageLiteral(resourceName: "playIconHighlighted"), for: .highlighted)
+        }
+        
+        if animated {
             UIView.animate(withDuration: 0.1, animations: {
-                sender.alpha = 0.0
+                self.playPauseButton.alpha = 0.0
             }, completion: { _ in
-                sender.setImage(#imageLiteral(resourceName: "playIcon"), for: .normal)
-                sender.setImage(#imageLiteral(resourceName: "playIconHighlighted"), for: .highlighted)
+                setImage()
                 UIView.animate(withDuration: 0.25) {
-                    sender.alpha = 1
+                    self.playPauseButton.alpha = 1
                 }
             })
-            musicPlayer.pauseTrack()
+        } else {
+            setImage()
+        }
+    }
+    
+    private func changeToPauseButton(animated: Bool) {
+        let setImage: () -> Void = { [weak self] in
+            self?.playPauseButton.setImage(#imageLiteral(resourceName: "pauseIcon"), for: .normal)
+            self?.playPauseButton.setImage(#imageLiteral(resourceName: "pauseIconHighlighted"), for: .highlighted)
+        }
+        
+        if animated {
+            UIView.animate(withDuration: 0.1, animations: {
+                self.playPauseButton.alpha = 0.0
+            }, completion: { _ in
+                setImage()
+                UIView.animate(withDuration: 0.25) {
+                    self.playPauseButton.alpha = 1
+                }
+            })
+        } else {
+            setImage()
         }
     }
     
@@ -406,7 +472,7 @@ class PartyViewController: UIViewController, SPTAudioStreamingPlaybackDelegate, 
     // MARK: - Callbacks
     
     @objc private func playNextTrack() {
-        if musicPlayer.safeToPlayNextTrack() && !Party.tracksQueue.isEmpty {
+        if musicPlayer.isSafeToPlayNextTrack {
             sendTracksToPeers(forTracks: [Party.tracksQueue.removeFirst()], toRemove: true)
             musicPlayer.startPlayer()
         }
@@ -425,10 +491,11 @@ class PartyViewController: UIViewController, SPTAudioStreamingPlaybackDelegate, 
     @IBAction func unwindToPartyViewController(_ sender: UIStoryboardSegue) {
         if let controller = sender.source.tabBarController as? AddTracksTabBarController {
             fetcher = (Party.musicService == .spotify) ? SpotifyFetcher() : AppleMusicFetcher()
-            fetcher.convert(userTracks: controller.libraryTracksSelected) { [weak self] (tracksFound, tracksNotFound) in
-                self?.updateQueues(withTracks: tracksFound)
-                self?.alertUser(forTracksCount: tracksNotFound.count)
-            }
+            fetcher.convert(libraryTracks: controller.libraryTracksSelected, trackHandler: { [weak self] (track) in
+                self?.updateQueues(withTracks: [track])
+            }, errorHandler: { [weak self] (tracksNotFoundCount) in
+                self?.alertUser(forTracksCount: tracksNotFoundCount)
+            })
             updateQueues(withTracks: controller.tracksSelected)
         }
     }
@@ -448,7 +515,8 @@ class PartyViewController: UIViewController, SPTAudioStreamingPlaybackDelegate, 
         
         hideConnectionRelatedViewsOnAlert()
         resendButton.isHidden = true
-        alertLabel.text = "\(count) library song\(count > 1 ? "s" : "") not found"
+        
+        alertLabel.text = String(count) + " " + (count > 1 ? NSLocalizedString("library songs not found", comment: "") : NSLocalizedString("library song not found", comment: ""))
         displayAlert()
         let _ = Timer.scheduledTimer(withTimeInterval: 2, repeats: false) { [weak self] _ in
             self?.hideAlert()
@@ -461,7 +529,7 @@ class PartyViewController: UIViewController, SPTAudioStreamingPlaybackDelegate, 
         
         hideConnectionRelatedViewsOnAlert()
         resendButton.isHidden = false
-        alertLabel.text = "\(count) request\(count > 1 ? "s" : "") failed to send"
+        alertLabel.text = String(count) + " " + (count > 1 ? NSLocalizedString("requests failed to send", comment: "") : NSLocalizedString("request failed to send", comment: ""))
         displayAlert()
         
         let _ = Timer.scheduledTimer(withTimeInterval: 4, repeats: false) { [weak self] _ in
@@ -481,8 +549,8 @@ class PartyViewController: UIViewController, SPTAudioStreamingPlaybackDelegate, 
     
     func resetManager() {
         networkManager = nil
-        networkManager = MultipeerManager(isHost: self.isHost)
-        networkManager?.delegate = self
+        networkManager = MultipeerManager(isHost: self.isHost, partyName: isHost ? Party.name! : NSLocalizedString("Party", comment: ""))
+        networkManager!.delegate = self
     }
     
     func updateStatus(withState state: MCSessionState) {
@@ -500,10 +568,14 @@ class PartyViewController: UIViewController, SPTAudioStreamingPlaybackDelegate, 
     }
     
     func update(usingPosition position: TimeInterval) {
-        MusicPlayer.currentPosition = position
+        currentPositionFromHost = position
     }
     
     // MARK: PartyViewControllerInfoDelegate
+    
+    func getCurrentPosition() -> TimeInterval? {
+        return isHost ? musicPlayer.currentPosition : currentPositionFromHost
+    }
     
     func returnTableHeight() -> CGFloat {
         return tableHeightConstraint.constant

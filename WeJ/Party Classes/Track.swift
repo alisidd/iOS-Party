@@ -9,7 +9,7 @@
 import Foundation
 import MediaPlayer
 
-class Track: NSObject, NSCoding {
+class Track: NSObject, NSCoding, NSCopying {
     
     var id = String()
     var name = String()
@@ -89,4 +89,18 @@ class Track: NSObject, NSCoding {
         self.length = length
     }
     
+    func copy(with zone: NSZone? = nil) -> Any {
+        let copy = Track()
+        copy.id = id
+        copy.name = name
+        copy.artist = artist
+        
+        copy.lowResArtworkURL = lowResArtworkURL
+        copy.lowResArtwork = lowResArtwork
+        copy.highResArtworkURL = highResArtworkURL
+        copy.highResArtwork = highResArtwork
+        
+        copy.length = length
+        return copy
+    }
 }

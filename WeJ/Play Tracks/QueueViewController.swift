@@ -26,10 +26,18 @@ class QueueViewController: UIViewController, UITableViewDelegate, UITableViewDat
     override func viewDidLoad() {
         super.viewDidLoad()
         setDelegates()
+        adjustFontSizes()
     }
     
     override func viewWillAppear(_ animated: Bool) {
         changeFontSizeForUpNext()
+    }
+    
+    private func adjustFontSizes() {
+        if UIDevice.deviceType == .iPhone4_4s || UIDevice.deviceType == .iPhone5_5s_SE {
+            addButton.changeToSmallerFont()
+            editButton.changeToSmallerFont()
+        }
     }
     
     private func setDelegates() {
@@ -67,14 +75,13 @@ class QueueViewController: UIViewController, UITableViewDelegate, UITableViewDat
     }
 
     @IBAction func editCells(_ sender: UIButton) {
-        if sender.titleLabel?.text == "Edit" {
+        if sender.titleLabel?.text == NSLocalizedString("Edit", comment: "") {
             tracksTableView.setEditing(true, animated: true)
-            sender.setTitle("Done", for: .normal)
+            sender.setTitle(NSLocalizedString("Done", comment: ""), for: .normal)
         } else {
             tracksTableView.setEditing(false, animated: true)
-            sender.setTitle("Edit", for: .normal)
+            sender.setTitle(NSLocalizedString("Edit", comment: ""), for: .normal)
         }
-        
     }
     
     func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
@@ -107,14 +114,13 @@ class QueueViewController: UIViewController, UITableViewDelegate, UITableViewDat
     }
     
     func tableView(_ tableView: UITableView, editActionsForRowAt indexPath: IndexPath) -> [UITableViewRowAction]? {
-        let deleteButton = UITableViewRowAction(style: .default, title: "Remove") { (_, indexPath) in
+        let deleteButton = UITableViewRowAction(style: .default, title: NSLocalizedString("Remove", comment: "")) { (_, indexPath) in
             tableView.dataSource?.tableView?(
                 tableView,
                 commit: .delete,
                 forRowAt: indexPath
             )
         }
-        
         return [deleteButton]
     }
     
@@ -174,7 +180,7 @@ extension QueueViewController {
     
     fileprivate func changeFontSizeForUpNext() {
         UIView.animate(withDuration: 0.3) {
-            self.upNextLabel.font = self.upNextLabel.font.withSize(22 - 6 * (self.headerHeightConstraint / self.minHeight))
+            self.upNextLabel.font = self.upNextLabel.font.withSize(20 - UILabel.smallerTitleFontSize * (self.headerHeightConstraint / self.minHeight))
         }
     }
     
@@ -202,7 +208,7 @@ extension QueueViewController {
         tracksTableView.setEditing(false, animated: true)
         editButton.isHidden = true
         addButton.isHidden = false
-        editButton.setTitle("Edit", for: .normal)
+        editButton.setTitle(NSLocalizedString("Edit", comment: ""), for: .normal)
     }
     
     func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {

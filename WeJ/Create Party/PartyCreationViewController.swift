@@ -19,18 +19,16 @@ protocol ViewControllerAccessDelegate: class {
 class PartyCreationViewController: UIViewController, UITextFieldDelegate, ViewControllerAccessDelegate {
     
     // MARK: - Storyboard Variables
-    
-    @IBOutlet weak var backButton: UIButton!
-    
+
     @IBOutlet weak var partyNameTextField: partyNameTextField!
     @IBOutlet weak var appleMusicButton: setupButton!
     @IBOutlet weak var spotifyButton: setupButton!
+    
     @IBOutlet weak var createButton: UIButton!
-    private var activityIndicator: NVActivityIndicatorView!
+    @IBOutlet weak var activityIndicator: NVActivityIndicatorView!
     
     // MARK: - General Variables
     
-    private var networkManager: MultipeerManager? = MultipeerManager(isHost: false)
     private var authorizationManager: AuthorizationManager!
     var processingLogin = false {
         didSet {
@@ -49,35 +47,18 @@ class PartyCreationViewController: UIViewController, UITextFieldDelegate, ViewCo
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        networkManager = MultipeerManager(isHost: false)
         self.navigationController?.setNavigationBarHidden(false, animated: animated)
     }
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        initializeActivityIndicator()
-        setDelegates()
         initializeVariables()
+        adjustFontSizes()
+        
+        setDelegates()
         
         setPartyName()
         setMusicService()
-    }
-    
-    override func viewWillDisappear(_ animated: Bool) {
-        super.viewWillDisappear(animated)
-        networkManager = nil
-    }
-    
-    private func initializeActivityIndicator() {
-        let rect = CGRect(x: createButton.center.x - 20, y: createButton.center.y - 20, width: 40, height: 40)
-        activityIndicator = NVActivityIndicatorView(frame: rect, type: .ballClipRotateMultiple, color: .white, padding: 0)
-        view.addSubview(activityIndicator)
-    }
-    
-    private func setDelegates() {
-        partyNameTextField.delegate = self
-        SpotifyAuthorizationManager.delegate = self
-        AppleMusicAuthorizationManager.delegate = self        
     }
     
     private func initializeVariables() {
@@ -86,8 +67,23 @@ class PartyCreationViewController: UIViewController, UITextFieldDelegate, ViewCo
         AppleMusicAuthorizationManager.storyboardSegue = "Create Party"
     }
     
+    private func adjustFontSizes() {
+        if UIDevice.deviceType == .iPhone4_4s || UIDevice.deviceType == .iPhone5_5s_SE {
+            partyNameTextField.changeToSmallerFont()
+            appleMusicButton.changeToSmallerFont()
+            spotifyButton.changeToSmallerFont()
+            createButton.changeToSmallerFont()
+        }
+    }
+    
     @objc private func createSession(withNotification notification: NSNotification) {
         SpotifyAuthorizationManager.createSession(withNotification: notification)
+    }
+    
+    private func setDelegates() {
+        partyNameTextField.delegate = self
+        SpotifyAuthorizationManager.delegate = self
+        AppleMusicAuthorizationManager.delegate = self
     }
     
     private func setPartyName() {
@@ -100,7 +96,7 @@ class PartyCreationViewController: UIViewController, UITextFieldDelegate, ViewCo
     }
     
     private func setDefaultPartyName() {
-        let partyName = String(UIDevice().userName().characters.prefix(14)) + " Party"
+        let partyName = String(UIDevice().userName().characters.prefix(14)) + " " + NSLocalizedString("Party", comment: "")
         partyNameTextField.text = partyName
         Party.name = partyName
     }
@@ -159,30 +155,14 @@ class PartyCreationViewController: UIViewController, UITextFieldDelegate, ViewCo
     }
     
     @IBAction func createParty() {
-        if networkManager!.otherHosts.isEmpty {
-            if !processingLogin {
-                authorizationManager = Party.musicService == .spotify ? SpotifyAuthorizationManager() : AppleMusicAuthorizationManager()
-                authorizationManager.requestAuthorization()
-            }
-        } else {
-            postAlertForOtherHosts()
+        if !processingLogin {
+            authorizationManager = Party.musicService == .spotify ? SpotifyAuthorizationManager() : AppleMusicAuthorizationManager()
+            authorizationManager.requestAuthorization()
         }
     }
     
     func tryAgain() {
         createParty()
-    }
-    
-    // MARK: - General Authorization
-    
-    private func postAlertForOtherHosts() {
-        let alert = UIAlertController(title: "Another Party in Progress", message: nil, preferredStyle: .alert)
-        alert.addAction(UIAlertAction(title: "Try Again", style: .default) { _ in
-            self.createParty()
-        })
-        alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
-        
-        present(alert, animated: true)
     }
     
     // MARK: - Navigation

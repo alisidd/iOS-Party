@@ -7,7 +7,7 @@
 //
 
 import UIKit
-import BadgeSwift
+import RKNotificationHub
 import NVActivityIndicatorView
 
 class SearchViewController: UIViewController, UITextFieldDelegate {
@@ -16,9 +16,13 @@ class SearchViewController: UIViewController, UITextFieldDelegate {
     
     // MARK: - Storyboard Variables
     
-    @IBOutlet weak var badge: BadgeSwift!
-    @IBOutlet weak var searchTracksField: UITextField!
+    @IBOutlet weak var searchTracksField: searchTextField!
     @IBOutlet weak var doneButton: UIButton!
+    private var badge: RKNotificationHub!
+    private var totalTracksCount: Int {
+        let controller = tabBarController! as! AddTracksTabBarController
+        return controller.tracksSelected.count + controller.libraryTracksSelected.count
+    }
     
     @IBOutlet weak var trackTableView: UITableView!
     
@@ -33,33 +37,42 @@ class SearchViewController: UIViewController, UITextFieldDelegate {
         }
     }
     private var fetcher: Fetcher!
-    private var activityIndicator: NVActivityIndicatorView!
-    private let noTracksFoundLabel = UILabel(frame: CGRect(x: 0, y: 0, width: 320, height: 70))
+    @IBOutlet weak var activityIndicator: NVActivityIndicatorView!
+    @IBOutlet weak var noTracksFoundLabel: UILabel!
     
     func setBadge(to count: Int) {
         guard badge != nil else { return }
-        badge.isHidden = count == 0
-        badge.text = String(count)
+        badge.count = Int32(count)
+        badge.pop()
     }
     
     // MARK: - Lifecycle
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        initializeBadge()
         initializeVariables()
+        
         setDelegates()
-        initializeActivityIndicator()
         adjustViews()
+        adjustFontSizes()
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        initializeBadge()
+        setBadge(to: totalTracksCount)
+    }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        searchTracksField.resignFirstResponder()
     }
     
     private func initializeBadge() {
-        let controller = tabBarController! as! AddTracksTabBarController
-        setBadge(to: controller.tracksSelected.count + controller.libraryTracksSelected.count)
+        badge = RKNotificationHub(view: doneButton.titleLabel, andCount: Int32(totalTracksCount))
+        badge.moveCircleBy(x: 51, y: 0)
+        badge.scaleCircleSize(by: 0.7)
+        badge.setCircleColor(AppConstants.orange, label: .white)
     }
     
     // MARK: - Functions
@@ -74,25 +87,26 @@ class SearchViewController: UIViewController, UITextFieldDelegate {
         trackTableView.dataSource  = delegate
     }
     
-    private func initializeActivityIndicator() {
-        let rect = CGRect(x: view.center.x - 20, y: view.center.x - 20, width: 40, height: 40)
-        activityIndicator = NVActivityIndicatorView(frame: rect, type: .ballClipRotateMultiple, color: .white, padding: 0)
-        activityIndicator.center = view.center
-        view.addSubview(activityIndicator)
-    }
-    
     private func adjustViews() {
         navigationItem.hidesBackButton = true
         
-        let placeholderText = "Search " + Party.musicService.toString()
+        let placeholderText = NSLocalizedString("Search", comment: "") + " " + Party.musicService.toString()
         searchTracksField.attributedPlaceholder = NSAttributedString(string: placeholderText, attributes: [NSForegroundColorAttributeName: UIColor.lightGray])
         
         trackTableView.backgroundColor = .clear
         trackTableView.contentInset = UIEdgeInsets(top: 0, left: 0, bottom: 50, right: 0)
     }
     
+    private func adjustFontSizes() {
+        if UIDevice.deviceType == .iPhone4_4s || UIDevice.deviceType == .iPhone5_5s_SE {
+            searchTracksField.changeToSmallerFont()
+            doneButton.changeToSmallerFont()
+        }
+    }
+    
     func textFieldShouldReturn(_ searchSongsField: UITextField) -> Bool {
         searchTracksField.resignFirstResponder()
+        searchTracksField.hideHintsTableView()
         if !searchTracksField.text!.isEmpty {
             trackTableView.isHidden = true
             fetchResults(forTerm: searchSongsField.text!)
@@ -115,7 +129,7 @@ class SearchViewController: UIViewController, UITextFieldDelegate {
         tracksList = fetcher.tracksList
         DispatchQueue.main.async {
             if self.tracksList.isEmpty {
-                self.displayNoTracksLabel(withText: "No Tracks Found")
+                self.displayNoTracksLabel()
             } else {
                 self.removeNoTracksFoundLabel()
             }
@@ -136,23 +150,19 @@ class SearchViewController: UIViewController, UITextFieldDelegate {
         }
     }
     
-    private func displayNoTracksLabel(withText text: String) {
-        customizeLabel(withText: text)
-        view.addSubview(noTracksFoundLabel)
-    }
-    
-    private func customizeLabel(withText text: String) {
-        noTracksFoundLabel.text = text
-        noTracksFoundLabel.textColor = .white
-        noTracksFoundLabel.textAlignment = .center
-        
-        noTracksFoundLabel.center = view.center
-        noTracksFoundLabel.lineBreakMode = .byWordWrapping
-        noTracksFoundLabel.numberOfLines = 0
+    private func displayNoTracksLabel() {
+        noTracksFoundLabel.isHidden = false
+        UIView.animate(withDuration: 0.5) { [weak self] in
+            self?.noTracksFoundLabel.alpha = 0.6
+        }
     }
     
     private func removeNoTracksFoundLabel() {
-        noTracksFoundLabel.removeFromSuperview()
+        UIView.animate(withDuration: 0.5, animations: { [weak self] in
+            self?.noTracksFoundLabel.alpha = 0
+        }, completion: { [weak self] _ in
+            self?.noTracksFoundLabel.isHidden = true
+        })
     }
     
     private func fetchArtworkForRestOfTracks() {

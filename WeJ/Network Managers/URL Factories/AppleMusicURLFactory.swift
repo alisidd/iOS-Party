@@ -36,6 +36,31 @@ struct AppleMusicURLFactory {
         return urlRequest
     }
     
+    static func createSearchHintsRequest(forTerm term: String) -> URLRequest {
+        let disallowedChars = CharacterSet(charactersIn: "()[],'.!?")
+        let escapedTerm = term.components(separatedBy: disallowedChars).joined(separator: " ").replacedWhiteSpaceForURL
+        
+        var urlComponents = URLComponents()
+        urlComponents.scheme = "https"
+        urlComponents.host = baseAppleMusicAPI
+        urlComponents.path = "/v1/catalog/us/search/hints"
+        
+        let urlParameters = ["term": escapedTerm,
+                             "types": "songs",
+                             "limit": "7"]
+        var queryItems = [URLQueryItem]()
+        for (key, value) in urlParameters {
+            queryItems.append(URLQueryItem(name: key, value: value))
+        }
+        urlComponents.queryItems = queryItems
+        
+        var urlRequest = URLRequest(url: urlComponents.url!)
+        urlRequest.httpMethod = "GET"
+        urlRequest.addValue("Bearer \(AppleMusicConstants.developerToken)", forHTTPHeaderField: "Authorization")
+        
+        return urlRequest
+    }
+    
     static func createTrackRequest(forID id: String) -> URLRequest {
         var urlComponents = URLComponents()
         urlComponents.scheme = "https"

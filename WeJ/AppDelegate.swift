@@ -8,7 +8,6 @@
 
 import UIKit
 import CoreData
-import Firebase
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
@@ -16,7 +15,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     var window: UIWindow?
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
-        FirebaseApp.configure()
         return true
     }
     
@@ -31,6 +29,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     }
 
     func applicationDidEnterBackground(_ application: UIApplication) {
+        let bgTask: UIBackgroundTaskIdentifier = 0
+        let app = UIApplication.shared
+        app.beginBackgroundTask {
+            app.endBackgroundTask(bgTask)
+        }
     }
 
     func applicationWillEnterForeground(_ application: UIApplication) {

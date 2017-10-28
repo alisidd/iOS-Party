@@ -8,6 +8,32 @@
 
 import Foundation
 
+//Code taken from https://stackoverflow.com/questions/28076020/ios-different-font-sizes-within-single-size-class-for-different-devices
+extension UIDevice {
+    enum DeviceTypes {
+        case iPhone4_4s
+        case iPhone5_5s_SE
+        case iPhone6_6s
+        case iPhone6p_6ps
+        case after_iPhone6p_6ps
+    }
+    
+    static var deviceType : DeviceTypes {
+        switch UIScreen.main.bounds.height {
+        case 480.0:
+            return .iPhone4_4s
+        case 568.0:
+            return .iPhone5_5s_SE
+        case 667.0:
+            return .iPhone6_6s
+        case 736.0:
+            return .iPhone6p_6ps
+        default:
+            return .after_iPhone6p_6ps
+        }
+    }
+}
+
 //Code taken from https://stackoverflow.com/questions/8261961/better-way-to-get-the-users-name-from-device
 extension UIDevice {
     
@@ -37,7 +63,7 @@ extension UIDevice {
                 username = nameParts.joined(separator: " ")
             }
         }
-        catch { NSLog("[Error] While searching for username from device name") }
+        catch { print("[Error] While searching for username from device name") }
         
         return username
     }

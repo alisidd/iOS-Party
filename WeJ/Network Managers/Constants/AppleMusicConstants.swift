@@ -10,7 +10,7 @@ import Foundation
 
 struct AppleMusicConstants {
     
-    static let developerToken = "eyJhbGciOiJFUzI1NiIsInR5cCI6IkpXVCIsImtpZCI6IkNaRjQ2VzdIUDcifQ.eyJpc3MiOiJZM1k4TTk4RjJNIiwiaWF0IjoxNTAxNjcyMTU2LCJleHAiOjE1MTczOTY5NTZ9.F9NbaxumNK1HmjSLaQEfFMVgT_h7kS1mjgERolROImDqJsVuTHdqLhSds67MXPf1zSvXtMbLTiKSz1diHzfVkA"
+    static let developerToken = "eyJhbGciOiJFUzI1NiIsInR5cCI6IkpXVCIsImtpZCI6IjNYSEJBMkIzMzcifQ.eyJpc3MiOiJZM1k4TTk4RjJNIiwiaWF0IjoxNTAyNzE1OTkwLCJleHAiOjE1MTg0NDA3OTB9.UTYLr_aLvd5Cd7-oPvbFuBbW5ZNpoWfdTcKIRmPHuJK1AUym1P6d5_BokXuH_XMAVlq_vGAVX4ona0j3HXiC4g"
     static let countryCodes = [
                               "143563": "DZ",
                               "143564": "AO",

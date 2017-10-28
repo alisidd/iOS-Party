@@ -17,31 +17,31 @@ class HubViewController: UIViewController, UITableViewDelegate, UITableViewDataS
     fileprivate var previousScrollOffset: CGFloat = 0
     
     @IBOutlet weak var hubTitle: UILabel?
-    private let hubOptions = ["View Lyrics", "Leave Party"]
+    private let hubOptions = [NSLocalizedString("View Lyrics", comment: ""), NSLocalizedString("Leave Party", comment: "")]
     private let hubIcons = [#imageLiteral(resourceName: "lyricsIcon"), #imageLiteral(resourceName: "leavePartyIcon")]
     @IBOutlet weak var hubTableView: UITableView!
     @IBOutlet weak var hubLabel: UILabel!
+    
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        
+        setDelegates()
+        adjustViews()
+    }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         changeFontSizeForHub()
     }
     
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        
-        adjustViews()
-        setDelegates()
+    private func setDelegates() {
+        hubTableView.delegate = self
+        hubTableView.dataSource = self
     }
     
     func adjustViews() {
         updateHubTitle()
         hubTableView.tableFooterView = UIView()
-    }
-    
-    private func setDelegates() {
-        hubTableView.delegate = self
-        hubTableView.dataSource = self
     }
     
     // MARK: - Table
@@ -71,15 +71,15 @@ class HubViewController: UIViewController, UITableViewDelegate, UITableViewDataS
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        if hubOptions[indexPath.row] == "Leave Party" {
+        if hubOptions[indexPath.row] == NSLocalizedString("Leave Party", comment: "") {
             leaveParty()
-        } else if !Party.tracksQueue.isEmpty && MusicPlayer.currentPosition != nil {
+        } else if let position = delegate?.getCurrentPosition(), !Party.tracksQueue.isEmpty {
             MXMLyricsAction.sharedExtension().findLyricsForSong(
                 withTitle: Party.tracksQueue[0].name,
                 artist: Party.tracksQueue[0].artist,
                 album: "",
                 artWork: Party.tracksQueue[0].highResArtwork,
-                currentProgress: MusicPlayer.currentPosition!,
+                currentProgress: position,
                 trackDuration: Party.tracksQueue[0].length!,
                 for: self,
                 sender: tableView.dequeueReusableCell(withIdentifier: "Hub Cell")!,
@@ -90,8 +90,8 @@ class HubViewController: UIViewController, UITableViewDelegate, UITableViewDataS
     }
     
     private func postAlertForNoTracks() {
-        let alert = UIAlertController(title: "No Track Playing", message: nil, preferredStyle: .alert)
-        alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
+        let alert = UIAlertController(title: NSLocalizedString("No Track Playing", comment: ""), message: nil, preferredStyle: .alert)
+        alert.addAction(UIAlertAction(title: NSLocalizedString("OK", comment: ""), style: .default, handler: nil))
         
         present(alert, animated: true)
     }
@@ -150,7 +150,7 @@ extension HubViewController {
     
     fileprivate func changeFontSizeForHub() {
         UIView.animate(withDuration: 0.3) {
-            self.hubLabel.font = self.hubLabel.font.withSize(22 - 6 * (self.headerHeightConstraint / self.minHeight))
+            self.hubLabel.font = self.hubLabel.font.withSize(20 - UILabel.smallerTitleFontSize * (self.headerHeightConstraint / self.minHeight))
         }
     }
     
@@ -189,13 +189,8 @@ extension HubViewController {
     }
     
     func updateHubTitle() {
-        guard Party.name != nil else { return }
         DispatchQueue.main.async {
-            UIView.animate(withDuration: 0.4, animations: { self.hubTitle?.alpha = 0 }, completion: { _ in
-                self.hubTitle?.text = Party.name ?? "The Party"
-                UIView.animate(withDuration: 0.4) { self.hubTitle?.alpha = 1 }
-                
-            })
+            self.hubTitle?.text = Party.name ?? NSLocalizedString("Party", comment: "")
         }
     }
     

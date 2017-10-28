@@ -21,19 +21,30 @@ class MusicPlayer {
     
     // MARK: - General Variables
     
-    static var currentPosition: TimeInterval?
-    
-    // MARK: - General Functions
-    
-    func safeToPlayNextTrack() -> Bool {
-        return appleMusicPlayer.playbackState == .stopped
+    var currentPosition: TimeInterval? {
+        get {
+            return (musicService == .spotify) ? spotifyPlayer?.playbackState?.position : appleMusicPlayer.currentPlaybackTime
+        }
     }
     
-    func isPaused() -> Bool {
+    var isSafeToPlayNextTrack: Bool {
+        return !Party.tracksQueue.isEmpty && appleMusicPlayer.playbackState == .stopped
+    }
+    
+    var isPaused: Bool {
         return musicService == .spotify ? spotifyPlayer?.playbackState.isPlaying == false : appleMusicPlayer.playbackState == .paused
     }
     
     // MARK: - Playback
+    
+    func preparePlayer() {
+        if Party.musicService == .spotify {
+            spotifyPlayer?.setTargetBitrate(.low, callback: nil)
+        } else {
+            appleMusicPlayer.beginGeneratingPlaybackNotifications()
+            appleMusicPlayer.prepareToPlay()
+        }
+    }
     
     func startPlayer() {
         DispatchQueue.main.async {
@@ -56,10 +67,9 @@ class MusicPlayer {
     
     private func startAppleMusicPlayer(withTracks tracks: [Track]) {
         if !tracks.isEmpty {
-            BackgroundTask.startBackgroundTask()
             appleMusicPlayer.setQueueWithStoreIDs([tracks[0].id])
             playTrack()
-        } else {
+        } else if BackgroundTask.isPlaying {
             BackgroundTask.stopBackgroundTask()
             appleMusicPlayer.setQueueWithStoreIDs([])
             appleMusicPlayer.stop()

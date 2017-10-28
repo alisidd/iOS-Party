@@ -13,7 +13,7 @@ struct SpotifyConstants {
     static let spotifyPlayerDidLoginNotification = Notification.Name("spotifyPlayerDidLoginNotification")
     
     static let clientID = "308657d9662146ecae57855ac2a01045"
-    static let clientSecret = "ac96ee90c147415ea3ca38eb5563c0ea"
+    static let clientSecret = "2ee61ecb3172468c8007c4d682c8d023"
     
     static let redirectURL = URL(string: "partyapp://returnafterlogin")
     static let swapURL = URL(string: "https://wej-refresh-token.herokuapp.com/swap")

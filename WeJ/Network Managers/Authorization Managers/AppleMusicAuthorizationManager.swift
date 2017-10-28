@@ -23,19 +23,20 @@ class AppleMusicAuthorizationManager: AuthorizationManager {
     func requestAuthorization() {
         AppleMusicAuthorizationManager.delegate?.processingLogin = true
         if SKCloudServiceController.authorizationStatus() == .authorized {
-            AppleMusicAuthorizationManager.requestStorefrontIdentifier()
+            AppleMusicAuthorizationManager.handleCapabilities()
         } else {
             SKCloudServiceController.requestAuthorization { (status) in
                 if status == .authorized {
-                    AppleMusicAuthorizationManager.requestStorefrontIdentifier()
+                    AppleMusicAuthorizationManager.handleCapabilities()
                 } else {
                     AppleMusicAuthorizationManager.postAlertForSettings()
+                    AppleMusicAuthorizationManager.delegate?.processingLogin = false
                 }
             }
         }
     }
     
-    static func requestStorefrontIdentifier() {
+    private static func handleCapabilities() {
         guard Party.cookie == nil else {
             DispatchQueue.main.async {
                 delegate?.performSegue(withIdentifier: storyboardSegue, sender: nil)
@@ -44,6 +45,21 @@ class AppleMusicAuthorizationManager: AuthorizationManager {
             return
         }
         
+        AppleMusicAuthorizationManager.cloudServiceController.requestCapabilities { (capabilities, _) in
+            if capabilities.contains(.musicCatalogPlayback) {
+                AppleMusicAuthorizationManager.requestStorefrontIdentifier()
+            } else {
+                if capabilities.rawValue == 0 {
+                    AppleMusicAuthorizationManager.postAlertForInternet()
+                } else {
+                    AppleMusicAuthorizationManager.postAlertForAppleMusicSubscription()
+                }
+                delegate?.processingLogin = false
+            }
+        }
+    }
+    
+    static func requestStorefrontIdentifier() {
         let countryCodeHandler: (String?, Error?) -> Void = { (countryCode, error) in
             if let storefrontId = countryCode?.components(separatedBy: "-").first,
                 let countryCode = AppleMusicConstants.countryCodes[storefrontId] ?? countryCode {
@@ -58,7 +74,7 @@ class AppleMusicAuthorizationManager: AuthorizationManager {
         }
         
         if #available(iOS 11.0, *) {
-            //cloudServiceController.requestStorefrontCountryCode(completionHandler: countryCodeHandler)
+            cloudServiceController.requestStorefrontCountryCode(completionHandler: countryCodeHandler)
         } else {
             cloudServiceController.requestStorefrontIdentifier(completionHandler: countryCodeHandler)
         }
@@ -66,9 +82,9 @@ class AppleMusicAuthorizationManager: AuthorizationManager {
     
     private static func postAlertForSettings() {
         DispatchQueue.main.async {
-            let alert = UIAlertController(title: "Apple Music Access Denied", message: "Go to Settings to enable Apple Music", preferredStyle: .alert)
-            alert.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil))
-            alert.addAction(UIAlertAction(title: "Settings", style: .default) { _ in
+            let alert = UIAlertController(title: NSLocalizedString("Apple Music Access Denied", comment: ""), message: NSLocalizedString("Go to Settings to enable Apple Music", comment: ""), preferredStyle: .alert)
+            alert.addAction(UIAlertAction(title: NSLocalizedString("Cancel", comment: ""), style: .cancel, handler: nil))
+                alert.addAction(UIAlertAction(title: NSLocalizedString("Settings", comment: ""), style: .default) { _ in
                 UIApplication.shared.open(URL(string: UIApplicationOpenSettingsURLString)!, options: [:], completionHandler: nil)
             })
             
@@ -76,13 +92,22 @@ class AppleMusicAuthorizationManager: AuthorizationManager {
         }
     }
     
+    private static func postAlertForAppleMusicSubscription() {
+        DispatchQueue.main.async {
+            let alert = UIAlertController(title: NSLocalizedString("No Apple Music Subscription", comment: ""), message: NSLocalizedString("An Apple Music Subscription is required to play music", comment: ""), preferredStyle: .alert)
+            alert.addAction(UIAlertAction(title: NSLocalizedString("OK", comment: ""), style: .default, handler: nil))
+            
+            delegate?.present(alert, animated: true, completion: nil)
+        }
+    }
+    
     private static func postAlertForInternet() {
         DispatchQueue.main.async {
-            let alert = UIAlertController(title: "Error", message: "Please check your internet connection", preferredStyle: .alert)
-            alert.addAction(UIAlertAction(title: "Try Again", style: .default) { _ in
+            let alert = UIAlertController(title: NSLocalizedString("Error", comment: ""), message: NSLocalizedString("Please check your internet connection", comment: ""), preferredStyle: .alert)
+            alert.addAction(UIAlertAction(title: NSLocalizedString("Try Again", comment: ""), style: .default) { _ in
                 delegate?.tryAgain()
             })
-            alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
+            alert.addAction(UIAlertAction(title: NSLocalizedString("OK", comment: ""), style: .default, handler: nil))
             
             delegate?.present(alert, animated: true, completion: nil)
         }

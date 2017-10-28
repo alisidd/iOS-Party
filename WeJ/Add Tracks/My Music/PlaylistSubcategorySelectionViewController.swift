@@ -7,14 +7,19 @@
 //
 
 import UIKit
-import BadgeSwift
+import RKNotificationHub
 import NVActivityIndicatorView
 import MediaPlayer
 
 class PlaylistSubcategorySelectionViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
     
     @IBOutlet weak var titleLabel: UILabel!
-    @IBOutlet weak var badge: BadgeSwift!
+    @IBOutlet weak var doneButton: UIButton!
+    private var badge: RKNotificationHub!
+    private var totalTracksCount: Int {
+        let controller = tabBarController! as! AddTracksTabBarController
+        return controller.tracksSelected.count + controller.libraryTracksSelected.count
+    }
     
     @IBOutlet weak var optionsTable: UITableView!
     
@@ -31,40 +36,34 @@ class PlaylistSubcategorySelectionViewController: UIViewController, UITableViewD
     }
     
     func setBadge(to count: Int) {
-        badge.isHidden = count == 0
-        badge.text = String(count)
+        badge.count = Int32(count)
+        badge.pop()
     }
 
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        adjustViews()
-        customizeTableView()
+        initializeBadge()
         initializeVariables()
         
         setDelegates()
+        adjustViews()
+        adjustFontSizes()
+        customizeTableView()
+        
         setOptions()
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        initializeBadge()
+        setBadge(to: totalTracksCount)
     }
     
-    private func adjustViews() {
-        switch playlistType {
-        case .some(.albums): titleLabel.text = "Albums"
-        case .some(.artists): titleLabel.text = "Artists"
-        case .some(.playlists): titleLabel.text = "Playlists"
-        default: break
-        }
-    }
-    
-    private func customizeTableView() {
-        edgesForExtendedLayout = UIRectEdge.init(rawValue: 0)
-        
-        optionsTable.sectionIndexColor = .gray
-        optionsTable.sectionIndexBackgroundColor = AppConstants.black
+    private func initializeBadge() {
+        badge = RKNotificationHub(view: doneButton.titleLabel, andCount: Int32(totalTracksCount))
+        badge.moveCircleBy(x: 51, y: 0)
+        badge.scaleCircleSize(by: 0.7)
+        badge.setCircleColor(AppConstants.orange, label: .white)
     }
     
     private func initializeVariables() {
@@ -83,6 +82,29 @@ class PlaylistSubcategorySelectionViewController: UIViewController, UITableViewD
         optionsTable.dataSource = self
     }
     
+    private func adjustViews() {
+        switch playlistType {
+        case .some(.albums): titleLabel.text = NSLocalizedString("Albums", comment: "")
+        case .some(.artists): titleLabel.text = NSLocalizedString("Artists", comment: "")
+        case .some(.playlists): titleLabel.text = NSLocalizedString("Playlists", comment: "")
+        default: break
+        }
+    }
+    
+    private func adjustFontSizes() {
+        if UIDevice.deviceType == .iPhone4_4s || UIDevice.deviceType == .iPhone5_5s_SE {
+            titleLabel.changeToSmallerFont()
+            doneButton.changeToSmallerFont()
+        }
+    }
+    
+    private func customizeTableView() {
+        edgesForExtendedLayout = UIRectEdge.init(rawValue: 0)
+        
+        optionsTable.sectionIndexColor = .gray
+        optionsTable.sectionIndexBackgroundColor = .clear
+    }
+    
     private func setOptions() {
         let completionHandler: ([String: [Option]]) -> (Void) = { [weak self] (optionsDict) in
             DispatchQueue.main.async {
@@ -93,16 +115,11 @@ class PlaylistSubcategorySelectionViewController: UIViewController, UITableViewD
         }
         
         switch playlistType {
-        case .some(.albums): fetcher.getUserAlbums(completionHandler: completionHandler)
-        case .some(.artists): fetcher.getUserArtists(completionHandler: completionHandler)
-        case .some(.playlists): fetcher.getUserPlaylists(completionHandler: completionHandler)
+        case .some(.albums): fetcher.getLibraryAlbums(completionHandler: completionHandler)
+        case .some(.artists): fetcher.getLibraryArtists(completionHandler: completionHandler)
+        case .some(.playlists): fetcher.getLibraryPlaylists(completionHandler: completionHandler)
         default: break
         }
-    }
-    
-    private func initializeBadge() {
-        let controller = tabBarController! as! AddTracksTabBarController
-        setBadge(to: controller.tracksSelected.count + controller.libraryTracksSelected.count)
     }
     
     // MARK - Table
@@ -162,7 +179,7 @@ class PlaylistSubcategorySelectionViewController: UIViewController, UITableViewD
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        if let controller = segue.destination as? UserTracksViewController,
+        if let controller = segue.destination as? LibraryTracksViewController,
             let (tracks, playlistName) = sender as? ([Track], String) {
             controller.musicService = musicService
             controller.playlistType = playlistType

@@ -7,7 +7,7 @@
 //
 
 import UIKit
-import BadgeSwift
+import RKNotificationHub
 import NVActivityIndicatorView
 
 class MusicLibrarySelectionViewController: UIViewController, ViewControllerAccessDelegate {
@@ -15,9 +15,20 @@ class MusicLibrarySelectionViewController: UIViewController, ViewControllerAcces
     private weak var delegate: AddTracksTabBarController!
 
     @IBOutlet weak var headerHeightConstraint: NSLayoutConstraint!
-    @IBOutlet weak var badge: BadgeSwift!
+    @IBOutlet weak var myLibraryLabel: UILabel!
+    @IBOutlet weak var doneButton: UIButton!
+    private var badge: RKNotificationHub!
     
+    private var totalTracksCount: Int {
+        let controller = tabBarController! as! AddTracksTabBarController
+        return controller.tracksSelected.count + controller.libraryTracksSelected.count
+    }
+    
+    
+    @IBOutlet weak var spotifyLibraryButton: UIButton!
     @IBOutlet weak var spotifyActivityIndicator: NVActivityIndicatorView!
+    @IBOutlet weak var appleMusicLibraryButton: UIButton!
+
     private var libraryMusicService: MusicService!
     private var authorizationManager: AuthorizationManager!
     var processingLogin = false {
@@ -25,7 +36,7 @@ class MusicLibrarySelectionViewController: UIViewController, ViewControllerAcces
             DispatchQueue.main.async {
                 if self.processingLogin && self.libraryMusicService == .spotify {
                     self.spotifyActivityIndicator.startAnimating()
-                } else if self.libraryMusicService == .spotify{
+                } else if self.libraryMusicService == .spotify {
                     self.spotifyActivityIndicator.stopAnimating()
                 }
             }
@@ -47,32 +58,37 @@ class MusicLibrarySelectionViewController: UIViewController, ViewControllerAcces
     }
     
     func setBadge(to count: Int) {
-        badge.isHidden = count == 0
-        badge.text = String(count)
+        badge.count = Int32(count)
+        badge.pop()
     }
     
     override func viewDidLoad() {
         super.viewDidLoad()
         hideNavigationBar()
+        initializeBadge()
         initializeVariables()
+        
         setDelegates()
         adjustViews()
+        adjustFontSizes()
         
         getTrending()
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        initializeBadge()
-    }
-    
-    private func initializeBadge() {
-        let controller = tabBarController! as! AddTracksTabBarController
-        setBadge(to: controller.tracksSelected.count + controller.libraryTracksSelected.count)
+        setBadge(to: totalTracksCount)
     }
     
     private func hideNavigationBar() {
         navigationController?.navigationBar.isHidden = true
+    }
+    
+    private func initializeBadge() {
+        badge = RKNotificationHub(view: doneButton.titleLabel, andCount: Int32(totalTracksCount))
+        badge.moveCircleBy(x: 51, y: 0)
+        badge.scaleCircleSize(by: 0.7)
+        badge.setCircleColor(AppConstants.orange, label: .white)
     }
     
     private func initializeVariables() {
@@ -92,6 +108,16 @@ class MusicLibrarySelectionViewController: UIViewController, ViewControllerAcces
     
     private func adjustViews() {
         tracksTableView.contentInset = UIEdgeInsets(top: 0, left: 0, bottom: 50, right: 0)
+    }
+    
+    private func adjustFontSizes() {
+        if UIDevice.deviceType == .iPhone4_4s || UIDevice.deviceType == .iPhone5_5s_SE {
+            myLibraryLabel.changeToSmallerFont()
+            doneButton.changeToSmallerFont()
+            spotifyLibraryButton.changeToSmallerFont()
+            appleMusicLibraryButton.changeToSmallerFont()
+            playlistsButton.changeToSmallerFont()
+        }
     }
     
     private func getTrending() {

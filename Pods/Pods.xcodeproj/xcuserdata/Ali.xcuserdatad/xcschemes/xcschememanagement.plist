@@ -4,16 +4,6 @@
 <dict>
 	<key>SchemeUserState</key>
 	<dict>
-		<key>BadgeSwift.xcscheme</key>
-		<dict>
-			<key>isShown</key>
-			<false/>
-		</dict>
-		<key>GoogleToolboxForMac.xcscheme</key>
-		<dict>
-			<key>isShown</key>
-			<false/>
-		</dict>
 		<key>NVActivityIndicatorView.xcscheme</key>
 		<dict>
 			<key>isShown</key>
@@ -24,12 +14,12 @@
 			<key>isShown</key>
 			<false/>
 		</dict>
-		<key>SwiftyJSON.xcscheme</key>
+		<key>RKNotificationHub.xcscheme</key>
 		<dict>
 			<key>isShown</key>
 			<false/>
 		</dict>
-		<key>nanopb.xcscheme</key>
+		<key>SwiftyJSON.xcscheme</key>
 		<dict>
 			<key>isShown</key>
 			<false/>
@@ -37,12 +27,12 @@
 	</dict>
 	<key>SuppressBuildableAutocreation</key>
 	<dict>
-		<key>00103D6C821BE85971C563025527BA5D</key>
+		<key>1FD97D3A5335E7D149FEF4DA5B2CFAA4</key>
 		<dict>
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>2BB3C7A0D901BA50C22490631DD34A01</key>
+		<key>3D699358C9909DDCB3A644A6F46BD489</key>
 		<dict>
 			<key>primary</key>
 			<true/>
@@ -52,17 +42,7 @@
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>93DCCF6DAF294069ABE83F3282E93C67</key>
-		<dict>
-			<key>primary</key>
-			<true/>
-		</dict>
-		<key>C8609E0C48929DE0C5F1867A9CA54D39</key>
-		<dict>
-			<key>primary</key>
-			<true/>
-		</dict>
-		<key>E4DD95323C54A78F879DAB0F1508B8E7</key>
+		<key>A2B18E18E3B646B56BD4C900624E2308</key>
 		<dict>
 			<key>primary</key>
 			<true/>

@@ -12,8 +12,8 @@ class AddTracksTabBarController: UITabBarController, UITabBarControllerDelegate,
     
     var myHubController: MusicLibrarySelectionViewController!
     
-    fileprivate let minHeight = 0.46 * UIScreen.main.bounds.height
-    fileprivate let maxHeight = -UIApplication.shared.statusBarFrame.height + 7
+    fileprivate let minHeight: CGFloat = 305.5
+    fileprivate let maxHeight = -UIApplication.shared.statusBarFrame.height + 11
     
     fileprivate var previousScrollOffset: CGFloat = 0
     
@@ -50,7 +50,7 @@ class AddTracksTabBarController: UITabBarController, UITabBarControllerDelegate,
                 controller.setBadge(to: count)
             }
             
-            if let controller = navigationVC.viewControllers.first(where: { $0 is UserTracksViewController }) as? UserTracksViewController {
+            if let controller = navigationVC.viewControllers.first(where: { $0 is LibraryTracksViewController }) as? LibraryTracksViewController {
                 controller.setBadge(to: count)
             }
         }
@@ -63,6 +63,7 @@ class AddTracksTabBarController: UITabBarController, UITabBarControllerDelegate,
     override func viewDidLoad() {
         super.viewDidLoad()
         setDelegates()
+        
         adjustViews()
     }
     
@@ -182,7 +183,6 @@ extension AddTracksTabBarController {
             newHeight = max(maxHeight, myHubController.headerHeightConstraint.constant - abs(scrollDiff))
             if newHeight != myHubController.headerHeightConstraint.constant {
                 myHubController.headerHeightConstraint.constant = newHeight
-                changeFontSizeForLabel()
                 setScrollPosition(forOffset: previousScrollOffset)
             }
             
@@ -190,18 +190,11 @@ extension AddTracksTabBarController {
             newHeight = min(minHeight, myHubController.headerHeightConstraint.constant + abs(scrollDiff))
             if newHeight != myHubController.headerHeightConstraint.constant && myHubController.tracksTableView.contentOffset.y < 2 {
                 myHubController.headerHeightConstraint.constant = newHeight
-                changeFontSizeForLabel()
                 setScrollPosition(forOffset: previousScrollOffset)
             }
         }
         
         previousScrollOffset = scrollView.contentOffset.y
-    }
-    
-    fileprivate func changeFontSizeForLabel() {
-        UIView.transition(with: myHubController.playlistsButton, duration: 0.5, options: .curveEaseIn, animations: {
-            self.myHubController.playlistsButton.titleLabel?.font = self.myHubController.playlistsButton.titleLabel?.font.withSize(22 - 2 * (self.myHubController.headerHeightConstraint.constant / self.minHeight))
-        }, completion: nil)
     }
     
     private func setScrollPosition(forOffset offset: CGFloat) {
@@ -227,13 +220,11 @@ extension AddTracksTabBarController {
         if myHubController.headerHeightConstraint.constant > midPoint {
             UIView.animate(withDuration: 0.2, animations: {
                 self.myHubController.headerHeightConstraint.constant = self.minHeight
-                self.changeFontSizeForLabel()
                 self.myHubController.view.layoutIfNeeded()
             })
         } else {
             UIView.animate(withDuration: 0.2, animations: {
                 self.myHubController.headerHeightConstraint.constant = self.maxHeight
-                self.changeFontSizeForLabel()
                 self.myHubController.view.layoutIfNeeded()
             })
         }

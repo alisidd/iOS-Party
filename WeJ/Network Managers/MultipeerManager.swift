@@ -9,34 +9,48 @@
 import Foundation
 import MultipeerConnectivity
 
+struct Host {
+    var hostID: MCPeerID
+    var partyName: String
+}
+
 class MultipeerManager: NSObject {
     
     weak var delegate : NetworkManagerDelegate?
-    
-    private let mssageServiceType = "localParty"
+    weak var partiesListerDelegate: PartiesListerDelegate?
+    private let serviceType = "localParty"
+    var partyName: String
+    fileprivate static var myPeerID: MCPeerID!
     private var serviceAdvertiser: MCNearbyServiceAdvertiser!
-    private var serviceBrowser: MCNearbyServiceBrowser!
-    fileprivate var myPeerId: MCPeerID!
+    fileprivate var serviceBrowser: MCNearbyServiceBrowser!
     
     fileprivate var isHost: Bool
-    fileprivate var sessions = [MCSession : MCPeerID]()
-    var otherHosts = Set<MCPeerID>()
+    fileprivate var sessions = [MCPeerID : (partyName: String, session: MCSession)]() {
+        didSet {
+            partiesListerDelegate?.reloadList()
+        }
+    }
+    var allHosts: [Host] {
+        return sessions.map { Host(hostID: $0.key, partyName: $0.value.partyName) }.sorted(by: { $0.partyName < $1.partyName })
+    }
+    
+    private var latestPosition = TimeInterval()
     private var latestRequest = [Track]()
     static var tracksFailedToSend = [Track]()
     
     // MARK: - Lifecycle
     
-    init(isHost: Bool) {
+    init(isHost: Bool, partyName: String = NSLocalizedString("Party", comment: "")) {
         self.isHost = isHost
+        self.partyName = partyName
         
         let deviceIdentifier = UIDevice.current.identifierForVendor!.uuidString
-        let deviceName = UIDevice.current.name
-        myPeerId = isHost ? MCPeerID(displayName: deviceName) : MCPeerID(displayName: deviceIdentifier)
+        MultipeerManager.myPeerID = MultipeerManager.myPeerID ?? MCPeerID(displayName: deviceIdentifier)
         
         if isHost {
-            serviceAdvertiser = MCNearbyServiceAdvertiser(peer: myPeerId, discoveryInfo: ["isHost": isHost.description], serviceType: mssageServiceType)
+            serviceAdvertiser = MCNearbyServiceAdvertiser(peer: MultipeerManager.myPeerID, discoveryInfo: ["partyName": partyName], serviceType: serviceType)
         } else {
-            serviceBrowser = MCNearbyServiceBrowser(peer: myPeerId, serviceType: mssageServiceType)
+            serviceBrowser = MCNearbyServiceBrowser(peer: MultipeerManager.myPeerID, serviceType: serviceType)
         }
         
         super.init()
@@ -47,9 +61,9 @@ class MultipeerManager: NSObject {
     
     deinit {
         if isHost {
-            serviceAdvertiser.stopAdvertisingPeer()
+            serviceAdvertiser?.stopAdvertisingPeer()
         } else {
-            serviceBrowser.stopBrowsingForPeers()
+            serviceBrowser?.stopBrowsingForPeers()
         }
     }
     
@@ -75,13 +89,18 @@ class MultipeerManager: NSObject {
     
     func advertise(position: TimeInterval) {
         if !sessions.isEmpty {
-            let positionData = NSKeyedArchiver.archivedData(withRootObject: position)
-            for session in sessions.keys {
-                try? session.send(positionData, toPeers: session.connectedPeers, with: .reliable)
+            latestPosition = position
+            DispatchQueue.global(qos: .userInitiated).async { [weak self] in
+                guard self != nil && position == self!.latestPosition else { return }
+                
+                let positionData = NSKeyedArchiver.archivedData(withRootObject: position)
+                self?.sessions.values.forEach {
+                    try? $0.session.send(positionData, toPeers: $0.session.connectedPeers, with: .reliable)
+                }
             }
         }
     }
-
+    
     func send(tracks: [Track], toRemove isRemoval: Bool = false) {
         if !sessions.isEmpty {
             if !isRemoval {
@@ -91,11 +110,16 @@ class MultipeerManager: NSObject {
                 guard self != nil && (isRemoval || tracks == self!.latestRequest) else { return }
                 
                 let tracksListData = NSKeyedArchiver.archivedData(withRootObject: tracks)
-                self?.sessions.keys.forEach {
+                self?.sessions.values.forEach {
                     guard self != nil else { return }
-                    if (try? $0.send(tracksListData, toPeers: $0.connectedPeers, with: .reliable)) == nil && !self!.isHost {
+                    if (try? $0.session.send(tracksListData, toPeers: $0.session.connectedPeers, with: .reliable)) == nil && !self!.isHost {
                         MultipeerManager.tracksFailedToSend = tracks
                     } else {
+                        MultipeerManager.tracksFailedToSend.forEach {
+                            if !Party.tracksQueue(hasTrack: $0) {
+                                Party.tracksQueue.append($0)
+                            }
+                        }
                         MultipeerManager.tracksFailedToSend = []
                     }
                 }
@@ -114,19 +138,30 @@ class MultipeerManager: NSObject {
     
 }
 
+extension MCSessionState {
+    
+    var stringValue: String {
+        switch self {
+        case .notConnected: return NSLocalizedString("Not Connected", comment: "")
+        case .connecting: return NSLocalizedString("Connecting", comment: "")
+        case .connected: return NSLocalizedString("Connected", comment: "")
+        }
+    }
+    
+}
+
 // MARK: - Invitation
 
 extension MultipeerManager: MCNearbyServiceAdvertiserDelegate {
     
     func advertiser(_ advertiser: MCNearbyServiceAdvertiser, didReceiveInvitationFromPeer peerID: MCPeerID, withContext context: Data?, invitationHandler: @escaping ((Bool, MCSession?) -> Void)) {
-        print("Received invitation from \(peerID)")
-        if !sessions.contains(where: { $0.1 == peerID }) {
-            let newSession = MCSession(peer: myPeerId, securityIdentity: nil, encryptionPreference: .none)
+        if !sessions.contains(where: { $0.0.displayName == peerID.displayName }) {
+            let newSession = MCSession(peer: MultipeerManager.myPeerID, securityIdentity: nil, encryptionPreference: .none)
             newSession.delegate = self
-            sessions[newSession] = peerID
+            sessions[peerID] = ("", newSession)
             invitationHandler(true, newSession)
         } else {
-            for session in sessions.keys where session.connectedPeers.isEmpty {
+            for (_, session) in sessions.values where session.connectedPeers.isEmpty {
                 invitationHandler(true, session)
             }
         }
@@ -143,28 +178,26 @@ extension MultipeerManager: MCNearbyServiceAdvertiserDelegate {
 extension MultipeerManager: MCNearbyServiceBrowserDelegate {
     
     public func browser(_ browser: MCNearbyServiceBrowser, foundPeer peerID: MCPeerID, withDiscoveryInfo info: [String : String]?) {
-        otherHosts.update(with: peerID)
-        
-        let newSession = MCSession(peer: myPeerId, securityIdentity: nil, encryptionPreference: MCEncryptionPreference.none)
+        guard peerID.displayName != MultipeerManager.myPeerID.displayName && (delegate?.connectionStatus ?? .notConnected) == .notConnected else { return }
+        let newSession = MCSession(peer: MultipeerManager.myPeerID, securityIdentity: nil, encryptionPreference: .none)
         newSession.delegate = self
+        sessions[peerID] = (info!["partyName"] ?? NSLocalizedString("Party", comment: ""), newSession)
         
-        sessions.forEach { if $0.key.connectedPeers.isEmpty { sessions.removeValue(forKey: $0.key) } }
-        let alreadyFound = sessions.contains(where: {$0.key.connectedPeers[0].displayName == peerID.displayName })
+        invite(peerID: peerID, forFirstTime: false, withPartyName: info!["partyName"] ?? NSLocalizedString("Party", comment: ""))
+    }
+    
+    func invite(peerID: MCPeerID, forFirstTime firstTime: Bool, withPartyName partyName: String? = nil) {
+        let alreadyConnected = sessions.values.contains(where: { !$0.session.connectedPeers.isEmpty && $0.session.connectedPeers[0].displayName == peerID.displayName })
         
-        if !alreadyFound {
-            sessions[newSession] = peerID
-            print("Invited \(peerID)")
-            browser.invitePeer(peerID, to: newSession, withContext: nil, timeout: 10)
+        if let (_, session) = sessions[peerID], !alreadyConnected && (firstTime || Party.name == partyName) {
+            serviceBrowser.invitePeer(peerID, to: session, withContext: nil, timeout: 2)
+            sessions.forEach { if $0.key.displayName != peerID.displayName { sessions.removeValue(forKey: $0.key) }}
         }
     }
     
     func browser(_ browser: MCNearbyServiceBrowser, lostPeer peerID: MCPeerID) {
-        otherHosts.remove(peerID)
-        
-        for (session, id) in sessions where id == peerID {
-            session.disconnect()
-            sessions.removeValue(forKey: session)
-        }
+        sessions[peerID]?.session.disconnect()
+        sessions.removeValue(forKey: peerID)
         
         if sessions.isEmpty {
             delegate?.updateStatus(withState: .notConnected)
@@ -177,23 +210,11 @@ extension MultipeerManager: MCNearbyServiceBrowserDelegate {
     
 }
 
-extension MCSessionState {
-    
-    func stringValue() -> String {
-        switch self {
-        case .notConnected: return "Not Connected"
-        case .connecting: return "Connecting"
-        case .connected: return "Connected"
-        }
-    }
-    
-}
-
 // MARK: - Session Callbacks
 
 extension MultipeerManager: MCSessionDelegate {
     
-    func session(_ session: MCSession, peer peerID: MCPeerID, didChange state: MCSessionState) {        
+    func session(_ session: MCSession, peer peerID: MCPeerID, didChange state: MCSessionState) {
         if state == .connected {
             if isHost {
                 sendPartyInfo(toSession: session)
@@ -201,12 +222,8 @@ extension MultipeerManager: MCSessionDelegate {
             }
             delegate?.updateStatus(withState: state)
         } else if state == .notConnected {
-            if otherHosts.contains(peerID) {
-                otherHosts.remove(peerID)
-            }
-            
-            sessions.removeValue(forKey: session)
-            if sessions.isEmpty {
+            sessions.removeValue(forKey: peerID)
+            if !sessions.contains(where: { !$0.value.session.connectedPeers.isEmpty }) {
                 delegate?.updateStatus(withState: state)
                 delegate?.resetManager()
             }
@@ -240,18 +257,12 @@ extension MultipeerManager: MCSessionDelegate {
         print("didReceiveStream")
     }
     
-    func session(_ session: MCSession, didFinishReceivingResourceWithName resourceName: String, fromPeer peerID: MCPeerID, at localURL: URL, withError error: Error?) {
-        print("didFinishReceivingResourceWithName")
-    }
-    
-    /*
     func session(_ session: MCSession, didFinishReceivingResourceWithName resourceName: String, fromPeer peerID: MCPeerID, at localURL: URL?, withError error: Error?) {
         print("didFinishReceivingResourceWithName")
-    }*/
+    }
     
     func session(_ session: MCSession, didStartReceivingResourceWithName resourceName: String, fromPeer peerID: MCPeerID, with progress: Progress) {
         print("didStartReceivingResourceWithName")
     }
     
 }
-

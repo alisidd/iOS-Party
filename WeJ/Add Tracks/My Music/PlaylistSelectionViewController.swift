@@ -7,40 +7,95 @@
 //
 
 import UIKit
-import BadgeSwift
+import RKNotificationHub
 
 class PlaylistSelectionViewController: UIViewController {
     
     @IBOutlet weak var titleLabel: UILabel!
-    @IBOutlet weak var badge: BadgeSwift!
+    @IBOutlet weak var doneButton: UIButton!
+    private var badge: RKNotificationHub!
+    private var totalTracksCount: Int {
+        let controller = tabBarController! as! AddTracksTabBarController
+        return controller.tracksSelected.count + controller.libraryTracksSelected.count
+    }
     
     var musicService: MusicService!
+    
+    @IBOutlet weak var albumsImageView: UIImageView!
+    @IBOutlet weak var albumsButton: UIButton!
+    
+    @IBOutlet weak var artistsStackView: UIStackView!
+    @IBOutlet weak var artistsImageView: UIImageView!
     @IBOutlet weak var artistsButton: UIButton!
     
+    @IBOutlet weak var playlistsImageView: UIImageView!
+    @IBOutlet weak var playlistsButton: UIButton!
+    
+    @IBOutlet weak var allSongsImageView: UIImageView!
+    @IBOutlet weak var allSongsButton: UIButton!
+    
+    var stackMapper: [UIButton: UIImageView] {
+        return [
+            albumsButton: albumsImageView,
+            artistsButton: artistsImageView,
+            playlistsButton: playlistsImageView,
+            allSongsButton: allSongsImageView
+        ]
+    }
+    
     func setBadge(to count: Int) {
-        badge.isHidden = count == 0
-        badge.text = String(count)
+        badge.count = Int32(count)
+        badge.pop()
     }
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        initializeBadge()
         adjustViews()
+        adjustFontSizes()
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        initializeBadge()
+        setBadge(to: totalTracksCount)
     }
     
     private func initializeBadge() {
-        let controller = tabBarController! as! AddTracksTabBarController
-        setBadge(to: controller.tracksSelected.count + controller.libraryTracksSelected.count)
+        badge = RKNotificationHub(view: doneButton.titleLabel, andCount: Int32(totalTracksCount))
+        badge.moveCircleBy(x: 51, y: 0)
+        badge.scaleCircleSize(by: 0.7)
+        badge.setCircleColor(AppConstants.orange, label: .white)
     }
     
     private func adjustViews() {
         titleLabel.text = musicService.toString()
         if musicService == .spotify {
-            artistsButton.isHidden = true
+            artistsStackView.isHidden = true
+        }
+        [albumsButton, artistsButton, playlistsButton, allSongsButton].forEach { button in
+            button?.addTarget(self, action:#selector(highlightIcon(sender:)), for: .touchDown)
+            button?.addTarget(self, action:#selector(unhighlightIcon(sender:)), for: [.touchUpInside, .touchUpOutside, .touchDragOutside])
+        }
+        
+        
+    }
+    
+    @objc private func highlightIcon(sender: UIButton) {
+        stackMapper[sender]?.isHighlighted = true
+    }
+    
+    @objc private func unhighlightIcon(sender: UIButton) {
+        stackMapper[sender]?.isHighlighted = false
+    }
+    
+    private func adjustFontSizes() {
+        if UIDevice.deviceType == .iPhone4_4s || UIDevice.deviceType == .iPhone5_5s_SE {
+            titleLabel.changeToSmallerFont()
+            doneButton.changeToSmallerFont()
+            albumsButton.changeToSmallerFont()
+            artistsButton.changeToSmallerFont()
+            playlistsButton.changeToSmallerFont()
+            allSongsButton.changeToSmallerFont()
         }
     }
 
@@ -59,10 +114,10 @@ class PlaylistSelectionViewController: UIViewController {
             default: break
             }
             controller.musicService = musicService
-        } else if let controller = segue.destination as? UserTracksViewController {
+        } else if let controller = segue.destination as? LibraryTracksViewController {
             controller.musicService = musicService
             controller.playlistType = .all
-            controller.playlistName = "All Songs"
+            controller.playlistName = NSLocalizedString("All Songs", comment: "")
         }
     }
 

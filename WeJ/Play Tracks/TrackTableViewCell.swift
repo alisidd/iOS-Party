@@ -17,6 +17,11 @@ class TrackTableViewCell: UITableViewCell {
         
         artworkImageView.layer.cornerRadius = 10
         artworkImageView.clipsToBounds = true
+        
+        if UIDevice.deviceType == .iPhone4_4s || UIDevice.deviceType == .iPhone5_5s_SE {
+            trackName.changeToSmallerFont()
+            artistName.changeToSmallerFont()
+        }
     }
     
 }

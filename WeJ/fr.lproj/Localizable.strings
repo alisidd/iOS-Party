@@ -1,0 +1,49 @@
+/* 
+  Localizable.strings
+  WeJ
+
+  Created by Ali Siddiqui on 8/27/17.
+  Copyright © 2017 Mohammad Ali Siddiqui. All rights reserved.
+*/
+
+"Version" = "Version";
+
+"Party" = "Fête";
+"Edit" = "Modifier";
+"Done" = "Fini";
+"Close" = "Fermer";
+"Remove" = "Supprimer";
+"View Lyrics" = "Voir Paroles";
+"Leave Party" = "Quitter Fête";
+
+"Not Connected" = "Pas connecté";
+"Connecting" = "En Cours de Connexion";
+"Connected" = "Connecté";
+
+"Search" = "Recherche";
+"Albums" = "Albums";
+"Artists" = "Artistes";
+"Playlists" = "Playlists";
+"All Songs" = "Toutes les Chansons";
+
+"library song not found" = "chanson de la biblio pas trouvée";
+"library songs not found" = "chansons pas trouvées dans votre biblio";
+"request failed to send" = "demande n'a pas atteint";
+"requests failed to send" = "demandes n'ont pas atteint";
+
+"Error" = "Erreur";
+"Please check your internet connection" = "Vérifiez votre connexion";
+"Try Again" = "Réessayer";
+
+"Apple Music Access Denied" = "Accès a Apple Music refusé";
+"Go to Settings to enable Apple Music" = "Allez dans Paramètres pour activer Apple Music";
+"Cancel" = "Annuler";
+"Settings" = "Paramètres";
+"No Apple Music Subscription" = "Pas d'abonnement Apple Music";
+"An Apple Music Subscription is required to play music" = "Un abonnement Apple Music est obligatoire pour passer la musique";
+
+"No Spotify Premium" = "Obtenir Spotify Premium";
+"A Spotify Premium account is required to play music" = "Un compte Spotify Premium est nécessaire pour jouer de la musique.";
+
+"No Track Playing" = "Aucune chansons jouent";
+"OK" = "OK";

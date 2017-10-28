@@ -18,6 +18,7 @@ class InitialSetupViewController: UIViewController, UIGestureRecognizerDelegate 
     
     override func viewDidLoad() {
         populateVersionNumber()
+        adjustFontSizes()
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -28,7 +29,15 @@ class InitialSetupViewController: UIViewController, UIGestureRecognizerDelegate 
     
     private func populateVersionNumber() {
         if let versionNumber = Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String {
-            versionLabel.text = "Version " + versionNumber
+            versionLabel.text = NSLocalizedString("Version", comment: "") + " " + versionNumber
+        }
+    }
+    
+    private func adjustFontSizes() {
+        if UIDevice.deviceType == .iPhone4_4s || UIDevice.deviceType == .iPhone5_5s_SE {
+            createPartyButton.changeToSmallerFont()
+            joinPartyButton.changeToSmallerFont()
+            versionLabel.changeToSmallerFont()
         }
     }
     
@@ -37,14 +46,15 @@ class InitialSetupViewController: UIViewController, UIGestureRecognizerDelegate 
         versionLabel.text = "😎   " + versionLabel.text!
     }
     
-    // MARK: - Navigation
-    
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        if let controller = segue.destination as? PartyViewController {
-            controller.isHost = false
-            controller.networkManager?.delegate = controller
-            Party.delegate = controller
+        if let controller = segue.destination as? PartiesListViewController {
+            controller.networkManager = MultipeerManager(isHost: false)
+            controller.networkManager.partiesListerDelegate = controller
         }
     }
+    
+}
+
+extension InitialSetupViewController {
     
 }

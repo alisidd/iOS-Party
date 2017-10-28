@@ -13,16 +13,22 @@ class BackgroundTask {
     static var isPlaying = false
     
     static func startBackgroundTask() {
-        NotificationCenter.default.addObserver(self, selector: #selector(interuptedAudio), name: NSNotification.Name.AVAudioSessionInterruption, object: AVAudioSession.sharedInstance())
-        playAudio()
-        isPlaying = true
+        DispatchQueue.global(qos: .userInitiated).async {
+            if !isPlaying {
+                NotificationCenter.default.addObserver(self, selector: #selector(interuptedAudio), name: NSNotification.Name.AVAudioSessionInterruption, object: AVAudioSession.sharedInstance())
+                playAudio()
+                isPlaying = true
+            }
+        }
     }
     
     static func stopBackgroundTask() {
-        NotificationCenter.default.removeObserver(self, name: NSNotification.Name.AVAudioSessionInterruption, object: nil)
-        if isPlaying {
-            player.stop()
-            isPlaying = false
+        DispatchQueue.global(qos: .userInitiated).async {
+            if isPlaying {
+                NotificationCenter.default.removeObserver(self, name: NSNotification.Name.AVAudioSessionInterruption, object: nil)
+                player.stop()
+                isPlaying = false
+            }
         }
     }
     

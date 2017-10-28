@@ -9,24 +9,8 @@
 import Foundation
 
 struct SpotifyURLFactory {
-    
-    private static let baseAccountsURL = "accounts.spotify.com"
+
     private static let baseSpotifyWebAPI = "api.spotify.com"
-    
-    static func createAccessTokenRequest() -> URLRequest {
-        var urlComponents = URLComponents()
-        urlComponents.scheme = "https"
-        urlComponents.host = baseAccountsURL
-        urlComponents.path = "/api/token"
-        
-        var urlRequest = URLRequest(url: urlComponents.url!)
-        urlRequest.httpMethod = "POST"
-        urlRequest.addValue("Basic \(SpotifyConstants.authorizationToken)", forHTTPHeaderField: "Authorization")
-        urlRequest.addValue("application/x-www-form-urlencoded", forHTTPHeaderField: "Content-Type")
-        urlRequest.httpBody = "grant_type=client_credentials".data(using: String.Encoding.utf8)
-        
-        return urlRequest
-    }
     
     static func createSearchRequest(forTerm term: String) -> URLRequest {
         let disallowedChars = CharacterSet(charactersIn: "()[],.!?")
@@ -63,7 +47,7 @@ struct SpotifyURLFactory {
         return urlRequest
     }
     
-    static func createUserAlbumsRequest() -> URLRequest {
+    static func createLibraryAlbumsRequest() -> URLRequest {
         var urlComponents = URLComponents()
         urlComponents.scheme = "https"
         urlComponents.host = baseSpotifyWebAPI
@@ -75,7 +59,7 @@ struct SpotifyURLFactory {
         return urlRequest
     }
     
-    static func createUserPlaylistsRequest() -> URLRequest {
+    static func createLibraryPlaylistsRequest() -> URLRequest {
         var urlComponents = URLComponents()
         urlComponents.scheme = "https"
         urlComponents.host = baseSpotifyWebAPI
@@ -87,11 +71,18 @@ struct SpotifyURLFactory {
         return urlRequest
     }
     
-    static func createUserTracksRequest() -> URLRequest {
+    static func createLibraryPlaylistTracksRequest(atOffset offset: Int, forOwnerID ownerID: String, forPlaylistID playlistID: String) -> URLRequest {
         var urlComponents = URLComponents()
         urlComponents.scheme = "https"
         urlComponents.host = baseSpotifyWebAPI
-        urlComponents.path = "/v1/me/tracks"
+        urlComponents.path = "/v1/users/\(ownerID)/playlists/\(playlistID)/tracks"
+        
+        let urlParameters = ["offset": String(offset)]
+        var queryItems = [URLQueryItem]()
+        for (key, value) in urlParameters {
+            queryItems.append(URLQueryItem(name: key, value: value))
+        }
+        urlComponents.queryItems = queryItems
         
         var urlRequest = URLRequest(url: urlComponents.url!)
         urlRequest.addValue("Bearer \(SpotifyAuthorizationManager.getAuth().session.accessToken!)", forHTTPHeaderField: "Authorization")
@@ -99,11 +90,19 @@ struct SpotifyURLFactory {
         return urlRequest
     }
     
-    static func createMyPlaylistsRequest(forOwnerID ownerID: String, forPlaylistID playlistID: String) -> URLRequest {
+    static func createLibraryTracksRequest(atOffset offset: Int) -> URLRequest {
         var urlComponents = URLComponents()
         urlComponents.scheme = "https"
         urlComponents.host = baseSpotifyWebAPI
-        urlComponents.path = "/v1/users/\(ownerID)/playlists/\(playlistID)"
+        urlComponents.path = "/v1/me/tracks"
+        
+        let urlParameters = ["limit": "50",
+                             "offset": String(offset)]
+        var queryItems = [URLQueryItem]()
+        for (key, value) in urlParameters {
+            queryItems.append(URLQueryItem(name: key, value: value))
+        }
+        urlComponents.queryItems = queryItems
         
         var urlRequest = URLRequest(url: urlComponents.url!)
         urlRequest.addValue("Bearer \(SpotifyAuthorizationManager.getAuth().session.accessToken!)", forHTTPHeaderField: "Authorization")

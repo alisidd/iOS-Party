@@ -12,10 +12,10 @@ import MultipeerConnectivity
 extension PartyViewController {
     
     func displayAlert() {
-        view.layoutIfNeeded()
-        UIView.animate(withDuration: 0.5) {
+        view.layoutSubviews()
+        UIView.animate(withDuration: 1) {
             self.alertViewConstraint.constant = 0
-            self.view.layoutIfNeeded()
+            self.view.layoutSubviews()
         }
     }
     
@@ -26,20 +26,22 @@ extension PartyViewController {
     }
     
     func hideAlert(completionHandler: ((Bool) -> Void)? = nil) {
-        view.layoutIfNeeded()
+        view.layoutSubviews()
         UIView.animate(withDuration: 1, animations: {
             self.alertViewConstraint.constant = -50
-            self.view.layoutIfNeeded()
+            self.view.layoutSubviews()
         }, completion: completionHandler)
     }
     
     func showConnectionRelatedViewsOnAlert() {
+        alertLabelConstraint.constant = 15
         reconnectButton.isHidden = false
         statusIndicatorView.isHidden = false
         resendButton.isHidden = true
     }
     
     func hideConnectionRelatedViewsOnAlert() {
+        alertLabelConstraint.constant = -5
         reconnectButton.isHidden = true
         statusIndicatorView.isHidden = true
     }
