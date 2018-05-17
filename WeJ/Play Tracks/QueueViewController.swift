@@ -249,6 +249,7 @@ extension QueueViewController {
         DispatchQueue.main.async {
             self.addButton.isHidden = false
             self.editButton.isHidden = true
+            self.comeOutOfEditingMode()
             UIView.animate(withDuration: 0.3, animations: { self.addButton.alpha = 1 })
         }
     }

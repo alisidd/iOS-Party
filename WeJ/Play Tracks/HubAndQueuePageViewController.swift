@@ -8,7 +8,11 @@
 
 import UIKit
 
-class HubAndQueuePageViewController: UIPageViewController, UIPageViewControllerDelegate, UIPageViewControllerDataSource {
+protocol TracksTableModifierDelegate: class {
+    func showAddButton()
+}
+
+class HubAndQueuePageViewController: UIPageViewController, UIPageViewControllerDelegate, UIPageViewControllerDataSource, TracksTableModifierDelegate {
     
     weak var partyDelegate: PartyViewControllerInfoDelegate?
     private var allViewControllers = [UIViewController]()
@@ -41,6 +45,7 @@ class HubAndQueuePageViewController: UIPageViewController, UIPageViewControllerD
         
         let vc1 = allViewControllers[0] as! HubViewController
         vc1.delegate = partyDelegate!
+        vc1.tracksTableModifierDelegate = self
         
         let vc2 = allViewControllers[1] as! QueueViewController
         vc2.delegate = partyDelegate!

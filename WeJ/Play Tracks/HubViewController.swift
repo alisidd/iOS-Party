@@ -11,9 +11,14 @@ import UIKit
 class HubViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
     
     weak var delegate: PartyViewControllerInfoDelegate?
+    weak var tracksTableModifierDelegate: TracksTableModifierDelegate?
     
-    fileprivate let minHeight = HubAndQueuePageViewController.minHeight
-    fileprivate let maxHeight = HubAndQueuePageViewController.maxHeight
+    fileprivate var minHeight: CGFloat {
+        return HubAndQueuePageViewController.minHeight
+    }
+    fileprivate var maxHeight: CGFloat {
+        return HubAndQueuePageViewController.maxHeight
+    }
     fileprivate var previousScrollOffset: CGFloat = 0
     
     @IBOutlet weak var hubTitle: UILabel?
@@ -174,12 +179,27 @@ extension HubViewController {
         
         delegate?.layout()
         if headerHeightConstraint > midPoint {
+            tracksTableModifierDelegate?.showAddButton()
+            makeTracksTableShorter()
+        } else {
+            makeTracksTableTaller()
+        }
+    }
+    
+    func makeTracksTableShorter() {
+        DispatchQueue.main.async {
+            self.delegate?.layout()
             UIView.animate(withDuration: 0.2, animations: {
                 self.headerHeightConstraint = self.minHeight
                 self.changeFontSizeForHub()
                 self.delegate?.layout()
             })
-        } else {
+        }
+    }
+    
+    func makeTracksTableTaller() {
+        DispatchQueue.main.async {
+            self.delegate?.layout()
             UIView.animate(withDuration: 0.2, animations: {
                 self.headerHeightConstraint = self.maxHeight
                 self.changeFontSizeForHub()

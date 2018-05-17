@@ -17,7 +17,7 @@ class AddTracksTabBarController: UITabBarController, UITabBarControllerDelegate,
         if #available(iOS 11.0, *), UIDevice.deviceType == .iPhoneX {
             return (UIApplication.shared.keyWindow?.safeAreaInsets.top)! - 46
         } else {
-           return -UIApplication.shared.statusBarFrame.height + 14
+           return -UIApplication.shared.statusBarFrame.height - 5
         }
     }
     
