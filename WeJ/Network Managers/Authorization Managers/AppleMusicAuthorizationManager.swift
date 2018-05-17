@@ -23,7 +23,6 @@ class AppleMusicAuthorizationManager: AuthorizationManager {
     // FIXME: - Make sure the authentication flow is correct (is postalertforinternet called when required)
     func requestAuthorization() {
         AppleMusicAuthorizationManager.delegate?.processingLogin = true
-        AppleMusicAuthorizationManager.requestDeveloperToken()
         if SKCloudServiceController.authorizationStatus() == .authorized {
             AppleMusicAuthorizationManager.handleCapabilities()
         } else {
@@ -38,7 +37,7 @@ class AppleMusicAuthorizationManager: AuthorizationManager {
         }
     }
     
-    private static func requestDeveloperToken() {
+    static func requestDeveloperToken() {
         let request = AppleMusicURLFactory.createDeveloperTokenRequest()
         
         DispatchQueue.global(qos: .userInitiated).async {

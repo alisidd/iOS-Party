@@ -21,6 +21,8 @@ class MusicPlayer {
     
     // MARK: - General Variables
     
+    var isScrubbing = false
+    
     var currentPosition: TimeInterval? {
         get {
             return (musicService == .spotify) ? spotifyPlayer?.playbackState?.position : appleMusicPlayer.currentPlaybackTime
@@ -42,7 +44,6 @@ class MusicPlayer {
             spotifyPlayer?.setTargetBitrate(.low, callback: nil)
         } else {
             appleMusicPlayer.beginGeneratingPlaybackNotifications()
-            appleMusicPlayer.prepareToPlay()
         }
     }
     
@@ -92,7 +93,14 @@ class MusicPlayer {
             spotifyPlayer?.setIsPlaying(true, callback: nil)
         } else {
             BackgroundTask.startBackgroundTask()
-            appleMusicPlayer.play()
+            if #available(iOS 10.1, *) {
+                appleMusicPlayer.prepareToPlay { (_) in
+                    self.appleMusicPlayer.play()
+                }
+            } else {
+                appleMusicPlayer.prepareToPlay()
+                appleMusicPlayer.play()
+            }
         }
         
     }
@@ -103,6 +111,12 @@ class MusicPlayer {
         } else {
             BackgroundTask.stopBackgroundTask()
             appleMusicPlayer.pause()
+        }
+    }
+    
+    func scrubTrack(toPosition position: TimeInterval, callback: @escaping SPTErrorableOperationCallback) {
+        if musicService == .spotify {
+            spotifyPlayer?.seek(to: position, callback: callback)
         }
     }
     

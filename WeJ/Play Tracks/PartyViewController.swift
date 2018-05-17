@@ -171,6 +171,9 @@ class PartyViewController: UIViewController, SPTAudioStreamingPlaybackDelegate, 
     private func setTimer() {
         let _ = Timer.scheduledTimer(withTimeInterval: 1, repeats: true) { [weak self] _ in
             self?.updateProgress()
+            if Party.musicService == .spotify {
+                self?.updateControlCenter()
+            }
         }
     }
     
@@ -193,6 +196,7 @@ class PartyViewController: UIViewController, SPTAudioStreamingPlaybackDelegate, 
     private func initializeCommandCenter() {
         MPRemoteCommandCenter.shared().pauseCommand.isEnabled = true
         MPRemoteCommandCenter.shared().playCommand.isEnabled = true
+        MPRemoteCommandCenter.shared().changePlaybackPositionCommand.isEnabled = true
         MPRemoteCommandCenter.shared().nextTrackCommand.isEnabled = true
     }
     
@@ -209,9 +213,35 @@ class PartyViewController: UIViewController, SPTAudioStreamingPlaybackDelegate, 
             return .success
         }
         
+        MPRemoteCommandCenter.shared().changePlaybackPositionCommand.addTarget { [weak self] (event) -> MPRemoteCommandHandlerStatus in
+            self?.musicPlayer.isScrubbing = true
+            self?.musicPlayer.scrubTrack(toPosition: (event as! MPChangePlaybackPositionCommandEvent).positionTime) { (error) in
+                self?.musicPlayer.isScrubbing = false
+            }
+            return .success
+        }
+        
         MPRemoteCommandCenter.shared().nextTrackCommand.addTarget { [weak self] _ -> MPRemoteCommandHandlerStatus in
             self?.skipTrack()
             return .success
+        }
+    }
+    
+    private func updateControlCenter() {
+        guard !musicPlayer.isScrubbing else { return }
+        DispatchQueue.main.async { [weak self] in
+            guard !Party.tracksQueue.isEmpty else { return }
+            guard let image = Party.tracksQueue[0].highResArtwork else { return }
+            guard let length = Party.tracksQueue[0].length else { return }
+            guard let currentPosition = self?.currentTrackPosition else { return }
+            
+            let artwork = MPMediaItemArtwork.init(boundsSize: image.size) { _ in return image }
+            let trackInfo: [String: Any] = [MPMediaItemPropertyTitle: Party.tracksQueue[0].name,
+                                            MPMediaItemPropertyArtist: Party.tracksQueue[0].artist,
+                                            MPMediaItemPropertyPlaybackDuration : Double(length),
+                                            MPNowPlayingInfoPropertyElapsedPlaybackTime: String(currentPosition),
+                                            MPMediaItemPropertyArtwork: artwork]
+            MPNowPlayingInfoCenter.default().nowPlayingInfo = trackInfo
         }
     }
     
@@ -263,7 +293,6 @@ class PartyViewController: UIViewController, SPTAudioStreamingPlaybackDelegate, 
             track.highResArtwork = image
             if !Party.tracksQueue.isEmpty && track == Party.tracksQueue[0] {
                 self?.currentlyPlayingArtwork.image = track.highResArtwork?.addGradient()
-                self?.updateControlCenter()
             }
         }
     }
@@ -281,20 +310,9 @@ class PartyViewController: UIViewController, SPTAudioStreamingPlaybackDelegate, 
                 self.currentlyPlayingArtwork.image = Party.tracksQueue[0].highResArtwork?.addGradient()
                 self.currentlyPlayingTrackName.text = Party.tracksQueue[0].name
                 self.currentlyPlayingArtistName.text = Party.tracksQueue[0].artist
-                self.updateControlCenter()
             } else {
                 self.hideCurrentlyPlayingArtwork()
             }
-        }
-    }
-    
-    private func updateControlCenter() {
-        if let image = Party.tracksQueue[0].highResArtwork {
-            let image = MPMediaItemArtwork.init(boundsSize: image.size) { _ in return image }
-            let trackInfo: [String: Any] = [MPMediaItemPropertyTitle: Party.tracksQueue[0].name,
-                                             MPMediaItemPropertyArtist: Party.tracksQueue[0].artist,
-                                             MPMediaItemPropertyArtwork: image]
-            MPNowPlayingInfoCenter.default().nowPlayingInfo = trackInfo
         }
     }
     
