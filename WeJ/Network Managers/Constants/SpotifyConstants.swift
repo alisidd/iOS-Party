@@ -16,8 +16,8 @@ struct SpotifyConstants {
     static let clientSecret = "2ee61ecb3172468c8007c4d682c8d023"
     
     static let redirectURL = URL(string: "partyapp://returnafterlogin")
-    static let swapURL = URL(string: "https://wej-refresh-token.herokuapp.com/swap")
-    static let refreshURL = URL(string: "https://wej-refresh-token.herokuapp.com/refresh")
+    static let swapURL =
+    static let refreshURL = 
     
     static var authorizationToken: String {
         return Data((clientID + ":" + clientSecret).utf8).base64EncodedString()

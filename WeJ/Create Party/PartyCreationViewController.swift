@@ -45,6 +45,10 @@ class PartyCreationViewController: UIViewController, UITextFieldDelegate, ViewCo
     
     // MARK: - Lifecycle
     
+    deinit {
+        print("DESTROYED")
+    }
+    
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         self.navigationController?.setNavigationBarHidden(false, animated: animated)

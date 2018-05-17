@@ -76,7 +76,6 @@ class AppleMusicAuthorizationManager: AuthorizationManager {
     
     static func requestStorefrontIdentifier() {
         let countryCodeHandler: (String?, Error?) -> Void = { (countryCode, error) in
-            print("Here")
             if let storefrontId = countryCode?.components(separatedBy: "-").first,
                 let countryCode = AppleMusicConstants.countryCodes[storefrontId] ?? countryCode {
                 Party.cookie = countryCode
