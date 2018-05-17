@@ -5,4 +5,3 @@
 #import <SpotifyAuthentication/SpotifyAuthentication.h>
 #import <SpotifyAudioPlayback/SpotifyAudioPlayback.h>
 #import "MXMLyricsAction/MXMLyricsAction.h"
-#import <GNSMessages.h>

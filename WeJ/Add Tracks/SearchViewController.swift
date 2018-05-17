@@ -92,7 +92,7 @@ class SearchViewController: UIViewController, UITextFieldDelegate {
         navigationItem.hidesBackButton = true
         
         let placeholderText = NSLocalizedString("Search", comment: "") + " " + Party.musicService.toString()
-        searchTracksField.attributedPlaceholder = NSAttributedString(string: placeholderText, attributes: [NSForegroundColorAttributeName: UIColor.lightGray])
+        searchTracksField.attributedPlaceholder = NSAttributedString(string: placeholderText, attributes: [NSAttributedStringKey.foregroundColor: UIColor.lightGray])
         
         trackTableView.backgroundColor = .clear
         trackTableView.contentInset = UIEdgeInsets(top: 0, left: 0, bottom: 50, right: 0)

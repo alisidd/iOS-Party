@@ -67,7 +67,6 @@
 		41C1113F1F2A158500A33771 /* AppleMusicConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 41C1113E1F2A158500A33771 /* AppleMusicConstants.swift */; };
 		41F345A41F34BD05007A250B /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 41F345A31F34BD05007A250B /* Assets.xcassets */; };
 		99E05000123D800F309A600D /* Pods_WeJ.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FB7198514224E0BBDF2873C4 /* Pods_WeJ.framework */; };
-		FC654A4920AD1AA0001B83C9 /* GoogleConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC654A4820AD1AA0001B83C9 /* GoogleConstants.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -148,7 +147,6 @@
 		41F345A31F34BD05007A250B /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; name = Assets.xcassets; path = "Supporting Files/Assets.xcassets"; sourceTree = "<group>"; };
 		CB810334E004CAA30F9C84CE /* Pods-WeJ.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-WeJ.release.xcconfig"; path = "Pods/Target Support Files/Pods-WeJ/Pods-WeJ.release.xcconfig"; sourceTree = "<group>"; };
 		FB7198514224E0BBDF2873C4 /* Pods_WeJ.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_WeJ.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		FC654A4820AD1AA0001B83C9 /* GoogleConstants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = GoogleConstants.swift; path = "Network Managers/Constants/GoogleConstants.swift"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -375,7 +373,6 @@
 				41774CCB1F3B72BB00108470 /* AppConstants.swift */,
 				41C1113E1F2A158500A33771 /* AppleMusicConstants.swift */,
 				416E8C3E1F2A046E00F524E0 /* SpotifyConstants.swift */,
-				FC654A4820AD1AA0001B83C9 /* GoogleConstants.swift */,
 			);
 			name = Constants;
 			sourceTree = "<group>";
@@ -447,7 +444,7 @@
 					417C38C81DDA43FD00F59926 = {
 						CreatedOnToolsVersion = 8.1;
 						DevelopmentTeam = Y3Y8M98F2M;
-						LastSwiftMigration = 0900;
+						LastSwiftMigration = 0930;
 						ProvisioningStyle = Automatic;
 						SystemCapabilities = {
 							com.apple.BackgroundModes = {
@@ -614,7 +611,6 @@
 				41A279EB1F28E54300C218A2 /* Appearance.swift in Sources */,
 				4113CFE91F362420000628B1 /* Automation.swift in Sources */,
 				41774CD81F3CE54C00108470 /* PlaylistSelectionViewController.swift in Sources */,
-				FC654A4920AD1AA0001B83C9 /* GoogleConstants.swift in Sources */,
 				416E8C3F1F2A046E00F524E0 /* SpotifyConstants.swift in Sources */,
 				417B9D4B1E317C3C0021F36E /* PartyViewController.swift in Sources */,
 				419F4AFA1F573A6D0006BB3C /* HintTableViewCell.swift in Sources */,
@@ -804,7 +800,7 @@
 				SWIFT_OBJC_BRIDGING_HEADER = "WeJ-Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_SWIFT3_OBJC_INFERENCE = On;
-				SWIFT_VERSION = 3.0;
+				SWIFT_VERSION = 4.0;
 				SYMROOT = build/Products;
 				TARGETED_DEVICE_FAMILY = 1;
 			};
@@ -836,7 +832,7 @@
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_OBJC_BRIDGING_HEADER = "WeJ-Bridging-Header.h";
 				SWIFT_SWIFT3_OBJC_INFERENCE = On;
-				SWIFT_VERSION = 3.0;
+				SWIFT_VERSION = 4.0;
 				SYMROOT = build/Products;
 				TARGETED_DEVICE_FAMILY = 1;
 			};

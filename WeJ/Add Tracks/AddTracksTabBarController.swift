@@ -84,7 +84,7 @@ class AddTracksTabBarController: UITabBarController, UITabBarControllerDelegate,
     
     private func adjustViews() {
         UITabBarItem.appearance().setTitleTextAttributes([
-            NSFontAttributeName: UIFont(name: "AvenirNext-Regular", size: 10)!
+            NSAttributedStringKey.font: UIFont(name: "AvenirNext-Regular", size: 10)!
             ], for: .normal)
     }
     
