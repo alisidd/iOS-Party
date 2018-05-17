@@ -98,9 +98,13 @@ class QueueViewController: UIViewController, UITableViewDelegate, UITableViewDat
     
     
     func tableView(_ tableView: UITableView, moveRowAt sourceIndexPath: IndexPath, to destinationIndexPath: IndexPath) {
-        let itemMoved = Party.tracksQueue[sourceIndexPath.row + 1]
-        Party.tracksQueue.remove(at: sourceIndexPath.row + 1)
-        Party.tracksQueue.insert(itemMoved, at: destinationIndexPath.row + 1)
+        var newTracksQueue = Party.tracksQueue.map { $0.copy() } as! [Track]
+        let itemMoved = newTracksQueue[sourceIndexPath.row + 1]
+        
+        newTracksQueue.remove(at: sourceIndexPath.row + 1)
+        newTracksQueue.insert(itemMoved, at: destinationIndexPath.row + 1)
+        
+        Party.tracksQueue = newTracksQueue
     }
     
     func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCellEditingStyle, forRowAt indexPath: IndexPath) {
