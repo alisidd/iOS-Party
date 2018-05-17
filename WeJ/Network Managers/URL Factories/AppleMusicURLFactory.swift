@@ -11,6 +11,19 @@ import Foundation
 struct AppleMusicURLFactory {
     private static let baseAppleMusicAPI = "api.music.apple.com"
     
+    static func createDeveloperTokenRequest() -> URLRequest {
+        var urlComponents = URLComponents()
+        urlComponents.scheme = "http"
+        urlComponents.host = AppConstants.webServerURL
+        urlComponents.port = AppConstants.webServerPort
+        urlComponents.path = "/apple_developer_token"
+        
+        var urlRequest = URLRequest(url: urlComponents.url!)
+        urlRequest.httpMethod = "GET"
+                
+        return urlRequest
+    }
+    
     static func createSearchRequest(forTerm term: String) -> URLRequest {
         let disallowedChars = CharacterSet(charactersIn: "()[],'.!?")
         let escapedTerm = term.components(separatedBy: disallowedChars).joined(separator: " ").replacedWhiteSpaceForURL
@@ -31,7 +44,7 @@ struct AppleMusicURLFactory {
         
         var urlRequest = URLRequest(url: urlComponents.url!)
         urlRequest.httpMethod = "GET"
-        urlRequest.addValue("Bearer \(AppleMusicConstants.developerToken)", forHTTPHeaderField: "Authorization")
+        urlRequest.addValue("Bearer \(AppleMusicAuthorizationManager.developerToken!)", forHTTPHeaderField: "Authorization")
         
         return urlRequest
     }
@@ -56,7 +69,7 @@ struct AppleMusicURLFactory {
         
         var urlRequest = URLRequest(url: urlComponents.url!)
         urlRequest.httpMethod = "GET"
-        urlRequest.addValue("Bearer \(AppleMusicConstants.developerToken)", forHTTPHeaderField: "Authorization")
+        urlRequest.addValue("Bearer \(AppleMusicAuthorizationManager.developerToken!)", forHTTPHeaderField: "Authorization")
         
         return urlRequest
     }
@@ -69,7 +82,7 @@ struct AppleMusicURLFactory {
         
         var urlRequest = URLRequest(url: urlComponents.url!)
         urlRequest.httpMethod = "GET"
-        urlRequest.addValue("Bearer \(AppleMusicConstants.developerToken)", forHTTPHeaderField: "Authorization")
+        urlRequest.addValue("Bearer \(AppleMusicAuthorizationManager.developerToken!)", forHTTPHeaderField: "Authorization")
         
         return urlRequest
     }
@@ -91,7 +104,7 @@ struct AppleMusicURLFactory {
         
         var urlRequest = URLRequest(url: urlComponents.url!)
         urlRequest.httpMethod = "GET"
-        urlRequest.addValue("Bearer \(AppleMusicConstants.developerToken)", forHTTPHeaderField: "Authorization")
+        urlRequest.addValue("Bearer \(AppleMusicAuthorizationManager.developerToken!)", forHTTPHeaderField: "Authorization")
         
         return urlRequest
     }

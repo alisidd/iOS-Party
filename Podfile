@@ -9,4 +9,5 @@ target 'WeJ' do
   pod 'RKNotificationHub'
   pod 'SwiftyJSON'
   pod 'NVActivityIndicatorView'
+  pod 'Siren'
 end

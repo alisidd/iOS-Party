@@ -134,11 +134,11 @@ extension QueueViewController {
     
     private var headerHeightConstraint: CGFloat {
         get {
-            return delegate?.returnTableHeight() ?? maxHeight
+            return delegate?.tableHeight ?? maxHeight
         }
         
         set {
-            delegate?.setTable(withHeight: newValue)
+            delegate?.tableHeight = newValue
             if headerHeightConstraint == maxHeight {
                 goIntoEditingMode()
             } else if headerHeightConstraint == minHeight {
@@ -232,6 +232,7 @@ extension QueueViewController {
         delegate?.layout()
         if headerHeightConstraint > midPoint {
             makeTracksTableShorter()
+            self.displayRatingsView()
         } else {
             makeTracksTableTaller()
         }
@@ -279,6 +280,15 @@ extension QueueViewController {
                 self.changeFontSizeForUpNext()
                 self.delegate?.layout()
             }
+        }
+    }
+    
+    func displayRatingsView() {
+        if #available(iOS 10.3, *),
+            UserDefaults.standard.integer(forKey: "launchCount") > AppConstants.minimumLaunchesBeforeReview &&
+                !Party.tracksQueue.isEmpty &&
+                delegate!.connectedUsers > 0 {
+            SKStoreReviewController.requestReview()
         }
     }
     

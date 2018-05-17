@@ -18,10 +18,12 @@ class AppleMusicAuthorizationManager: AuthorizationManager {
     static weak var delegate: ViewControllerAccessDelegate?
     
     static let cloudServiceController = SKCloudServiceController()
+    static var developerToken: String!
     static var storyboardSegue: String!
-    
+    // FIXME: - Make sure the authentication flow is correct (is postalertforinternet called when required)
     func requestAuthorization() {
         AppleMusicAuthorizationManager.delegate?.processingLogin = true
+        AppleMusicAuthorizationManager.requestDeveloperToken()
         if SKCloudServiceController.authorizationStatus() == .authorized {
             AppleMusicAuthorizationManager.handleCapabilities()
         } else {
@@ -33,6 +35,20 @@ class AppleMusicAuthorizationManager: AuthorizationManager {
                     AppleMusicAuthorizationManager.delegate?.processingLogin = false
                 }
             }
+        }
+    }
+    
+    private static func requestDeveloperToken() {
+        let request = AppleMusicURLFactory.createDeveloperTokenRequest()
+        
+        DispatchQueue.global(qos: .userInitiated).async {
+            let task = URLSession.shared.dataTask(with: request) { (data, response, error) in
+                if let statusCode = (response as? HTTPURLResponse)?.statusCode, statusCode == 200 {
+                    developerToken = String(data: data!, encoding: .utf8)!
+                }
+            }
+            
+            task.resume()
         }
     }
     
@@ -61,6 +77,7 @@ class AppleMusicAuthorizationManager: AuthorizationManager {
     
     static func requestStorefrontIdentifier() {
         let countryCodeHandler: (String?, Error?) -> Void = { (countryCode, error) in
+            print("Here")
             if let storefrontId = countryCode?.components(separatedBy: "-").first,
                 let countryCode = AppleMusicConstants.countryCodes[storefrontId] ?? countryCode {
                 Party.cookie = countryCode

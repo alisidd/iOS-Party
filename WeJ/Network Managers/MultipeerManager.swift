@@ -25,7 +25,7 @@ class MultipeerManager: NSObject {
     fileprivate var serviceBrowser: MCNearbyServiceBrowser!
     
     fileprivate var isHost: Bool
-    fileprivate var sessions = [MCPeerID : (partyName: String, session: MCSession)]() {
+    var sessions = [MCPeerID : (partyName: String, session: MCSession)]() {
         didSet {
             partiesListerDelegate?.reloadList()
         }

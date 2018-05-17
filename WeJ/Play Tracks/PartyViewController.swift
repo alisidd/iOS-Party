@@ -29,11 +29,11 @@ protocol NetworkManagerDelegate: class {
 
 protocol PartyViewControllerInfoDelegate: class {
     var isHost: Bool { get }
-    func getCurrentPosition() -> TimeInterval?
+    var connectedUsers: Int { get }
+    var currentTrackPosition: TimeInterval? { get }
     var personalQueue: Set<Track> { get }
     func sendTracksToPeers(forTracks: [Track], toRemove: Bool)
-    func returnTableHeight() -> CGFloat
-    func setTable(withHeight height: CGFloat)
+    var tableHeight: CGFloat { get set }
     func layout()
 }
 
@@ -573,16 +573,21 @@ class PartyViewController: UIViewController, SPTAudioStreamingPlaybackDelegate, 
     
     // MARK: PartyViewControllerInfoDelegate
     
-    func getCurrentPosition() -> TimeInterval? {
+    var connectedUsers: Int {
+        return networkManager!.sessions.count
+    }
+    
+    var currentTrackPosition: TimeInterval? {
         return isHost ? musicPlayer.currentPosition : currentPositionFromHost
     }
     
-    func returnTableHeight() -> CGFloat {
-        return tableHeightConstraint.constant
-    }
-    
-    func setTable(withHeight height: CGFloat) {
-        tableHeightConstraint.constant = height
+    var tableHeight: CGFloat {
+        get {
+            return tableHeightConstraint.constant
+        }
+        set {
+            tableHeightConstraint.constant = newValue
+        }
     }
     
     func layout() {

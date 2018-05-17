@@ -78,7 +78,7 @@ class HubViewController: UIViewController, UITableViewDelegate, UITableViewDataS
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         if hubOptions[indexPath.row] == NSLocalizedString("Leave Party", comment: "") {
             leaveParty()
-        } else if let position = delegate?.getCurrentPosition(), !Party.tracksQueue.isEmpty {
+        } else if let position = delegate?.currentTrackPosition, !Party.tracksQueue.isEmpty {
             MXMLyricsAction.sharedExtension().findLyricsForSong(
                 withTitle: Party.tracksQueue[0].name,
                 artist: Party.tracksQueue[0].artist,
@@ -113,11 +113,11 @@ extension HubViewController {
     
     private var headerHeightConstraint: CGFloat {
         get {
-            return delegate!.returnTableHeight()
+            return delegate!.tableHeight
         }
         
         set {
-            delegate?.setTable(withHeight: newValue)
+            delegate?.tableHeight = newValue
         }
     }
     

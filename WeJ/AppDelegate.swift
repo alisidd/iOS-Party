@@ -8,6 +8,7 @@
 
 import UIKit
 import CoreData
+import Siren
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
@@ -15,6 +16,14 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     var window: UIWindow?
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
+        let currentCount = UserDefaults.standard.integer(forKey: "launchCount")
+        UserDefaults.standard.set(currentCount + 1, forKey:"launchCount")
+        UserDefaults.standard.synchronize()
+        
+        Siren.shared.alertType = .option
+        Siren.shared.majorUpdateAlertType = .force
+        Siren.shared.checkVersion(checkType: .daily)
+        
         return true
     }
     
