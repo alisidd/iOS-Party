@@ -54,7 +54,3 @@ class InitialSetupViewController: UIViewController, UIGestureRecognizerDelegate 
     }
     
 }
-
-extension InitialSetupViewController {
-    
-}

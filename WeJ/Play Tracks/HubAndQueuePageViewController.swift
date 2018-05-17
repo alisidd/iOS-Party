@@ -13,8 +13,12 @@ class HubAndQueuePageViewController: UIPageViewController, UIPageViewControllerD
     weak var partyDelegate: PartyViewControllerInfoDelegate?
     private var allViewControllers = [UIViewController]()
     
-    static let minHeight = 0.53 * UIScreen.main.bounds.height
-    static let maxHeight = -UIApplication.shared.statusBarFrame.height
+    static var minHeight: CGFloat {
+        return UIDevice.deviceType == .iPhoneX ? 0.47 * UIScreen.main.bounds.height : 0.56 * UIScreen.main.bounds.height
+    }
+    static var maxHeight: CGFloat {
+        return Party.tracksQueue.isEmpty ? CGFloat(0.0) : CGFloat(120.0)
+    }
 
     override func viewDidLoad() {
         super.viewDidLoad()

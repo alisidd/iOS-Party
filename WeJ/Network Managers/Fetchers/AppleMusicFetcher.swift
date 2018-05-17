@@ -43,7 +43,7 @@ class AppleMusicFetcher: Fetcher {
         let request = AppleMusicURLFactory.createSearchRequest(forTerm: term)
         
         AppleMusicFetcher.templateWebRequest(request) { [weak self] (data, response, _) in
-            let tracksJSON = JSON(data: data!)["results"]["songs"]["data"].arrayValue
+            let tracksJSON = try! JSON(data: data!)["results"]["songs"]["data"].arrayValue
             for trackJSON in tracksJSON {
                 guard self != nil else { return }
                 self!.tracksList.append(self!.parse(json: trackJSON))
@@ -55,9 +55,9 @@ class AppleMusicFetcher: Fetcher {
     static func getSearchHints(forTerm term: String, completionHandler: @escaping ([String]) -> Void) {
         let request = AppleMusicURLFactory.createSearchHintsRequest(forTerm: term)
         
-        templateWebRequest(request) { (data, response, _) in
+        templateWebRequest(request) { (data, response, error) in
             var hints = [String]()
-            let hintsJSON = JSON(data: data!)["results"]["terms"].arrayValue
+            let hintsJSON = try! JSON(data: data!)["results"]["terms"].arrayValue
             for hintJSON in hintsJSON {
                 hints.append(hintJSON.stringValue)
             }
@@ -78,7 +78,7 @@ class AppleMusicFetcher: Fetcher {
             for album in albumsList where !album.items.isEmpty {
                 let albumName = album.items[0].albumTitle ?? "#"
                 
-                let key = String(albumName.characters.first!).uppercased()
+                let key = String(albumName.first!).uppercased()
                 let tracks = Track.convert(tracks: album.items)
                 
                 if optionsDict[key] != nil {
@@ -103,7 +103,7 @@ class AppleMusicFetcher: Fetcher {
             for artist in artistsList where !artist.items.isEmpty {
                 let artistName = artist.items[0].artist ?? "#"
                 
-                let key = String(artistName.characters.first!).uppercased()
+                let key = String(artistName.first!).uppercased()
                 let tracks = Track.convert(tracks: artist.items)
                 
                 if optionsDict[key] != nil {
@@ -128,7 +128,7 @@ class AppleMusicFetcher: Fetcher {
             for playlist in playlistsList where !playlist.items.isEmpty {
                 let playlistName = playlist.value(forProperty: MPMediaPlaylistPropertyName) as? String ?? "#"
                 
-                let key = String(playlistName.characters.first!)
+                let key = String(playlistName.first!)
                 let tracks = Track.convert(tracks: playlist.items)
                 
                 if optionsDict[key] != nil {
@@ -168,7 +168,7 @@ class AppleMusicFetcher: Fetcher {
                 dispatchGroup.enter()
                 let task = URLSession.shared.dataTask(with: request) { (data, response, _) in
                     if let statusCode = (response as? HTTPURLResponse)?.statusCode, statusCode == 200 {
-                        let tracksJSON = JSON(data: data!)["results"]["songs"]["data"].arrayValue
+                        let tracksJSON = try! JSON(data: data!)["results"]["songs"]["data"].arrayValue
                         guard self != nil else { return }
                         
                         if !tracksJSON.isEmpty {
@@ -203,7 +203,7 @@ class AppleMusicFetcher: Fetcher {
         let request = AppleMusicURLFactory.createMostPlayedRequest()
         
         AppleMusicFetcher.templateWebRequest(request) { [weak self] (data, response, _) in
-            let chartsJSON = JSON(data: data!)["results"]["songs"]
+            let chartsJSON = try! JSON(data: data!)["results"]["songs"]
             if !chartsJSON.arrayValue.isEmpty {
                 let tracksJSON = chartsJSON.arrayValue[0]["data"].arrayValue
                 for trackJSON in tracksJSON {

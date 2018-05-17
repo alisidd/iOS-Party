@@ -42,13 +42,14 @@ FOUNDATION_EXPORT CGFloat const RKNotificationHubDefaultDiameter;
 @interface RKNotificationHub : NSObject
 
 //%%% setup
-- (id)initWithView:(UIView *)view andCount:(int)startCount;
+- (id)initWithView:(UIView *)view;
 - (id)initWithBarButtonItem:(UIBarButtonItem *)barButtonItem;
 
 //%%% adjustment methods
 - (void)setView:(UIView *)view andCount:(int)startCount;
 - (void)setCircleAtFrame:(CGRect)frame;
 - (void)setCircleColor:(UIColor*)circleColor labelColor:(UIColor*)labelColor;
+- (void)setCircleBorderColor:(UIColor *)color borderWidth:(CGFloat)width;
 - (void)moveCircleByX:(CGFloat)x Y:(CGFloat)y;
 - (void)scaleCircleSizeBy:(CGFloat)scale;
 @property (nonatomic, strong) UIFont *countLabelFont;

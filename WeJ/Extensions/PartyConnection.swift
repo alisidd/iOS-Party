@@ -14,7 +14,11 @@ extension PartyViewController {
     func displayAlert() {
         view.layoutSubviews()
         UIView.animate(withDuration: 1) {
-            self.alertViewConstraint.constant = 0
+            if #available(iOS 11.0, *), UIDevice.deviceType == .iPhoneX {
+                self.alertViewConstraint.constant = -(UIApplication.shared.keyWindow?.safeAreaInsets.bottom)!
+            } else {
+                self.alertViewConstraint.constant = -34
+            }
             self.view.layoutSubviews()
         }
     }
@@ -28,7 +32,7 @@ extension PartyViewController {
     func hideAlert(completionHandler: ((Bool) -> Void)? = nil) {
         view.layoutSubviews()
         UIView.animate(withDuration: 1, animations: {
-            self.alertViewConstraint.constant = -50
+            self.alertViewConstraint.constant = -130
             self.view.layoutSubviews()
         }, completion: completionHandler)
     }

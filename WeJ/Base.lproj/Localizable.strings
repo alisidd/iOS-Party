@@ -1,0 +1,49 @@
+/* 
+  Localizable.strings
+  WeJ
+
+  Created by Ali Siddiqui on 8/27/17.
+  Copyright © 2017 Mohammad Ali Siddiqui. All rights reserved.
+*/
+
+"Version" = "Version";
+
+"Party" = "Party";
+"Edit" = "Edit";
+"Done" = "Done";
+"Close" = "Close";
+"Remove" = "Remove";
+"View Lyrics" = "View Lyrics";
+"Leave Party" = "Leave Party";
+
+"Not Connected" = "Not Connected";
+"Connecting" = "Connecting";
+"Connected" = "Connected";
+
+"Search" = "Search";
+"Albums" = "Albums";
+"Artists" = "Artists";
+"Playlists" = "Playlists";
+"All Songs" = "All Songs";
+
+"library song not found" = "library song not found";
+"library songs not found" = "library songs not found";
+"request failed to send" = "request failed to send";
+"requests failed to send" = "requests failed to send";
+
+"Error" = "Error";
+"Please check your internet connection" = "Please check your internet connection";
+"Try Again" = "Try Again";
+
+"Apple Music Access Denied" = "Apple Music Access Denied";
+"Go to Settings to enable Apple Music" = "Go to Settings to enable Apple Music";
+"Cancel" = "Cancel";
+"Settings" = "Settings";
+"No Apple Music Subscription" = "No Apple Music Subscription";
+"An Apple Music Subscription is required to play music" = "An Apple Music Subscription is required to play music";
+
+"No Spotify Premium" = "No Spotify Premium";
+"A Spotify Premium account is required to play music" = "A Spotify Premium account is required to play music";
+
+"No Track Playing" = "No Track Playing";
+"OK" = "OK";

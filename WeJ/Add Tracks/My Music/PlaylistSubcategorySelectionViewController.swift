@@ -60,7 +60,8 @@ class PlaylistSubcategorySelectionViewController: UIViewController, UITableViewD
     }
     
     private func initializeBadge() {
-        badge = RKNotificationHub(view: doneButton.titleLabel, andCount: Int32(totalTracksCount))
+        badge = RKNotificationHub(view: doneButton.titleLabel)
+        badge.count = Int32(totalTracksCount)
         badge.moveCircleBy(x: 51, y: 0)
         badge.scaleCircleSize(by: 0.7)
         badge.setCircleColor(AppConstants.orange, label: .white)

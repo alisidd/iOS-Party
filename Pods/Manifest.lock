@@ -1,9 +1,9 @@
 PODS:
-  - NVActivityIndicatorView (3.7.0):
-    - NVActivityIndicatorView/Presenter (= 3.7.0)
-  - NVActivityIndicatorView/Presenter (3.7.0)
-  - RKNotificationHub (2.0.4)
-  - SwiftyJSON (3.1.4)
+  - NVActivityIndicatorView (4.2.1):
+    - NVActivityIndicatorView/Presenter (= 4.2.1)
+  - NVActivityIndicatorView/Presenter (4.2.1)
+  - RKNotificationHub (2.0.5)
+  - SwiftyJSON (4.1.0)
 
 DEPENDENCIES:
   - NVActivityIndicatorView
@@ -11,10 +11,10 @@ DEPENDENCIES:
   - SwiftyJSON
 
 SPEC CHECKSUMS:
-  NVActivityIndicatorView: d3738df7e2e476aca0ba6bf32a8c9fbcfc33d64b
-  RKNotificationHub: 3765424499139c3d3885b681bb0837f072d12ae6
-  SwiftyJSON: c2842d878f95482ffceec5709abc3d05680c0220
+  NVActivityIndicatorView: 8068ba3ad39cb44cbaab25d89ff2546b3f092681
+  RKNotificationHub: e926748820d719f21ff374657a47fceefa1796b4
+  SwiftyJSON: c29297daf073d2aa016295d5809cdd68045c39b3
 
-PODFILE CHECKSUM: b92a23af5fcc4963fc2e1a183852463ad27a7e70
+PODFILE CHECKSUM: 578956f2a489e174467de31ff7b5f4c3916b96ca
 
-COCOAPODS: 1.2.0
+COCOAPODS: 1.4.0

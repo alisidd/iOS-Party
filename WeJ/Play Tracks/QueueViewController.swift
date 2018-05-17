@@ -18,8 +18,12 @@ class QueueViewController: UIViewController, UITableViewDelegate, UITableViewDat
     
     @IBOutlet weak var tracksTableView: UITableView!
 
-    fileprivate let minHeight = HubAndQueuePageViewController.minHeight
-    fileprivate let maxHeight = HubAndQueuePageViewController.maxHeight
+    fileprivate var minHeight: CGFloat {
+        return HubAndQueuePageViewController.minHeight
+    }
+    fileprivate var maxHeight: CGFloat {
+        return HubAndQueuePageViewController.maxHeight
+    }
     
     fileprivate var previousScrollOffset: CGFloat = 0
         
@@ -227,17 +231,9 @@ extension QueueViewController {
         
         delegate?.layout()
         if headerHeightConstraint > midPoint {
-            UIView.animate(withDuration: 0.2, animations: {
-                self.headerHeightConstraint = self.minHeight
-                self.changeFontSizeForUpNext()
-                self.delegate?.layout()
-            })
+            makeTracksTableShorter()
         } else {
-            UIView.animate(withDuration: 0.2, animations: {
-                self.headerHeightConstraint = self.maxHeight
-                self.changeFontSizeForUpNext()
-                self.delegate?.layout()
-            })
+            makeTracksTableTaller()
         }
     }
     

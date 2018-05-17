@@ -81,7 +81,8 @@ class LibraryTracksViewController: UIViewController, UITableViewDelegate, UITabl
     }
     
     private func initializeBadge() {
-        badge = RKNotificationHub(view: doneButton.titleLabel, andCount: Int32(totalTracksCount))
+        badge = RKNotificationHub(view: doneButton.titleLabel)
+        badge.count = Int32(totalTracksCount)
         badge.moveCircleBy(x: 51, y: 0)
         badge.scaleCircleSize(by: 0.7)
         badge.setCircleColor(AppConstants.orange, label: .white)
@@ -97,7 +98,7 @@ class LibraryTracksViewController: UIViewController, UITableViewDelegate, UITabl
     }
     
     private func adjustViews() {
-        titleLabel.text = String(playlistName.characters.prefix(20)) + (playlistName.characters.count > 20 ? "..." : "")
+        titleLabel.text = String(playlistName.prefix(20)) + (playlistName.count > 20 ? "..." : "")
     }
     
     private func adjustFontSizes() {
@@ -163,7 +164,7 @@ class LibraryTracksViewController: UIViewController, UITableViewDelegate, UITabl
     
     private func populateUserTracksDict() {
         for track in libraryTracksList {
-            let key = String(track.name.characters.first ?? "#")
+            let key = String(track.name.first ?? "#")
             
             if libraryTracksDict[key] != nil {
                 libraryTracksDict[key]!.append(track)

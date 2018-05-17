@@ -15,7 +15,8 @@ extension UIDevice {
         case iPhone5_5s_SE
         case iPhone6_6s
         case iPhone6p_6ps
-        case after_iPhone6p_6ps
+        case iPhoneX
+        case after_iPhoneX
     }
     
     static var deviceType : DeviceTypes {
@@ -28,8 +29,10 @@ extension UIDevice {
             return .iPhone6_6s
         case 736.0:
             return .iPhone6p_6ps
+        case 812.0:
+            return .iPhoneX
         default:
-            return .after_iPhone6p_6ps
+            return .after_iPhoneX
         }
     }
 }
@@ -47,7 +50,7 @@ extension UIDevice {
             let regex = try NSRegularExpression(pattern: expression, options: .caseInsensitive)
             let matches = regex.matches(in: deviceName as String,
                                                 options: NSRegularExpression.MatchingOptions.init(rawValue: 0),
-                                                range: NSMakeRange(0, deviceName.characters.count))
+                                                range: NSMakeRange(0, deviceName.count))
             let rangeNotFound = NSMakeRange(NSNotFound, 0)
             
             var nameParts = [String]()

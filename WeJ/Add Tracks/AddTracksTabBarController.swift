@@ -12,8 +12,14 @@ class AddTracksTabBarController: UITabBarController, UITabBarControllerDelegate,
     
     var myHubController: MusicLibrarySelectionViewController!
     
-    fileprivate let minHeight: CGFloat = 305.5
-    fileprivate let maxHeight = -UIApplication.shared.statusBarFrame.height + 11
+    fileprivate let minHeight: CGFloat = 310
+    fileprivate var maxHeight: CGFloat {
+        if #available(iOS 11.0, *), UIDevice.deviceType == .iPhoneX {
+            return (UIApplication.shared.keyWindow?.safeAreaInsets.top)! - 46
+        } else {
+           return -UIApplication.shared.statusBarFrame.height + 14
+        }
+    }
     
     fileprivate var previousScrollOffset: CGFloat = 0
     

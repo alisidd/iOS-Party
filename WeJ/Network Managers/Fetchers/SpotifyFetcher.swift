@@ -29,7 +29,7 @@ class SpotifyFetcher: Fetcher {
         let request = SpotifyURLFactory.createSearchRequest(forTerm: term)
         
         SpotifyFetcher.templateWebRequest(request) { [weak self] (data, response, _) in
-            let tracksJSON = JSON(data: data!)["tracks"]["items"].arrayValue
+            let tracksJSON = try! JSON(data: data!)["tracks"]["items"].arrayValue
             for trackJSON in tracksJSON {
                 guard self != nil else { return }
                 self!.tracksList.append(self!.parse(json: trackJSON))
@@ -44,12 +44,12 @@ class SpotifyFetcher: Fetcher {
         SpotifyFetcher.templateWebRequest(request) { [weak self] (data, response, _) in
             var optionsDict = [String: [Option]]()
             
-            let albumsJSON = JSON(data: data!)["items"].arrayValue
+            let albumsJSON = try! JSON(data: data!)["items"].arrayValue
             for albumJSON in albumsJSON {
                 let albumName = albumJSON["name"].stringValue
                 let tracksJSON = albumJSON["name"]["tracks"].arrayValue
                 
-                let key = String(albumName.characters.first ?? "#")
+                let key = String(albumName.first ?? "#")
                 var tracks = [Track]()
                 
                 for trackJSON in tracksJSON {
@@ -77,11 +77,11 @@ class SpotifyFetcher: Fetcher {
         SpotifyFetcher.templateWebRequest(request) { (data, response, _) in
             var optionsDict = [String: [Option]]()
             
-            let playlistsJSON = JSON(data: data!)["items"].arrayValue
+            let playlistsJSON = try! JSON(data: data!)["items"].arrayValue
             for playlistJSON in playlistsJSON {
                 let playlistName = playlistJSON["name"].stringValue
                 
-                let key = String(playlistName.characters.first ?? "#")
+                let key = String(playlistName.first ?? "#")
                 
                 let dummyTrack = Track()
                 dummyTrack.id = playlistJSON["owner"]["id"].stringValue //ownerID
@@ -103,7 +103,7 @@ class SpotifyFetcher: Fetcher {
         DispatchQueue.global(qos: .userInitiated).async { [weak self] in
             let task = URLSession.shared.dataTask(with: request) { (data, response, _) in
                 if let statusCode = (response as? HTTPURLResponse)?.statusCode, statusCode == 200 {
-                    let json = JSON(data: data!)
+                    let json = try! JSON(data: data!)
                     let tracksJSON = json["items"].arrayValue
                     for trackJSON in tracksJSON {
                         guard self != nil else { return }
@@ -130,7 +130,7 @@ class SpotifyFetcher: Fetcher {
         DispatchQueue.global(qos: .userInitiated).async { [weak self] in
             let task = URLSession.shared.dataTask(with: request) { (data, response, error) in
                 if let statusCode = (response as? HTTPURLResponse)?.statusCode, statusCode == 200 {
-                    let json = JSON(data: data!)
+                    let json = try! JSON(data: data!)
                     let tracksJSON = json["items"].arrayValue
                     for trackJSON in tracksJSON {
                         guard self != nil else { return }
@@ -163,7 +163,7 @@ class SpotifyFetcher: Fetcher {
                 dispatchGroup.enter()
                 let task = URLSession.shared.dataTask(with: request) { (data, response, _) in
                     if let statusCode = (response as? HTTPURLResponse)?.statusCode, statusCode == 200 {
-                        let tracksJSON = JSON(data: data!)["tracks"]["items"].arrayValue
+                        let tracksJSON = try! JSON(data: data!)["tracks"]["items"].arrayValue
                         guard self != nil else { return }
                         
                         if !tracksJSON.isEmpty {
@@ -199,7 +199,7 @@ class SpotifyFetcher: Fetcher {
             let request = SpotifyURLFactory.createPlaylistsRequest(forOwnerID: ownerID, forPlaylistID: playlistID)
             
             SpotifyFetcher.templateWebRequest(request) {(data, response, _) in
-                let tracksJSON = JSON(data: data!)["tracks"]["items"].arrayValue
+                let tracksJSON = try! JSON(data: data!)["tracks"]["items"].arrayValue
                 for (i, trackJSON) in tracksJSON.enumerated() where i < 20 {
                     guard self != nil else { return }
                     self!.tracksList.append(self!.parse(json: trackJSON["track"]))
@@ -213,7 +213,7 @@ class SpotifyFetcher: Fetcher {
         let request = SpotifyURLFactory.createPlaylistsIDRequest(forCategoryID: categoryID)
         
         SpotifyFetcher.templateWebRequest(request) { (data, response, _) in
-            let playlistsJSON = JSON(data: data!)["playlists"]["items"].arrayValue
+            let playlistsJSON = try! JSON(data: data!)["playlists"]["items"].arrayValue
             if let playlistJSON = playlistsJSON.first {
                 let ownerID = playlistJSON["owner"]["id"].stringValue
                 let playlistID = playlistJSON["id"].stringValue
