@@ -120,10 +120,18 @@ class SpotifyAuthorizationManager: NSObject, AuthorizationManager, SPTAudioStrea
         }
     }
     
-    func audioStreaming(_ audioStreaming: SPTAudioStreamingController!, didReceiveError error: Error!) {
-        SpotifyAuthorizationManager.postAlertForSpotifyPremium()
+    func audioStreamingDidEncounterTemporaryConnectionError(_ audioStreaming: SPTAudioStreamingController!) {
+        SpotifyAuthorizationManager.postAlertForInternet()
+        SPTAudioStreamingController.sharedInstance().logout()
         SpotifyAuthorizationManager.delegate?.processingLogin = false
-        SpotifyAuthorizationManager.getAuth().session = nil
+    }
+    
+    func audioStreaming(_ audioStreaming: SPTAudioStreamingController!, didReceiveError error: Error!) {
+        if (error! as NSError).code == 9 {
+            SpotifyAuthorizationManager.postAlertForSpotifyPremium()
+            SpotifyAuthorizationManager.getAuth().session = nil
+        }
+        SpotifyAuthorizationManager.delegate?.processingLogin = false
     }
     
     // MARK: - Alerts

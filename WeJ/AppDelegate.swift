@@ -22,9 +22,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         
         Siren.shared.alertType = .option
         Siren.shared.majorUpdateAlertType = .force
+        Siren.shared.minorUpdateAlertType = .force
         Siren.shared.checkVersion(checkType: .daily)
-        
-        AppleMusicAuthorizationManager.requestDeveloperToken()
         
         return true
     }
