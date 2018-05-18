@@ -13,9 +13,9 @@ struct AppleMusicURLFactory {
     
     static func createDeveloperTokenRequest() -> URLRequest {
         var urlComponents = URLComponents()
-        urlComponents.scheme = "http"
-        urlComponents.host = AppConstants.webServerURL
-        urlComponents.port = AppConstants.webServerPort
+        urlComponents.scheme = "https"
+        urlComponents.host = PrivateConfig.webServerURL
+        urlComponents.port = PrivateConfig.appleWebServerPort
         urlComponents.path = "/apple_developer_token"
         
         var urlRequest = URLRequest(url: urlComponents.url!)

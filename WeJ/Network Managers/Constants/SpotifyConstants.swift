@@ -12,12 +12,12 @@ struct SpotifyConstants {
     
     static let spotifyPlayerDidLoginNotification = Notification.Name("spotifyPlayerDidLoginNotification")
     
-    static let clientID = "308657d9662146ecae57855ac2a01045"
-    static let clientSecret = "2ee61ecb3172468c8007c4d682c8d023"
+    static let clientID = PrivateConfig.spotifyClientID
+    static let clientSecret = PrivateConfig.spotifyClientSecret
     
-    static let redirectURL = URL(string: "partyapp://returnafterlogin")
-    static let swapURL =
-    static let refreshURL = 
+    static let redirectURL = PrivateConfig.spotifyRedirectURL
+    static let swapURL = URL(string: "http://\(PrivateConfig.webServerURL):\(PrivateConfig.spotifyWebServerPort)/swap")
+    static let refreshURL = URL(string: "http://\(PrivateConfig.webServerURL):\(PrivateConfig.spotifyWebServerPort)/refresh")
     
     static var authorizationToken: String {
         return Data((clientID + ":" + clientSecret).utf8).base64EncodedString()

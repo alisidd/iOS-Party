@@ -20,9 +20,6 @@ struct AppConstants {
     static let doneButtonWidth = 51
     static let doneButtonHeight = 40
     
-    static let webServerURL =
-    static let webServerPort = 
-    
     static let minimumLaunchesBeforeReview = 5
     
 }

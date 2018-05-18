@@ -16,10 +16,15 @@ class SpotifyAuthorizationManager: NSObject, AuthorizationManager, SPTAudioStrea
     
     private static var authViewController: SFSafariViewController!
     private static let updateSession: (Error?, SPTSession?) -> Void = { (error, session) in
-        if let sess = session {
-            getAuth().session = sess
-            loginToPlayer(withAccessToken: sess.accessToken)
+        guard error == nil else {
+            if (error! as NSError).code == -1009 {
+                postAlertForInternet()
+            }
+            delegate?.processingLogin = false
+            return
         }
+        getAuth().session = session!
+        loginToPlayer(withAccessToken: session!.accessToken)
     }
     static var storyboardSegue: String!
     private static var isLoggedIn = false
