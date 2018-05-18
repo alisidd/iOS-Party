@@ -225,7 +225,6 @@ extension MultipeerManager: MCSessionDelegate {
             sessions.removeValue(forKey: peerID)
             if !sessions.contains(where: { !$0.value.session.connectedPeers.isEmpty }) {
                 delegate?.updateStatus(withState: state)
-                delegate?.resetManager()
             }
         } else {
             delegate?.updateStatus(withState: state)

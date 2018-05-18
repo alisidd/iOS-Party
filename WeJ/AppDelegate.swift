@@ -25,6 +25,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         Siren.shared.minorUpdateAlertType = .force
         Siren.shared.checkVersion(checkType: .daily)
         
+        AppleMusicAuthorizationManager.requestDeveloperToken()
+        
         return true
     }
     

@@ -157,7 +157,6 @@ class PartyCreationViewController: UIViewController, UITextFieldDelegate, ViewCo
     @IBAction func createParty() {
         if !processingLogin {
             authorizationManager = Party.musicService == .spotify ? SpotifyAuthorizationManager() : AppleMusicAuthorizationManager()
-            AppleMusicAuthorizationManager.requestDeveloperToken()
             authorizationManager.requestAuthorization()
         }
     }
