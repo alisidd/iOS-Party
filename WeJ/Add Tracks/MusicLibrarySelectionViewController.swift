@@ -87,7 +87,7 @@ class MusicLibrarySelectionViewController: UIViewController, ViewControllerAcces
     private func initializeBadge() {
         badge = RKNotificationHub(view: doneButton.titleLabel)
         badge.count = Int32(totalTracksCount)
-        badge.moveCircleBy(x: 51, y: 0)
+        badge.moveCircleBy(x: CGFloat(Float(NSLocalizedString("DoneBadgeConstraint", comment: "")) ?? 51.0), y: 0)
         badge.scaleCircleSize(by: 0.7)
         badge.setCircleColor(AppConstants.orange, label: .white)
     }

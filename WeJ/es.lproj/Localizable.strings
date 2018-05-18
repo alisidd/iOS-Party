@@ -10,6 +10,7 @@
 "Party" = "Fiesta";
 "Edit" = "Editar";
 "Done" = "Hecho";
+"DoneBadgeConstraint" = "56.0";
 "Close" = "Cerrar";
 "Remove" = "Eliminar";
 "View Lyrics" = "Ver Letras";

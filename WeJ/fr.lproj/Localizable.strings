@@ -11,6 +11,7 @@
 "Party" = "Fête";
 "Edit" = "Modifier";
 "Done" = "Fini";
+"DoneBadgeConstraint" = "51.0";
 "Close" = "Fermer";
 "Remove" = "Supprimer";
 "View Lyrics" = "Voir Paroles";
