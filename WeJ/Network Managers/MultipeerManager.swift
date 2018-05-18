@@ -45,7 +45,7 @@ class MultipeerManager: NSObject {
         self.partyName = partyName
         
         let deviceIdentifier = UIDevice.current.identifierForVendor!.uuidString
-        MultipeerManager.myPeerID = MultipeerManager.myPeerID ?? MCPeerID(displayName: deviceIdentifier)
+        MultipeerManager.myPeerID = MCPeerID(displayName: deviceIdentifier)
         
         if isHost {
             serviceAdvertiser = MCNearbyServiceAdvertiser(peer: MultipeerManager.myPeerID, discoveryInfo: ["partyName": partyName], serviceType: serviceType)
