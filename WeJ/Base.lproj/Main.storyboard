@@ -819,23 +819,23 @@
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="3Ts-N1-kNv">
-                                                    <rect key="frame" x="33" y="20" width="60" height="60"/>
+                                                    <rect key="frame" x="26" y="20" width="60" height="60"/>
                                                     <constraints>
                                                         <constraint firstAttribute="width" constant="60" id="8qz-5e-aZY"/>
                                                         <constraint firstAttribute="height" constant="60" id="GCr-aX-L3c"/>
                                                     </constraints>
                                                 </imageView>
                                                 <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" spacing="2" translatesAutoresizingMaskIntoConstraints="NO" id="Tkj-9p-ydc">
-                                                    <rect key="frame" x="109" y="28.5" width="211" height="43.5"/>
+                                                    <rect key="frame" x="102" y="28.5" width="225" height="43.5"/>
                                                     <subviews>
                                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Track Name" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="xRD-Ba-pNC">
-                                                            <rect key="frame" x="0.0" y="0.0" width="211" height="22"/>
+                                                            <rect key="frame" x="0.0" y="0.0" width="225" height="22"/>
                                                             <fontDescription key="fontDescription" name="AvenirNext-Regular" family="Avenir Next" pointSize="16"/>
                                                             <color key="textColor" red="0.85490196080000003" green="0.85490196080000003" blue="0.85490196080000003" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                             <nil key="highlightedColor"/>
                                                         </label>
                                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Artist Name" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="UYe-cQ-2lE">
-                                                            <rect key="frame" x="0.0" y="24" width="211" height="19.5"/>
+                                                            <rect key="frame" x="0.0" y="24" width="225" height="19.5"/>
                                                             <fontDescription key="fontDescription" name="AvenirNext-Regular" family="Avenir Next" pointSize="14"/>
                                                             <color key="textColor" red="0.63529411759999999" green="0.63529411759999999" blue="0.63529411759999999" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                             <nil key="highlightedColor"/>
@@ -1140,19 +1140,46 @@
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="4e4-jM-ufU">
-                                                    <rect key="frame" x="31" y="29" width="43" height="23.5"/>
+                                                    <rect key="frame" x="38" y="29" width="263" height="23.5"/>
                                                     <fontDescription key="fontDescription" name="AvenirNext-Regular" family="Avenir Next" pointSize="17"/>
                                                     <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                                     <color key="highlightedColor" red="0.96470588239999999" green="0.65098039220000004" blue="0.13725490200000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                 </label>
+                                                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="e1k-qH-cjB" customClass="M13Checkbox" customModule="M13Checkbox">
+                                                    <rect key="frame" x="341" y="31.5" width="19" height="19"/>
+                                                    <color key="tintColor" red="1" green="0.65098039215686276" blue="0.13725490196078433" alpha="1" colorSpace="calibratedRGB"/>
+                                                    <constraints>
+                                                        <constraint firstAttribute="width" constant="19" id="8ky-50-vP8"/>
+                                                        <constraint firstAttribute="height" constant="19" id="jcK-37-Afn"/>
+                                                    </constraints>
+                                                    <userDefinedRuntimeAttributes>
+                                                        <userDefinedRuntimeAttribute type="string" keyPath="_IBStateChangeAnimation" value="Dot"/>
+                                                        <userDefinedRuntimeAttribute type="string" keyPath="_IBCheckState" value="unchecked"/>
+                                                        <userDefinedRuntimeAttribute type="color" keyPath="secondaryTintColor">
+                                                            <color key="value" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                        </userDefinedRuntimeAttribute>
+                                                        <userDefinedRuntimeAttribute type="color" keyPath="secondaryCheckmarkTintColor">
+                                                            <color key="value" red="0.4358109696245378" green="1" blue="0.66705542497851134" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
+                                                        </userDefinedRuntimeAttribute>
+                                                        <userDefinedRuntimeAttribute type="string" keyPath="_IBMarkType" value="Dot"/>
+                                                    </userDefinedRuntimeAttributes>
+                                                    <connections>
+                                                        <action selector="addWholePlaylist:" destination="rzK-qP-Wp0" eventType="valueChanged" id="C9P-jD-5rb"/>
+                                                    </connections>
+                                                </view>
                                             </subviews>
+                                            <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                             <constraints>
-                                                <constraint firstAttribute="trailingMargin" relation="greaterThanOrEqual" secondItem="4e4-jM-ufU" secondAttribute="trailing" constant="40" id="UMD-ZY-LGo"/>
+                                                <constraint firstItem="e1k-qH-cjB" firstAttribute="leading" secondItem="4e4-jM-ufU" secondAttribute="trailing" constant="40" id="L05-EO-5wc"/>
+                                                <constraint firstItem="e1k-qH-cjB" firstAttribute="centerY" secondItem="4e4-jM-ufU" secondAttribute="centerY" id="RY4-S1-AtR"/>
+                                                <constraint firstAttribute="trailing" secondItem="e1k-qH-cjB" secondAttribute="trailing" constant="15" id="Rgb-a2-vGZ"/>
                                                 <constraint firstItem="4e4-jM-ufU" firstAttribute="centerY" secondItem="MkY-Zm-FF3" secondAttribute="centerY" id="a3g-sa-YB9"/>
                                                 <constraint firstItem="4e4-jM-ufU" firstAttribute="leading" secondItem="MkY-Zm-FF3" secondAttribute="leadingMargin" constant="23" id="cW5-hj-zuH"/>
                                             </constraints>
                                         </tableViewCellContentView>
+                                        <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         <connections>
+                                            <outlet property="addPlaylistButton" destination="e1k-qH-cjB" id="Sys-2q-O3q"/>
                                             <outlet property="optionLabel" destination="4e4-jM-ufU" id="MhD-OX-il8"/>
                                         </connections>
                                     </tableViewCell>
@@ -1217,7 +1244,7 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="WnC-U0-75a" userLabel="First Responder" sceneMemberID="firstResponder"/>
                 <exit id="jOb-t6-ss8" userLabel="Exit" sceneMemberID="exit"/>
             </objects>
-            <point key="canvasLocation" x="11261.6" y="284.70764617691157"/>
+            <point key="canvasLocation" x="11261.6" y="284.25787106446779"/>
         </scene>
         <!--Library Tracks View Controller-->
         <scene sceneID="brg-Fo-EvC">

@@ -9,9 +9,16 @@
 import UIKit
 import RKNotificationHub
 import NVActivityIndicatorView
+import M13Checkbox
+
+protocol LibraryTracksViewControllerDelegate: class {
+    func updateTable()
+}
 
 class LibraryTracksViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
-
+    
+    weak var delegate: LibraryTracksViewControllerDelegate?
+    
     @IBOutlet weak var titleLabel: UILabel!
     @IBOutlet weak var doneButton: UIButton!
     private var badge: RKNotificationHub!
@@ -27,6 +34,7 @@ class LibraryTracksViewController: UIViewController, UITableViewDelegate, UITabl
     var musicService: MusicService!
     var playlistName: String!
     var playlistType: PlaylistType!
+    var playlistIndexPath: IndexPath!
     
     var intermediateTracksList: [Track]!
     var libraryTracksList = [Track]() {
@@ -50,6 +58,14 @@ class LibraryTracksViewController: UIViewController, UITableViewDelegate, UITabl
         }
         set {
             (tabBarController! as! AddTracksTabBarController).libraryTracksSelected = newValue
+        }
+    }
+    var playlistsSelected: [MusicService: [IndexPath: M13Checkbox.CheckState]] {
+        get {
+            return (tabBarController as? AddTracksTabBarController)?.playlistsSelected ?? [:]
+        }
+        set {
+            (tabBarController! as! AddTracksTabBarController).playlistsSelected = newValue
         }
     }
     
@@ -231,6 +247,7 @@ class LibraryTracksViewController: UIViewController, UITableViewDelegate, UITabl
         let track = libraryTracksDict[section]![indexPath.row]
         
         addToQueue(track: track)
+        modifyPlaylistCheckbox()
         UIView.animate(withDuration: 0.35) {
             cell.accessoryType = .checkmark
         }
@@ -274,9 +291,23 @@ class LibraryTracksViewController: UIViewController, UITableViewDelegate, UITabl
         let track = libraryTracksDict[section]![indexPath.row]
         
         removeFromQueue(track: track)
+        modifyPlaylistCheckbox()
         UIView.animate(withDuration: 0.35) {
             cell.accessoryType = .none
         }
+    }
+    
+    func modifyPlaylistCheckbox() {
+        if let list = tracksTableView.indexPathsForSelectedRows {
+            if list.count < libraryTracksList.count {
+                playlistsSelected[musicService]![playlistIndexPath] = .mixed
+            } else {
+                playlistsSelected[musicService]![playlistIndexPath] = .checked
+            }
+        } else {
+            playlistsSelected[musicService]![playlistIndexPath] = .unchecked
+        }
+        delegate?.updateTable()
     }
     
     private func removeFromQueue(track: Track) {

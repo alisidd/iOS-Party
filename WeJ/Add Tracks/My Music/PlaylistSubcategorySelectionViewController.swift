@@ -9,9 +9,10 @@
 import UIKit
 import RKNotificationHub
 import NVActivityIndicatorView
+import M13Checkbox
 import MediaPlayer
 
-class PlaylistSubcategorySelectionViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
+class PlaylistSubcategorySelectionViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, PlaylistSubcategoryTableViewCellDelegate, LibraryTracksViewControllerDelegate {
     
     @IBOutlet weak var titleLabel: UILabel!
     @IBOutlet weak var doneButton: UIButton!
@@ -33,6 +34,28 @@ class PlaylistSubcategorySelectionViewController: UIViewController, UITableViewD
     
     var orderedOptionsDictKeys: [String] {
         return optionsDict.keys.sorted()
+    }
+    
+    var libraryTracksSelected: [Track] {
+        get {
+            print("HERE HERE 1")
+            return (tabBarController as? AddTracksTabBarController)?.libraryTracksSelected ?? []
+        }
+        set {
+            print("HERE HERE 2")
+            (tabBarController! as! AddTracksTabBarController).libraryTracksSelected = newValue
+        }
+    }
+    var playlistsSelected: [MusicService: [IndexPath: M13Checkbox.CheckState]] {
+        get {
+            print("HERE HERE 3")
+            return (tabBarController as? AddTracksTabBarController)?.playlistsSelected ?? [:]
+        }
+        set {
+            print("HERE HERE 4")
+            (tabBarController! as! AddTracksTabBarController).playlistsSelected = newValue
+            optionsTable.reloadData()
+        }
     }
     
     func setBadge(to count: Int) {
@@ -125,6 +148,54 @@ class PlaylistSubcategorySelectionViewController: UIViewController, UITableViewD
     
     // MARK - Table
     
+    func addWholePlaylist(withAddPlaylistButton addPlaylistButton: M13Checkbox, atCell cell: PlaylistSubcategoryTableViewCell) {
+        let indexPath = IndexPath(row: optionsTable.indexPath(for: cell)!.row, section: optionsTable.indexPath(for: cell)!.section)
+        playlistsSelected[musicService]![indexPath] = addPlaylistButton.checkState
+        
+        if addPlaylistButton.checkState == .checked {
+            addTracks(atIndexPath: indexPath)
+        } else {
+            removeTracks(atIndexPath: indexPath)
+        }
+    }
+    
+    func addTracks(atIndexPath indexPath: IndexPath) {
+        getTracks(atIndexPath: indexPath) { [weak self] (tracks) in
+            self?.libraryTracksSelected.append(contentsOf: tracks.filter { (trackToFind) in
+                guard self != nil else { return false }
+                return !self!.libraryTracksSelected.contains(where: {$0.id == trackToFind.id })})
+        }
+    }
+    
+    func removeTracks(atIndexPath indexPath: IndexPath) {
+        getTracks(atIndexPath: indexPath) { [weak self] (tracksToRemove) in
+            guard self != nil else { return }
+            self?.libraryTracksSelected = self!.libraryTracksSelected.filter { (trackFound) in
+                return !tracksToRemove.contains(where: {$0.id == trackFound.id })
+            }
+        }
+    }
+    
+    private func getTracks(atIndexPath indexPath: IndexPath, completionHandler: @escaping ([Track]) -> Void) {
+        let tracksSelected = optionsDict[orderedOptionsDictKeys[indexPath.section]]![indexPath.row].tracks
+        
+        if musicService == .spotify && playlistType == .playlists {
+            getSpotifyPlaylistTracks(forPlaylist: tracksSelected, completionHandler: completionHandler)
+        } else {
+            completionHandler(tracksSelected)
+            
+        }
+    }
+    
+    private func getSpotifyPlaylistTracks(forPlaylist playlist: [Track], completionHandler: @escaping ([Track]) -> Void) {
+        let spotifyPlaylistFetcher = SpotifyFetcher()
+        spotifyPlaylistFetcher.getLibraryPlaylistTracks(atOffset: 0, forOwnerID: playlist[0].id, forPlaylistID: playlist[0].name) {
+            DispatchQueue.main.async {
+                completionHandler(spotifyPlaylistFetcher.tracksList)
+            }
+        }
+    }
+    
     func numberOfSections(in tableView: UITableView) -> Int {
         return optionsDict.keys.count
     }
@@ -135,8 +206,7 @@ class PlaylistSubcategorySelectionViewController: UIViewController, UITableViewD
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let section = orderedOptionsDictKeys[indexPath.section]
-        
-        performSegue(withIdentifier: "Show Tracks", sender: (optionsDict[section]![indexPath.row].tracks, optionsDict[section]![indexPath.row].name))
+        performSegue(withIdentifier: "Show Tracks", sender: (optionsDict[section]![indexPath.row].tracks, optionsDict[section]![indexPath.row].name, indexPath))
     }
     
     func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
@@ -169,6 +239,8 @@ class PlaylistSubcategorySelectionViewController: UIViewController, UITableViewD
         
         cell.optionLabel.text = row.name
         cell.backgroundColor = .clear
+        cell.addPlaylistButton.setCheckState(playlistsSelected[musicService]![indexPath] ?? .unchecked, animated: true)
+        cell.delegate = self
         
         return cell
     }
@@ -181,12 +253,18 @@ class PlaylistSubcategorySelectionViewController: UIViewController, UITableViewD
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if let controller = segue.destination as? LibraryTracksViewController,
-            let (tracks, playlistName) = sender as? ([Track], String) {
+            let (tracks, playlistName, indexPath) = sender as? ([Track], String, IndexPath) {
+            controller.delegate = self
             controller.musicService = musicService
-            controller.playlistType = playlistType
             controller.playlistName = playlistName
+            controller.playlistType = playlistType
+            controller.playlistIndexPath = indexPath
             controller.intermediateTracksList = tracks
         }
+    }
+    
+    func updateTable() {
+        optionsTable.reloadData()
     }
 
 }

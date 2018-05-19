@@ -7,10 +7,17 @@
 //
 
 import UIKit
+import M13Checkbox
+
+protocol PlaylistSubcategoryTableViewCellDelegate: class {
+    func addWholePlaylist(withAddPlaylistButton addPlaylistButton: M13Checkbox, atCell cell: PlaylistSubcategoryTableViewCell)
+}
 
 class PlaylistSubcategoryTableViewCell: UITableViewCell {
 
+    weak var delegate: PlaylistSubcategoryTableViewCellDelegate?
     @IBOutlet weak var optionLabel: UILabel!
+    @IBOutlet weak var addPlaylistButton: M13Checkbox!
     
     override func awakeFromNib() {
         super.awakeFromNib()
@@ -18,6 +25,9 @@ class PlaylistSubcategoryTableViewCell: UITableViewCell {
         if UIDevice.deviceType == .iPhone4_4s || UIDevice.deviceType == .iPhone5_5s_SE {
             optionLabel.changeToSmallerFont()
         }
+    }
+    @IBAction func addWholePlaylist(_ sender: M13Checkbox) {
+        delegate?.addWholePlaylist(withAddPlaylistButton: sender, atCell: self)
     }
     
     override func setHighlighted(_ highlighted: Bool, animated: Bool) {

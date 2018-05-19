@@ -10,4 +10,5 @@ target 'WeJ' do
   pod 'SwiftyJSON'
   pod 'NVActivityIndicatorView'
   pod 'Siren'
+  pod 'M13Checkbox' 
 end

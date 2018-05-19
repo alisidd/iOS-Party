@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import M13Checkbox
 
 class AddTracksTabBarController: UITabBarController, UITabBarControllerDelegate, UITableViewDelegate, UITableViewDataSource {
     
@@ -28,6 +29,7 @@ class AddTracksTabBarController: UITabBarController, UITabBarControllerDelegate,
             updateBadge(to: libraryTracksSelected.count + tracksSelected.count)
         }
     }
+    var playlistsSelected: [MusicService: [IndexPath: M13Checkbox.CheckState]] = [.appleMusic: [:], .spotify: [:]]
     var tracksSelected = [Track]() {
         didSet {
             updateBadge(to: libraryTracksSelected.count + tracksSelected.count)

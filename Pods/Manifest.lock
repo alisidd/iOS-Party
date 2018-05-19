@@ -1,4 +1,5 @@
 PODS:
+  - M13Checkbox (3.2.2)
   - NVActivityIndicatorView (4.2.1):
     - NVActivityIndicatorView/Presenter (= 4.2.1)
   - NVActivityIndicatorView/Presenter (4.2.1)
@@ -7,17 +8,19 @@ PODS:
   - SwiftyJSON (4.1.0)
 
 DEPENDENCIES:
+  - M13Checkbox
   - NVActivityIndicatorView
   - RKNotificationHub
   - Siren
   - SwiftyJSON
 
 SPEC CHECKSUMS:
+  M13Checkbox: a8c2491cfbbca10797925fd0b9154a782bf40d89
   NVActivityIndicatorView: 8068ba3ad39cb44cbaab25d89ff2546b3f092681
   RKNotificationHub: e926748820d719f21ff374657a47fceefa1796b4
   Siren: 5b8be41b5cd05aa3528303325966e919bd53e412
   SwiftyJSON: c29297daf073d2aa016295d5809cdd68045c39b3
 
-PODFILE CHECKSUM: 06c0decbd82e9d050d24955138bba78d1d3145c3
+PODFILE CHECKSUM: 240a96f458836cfe715f009ed8c5bbd265b51474
 
 COCOAPODS: 1.4.0
