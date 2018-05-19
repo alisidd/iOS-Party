@@ -38,21 +38,17 @@ class PlaylistSubcategorySelectionViewController: UIViewController, UITableViewD
     
     var libraryTracksSelected: [Track] {
         get {
-            print("HERE HERE 1")
             return (tabBarController as? AddTracksTabBarController)?.libraryTracksSelected ?? []
         }
         set {
-            print("HERE HERE 2")
             (tabBarController! as! AddTracksTabBarController).libraryTracksSelected = newValue
         }
     }
     var playlistsSelected: [MusicService: [IndexPath: M13Checkbox.CheckState]] {
         get {
-            print("HERE HERE 3")
             return (tabBarController as? AddTracksTabBarController)?.playlistsSelected ?? [:]
         }
         set {
-            print("HERE HERE 4")
             (tabBarController! as! AddTracksTabBarController).playlistsSelected = newValue
             optionsTable.reloadData()
         }
