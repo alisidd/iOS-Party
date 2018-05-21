@@ -92,7 +92,6 @@ class SpotifyAuthorizationManager: NSObject, AuthorizationManager, SPTAudioStrea
         if Party.cookie == nil {
             SPTAudioStreamingController.sharedInstance().login(withAccessToken: accessToken)
         } else {
-            print("HERE1")
             completeAuthorization()
         }
     }
@@ -113,7 +112,6 @@ class SpotifyAuthorizationManager: NSObject, AuthorizationManager, SPTAudioStrea
         if auth.canHandle(url) {
             authViewController.dismiss(animated: true, completion: nil)
             delegate?.processingLogin = true
-            print("HERE2")
             auth.handleAuthCallback(withTriggeredAuthURL: url, callback: updateSession)
         }
     }

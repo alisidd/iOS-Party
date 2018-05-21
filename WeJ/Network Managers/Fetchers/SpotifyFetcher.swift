@@ -14,105 +14,101 @@ class SpotifyFetcher: Fetcher {
     var tracksList = [Track]()
     
     private static var templateWebRequest: (URLRequest, @escaping (Data?, URLResponse?, Error?) -> Void) -> Void = { (request, completionHandler) in
-        DispatchQueue.global(qos: .userInitiated).async {
-            let task = URLSession.shared.dataTask(with: request) { (data, response, error) in
-                if let statusCode = (response as? HTTPURLResponse)?.statusCode, statusCode == 200, data != nil {
-                    completionHandler(data, response, error)
-                }
+        let task = URLSession.shared.dataTask(with: request) { (data, response, error) in
+            if let statusCode = (response as? HTTPURLResponse)?.statusCode, statusCode == 200, data != nil {
+                completionHandler(data, response, error)
             }
-            
-            task.resume()
         }
+        
+        task.resume()
     }
     
     func searchCatalog(forTerm term: String, completionHandler: @escaping () -> Void) {
-        let request = SpotifyURLFactory.createSearchRequest(forTerm: term)
-        
-        SpotifyFetcher.templateWebRequest(request) { [weak self] (data, response, _) in
-            let tracksJSON = try! JSON(data: data!)["tracks"]["items"].arrayValue
-            for trackJSON in tracksJSON {
-                guard self != nil else { return }
-                self!.tracksList.append(self!.parse(json: trackJSON))
+        DispatchQueue.global(qos: .userInitiated).async {
+            let request = SpotifyURLFactory.createSearchRequest(forTerm: term)
+            
+            SpotifyFetcher.templateWebRequest(request) { [weak self] (data, response, _) in
+                let tracksJSON = try! JSON(data: data!)["tracks"]["items"].arrayValue
+                for trackJSON in tracksJSON {
+                    guard self != nil else { return }
+                    self!.tracksList.append(self!.parse(json: trackJSON))
+                }
+                completionHandler()
             }
-            completionHandler()
         }
     }
     
     func getLibraryAlbums(atOffset offset: Int, withOptionsDict optionsDict: [String: [Option]], completionHandler: @escaping ([String : [Option]]) -> Void) {
-        let request = SpotifyURLFactory.createLibraryAlbumsRequest(atOffset: offset)
-        
-        SpotifyFetcher.templateWebRequest(request) { [weak self] (data, response, _) in
-            var optionsDict = optionsDict
+        DispatchQueue.global(qos: .userInitiated).async {
+            let request = SpotifyURLFactory.createLibraryAlbumsRequest(atOffset: offset)
             
-            let json = try! JSON(data: data!)
-            
-            let itemsJSON = json["items"].arrayValue
-            for itemJSON in itemsJSON {
-                let albumJSON = itemJSON["album"]
-                let albumName = albumJSON["name"].stringValue
+            SpotifyFetcher.templateWebRequest(request) { [weak self] (data, response, _) in
+                var optionsDict = optionsDict
                 
-                let key = String(albumName.first ?? "#")
+                let json = try! JSON(data: data!)
                 
-                let dummyTrack = Track()
-                dummyTrack.id = albumJSON["id"].stringValue //album ID
-                
-                for images in albumJSON["images"].arrayValue {
-                    if images["height"].stringValue == "64" {
-                        dummyTrack.lowResArtworkURL = images["url"].stringValue
-                        Track.fetchImage(fromURL: dummyTrack.lowResArtworkURL) { (image) in
-                            dummyTrack.lowResArtwork = image
+                let itemsJSON = json["items"].arrayValue
+                for itemJSON in itemsJSON {
+                    let albumJSON = itemJSON["album"]
+                    let albumName = albumJSON["name"].stringValue
+                    
+                    let key = String(albumName.capitalized.first ?? "#")
+                    
+                    let dummyTrack = Track()
+                    dummyTrack.id = albumJSON["id"].stringValue //album ID
+                    
+                    for images in albumJSON["images"].arrayValue {
+                        if images["height"].stringValue == "64" {
+                            dummyTrack.lowResArtworkURL = images["url"].stringValue
+                            Track.fetchImage(fromURL: dummyTrack.lowResArtworkURL) { (image) in
+                                dummyTrack.lowResArtwork = image
+                            }
+                        }
+                        
+                        if images["height"].stringValue == "640" {
+                            dummyTrack.highResArtworkURL = images["url"].stringValue
                         }
                     }
                     
-                    if images["height"].stringValue == "640" {
-                        dummyTrack.highResArtworkURL = images["url"].stringValue
+                    if optionsDict[key] != nil {
+                        optionsDict[key]!.append(Option(name: albumName, tracks: [dummyTrack]))
+                    } else {
+                        optionsDict[key] = [Option(name: albumName, tracks: [dummyTrack])]
                     }
                 }
                 
-                if optionsDict[key] != nil {
-                    optionsDict[key]!.append(Option(name: albumName, tracks: [dummyTrack]))
+                if json["total"].intValue > offset + 50 {
+                    self?.getLibraryAlbums(atOffset: offset + 50, withOptionsDict: optionsDict, completionHandler: completionHandler)
                 } else {
-                    optionsDict[key] = [Option(name: albumName, tracks: [dummyTrack])]
+                    completionHandler(optionsDict)
                 }
-            }
-            
-            if json["total"].intValue > offset + 50 {
-                self?.getLibraryAlbums(atOffset: offset + 50, withOptionsDict: optionsDict, completionHandler: completionHandler)
-            } else {
-                completionHandler(optionsDict)
             }
         }
     }
     
     func getLibraryAlbumTracks(atOffset offset: Int, forDummyTrack track: Track, completionHandler: @escaping () -> Void) {
-        let request = SpotifyURLFactory.createLibraryAlbumsTracksRequest(atOffset: offset, forID: track.id)
-        
-        DispatchQueue.global(qos: .userInitiated).async { [weak self] in
-            let task = URLSession.shared.dataTask(with: request) { (data, response, _) in
-                if let statusCode = (response as? HTTPURLResponse)?.statusCode, statusCode == 200 {
-                    let json = try! JSON(data: data!)
-
-                    let tracksJSON = json["items"].arrayValue
-                    for trackJSON in tracksJSON {
-                        guard self != nil else { return }
-                        let trackMade = self!.parse(json: trackJSON)
-                        trackMade.lowResArtworkURL = track.lowResArtworkURL
-                        trackMade.lowResArtwork = track.lowResArtwork
-                        trackMade.highResArtworkURL = track.highResArtworkURL
-                        self!.tracksList.append(trackMade)
-                    }
-                    
-                    if json["total"].intValue > offset + 50 {
-                        self?.getLibraryAlbumTracks(atOffset: offset + 50, forDummyTrack: track, completionHandler: completionHandler)
-                    } else {
-                        completionHandler()
-                    }
+        DispatchQueue.global(qos: .userInitiated).async {
+            let request = SpotifyURLFactory.createLibraryAlbumsTracksRequest(atOffset: offset, forID: track.id)
+            
+            SpotifyFetcher.templateWebRequest(request) { [weak self] (data, response, _) in
+                let json = try! JSON(data: data!)
+                
+                let tracksJSON = json["items"].arrayValue
+                for trackJSON in tracksJSON {
+                    guard self != nil else { return }
+                    let trackMade = self!.parse(json: trackJSON)
+                    trackMade.lowResArtworkURL = track.lowResArtworkURL
+                    trackMade.lowResArtwork = track.lowResArtwork
+                    trackMade.highResArtworkURL = track.highResArtworkURL
+                    self!.tracksList.append(trackMade)
+                }
+                
+                if json["total"].intValue > offset + 50 {
+                    self?.getLibraryAlbumTracks(atOffset: offset + 50, forDummyTrack: track, completionHandler: completionHandler)
                 } else {
                     completionHandler()
                 }
             }
-            
-            task.resume()
         }
     }
     
@@ -121,83 +117,72 @@ class SpotifyFetcher: Fetcher {
     }
     
     func getLibraryPlaylists(completionHandler: @escaping ([String : [Option]]) -> Void) {
-        let request = SpotifyURLFactory.createLibraryPlaylistsRequest()
-        
-        SpotifyFetcher.templateWebRequest(request) { (data, response, _) in
-            var optionsDict = [String: [Option]]()
+        DispatchQueue.global(qos: .userInitiated).async {
+            let request = SpotifyURLFactory.createLibraryPlaylistsRequest()
             
-            let playlistsJSON = try! JSON(data: data!)["items"].arrayValue
-            for playlistJSON in playlistsJSON {
-                let playlistName = playlistJSON["name"].stringValue
+            SpotifyFetcher.templateWebRequest(request) { (data, response, _) in
+                var optionsDict = [String: [Option]]()
                 
-                let key = String(playlistName.first ?? "#")
-                
-                let dummyTrack = Track()
-                dummyTrack.id = playlistJSON["owner"]["id"].stringValue //ownerID
-                dummyTrack.name = playlistJSON["id"].stringValue //playlistID
-                
-                if optionsDict[key] != nil {
-                    optionsDict[key]!.append(Option(name: playlistName, tracks: [dummyTrack]))
-                } else {
-                    optionsDict[key] = [Option(name: playlistName, tracks: [dummyTrack])]
+                let playlistsJSON = try! JSON(data: data!)["items"].arrayValue
+                for playlistJSON in playlistsJSON {
+                    let playlistName = playlistJSON["name"].stringValue
+                    
+                    let key = String(playlistName.capitalized.first ?? "#")
+                    
+                    let dummyTrack = Track()
+                    dummyTrack.id = playlistJSON["owner"]["id"].stringValue //ownerID
+                    dummyTrack.name = playlistJSON["id"].stringValue //playlistID
+                    
+                    if optionsDict[key] != nil {
+                        optionsDict[key]!.append(Option(name: playlistName, tracks: [dummyTrack]))
+                    } else {
+                        optionsDict[key] = [Option(name: playlistName, tracks: [dummyTrack])]
+                    }
                 }
+                completionHandler(optionsDict)
             }
-            completionHandler(optionsDict)
         }
     }
     
     func getLibraryPlaylistTracks(atOffset offset: Int, forDummyTrack track: Track, completionHandler: @escaping () -> Void) {
-        let request = SpotifyURLFactory.createLibraryPlaylistTracksRequest(atOffset: offset, forOwnerID: track.id, forPlaylistID: track.name)
-        
-        
-        DispatchQueue.global(qos: .userInitiated).async { [weak self] in
-            let task = URLSession.shared.dataTask(with: request) { (data, response, _) in
-                if let statusCode = (response as? HTTPURLResponse)?.statusCode, statusCode == 200 {
-                    let json = try! JSON(data: data!)
-                    let tracksJSON = json["items"].arrayValue
-                    for trackJSON in tracksJSON {
-                        guard self != nil else { return }
-                        self!.tracksList.append(self!.parse(json: trackJSON["track"]))
-                    }
-                    
-                    if json["total"].intValue > offset + 50 {
-                        self?.getLibraryPlaylistTracks(atOffset: offset + 50, forDummyTrack: track, completionHandler: completionHandler)
-                    } else {
-                        completionHandler()
-                    }
+        DispatchQueue.global(qos: .userInitiated).async {
+            let request = SpotifyURLFactory.createLibraryPlaylistTracksRequest(atOffset: offset, forOwnerID: track.id, forPlaylistID: track.name)
+            
+            SpotifyFetcher.templateWebRequest(request) { [weak self] (data, response, _) in
+                let json = try! JSON(data: data!)
+                let tracksJSON = json["items"].arrayValue
+                for trackJSON in tracksJSON {
+                    guard self != nil else { return }
+                    self!.tracksList.append(self!.parse(json: trackJSON["track"]))
+                }
+                
+                if json["total"].intValue > offset + 50 {
+                    self?.getLibraryPlaylistTracks(atOffset: offset + 50, forDummyTrack: track, completionHandler: completionHandler)
                 } else {
                     completionHandler()
                 }
             }
-            
-            task.resume()
         }
     }
     
     func getLibraryTracks(atOffset offset: Int, completionHandler: @escaping () -> Void) {
-        let request = SpotifyURLFactory.createLibraryTracksRequest(atOffset: offset)
-        
-        DispatchQueue.global(qos: .userInitiated).async { [weak self] in
-            let task = URLSession.shared.dataTask(with: request) { (data, response, error) in
-                if let statusCode = (response as? HTTPURLResponse)?.statusCode, statusCode == 200 {
-                    let json = try! JSON(data: data!)
-                    let tracksJSON = json["items"].arrayValue
-                    for trackJSON in tracksJSON {
-                        guard self != nil else { return }
-                        self!.tracksList.append(self!.parse(json: trackJSON["track"]))
-                    }
-                    
-                    if json["total"].intValue > offset + 50 {
-                        self?.getLibraryTracks(atOffset: offset + 50, completionHandler: completionHandler)
-                    } else {
-                        completionHandler()
-                    }
+        DispatchQueue.global(qos: .userInitiated).async {
+            let request = SpotifyURLFactory.createLibraryTracksRequest(atOffset: offset)
+            
+            SpotifyFetcher.templateWebRequest(request) { [weak self] (data, response, _) in
+                let json = try! JSON(data: data!)
+                let tracksJSON = json["items"].arrayValue
+                for trackJSON in tracksJSON {
+                    guard self != nil else { return }
+                    self!.tracksList.append(self!.parse(json: trackJSON["track"]))
+                }
+                
+                if json["total"].intValue > offset + 50 {
+                    self?.getLibraryTracks(atOffset: offset + 50, completionHandler: completionHandler)
                 } else {
                     completionHandler()
                 }
             }
-            
-            task.resume()
         }
     }
     
@@ -245,16 +230,18 @@ class SpotifyFetcher: Fetcher {
     }
     
     func getMostPlayed(completionHandler: @escaping () -> Void) {
-        getID(forCategoryID: "toplists") { [weak self] (ownerID, playlistID) in
-            let request = SpotifyURLFactory.createPlaylistsRequest(forOwnerID: ownerID, forPlaylistID: playlistID)
-            
-            SpotifyFetcher.templateWebRequest(request) {(data, response, _) in
-                let tracksJSON = try! JSON(data: data!)["tracks"]["items"].arrayValue
-                for (i, trackJSON) in tracksJSON.enumerated() where i < 20 {
-                    guard self != nil else { return }
-                    self!.tracksList.append(self!.parse(json: trackJSON["track"]))
+        DispatchQueue.global(qos: .userInitiated).async { [weak self] in
+            self?.getID(forCategoryID: "toplists") { (ownerID, playlistID) in
+                let request = SpotifyURLFactory.createPlaylistsRequest(forOwnerID: ownerID, forPlaylistID: playlistID)
+                
+                SpotifyFetcher.templateWebRequest(request) {(data, response, _) in
+                    let tracksJSON = try! JSON(data: data!)["tracks"]["items"].arrayValue
+                    for (i, trackJSON) in tracksJSON.enumerated() where i < 20 {
+                        guard self != nil else { return }
+                        self!.tracksList.append(self!.parse(json: trackJSON["track"]))
+                    }
+                    completionHandler()
                 }
-                completionHandler()
             }
         }
     }

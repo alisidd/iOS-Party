@@ -23,17 +23,23 @@ class AppleMusicAuthorizationManager: NSObject, AuthorizationManager, URLSession
     
     static func requestDeveloperToken() {
         let request = AppleMusicURLFactory.createDeveloperTokenRequest()
+        let dispatchGroup = DispatchGroup()
+        dispatchGroup.enter()
         
         DispatchQueue.global(qos: .userInitiated).async {
+            
             let session = URLSession(configuration: URLSessionConfiguration.default, delegate: AppleMusicAuthorizationManager(), delegateQueue: nil)
             let task = session.dataTask(with: request) { (data, response, error) in
                 if let statusCode = (response as? HTTPURLResponse)?.statusCode, statusCode == 200 {
                     developerToken = String(data: data!, encoding: .utf8)!
                 }
+                dispatchGroup.leave()
             }
             
             task.resume()
         }
+        
+        dispatchGroup.wait()
     }
     
     func urlSession(_ session: URLSession, didReceive challenge: URLAuthenticationChallenge, completionHandler: @escaping (URLSession.AuthChallengeDisposition, URLCredential?) -> Void) {

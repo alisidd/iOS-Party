@@ -25,6 +25,8 @@ struct AppleMusicURLFactory {
     }
     
     static func createSearchRequest(forTerm term: String) -> URLRequest {
+        if AppleMusicAuthorizationManager.developerToken == nil { AppleMusicAuthorizationManager.requestDeveloperToken() }
+        
         let disallowedChars = CharacterSet(charactersIn: "()[],'.!?")
         let escapedTerm = term.components(separatedBy: disallowedChars).joined(separator: " ").replacedWhiteSpaceForURL
         
@@ -50,6 +52,8 @@ struct AppleMusicURLFactory {
     }
     
     static func createSearchHintsRequest(forTerm term: String) -> URLRequest {
+        if AppleMusicAuthorizationManager.developerToken == nil { AppleMusicAuthorizationManager.requestDeveloperToken() }
+        
         let disallowedChars = CharacterSet(charactersIn: "()[],'.!?")
         let escapedTerm = term.components(separatedBy: disallowedChars).joined(separator: " ").replacedWhiteSpaceForURL
         
@@ -75,6 +79,8 @@ struct AppleMusicURLFactory {
     }
     
     static func createTrackRequest(forID id: String) -> URLRequest {
+        if AppleMusicAuthorizationManager.developerToken == nil { AppleMusicAuthorizationManager.requestDeveloperToken() }
+        
         var urlComponents = URLComponents()
         urlComponents.scheme = "https"
         urlComponents.host = baseAppleMusicAPI
@@ -88,6 +94,8 @@ struct AppleMusicURLFactory {
     }
     
     static func createMostPlayedRequest() -> URLRequest {
+        if AppleMusicAuthorizationManager.developerToken == nil { AppleMusicAuthorizationManager.requestDeveloperToken() }
+        
         var urlComponents = URLComponents()
         urlComponents.scheme = "https"
         urlComponents.host = baseAppleMusicAPI

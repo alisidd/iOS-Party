@@ -196,7 +196,7 @@ class LibraryTracksViewController: UIViewController, UITableViewDelegate, UITabl
     
     private func populateUserTracksDict() {
         for track in libraryTracksList {
-            let key = String(track.name.first ?? "#")
+            let key = String(track.name.uppercased().first ?? "#")
             
             if libraryTracksDict[key] != nil {
                 libraryTracksDict[key]!.append(track)
@@ -314,6 +314,8 @@ class LibraryTracksViewController: UIViewController, UITableViewDelegate, UITabl
     }
     
     func modifyPlaylistCheckbox() {
+        guard playlistType != .all else { return }
+        
         if let list = tracksTableView.indexPathsForSelectedRows {
             if list.count < libraryTracksList.count {
                 playlistsSelected[musicService]![playlistIndexPath] = .mixed
