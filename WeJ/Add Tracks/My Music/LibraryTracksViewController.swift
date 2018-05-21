@@ -210,11 +210,15 @@ class LibraryTracksViewController: UIViewController, UITableViewDelegate, UITabl
         guard musicService == .spotify else { return }
         
         let tracksCaptured = libraryTracksList
-        for track in libraryTracksList where libraryTracksList == tracksCaptured && track.lowResArtwork == nil {
+        for (i, track) in libraryTracksList.enumerated() where libraryTracksList == tracksCaptured && track.lowResArtwork == nil {
             DispatchQueue.global(qos: .userInitiated).async { [weak self] in
+                guard self != nil else { return }
                 Track.fetchImage(fromURL: track.lowResArtworkURL) { (image) in
+                    guard self != nil else { return }
                     track.lowResArtwork = image
-                    self?.tracksTableView.reloadData()
+                    if (i % 20) == 0  || i == self!.libraryTracksList.count - 1 {
+                        self?.tracksTableView.reloadData()
+                    }
                 }
             }
         }

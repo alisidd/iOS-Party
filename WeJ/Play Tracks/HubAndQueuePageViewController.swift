@@ -60,7 +60,7 @@ class HubAndQueuePageViewController: UIPageViewController, UIPageViewControllerD
     }
     
     func updateTable() {
-        if let vc = allViewControllers[1] as? QueueViewController, !vc.tracksTableView.isEditing {
+        if let vc = allViewControllers[1] as? QueueViewController {
             vc.updateTable()
         }
     }

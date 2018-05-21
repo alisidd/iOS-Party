@@ -248,7 +248,7 @@ class PlaylistSubcategorySelectionViewController: UIViewController, UITableViewD
         
         cell.optionLabel.text = row.name
         cell.backgroundColor = .clear
-        cell.addPlaylistButton.setCheckState(playlistsSelected[musicService]![indexPath] ?? .unchecked, animated: true)
+        cell.addPlaylistButton?.setCheckState(playlistsSelected[musicService]![indexPath] ?? .unchecked, animated: true)
         cell.delegate = self
         
         return cell
