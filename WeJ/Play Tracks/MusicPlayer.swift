@@ -30,7 +30,7 @@ class MusicPlayer {
     }
     
     var isSafeToPlayNextTrack: Bool {
-        return !Party.tracksQueue.isEmpty && appleMusicPlayer.playbackState == .paused
+        return !Party.tracksQueue.isEmpty && (self.musicService == .spotify || appleMusicPlayer.playbackState == .stopped)
     }
     
     var isPaused: Bool {
@@ -40,7 +40,7 @@ class MusicPlayer {
     // MARK: - Playback
     
     func preparePlayer() {
-        if Party.musicService == .spotify {
+        if self.musicService == .spotify {
             spotifyPlayer?.setTargetBitrate(.low, callback: nil)
         } else {
             appleMusicPlayer.beginGeneratingPlaybackNotifications()
