@@ -14,7 +14,7 @@ protocol Fetcher {
     var tracksList: [Track] { get set }
     func searchCatalog(forTerm term: String, completionHandler: @escaping () -> Void)
     
-    func getLibraryAlbums(completionHandler: @escaping ([String: [Option]]) -> Void)
+    func getLibraryAlbums(atOffset offset: Int, withOptionsDict optionsDict: [String: [Option]], completionHandler: @escaping ([String : [Option]]) -> Void)
     func getLibraryArtists(completionHandler: @escaping ([String: [Option]]) -> Void)
     func getLibraryPlaylists(completionHandler: @escaping ([String: [Option]]) -> Void)
     func getLibraryTracks(atOffset offset: Int, completionHandler: @escaping () -> Void)
@@ -67,7 +67,7 @@ class AppleMusicFetcher: Fetcher {
         }
     }
     
-    func getLibraryAlbums(completionHandler: @escaping ([String: [Option]]) -> Void) {
+    func getLibraryAlbums(atOffset offset: Int, withOptionsDict optionsDict: [String: [Option]], completionHandler: @escaping ([String : [Option]]) -> Void) {
         DispatchQueue.global(qos: .userInitiated).async {
             let albums = MPMediaQuery.albums()
             albums.groupingType = .album

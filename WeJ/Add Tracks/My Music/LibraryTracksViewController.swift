@@ -141,7 +141,23 @@ class LibraryTracksViewController: UIViewController, UITableViewDelegate, UITabl
     }
     
     private func populateAlbumTracks() {
-        libraryTracksList = intermediateTracksList
+        if musicService == .spotify {
+            populateSpotifyAlbumTracks()
+        } else {
+            libraryTracksList = intermediateTracksList
+        }
+    }
+    
+    private func populateSpotifyAlbumTracks() {
+        let spotifyAlbumFetcher = SpotifyFetcher()
+        activityIndicator.startAnimating()
+        
+        if !intermediateTracksList.isEmpty {
+            spotifyAlbumFetcher.getLibraryAlbumTracks(atOffset: 0, forDummyTrack: intermediateTracksList[0]) { [weak self] in
+                guard self != nil else { return }
+                self!.libraryTracksList = spotifyAlbumFetcher.tracksList
+            }
+        }
     }
     
     private func populateArtistTracks() {
@@ -163,7 +179,7 @@ class LibraryTracksViewController: UIViewController, UITableViewDelegate, UITabl
         activityIndicator.startAnimating()
 
         if !intermediateTracksList.isEmpty {
-            spotifyPlaylistFetcher.getLibraryPlaylistTracks(atOffset: 0, forOwnerID: intermediateTracksList[0].id, forPlaylistID: intermediateTracksList[0].name) { [weak self] in
+            spotifyPlaylistFetcher.getLibraryPlaylistTracks(atOffset: 0, forDummyTrack: intermediateTracksList[0]) { [weak self] in
                 guard self != nil else { return }
                 self!.libraryTracksList = spotifyPlaylistFetcher.tracksList
             }

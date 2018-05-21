@@ -135,7 +135,7 @@ class PlaylistSubcategorySelectionViewController: UIViewController, UITableViewD
         }
         
         switch playlistType {
-        case .some(.albums): fetcher.getLibraryAlbums(completionHandler: completionHandler)
+        case .some(.albums): fetcher.getLibraryAlbums(atOffset: 0, withOptionsDict: [:], completionHandler: completionHandler)
         case .some(.artists): fetcher.getLibraryArtists(completionHandler: completionHandler)
         case .some(.playlists): fetcher.getLibraryPlaylists(completionHandler: completionHandler)
         default: break
@@ -185,7 +185,7 @@ class PlaylistSubcategorySelectionViewController: UIViewController, UITableViewD
     
     private func getSpotifyPlaylistTracks(forPlaylist playlist: [Track], completionHandler: @escaping ([Track]) -> Void) {
         let spotifyPlaylistFetcher = SpotifyFetcher()
-        spotifyPlaylistFetcher.getLibraryPlaylistTracks(atOffset: 0, forOwnerID: playlist[0].id, forPlaylistID: playlist[0].name) {
+        spotifyPlaylistFetcher.getLibraryPlaylistTracks(atOffset: 0, forDummyTrack: playlist[0]) {
             DispatchQueue.main.async {
                 completionHandler(spotifyPlaylistFetcher.tracksList)
             }

@@ -47,11 +47,39 @@ struct SpotifyURLFactory {
         return urlRequest
     }
     
-    static func createLibraryAlbumsRequest() -> URLRequest {
+    static func createLibraryAlbumsRequest(atOffset offset: Int) -> URLRequest {
         var urlComponents = URLComponents()
         urlComponents.scheme = "https"
         urlComponents.host = baseSpotifyWebAPI
         urlComponents.path = "/v1/me/albums"
+        
+        let urlParameters = ["limit": "50",
+                             "offset": String(offset)]
+        var queryItems = [URLQueryItem]()
+        for (key, value) in urlParameters {
+            queryItems.append(URLQueryItem(name: key, value: value))
+        }
+        urlComponents.queryItems = queryItems
+        
+        var urlRequest = URLRequest(url: urlComponents.url!)
+        urlRequest.addValue("Bearer \(SpotifyAuthorizationManager.getAuth().session.accessToken!)", forHTTPHeaderField: "Authorization")
+        
+        return urlRequest
+    }
+    
+    static func createLibraryAlbumsTracksRequest(atOffset offset: Int, forID id: String) -> URLRequest {
+        var urlComponents = URLComponents()
+        urlComponents.scheme = "https"
+        urlComponents.host = baseSpotifyWebAPI
+        urlComponents.path = "/v1/albums/\(id)/tracks"
+        
+        let urlParameters = ["limit": "50",
+                             "offset": String(offset)]
+        var queryItems = [URLQueryItem]()
+        for (key, value) in urlParameters {
+            queryItems.append(URLQueryItem(name: key, value: value))
+        }
+        urlComponents.queryItems = queryItems
         
         var urlRequest = URLRequest(url: urlComponents.url!)
         urlRequest.addValue("Bearer \(SpotifyAuthorizationManager.getAuth().session.accessToken!)", forHTTPHeaderField: "Authorization")
@@ -77,7 +105,8 @@ struct SpotifyURLFactory {
         urlComponents.host = baseSpotifyWebAPI
         urlComponents.path = "/v1/users/\(ownerID)/playlists/\(playlistID)/tracks"
         
-        let urlParameters = ["offset": String(offset)]
+        let urlParameters = ["limit": "50",
+                             "offset": String(offset)]
         var queryItems = [URLQueryItem]()
         for (key, value) in urlParameters {
             queryItems.append(URLQueryItem(name: key, value: value))
