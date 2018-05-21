@@ -175,11 +175,24 @@ class PlaylistSubcategorySelectionViewController: UIViewController, UITableViewD
     private func getTracks(atIndexPath indexPath: IndexPath, completionHandler: @escaping ([Track]) -> Void) {
         let tracksSelected = optionsDict[orderedOptionsDictKeys[indexPath.section]]![indexPath.row].tracks
         
-        if musicService == .spotify && playlistType == .playlists {
-            getSpotifyPlaylistTracks(forPlaylist: tracksSelected, completionHandler: completionHandler)
+        if musicService == .spotify {
+            switch playlistType {
+            case .some(.albums): getSpotifyAlbumTracks(forPlaylist: tracksSelected, completionHandler: completionHandler)
+            case .some(.playlists): getSpotifyPlaylistTracks(forPlaylist: tracksSelected, completionHandler: completionHandler)
+            default: break
+            }
         } else {
             completionHandler(tracksSelected)
             
+        }
+    }
+    
+    private func getSpotifyAlbumTracks(forPlaylist playlist: [Track], completionHandler: @escaping ([Track]) -> Void) {
+        let spotifyPlaylistFetcher = SpotifyFetcher()
+        spotifyPlaylistFetcher.getLibraryAlbumTracks(atOffset: 0, forDummyTrack: playlist[0]) {
+            DispatchQueue.main.async {
+                completionHandler(spotifyPlaylistFetcher.tracksList)
+            }
         }
     }
     
