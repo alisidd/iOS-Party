@@ -30,7 +30,7 @@ class MusicPlayer {
     }
     
     var isSafeToPlayNextTrack: Bool {
-        return !Party.tracksQueue.isEmpty && appleMusicPlayer.playbackState == .stopped
+        return !Party.tracksQueue.isEmpty && appleMusicPlayer.playbackState == .paused
     }
     
     var isPaused: Bool {
