@@ -109,6 +109,7 @@ class QueueViewController: UIViewController, UITableViewDelegate, UITableViewDat
     
     func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCellEditingStyle, forRowAt indexPath: IndexPath) {
         if editingStyle == .delete {
+            tableView.reloadData()
             tableView.beginUpdates()
             let track = removeTrack(atIndex: indexPath.row + 1)
             tableView.deleteRows(at: [indexPath], with: .right)
