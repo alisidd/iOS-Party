@@ -93,7 +93,6 @@ class MusicLibrarySelectionViewController: UIViewController, ViewControllerAcces
     }
     
     private func initializeVariables() {
-        NotificationCenter.default.addObserver(self, selector: #selector(createSession(withNotification:)), name: SpotifyConstants.spotifyPlayerDidLoginNotification, object: nil)
         SpotifyAuthorizationManager.storyboardSegue = "Show Spotify Library"
         AppleMusicAuthorizationManager.storyboardSegue = "Show Apple Music Library"
     }
@@ -139,12 +138,6 @@ class MusicLibrarySelectionViewController: UIViewController, ViewControllerAcces
                 }
             }
         }
-    }
-    
-    // MARK: - Callback
-    
-    @objc private func createSession(withNotification notification: NSNotification) {
-        SpotifyAuthorizationManager.createSession(withNotification: notification)
     }
 
     // MARK: - Navigation 

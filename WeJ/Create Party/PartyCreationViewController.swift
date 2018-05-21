@@ -62,7 +62,6 @@ class PartyCreationViewController: UIViewController, UITextFieldDelegate, ViewCo
     }
     
     private func initializeVariables() {
-        NotificationCenter.default.addObserver(self, selector: #selector(createSession(withNotification:)), name: SpotifyConstants.spotifyPlayerDidLoginNotification, object: nil)
         SpotifyAuthorizationManager.storyboardSegue = "Create Party"
         AppleMusicAuthorizationManager.storyboardSegue = "Create Party"
     }
@@ -74,10 +73,6 @@ class PartyCreationViewController: UIViewController, UITextFieldDelegate, ViewCo
             spotifyButton.changeToSmallerFont()
             createButton.changeToSmallerFont()
         }
-    }
-    
-    @objc private func createSession(withNotification notification: NSNotification) {
-        SpotifyAuthorizationManager.createSession(withNotification: notification)
     }
     
     private func setDelegates() {
