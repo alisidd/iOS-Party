@@ -591,7 +591,7 @@ class PartyViewController: UIViewController, SPTAudioStreamingPlaybackDelegate, 
         UserDefaults.standard.synchronize()
         
         DispatchQueue.main.async { [weak self] in
-            let alert = UIAlertController(title: NSLocalizedString("Incompatible iOS Version", comment: ""), message: NSLocalizedString("Your version of iOS may have problems with Apple Music playback. Please update to the newest version of iOS", comment: ""), preferredStyle: .alert)
+            let alert = UIAlertController(title: NSLocalizedString("Incompatible iOS Version", comment: ""), message: NSLocalizedString("Your version of iOS may have problems with Apple Music playback. Please update to the newest version of iOS.", comment: ""), preferredStyle: .alert)
             alert.addAction(UIAlertAction(title: NSLocalizedString("OK", comment: ""), style: .default, handler: nil))
             
             self?.present(alert, animated: true, completion: nil)

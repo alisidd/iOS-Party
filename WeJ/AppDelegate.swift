@@ -18,6 +18,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
         let currentCount = UserDefaults.standard.integer(forKey: "launchCount")
         UserDefaults.standard.set(currentCount + 1, forKey:"launchCount")
+        UserDefaults.standard.set(false, forKey:"iOSErrorShown")
         UserDefaults.standard.synchronize()
         
         Siren.shared.alertType = .option
