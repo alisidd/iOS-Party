@@ -10,6 +10,10 @@ import UIKit
 import MediaPlayer
 import MultipeerConnectivity
 
+protocol MusicPlayerDelegate: class {
+    func alertPreviousiOSVersionUsers()
+}
+
 protocol UpdatePartyDelegate: class {
     var hubAndQueueVC: HubAndQueuePageViewController? { get }
     func updateCache()
@@ -37,7 +41,7 @@ protocol PartyViewControllerInfoDelegate: class {
     func layout()
 }
 
-class PartyViewController: UIViewController, SPTAudioStreamingPlaybackDelegate, UpdatePartyDelegate, NetworkManagerDelegate, PartyViewControllerInfoDelegate {
+class PartyViewController: UIViewController, SPTAudioStreamingPlaybackDelegate, MusicPlayerDelegate, UpdatePartyDelegate, NetworkManagerDelegate, PartyViewControllerInfoDelegate {
     
     // MARK: - Storyboard Variables
     
@@ -124,7 +128,7 @@ class PartyViewController: UIViewController, SPTAudioStreamingPlaybackDelegate, 
         Party.reset()
         
         if isHost {
-            musicPlayer.stopPlayer()
+            musicPlayer.exitPlayer()
         }
     }
     
@@ -151,6 +155,7 @@ class PartyViewController: UIViewController, SPTAudioStreamingPlaybackDelegate, 
     }
     
     private func initializeMusicPlayer() {
+        musicPlayer.delegate = self
         setTimer()
         initializeCommandCenter()
         setupControlEvents()
@@ -562,6 +567,36 @@ class PartyViewController: UIViewController, SPTAudioStreamingPlaybackDelegate, 
         networkManager?.send(tracks: MultipeerManager.tracksFailedToSend)
     }
     
+    // MARK: MusicPlayerDelegate
+    
+    func alertPreviousiOSVersionUsers() {
+        let errorShown = UserDefaults.standard.bool(forKey: "iOSErrorShown")
+        guard errorShown == false else { return }
+        
+        let os = ProcessInfo().operatingSystemVersion
+        switch (os.majorVersion, os.minorVersion, os.patchVersion) {
+        case (11, 0, _):
+            fallthrough
+        case (11, 1, _):
+            fallthrough
+        case (11, 2, _):
+            self.postAlertForiOSVersion()
+        default:
+            break
+        }
+    }
+    
+    private func postAlertForiOSVersion() {
+        UserDefaults.standard.set(true, forKey:"iOSErrorShown")
+        UserDefaults.standard.synchronize()
+        
+        DispatchQueue.main.async { [weak self] in
+            let alert = UIAlertController(title: NSLocalizedString("Incompatible iOS Version", comment: ""), message: NSLocalizedString("Your version of iOS may have problems with Apple Music playback. Please update to the newest version of iOS", comment: ""), preferredStyle: .alert)
+            alert.addAction(UIAlertAction(title: NSLocalizedString("OK", comment: ""), style: .default, handler: nil))
+            
+            self?.present(alert, animated: true, completion: nil)
+        }
+    }
     
     // MARK: NetworkManagerDelegate
     

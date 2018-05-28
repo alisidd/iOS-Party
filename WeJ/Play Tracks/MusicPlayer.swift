@@ -21,6 +21,8 @@ class MusicPlayer {
     
     // MARK: - General Variables
     
+    weak var delegate: MusicPlayerDelegate?
+    
     var isScrubbing = false
     
     var currentPosition: TimeInterval? {
@@ -77,25 +79,18 @@ class MusicPlayer {
         }
     }
     
-    func stopPlayer() {
-        if musicService == .spotify && spotifyPlayer!.playbackState.isPlaying {
-            spotifyPlayer?.setIsPlaying(false, callback: nil)
-        }
-        
-        if musicService == .appleMusic && appleMusicPlayer.playbackState == .playing {
-            BackgroundTask.stopBackgroundTask()
-            appleMusicPlayer.stop()
-        }
-    }
-    
     func playTrack() {
         if musicService == .spotify {
             spotifyPlayer?.setIsPlaying(true, callback: nil)
         } else {
+            delegate?.alertPreviousiOSVersionUsers()
             BackgroundTask.startBackgroundTask()
             if #available(iOS 10.1, *) {
+                let capturedTracks = Party.tracksQueue
                 appleMusicPlayer.prepareToPlay { (_) in
-                    self.appleMusicPlayer.play()
+                    if capturedTracks == Party.tracksQueue {
+                        self.appleMusicPlayer.play()
+                    }
                 }
             } else {
                 appleMusicPlayer.prepareToPlay()
@@ -117,6 +112,17 @@ class MusicPlayer {
     func scrubTrack(toPosition position: TimeInterval, callback: @escaping SPTErrorableOperationCallback) {
         if musicService == .spotify {
             spotifyPlayer?.seek(to: position, callback: callback)
+        }
+    }
+    
+    func exitPlayer() {
+        if musicService == .spotify && spotifyPlayer!.playbackState.isPlaying {
+            spotifyPlayer?.setIsPlaying(false, callback: nil)
+        }
+        
+        if musicService == .appleMusic && appleMusicPlayer.playbackState == .playing {
+            BackgroundTask.stopBackgroundTask()
+            appleMusicPlayer.stop()
         }
     }
     

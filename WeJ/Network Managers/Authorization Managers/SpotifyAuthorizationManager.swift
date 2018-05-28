@@ -89,8 +89,12 @@ class SpotifyAuthorizationManager: NSObject, AuthorizationManager, SPTAudioStrea
     }
     
     private static func loginToPlayer(withAccessToken accessToken: String) {
-        if Party.cookie == nil {
-            SPTAudioStreamingController.sharedInstance().login(withAccessToken: accessToken)
+        if Party.musicService == .spotify {
+            if Party.cookie == nil {
+                SPTAudioStreamingController.sharedInstance().login(withAccessToken: accessToken)
+            } else {
+                Party.cookie = accessToken
+            }
         } else {
             completeAuthorization()
         }
