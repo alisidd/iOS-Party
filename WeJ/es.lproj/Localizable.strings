@@ -45,5 +45,8 @@
 "No Spotify Premium" = "Sin Spotify Premium";
 "A Spotify Premium account is required to play music" = "Se requiere una cuenta Spotify Premium para tocar música";
 
+"Incompatible iOS Version" = "Versión incompatible de iOS";
+"Your version of iOS may have problems with Apple Music playback. Please update to the newest version of iOS." = "Tu versión de iOS quizá tendrá problemas de playback con Apple Music. Por favor actualiza la versión de iOS hasta la más nueva.";
+
 "No Track Playing" = "Sin Pista de Música";
 "OK" = "OK";
