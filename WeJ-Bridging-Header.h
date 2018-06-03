@@ -4,4 +4,4 @@
 
 #import <SpotifyAuthentication/SpotifyAuthentication.h>
 #import <SpotifyAudioPlayback/SpotifyAudioPlayback.h>
-#import "MXMLyricsAction/MXMLyricsAction.h"
+#import "Frameworks/MXMLyricsAction/MXMLyricsAction.h"

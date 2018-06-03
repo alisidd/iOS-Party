@@ -1,0 +1,52 @@
+/* 
+  Localizable.strings
+  WeJ
+
+  Created by Ali Siddiqui on 8/27/17.
+  Copyright © 2017 Mohammad Ali Siddiqui. All rights reserved.
+*/
+"Version" = "Versión";
+
+"Party" = "Fiesta";
+"Edit" = "Editar";
+"Done" = "Hecho";
+"DoneBadgeConstraint" = "56.0";
+"Close" = "Cerrar";
+"Remove" = "Eliminar";
+"View Lyrics" = "Ver Letras";
+"Leave Party" = "Dejar Fiesta";
+
+"Not Connected" = "No Conectado";
+"Connecting" = "Conectando";
+"Connected" = "Conectado";
+
+"Search" = "Buscar";
+"Albums" = "Álbumes";
+"Artists" = "Artistas";
+"Playlists" = "Listas";
+"All Songs" = "Todas Las Canciones";
+
+"library song not found" = "música de la biblioteca no encontrada";
+"library songs not found" = "músicas de la biblioteca no encontradas";
+"request failed to send" = "solicitud non llegó";
+"requests failed to send" = "solicitudes non llegaran";
+
+"Error" = "Error";
+"Please check your internet connection" = "Por favor revisa tu conexión";
+"Try Again" = "Inténtalo de Nuevo";
+
+"Apple Music Access Denied" = "Acceso a Apple Music Denegado";
+"Go to Settings to enable Apple Music" = "Vaya a Ajustes para habilitar Apple Music";
+"Cancel" = "Cancelar";
+"Settings" = "Ajustes";
+"No Apple Music Subscription" = "No suscripción a Apple Music";
+"An Apple Music Subscription is required to play music" = "Se necesita una suscripción a Apple Music para poner música";
+
+"No Spotify Premium" = "Sin Spotify Premium";
+"A Spotify Premium account is required to play music" = "Se requiere una cuenta Spotify Premium para tocar música";
+
+"Incompatible iOS Version" = "Versión incompatible de iOS";
+"Your version of iOS may have problems with Apple Music playback. Please update to the newest version of iOS." = "Tu versión de iOS quizá tendrá problemas de playback con Apple Music. Por favor actualiza la versión de iOS hasta la más nueva.";
+
+"No Track Playing" = "Sin Pista de Música";
+"OK" = "OK";
