@@ -43,12 +43,12 @@ class AppleMusicAuthorizationManager: NSObject, AuthorizationManager, URLSession
     }
     
     func urlSession(_ session: URLSession, didReceive challenge: URLAuthenticationChallenge, completionHandler: @escaping (URLSession.AuthChallengeDisposition, URLCredential?) -> Void) {
-        if (challenge.protectionSpace.authenticationMethod == NSURLAuthenticationMethodServerTrust) {
+        if challenge.protectionSpace.authenticationMethod == NSURLAuthenticationMethodServerTrust {
             if let serverTrust = challenge.protectionSpace.serverTrust {
                 var secresult = SecTrustResultType.invalid
                 let status = SecTrustEvaluate(serverTrust, &secresult)
                 
-                if (errSecSuccess == status) {
+                if errSecSuccess == status {
                     if let serverCertificate = SecTrustGetCertificateAtIndex(serverTrust, 0) {
                         let serverCertificateData = SecCertificateCopyData(serverCertificate)
                         let data = CFDataGetBytePtr(serverCertificateData);
