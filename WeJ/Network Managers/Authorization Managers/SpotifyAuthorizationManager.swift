@@ -94,6 +94,7 @@ class SpotifyAuthorizationManager: NSObject, AuthorizationManager, SPTAudioStrea
                 SPTAudioStreamingController.sharedInstance().login(withAccessToken: accessToken)
             } else {
                 Party.cookie = accessToken
+                completeAuthorization()
             }
         } else {
             completeAuthorization()
