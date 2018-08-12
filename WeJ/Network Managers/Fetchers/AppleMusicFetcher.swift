@@ -232,8 +232,8 @@ class AppleMusicFetcher: Fetcher {
         track.lowResArtworkURL = getImageURL(fromURL: attributes["artwork"]["url"].stringValue, withSize: "60")
         
         if tracksList.count < AppleMusicConstants.maxInitialLowRes {
-            Track.fetchImage(fromURL: track.lowResArtworkURL) { (image) in
-                track.lowResArtwork = image
+            track.fetchImage(fromURL: track.lowResArtworkURL) { [weak track] (image) in
+                track?.lowResArtwork = image
             }
         }
         

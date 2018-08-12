@@ -60,8 +60,8 @@ class SpotifyFetcher: Fetcher {
                     for images in albumJSON["images"].arrayValue {
                         if images["height"].stringValue == "64" {
                             dummyTrack.lowResArtworkURL = images["url"].stringValue
-                            Track.fetchImage(fromURL: dummyTrack.lowResArtworkURL) { (image) in
-                                dummyTrack.lowResArtwork = image
+                            dummyTrack.fetchImage(fromURL: dummyTrack.lowResArtworkURL) { [weak dummyTrack] (image) in
+                                dummyTrack?.lowResArtwork = image
                             }
                         }
                         
@@ -271,8 +271,8 @@ class SpotifyFetcher: Fetcher {
             if images["height"].stringValue == "64" {
                 track.lowResArtworkURL = images["url"].stringValue
                 if tracksList.count < SpotifyConstants.maxInitialLowRes {
-                    Track.fetchImage(fromURL: track.lowResArtworkURL) { (image) in
-                        track.lowResArtwork = image
+                    track.fetchImage(fromURL: track.lowResArtworkURL) { [weak track] (image) in
+                        track?.lowResArtwork = image
                     }
                 }
             }

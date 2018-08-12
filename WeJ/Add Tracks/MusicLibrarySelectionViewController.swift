@@ -131,9 +131,9 @@ class MusicLibrarySelectionViewController: UIViewController, ViewControllerAcces
     private func fetchArtworkForRestOfTracks() {
         let tracksCaptured = tracksList
         for track in tracksList where tracksList == tracksCaptured && track.lowResArtwork == nil {
-            DispatchQueue.global(qos: .userInitiated).async { [weak self] in
-                Track.fetchImage(fromURL: track.lowResArtworkURL) { (image) in
-                    track.lowResArtwork = image
+            DispatchQueue.global(qos: .userInitiated).async {
+                track.fetchImage(fromURL: track.lowResArtworkURL) { [weak self, weak track] (image) in
+                    track?.lowResArtwork = image
                     self?.tracksTableView.reloadData()
                 }
             }

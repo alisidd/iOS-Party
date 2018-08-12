@@ -32,7 +32,7 @@ class MusicPlayer {
     }
     
     var isSafeToPlayNextTrack: Bool {
-        return !Party.tracksQueue.isEmpty && (self.musicService == .spotify || appleMusicPlayer.playbackState == .stopped)
+        return !Party.tracksQueue.isEmpty && self.musicService == .spotify
     }
     
     var isPaused: Bool {
@@ -64,7 +64,7 @@ class MusicPlayer {
             try? AVAudioSession.sharedInstance().setActive(true)
             spotifyPlayer?.playSpotifyURI("spotify:track:" + tracks[0].id, startingWith: 0, startingWithPosition: 0, callback: nil)
         } else {
-            spotifyPlayer?.skipNext(nil)
+            spotifyPlayer?.setIsPlaying(false, callback: nil)
         }
     }
     

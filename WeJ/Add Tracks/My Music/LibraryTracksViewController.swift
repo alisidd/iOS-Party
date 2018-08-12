@@ -211,11 +211,10 @@ class LibraryTracksViewController: UIViewController, UITableViewDelegate, UITabl
         
         let tracksCaptured = libraryTracksList
         for (i, track) in libraryTracksList.enumerated() where libraryTracksList == tracksCaptured && track.lowResArtwork == nil {
-            DispatchQueue.global(qos: .userInitiated).async { [weak self] in
-                guard self != nil else { return }
-                Track.fetchImage(fromURL: track.lowResArtworkURL) { (image) in
+            DispatchQueue.global(qos: .userInitiated).async {
+                track.fetchImage(fromURL: track.lowResArtworkURL) { [weak self, weak track] (image) in
                     guard self != nil else { return }
-                    track.lowResArtwork = image
+                    track?.lowResArtwork = image
                     if (i % 20) == 0  || i == self!.libraryTracksList.count - 1 {
                         self?.tracksTableView.reloadData()
                     }

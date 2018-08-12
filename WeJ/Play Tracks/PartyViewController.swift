@@ -163,8 +163,6 @@ class PartyViewController: UIViewController, SPTAudioStreamingPlaybackDelegate, 
         
         if Party.musicService == .spotify {
             setSpotifyDelegates()
-        } else {
-            NotificationCenter.default.addObserver(self, selector: #selector(playNextTrack), name:.MPMusicPlayerControllerPlaybackStateDidChange, object: musicPlayer.appleMusicPlayer)
         }
     }
     
@@ -176,6 +174,8 @@ class PartyViewController: UIViewController, SPTAudioStreamingPlaybackDelegate, 
     private func setTimer() {
         let _ = Timer.scheduledTimer(withTimeInterval: 1, repeats: true) { [weak self] _ in
             self?.updateProgress()
+            self?.skipToNextSongIfRequired()
+            
             if Party.musicService == .spotify {
                 self?.updateControlCenter()
             }
@@ -198,6 +198,13 @@ class PartyViewController: UIViewController, SPTAudioStreamingPlaybackDelegate, 
         networkManager?.advertise()
     }
     
+    // This method is made to change Apple Music songs when it ends since playbackState (when the song ends) isn't consistent across iOS versions
+    private func skipToNextSongIfRequired() {
+        if !Party.tracksQueue.isEmpty && Party.musicService == .appleMusic  && (Party.tracksQueue[0].length! - musicPlayer.currentPosition! <= 1) {
+            playNextTrack(force: true)
+        }
+    }
+    
     private func initializeCommandCenter() {
         MPRemoteCommandCenter.shared().pauseCommand.isEnabled = true
         MPRemoteCommandCenter.shared().playCommand.isEnabled = true
@@ -208,12 +215,12 @@ class PartyViewController: UIViewController, SPTAudioStreamingPlaybackDelegate, 
     private func setupControlEvents() {
         UIApplication.shared.beginReceivingRemoteControlEvents()
         
-        MPRemoteCommandCenter.shared().pauseCommand.addTarget { [weak self] _ -> MPRemoteCommandHandlerStatus in
+        MPRemoteCommandCenter.shared().pauseCommand.addTarget { [weak self]  _-> MPRemoteCommandHandlerStatus in
             self?.musicPlayer.pauseTrack()
             return .success
         }
         
-        MPRemoteCommandCenter.shared().playCommand.addTarget { [weak self] _ -> MPRemoteCommandHandlerStatus in
+        MPRemoteCommandCenter.shared().playCommand.addTarget { [weak self]  _ -> MPRemoteCommandHandlerStatus in
             self?.musicPlayer.playTrack()
             return .success
         }
@@ -294,17 +301,17 @@ class PartyViewController: UIViewController, SPTAudioStreamingPlaybackDelegate, 
     }
     
     private func fetchHighResArtwork(forTrack track: Track) {
-        Track.fetchImage(fromURL: track.highResArtworkURL) { [weak self] (image) in
-            track.highResArtwork = image
+        track.fetchImage(fromURL: track.highResArtworkURL) { [weak self, weak track] (image) in
+            track?.highResArtwork = image
             if !Party.tracksQueue.isEmpty && track == Party.tracksQueue[0] {
-                self?.currentlyPlayingArtwork.image = track.highResArtwork?.addGradient()
+                self?.currentlyPlayingArtwork.image = track?.highResArtwork?.addGradient()
             }
         }
     }
 
     private func fetchLowResArtwork(forTrack track: Track) {
-        Track.fetchImage(fromURL: track.lowResArtworkURL) { [weak self] (image) in
-            track.lowResArtwork = image
+        track.fetchImage(fromURL: track.lowResArtworkURL) { [weak self, weak track] (image) in
+            track?.lowResArtwork = image
             self?.hubAndQueueVC?.updateTable()
         }
     }
@@ -494,8 +501,8 @@ class PartyViewController: UIViewController, SPTAudioStreamingPlaybackDelegate, 
     
     // MARK: - Callbacks
     
-    @objc private func playNextTrack() {
-        if musicPlayer.isSafeToPlayNextTrack {
+    @objc private func playNextTrack(force: Bool = false) {
+        if musicPlayer.isSafeToPlayNextTrack || force {
             sendTracksToPeers(forTracks: [Party.tracksQueue.removeFirst()], toRemove: true)
             musicPlayer.startPlayer()
         }

@@ -23,6 +23,33 @@ class Track: NSObject, NSCoding, NSCopying {
     
     var length: TimeInterval?
     
+    func fetchImage(fromURL urlString: String, completionHandler: @escaping (UIImage?) -> Void) {
+        let errorHandler: () -> Void = {
+            DispatchQueue.main.async {
+                completionHandler(#imageLiteral(resourceName: "stockArtwork"))
+            }
+        }
+        
+        guard let url = URL(string: urlString) else {
+            errorHandler()
+            return
+        }
+        
+        let task = URLSession.shared.dataTask(with: url) { [weak self] (data, _, error) in
+            guard self != nil else { return }
+            
+            guard error == nil, let data = data else {
+                errorHandler()
+                return
+            }
+            DispatchQueue.main.async {
+                completionHandler(UIImage(data: data))
+            }
+        }
+        
+        task.resume()
+    }
+    
     static func typeOf(track: Track) -> RequestType {
         return track.id.hasPrefix("R:") ? .removal : .addition
     }
@@ -42,18 +69,6 @@ class Track: NSObject, NSCoding, NSCopying {
         }
         
         return newTracks
-    }
-    
-    static func fetchImage(fromURL urlString: String, completionHandler: @escaping (UIImage?) -> Void) {
-        if let url = URL(string: urlString), let data = try? Data(contentsOf: url) {
-            DispatchQueue.main.async {
-                completionHandler(UIImage(data: data))
-            }
-        } else {
-            DispatchQueue.main.async {
-                completionHandler(#imageLiteral(resourceName: "stockArtwork"))
-            }
-        }
     }
     
     func encode(with aCoder: NSCoder) {
